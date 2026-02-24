@@ -27,14 +27,14 @@ function Header() {
         }`}
       >
         <section className="flex justify-between items-center">
-          <div className="flex items-center py-4">
+          <Link href={'/'} className="flex items-center py-4">
             <Image src={LearnTechniqueLogo} alt="Learn Technique Logo" />
             <div className="bg-[#000000] w-px h-9 mx-4" />
             <Image src={Elmlogo} alt="Elm Logo" />
-          </div>
+          </Link>
 
           <nav className="flex items-center gap-8 py-4">
-            <Link href={"#"}>
+            <Link href={"/courses"}>
               <p>Courses</p>
             </Link>
             <Link href={"#"}>
