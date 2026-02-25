@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import FirstImage from "@/app/assets/png/010763a3052b54b4c1698aa779c00ac7c6ee3d6e.jpg";
 import SecondImage from "@/app/assets/png/22d5c2b039b0485213666e8075a240a93aa4bb9d.png";
 import ThirdImage from "@/app/assets/png/32743f1db038b2a1c51268ee3d04b3737c7bef67.jpg";
@@ -16,35 +16,134 @@ const allImages = [
   FourthImage,
 ];
 
-const cards = [
-  { height: "500px", flex: "1.8", margin: "0 -40px 0 0" },
-  { height: "340px", flex: "1.3", margin: "0 0px 0 0px" },
-  { height: "300px", flex: "1", margin: "0 0px 0 0px" },
-  { height: "340px", flex: "1.3", margin: "0 -36px 0 0px" },
-  { height: "500px", flex: "1.8", margin: "0 0 0 0px" },
-];
+const CARD_WIDTH = 280;
+const CARD_GAP = 10;
+const CARD_TOTAL = CARD_WIDTH + CARD_GAP;
+const AUTO_SCROLL_SPEED = 1;
+const AUTO_SCROLL_INTERVAL = 40;
 
-const transforms = [
-  "perspective(200px) rotateY(15deg) rotateX(0deg) translateZ(-30px)",
-  "perspective(300px) rotateY(8deg) rotateX(-1deg) translateZ(-20px)",
-  "perspective(2000px) rotateY(0deg) rotateX(0deg) translateZ(0px)",
-  "perspective(300px) rotateY(-8deg) rotateX(-1deg) translateZ(-20px)",
-  "perspective(200px) rotateY(-15deg) rotateX(0deg) translateZ(-20px)",
-];
+const SET_WIDTH = allImages.length * CARD_TOTAL - CARD_GAP;
+const LOOP_LENGTH = SET_WIDTH + CARD_GAP; // set + gap before next set
+
+// Wheel effect: center = smaller (far), edges = bigger (close). Layout stays fixed; only transform changes.
+function getWheelStyle(
+  cardIndex: number,
+  setIndex: number,
+  scrollLeft: number,
+  viewportWidth: number
+) {
+  const cardCenter = cardIndex * CARD_TOTAL + CARD_WIDTH / 2 + setIndex * LOOP_LENGTH;
+  const viewportCenter = scrollLeft + viewportWidth / 2;
+  const distanceFromCenter = cardCenter - viewportCenter;
+  const halfWidth = viewportWidth / 2;
+  const normalizedDist = Math.max(-1, Math.min(1, distanceFromCenter / halfWidth));
+
+  const absDist = Math.abs(normalizedDist);
+  const scale = 0.88 + absDist * 0.12; // center 0.88, edges 1.0 - prevents overlap
+  const rotateY = -normalizedDist * 10;
+
+  return {
+    transform: `perspective(1400px) rotateY(${rotateY}deg) scale(${scale})`,
+    transformStyle: "preserve-3d" as const,
+    transformOrigin: "center center",
+  };
+}
 
 function Hero() {
-  const [offset, setOffset] = useState(0);
+  const [scrollPos, setScrollPos] = useState(0);
+  const [viewportWidth, setViewportWidth] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number>(0);
+
+  const updateScrollState = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    let pos = el.scrollLeft;
+    if (pos >= LOOP_LENGTH) {
+      pos -= LOOP_LENGTH;
+      el.scrollLeft = pos;
+    }
+    setScrollPos(pos);
+    setViewportWidth(el.clientWidth);
+  };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setOffset((prev) => prev + 1);
-    }, 3000);
-    return () => clearInterval(interval);
+    const scrollEl = scrollRef.current;
+    if (!scrollEl) return;
+
+    const onScroll = () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(updateScrollState);
+    };
+
+    const onResize = () => setViewportWidth(scrollEl.clientWidth);
+    setViewportWidth(scrollEl.clientWidth);
+
+    const intervalId = setInterval(() => {
+      const maxScroll = scrollEl.scrollWidth - scrollEl.clientWidth;
+      if (maxScroll <= 0) return;
+
+      let next = scrollEl.scrollLeft + AUTO_SCROLL_SPEED;
+      if (next >= LOOP_LENGTH) next -= LOOP_LENGTH;
+      scrollEl.scrollLeft = next;
+    }, AUTO_SCROLL_INTERVAL);
+
+    scrollEl.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      clearInterval(intervalId);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      scrollEl.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+    };
   }, []);
 
+  const CARD_HEIGHT = 380;
+
+  const renderImageCard = (
+    src: (typeof allImages)[0],
+    cardIndex: number,
+    setIndex: number
+  ) => {
+    const wheelStyle =
+      viewportWidth > 0
+        ? getWheelStyle(cardIndex, setIndex, scrollPos, viewportWidth)
+        : { transform: "scale(1)", transformStyle: "preserve-3d" as const };
+
+    return (
+      <div
+        key={`${setIndex}-${cardIndex}`}
+        className="relative overflow-hidden shrink-0 rounded-[15px] will-change-transform shadow-2xl transition-transform duration-100 ease-out"
+        style={{
+          width: CARD_WIDTH,
+          height: CARD_HEIGHT,
+          ...wheelStyle,
+        }}
+      >
+        <Image
+          src={src}
+          alt={`Training facility ${cardIndex + 1}`}
+          className="object-cover"
+          fill
+          sizes={`${CARD_WIDTH}px`}
+        />
+      </div>
+    );
+  };
+
+  const imageRow = (setIndex: number) => (
+    <div
+      className="flex items-center shrink-0"
+      style={{ width: SET_WIDTH, gap: CARD_GAP }}
+    >
+      {allImages.map((src, i) => renderImageCard(src, i, setIndex))}
+    </div>
+  );
+
   return (
-    <div className="pt-25">
-      <section className="flex flex-col items-center justify-center gap-5 text-center mb-16 z-10 relative">
+    <div className="flex flex-col h-screen">
+      <section className="flex flex-col items-center justify-center gap-5 text-center flex-shrink-0 pt-20 pb-6 z-10 relative">
         <h1 className="font-outfit font-semibold text-[62px] leading-tight text-black">
           Electrical Skills for <br /> Everyone, by Experts.
         </h1>
@@ -59,48 +158,22 @@ function Hero() {
         </Button>
       </section>
 
-      <section className="relative w-full -my-10 -mt-30">
+      <section
+        className="relative w-full overflow-hidden flex-1 flex flex-col justify-center min-h-0"
+        style={{ perspective: "2000px", perspectiveOrigin: "center center" }}
+      >
         <div
-          className="flex items-center justify-center w-full"
-          style={{
-            perspective: "2000px",
-            perspectiveOrigin: "center center",
-          }}
+          ref={scrollRef}
+          className="w-full overflow-x-auto overflow-y-hidden no-scrollbar touch-pan-x py-6 flex-1 flex items-center"
+          style={{ scrollBehavior: "auto", WebkitOverflowScrolling: "touch" }}
         >
-          {cards.map((card, index) => {
-            const imageIndex =
-              (index + offset) % allImages.length;
-
-            return (
-              <div
-                key={index}
-                className="relative overflow-hidden shadow-2xl"
-                style={{
-                  height: card.height,
-                  flex: card.flex,
-                  borderRadius: "15px",
-                  margin: card.margin,
-                  transform: transforms[index],
-                  transformStyle: "preserve-3d",
-                }}
-              >
-                {/* Stack all images, crossfade to active one */}
-                {allImages.map((src, imgIdx) => (
-                  <Image
-                    key={imgIdx}
-                    src={src}
-                    alt={`Training facility ${imgIdx + 1}`}
-                    className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out"
-                    style={{
-                      opacity: imgIdx === imageIndex ? 1 : 0,
-                    }}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                  />
-                ))}
-              </div>
-            );
-          })}
+          <div
+            className="flex shrink-0"
+            style={{ width: "max-content", gap: CARD_GAP }}
+          >
+            {imageRow(0)}
+            {imageRow(1)}
+          </div>
         </div>
       </section>
     </div>

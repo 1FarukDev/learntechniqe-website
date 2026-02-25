@@ -176,3 +176,77 @@ body {
 .animate-infinite-scroll:hover {
   animation-play-state: paused;
 }
+
+/* Section entry animations */
+@keyframes section-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes section-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes section-fade-left {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes section-fade-right {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes section-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-section-fade-up {
+  animation: section-fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-section-fade-in {
+  animation: section-fade-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-section-fade-left {
+  animation: section-fade-left 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-section-fade-right {
+  animation: section-fade-right 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-section-scale {
+  animation: section-scale 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}

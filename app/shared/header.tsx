@@ -18,12 +18,12 @@ function Header() {
   }, []);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex justify-center transition-all duration-500 ease-in-out">
+    <header className="fixed top-0 left-0 right-0 z-50 flex justify-center transition-all duration-500 ease-in-out px-4">
       <div
-        className={`w-full transition-all duration-500 ease-in-out ${
+        className={`max-w-7xl w-full transition-all duration-500 ease-in-out ${
           scrolled
-            ? "max-w-7xl mt-3 mx-4 rounded-2xl bg-white/80 backdrop-blur-md shadow-lg px-6 py-2"
-            : "max-w-full mt-0 mx-0 rounded-none  shadow-none px-8 py-0"
+            ? "mt-3 rounded-2xl bg-white/80 backdrop-blur-md shadow-lg px-6 py-2"
+            : "mt-0 rounded-none shadow-none px-6 py-0"
         }`}
       >
         <section className="flex justify-between items-center">
