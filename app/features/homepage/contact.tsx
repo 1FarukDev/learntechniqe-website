@@ -24,26 +24,26 @@ function Contact() {
     console.log(data);
   };
   return (
-    <section className="bg-[#E0ECED]">
-      <div className="flex flex-col md:flex-row justify-between items-center max-w-6xl mx-auto py-19 px-4 gap-10">
-        <div className="w-[40%] flex flex-col gap-4">
-          <h1 className="text-black font-semibold text-[48px] leading-15">
+    <section className="bg-[#E0ECED] -mx-5 px-0">
+      <div className="flex flex-col md:flex-row justify-between items-center max-w-6xl mx-auto py-10 sm:py-19 px-4 sm:px-6 gap-8 sm:gap-10">
+        <div className="w-full md:w-[40%] flex flex-col gap-3 sm:gap-4">
+          <h1 className="text-black font-semibold text-[32px] sm:text-[42px] md:text-[52px] leading-tight">
             Got questions? <br /> Get in touch
           </h1>
-          <h6 className="text-black font-bold text-xl">
+          <h6 className="text-black font-bold text-base sm:text-xl">
             Technique Learning Solutions
           </h6>
-          <p className="text-black font-normal text-base">
+          <p className="text-black font-normal text-sm sm:text-base">
             Technique Tower Business Park <br /> High Street <br /> Clay Cross{" "}
             <br /> Chesterfield <br /> Derbyshire <br />
             S45 9EA
           </p>
           <div>
-            <h6 className="font-bold text-base">CALL</h6>
+            <h6 className="font-bold text-sm sm:text-base">CALL</h6>
             <h6 className="font-bold text-base">0800 112 3310</h6>
           </div>
           <div>
-            <h6 className="font-bold text-base">EMAIL</h6>
+            <h6 className="font-bold text-sm sm:text-base">EMAIL</h6>
             <h6 className="font-bold text-base">info@technique.com</h6>
           </div>
 
@@ -78,9 +78,9 @@ function Contact() {
           <FormProvider {...methods}>
             <form
               onSubmit={methods.handleSubmit(onSubmit)}
-              className="mt-12 space-y-6 text-left bg-white p-13 rounded-2xl max mx-auto "
+              className="mt-8 sm:mt-12 space-y-6 text-left bg-white p-6 sm:p-13 rounded-2xl max-w-full mx-auto"
             >
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <FormInput
                   name="first_name"
                   label="First Name"
@@ -93,7 +93,7 @@ function Contact() {
                 />
               </div>
 
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <FormInput
                   name="number"
                   label="Phone Number"

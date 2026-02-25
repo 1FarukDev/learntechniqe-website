@@ -12,7 +12,7 @@ import { AnimatedSection } from "@/components/animated-section";
 
 export default function Home() {
   return (
-    <div className="overflow-hidden">
+    <div className="overflow-hidden px-5">
       <AnimatedSection variant="fade-in" visibleOnLoad>
         <Hero />
       </AnimatedSection>

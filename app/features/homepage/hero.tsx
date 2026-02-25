@@ -19,11 +19,12 @@ const allImages = [
 const CARD_WIDTH = 280;
 const CARD_GAP = 10;
 const CARD_TOTAL = CARD_WIDTH + CARD_GAP;
+const CARD_HEIGHT = 380;
 const AUTO_SCROLL_SPEED = 1;
 const AUTO_SCROLL_INTERVAL = 40;
 
 const SET_WIDTH = allImages.length * CARD_TOTAL - CARD_GAP;
-const LOOP_LENGTH = SET_WIDTH + CARD_GAP; // set + gap before next set
+const LOOP_LENGTH = SET_WIDTH + CARD_GAP;
 
 // Wheel effect: center = smaller (far), edges = bigger (close). Layout stays fixed; only transform changes.
 function getWheelStyle(
@@ -39,7 +40,7 @@ function getWheelStyle(
   const normalizedDist = Math.max(-1, Math.min(1, distanceFromCenter / halfWidth));
 
   const absDist = Math.abs(normalizedDist);
-  const scale = 0.88 + absDist * 0.12; // center 0.88, edges 1.0 - prevents overlap
+  const scale = 0.88 + absDist * 0.12;
   const rotateY = -normalizedDist * 10;
 
   return {
@@ -99,8 +100,6 @@ function Hero() {
     };
   }, []);
 
-  const CARD_HEIGHT = 380;
-
   const renderImageCard = (
     src: (typeof allImages)[0],
     cardIndex: number,
@@ -114,7 +113,7 @@ function Hero() {
     return (
       <div
         key={`${setIndex}-${cardIndex}`}
-        className="relative overflow-hidden shrink-0 rounded-[15px] will-change-transform shadow-2xl transition-transform duration-100 ease-out"
+        className="relative overflow-hidden shrink-0 rounded-[15px] will-change-transform shadow-2xl"
         style={{
           width: CARD_WIDTH,
           height: CARD_HEIGHT,
@@ -143,17 +142,17 @@ function Hero() {
 
   return (
     <div className="flex flex-col h-screen">
-      <section className="flex flex-col items-center justify-center gap-5 text-center flex-shrink-0 pt-20 pb-6 z-10 relative">
-        <h1 className="font-outfit font-semibold text-[62px] leading-tight text-black">
+      <section className="flex flex-col items-center justify-center gap-5 text-center flex-shrink-0 pt-28 sm:pt-32 md:pt-36 lg:pt-40 pb-6 z-10 relative px-0">
+        <h1 className="font-semibold text-[32px] sm:text-[44px] md:text-[56px] lg:text-[68px] leading-tight text-black">
           Electrical Skills for <br /> Everyone, by Experts.
         </h1>
-        <p className="font-normal text-base text-black">
+        <p className="font-normal text-sm sm:text-base text-black max-w-2xl">
           Carefully put-together data-backed courses taught by seasoned experts.{" "}
-          <br />
+          <br className="hidden sm:block" />
           Our processes and facilities are word-class with multiple credible
           accreditations.
         </p>
-        <Button className="px-12 py-7 bg-[#01636B] text-[#F5F5F5] rounded-md uppercase">
+        <Button className="px-8 sm:px-12 py-5 sm:py-7 bg-[#01636B] text-[#F5F5F5] rounded-md uppercase text-sm sm:text-base">
           Find a course
         </Button>
       </section>

@@ -14,8 +14,8 @@ const Location: React.FC = () => {
     "flex items-center gap-2 rounded-md p-4 px-8 cursor-pointer transition-all";
 
   return (
-    <section className="py-30 max-w-7xl mx-auto px-4">
-      <div className="flex justify-end">
+    <section className="py-15 sm:py-30 max-w-7xl mx-auto px-0">
+      <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-0">
         <div
           onClick={() => setActiveTab("clay")}
           className={`${baseClasses} ${
@@ -30,7 +30,7 @@ const Location: React.FC = () => {
 
         <div
           onClick={() => setActiveTab("stirling")}
-          className={`${baseClasses} ml-4 ${
+          className={`${baseClasses} sm:ml-4 ${
             activeTab === "stirling"
               ? "bg-[#0088FF] text-white"
               : "bg-[#ECF0F0] text-[#627080]"
@@ -61,30 +61,30 @@ const Location: React.FC = () => {
           </div>
         )}
       </div> */}
-      <div className="flex flex-col md:flex-row  mt-10 justify-between items-center">
-        <div className="flex flex-col gap-8 mt-13  w-1/2">
-          <h3 className="text-[#01656B] font-bold text-base">
+      <div className="flex flex-col md:flex-row mt-6 sm:mt-10 justify-between items-center gap-6">
+        <div className="flex flex-col gap-4 sm:gap-8 mt-6 sm:mt-13 w-full md:w-1/2 order-2 md:order-1">
+          <h3 className="text-[#01656B] font-bold text-sm sm:text-base">
             OUR TRAINING CENTRES
           </h3>
-          <h1 className="text-black font-semibold text-4xl">
+          <h1 className="text-black font-semibold text-[32px] sm:text-[40px] md:text-5xl">
             Our New Centre of <br />
             Excellence
           </h1>
-          <p className="text-black font-normal text-base">
+          <p className="text-black font-normal text-sm sm:text-base">
             Technique Tower Business Park <br /> High Street, Clay Cross <br />{" "}
             Derbyshire, S45 9EA
           </p>
 
-          <div className="flex gap-4 ">
-            <Button className="uppercase bg-[#01656B] text-white h-17.25 px-10">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <Button className="uppercase bg-[#01656B] text-white h-12 sm:h-17.25 px-8 sm:px-10 text-sm sm:text-base">
               More Info
             </Button>
-            <Button className="uppercase bg-[#14AE5C] text-white h-17.25 px-8">
+            <Button className="uppercase bg-[#14AE5C] text-white h-12 sm:h-17.25 px-6 sm:px-8 text-sm sm:text-base">
               Google maps
             </Button>
           </div>
         </div>
-        <div className="relative w-1/2 h-150 ">
+        <div className="relative w-full md:w-1/2 h-64 sm:h-96 md:h-[450px] lg:h-[650px] order-1 md:order-2">
           <Image
             src={ClayImage}
             alt="Clay Cross Location"
