@@ -1,10 +1,14 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import CardImage from "@/app/assets/png/cardimage.png";
 import Link from "next/link";
 import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
 
 function CourseCard() {
+  const router = useRouter();
+
   return (
     <section className="bg-[#FFF9ED] min-w-70 max-w-117 shrink-0 rounded-bl-md rounded-br-md">
       <div className="w-full relative h-70 md:h-80">
@@ -44,7 +48,10 @@ function CourseCard() {
       </p>
 
       <div className="mx-5 pb-5">
-        <Button className="bg-[#14AE5C] w-full h-14.25 uppercase mt-8 ">
+        <Button
+          className="bg-[#14AE5C] w-full h-14.25 uppercase mt-8"
+          onClick={() => router.push("/courses/1")}
+        >
           More Information
         </Button>
       </div>
