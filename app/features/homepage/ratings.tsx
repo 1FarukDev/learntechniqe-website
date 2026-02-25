@@ -9,22 +9,22 @@ import Image from "next/image";
 
 function Ratings() {
   return (
-    <section className="max-w-5xl mx-auto py-30">
-      <div className="mx-auto max-w-7xl flex justify-between items-center mb-6 px-4">
-        <h1 className="text-black font-semibold text-[28px]">
+    <section className="max-w-5xl mx-auto py-15 sm:py-30">
+      <div className="mx-auto max-w-7xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 px-0">
+        <h1 className="text-black font-semibold text-[26px] sm:text-[30px] md:text-[34px]">
           What our students say about us
         </h1>
         <div className="flex items-center gap-8">
-          <Button className="uppercase bg-[#016068] h-17.25 px-15">
+          <Button className="uppercase bg-[#016068] h-12 sm:h-17.25 px-8 sm:px-15 text-sm sm:text-base">
             See All Reviews
           </Button>
         </div>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6 px-4 mt-10">
+      <div className="grid md:grid-cols-2 gap-4 sm:gap-6 px-0 mt-6 sm:mt-10">
         <div className="flex h-full">
           <div className="flex items-stretch gap-4 w-full relative">
-            <div className="relative shrink-0 w-55 h-full">
+            <div className="relative shrink-0 w-40 sm:w-55 h-full">
               <div className="relative w-full h-full">
                 <Image
                   src={FirstImage}
@@ -55,7 +55,7 @@ function Ratings() {
 
                 <hr />
 
-                <h3 className="font-semibold text-lg my-2">Amazing Classes</h3>
+                <h3 className="font-semibold text-base sm:text-lg my-2">Amazing Classes</h3>
 
                 <p className="text-sm text-gray-300">
                   “What can I say, will recommend this course to all my work
@@ -68,7 +68,7 @@ function Ratings() {
 
         <div className="flex h-full">
           <div className="flex items-stretch gap-4 w-full">
-            <div className="relative shrink-0 w-55 h-full">
+            <div className="relative shrink-0 w-40 sm:w-55 h-full">
               <div className="relative w-full h-full">
                 <Image
                   src={SecondImage}
@@ -97,7 +97,7 @@ function Ratings() {
                   ))}
                 </div>
                 <hr />
-                <h3 className="font-semibold text-lg my-2">
+                <h3 className="font-semibold text-base sm:text-lg my-2">
                   Great Learning Experience
                 </h3>
 
@@ -125,7 +125,7 @@ function Ratings() {
                   ))}
                 </div>
                 <hr />
-                <h3 className="font-semibold text-lg my-2">
+                <h3 className="font-semibold text-base sm:text-lg my-2">
                   Supportive Instructors
                 </h3>
 
@@ -135,7 +135,7 @@ function Ratings() {
                 </p>
               </div>
             </div>
-            <div className="relative shrink-0 w-50 h-full">
+            <div className="relative shrink-0 w-40 sm:w-50 h-full">
               <div className="relative w-full h-full">
                 <Image
                   src={ThirdImage}
@@ -168,7 +168,7 @@ function Ratings() {
                   ))}
                 </div>
                 <hr />
-                <h3 className="font-semibold text-lg my-2">
+                <h3 className="font-semibold text-base sm:text-lg my-2">
                   Worth Every Penny
                 </h3>
 
@@ -178,7 +178,7 @@ function Ratings() {
                 </p>
               </div>
             </div>
-            <div className="relative shrink-0 w-50 h-full">
+            <div className="relative shrink-0 w-40 sm:w-50 h-full">
               <div className="relative w-full h-full">
                 <Image
                   src={FourthImage}

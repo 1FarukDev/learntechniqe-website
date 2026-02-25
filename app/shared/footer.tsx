@@ -8,15 +8,15 @@ import { Icon } from "@iconify/react";
 function Footer() {
   return (
     <footer className="bg-[#001431]">
-      <div className="max-w-7xl mx-auto pt-16 pb-24 px-6">
-        <div className="grid grid-cols-1 md:grid-cols-[3fr_1fr_1fr_1fr] gap-12">
+      <div className="max-w-7xl mx-auto pt-10 sm:pt-16 pb-16 sm:pb-24 px-6 sm:px-8 md:px-10">
+        <div className="grid grid-cols-1 md:grid-cols-[3fr_1fr_1fr_1fr] gap-8 sm:gap-12">
           <div className="max-w-md">
             <Image
               src={FooterLogo}
               alt="Technique Logo"
-              className="mb-8 w-50"
+              className="mb-6 sm:mb-8 w-40 sm:w-50"
             />
-            <p className="text-white text-sm leading-relaxed">
+            <p className="text-white text-xs sm:text-sm leading-relaxed">
               Elm Training Services is the Nottingham approved AM2 Test <br />{" "}
               Centre providing the Achievement Measurement 2 practical <br />{" "}
               skills test.
@@ -101,8 +101,8 @@ function Footer() {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center font-semibold justify-between gap-4">
-          <p className="text-white text-sm">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 md:px-10 py-4 sm:py-6 flex flex-col md:flex-row items-center font-semibold justify-between gap-4">
+          <p className="text-white text-xs sm:text-sm text-center md:text-left">
             2026 Technique Learning Solutions | All Rights Reserved |{" "}
             <Link
               href="#"

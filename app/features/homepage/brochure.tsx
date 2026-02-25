@@ -24,7 +24,7 @@ function Brochure() {
   };
 
   return (
-    <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[70vh] sm:min-h-[80vh] flex items-center justify-center overflow-hidden py-10 sm:py-0 -mx-5 px-0">
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: `url(${BackgroundImage.src})` }}
@@ -32,12 +32,12 @@ function Brochure() {
 
       <div className="absolute inset-0 bg-[#242A3A80]" />
 
-      <div className="relative z-10 max-w-3xl w-full px-6 text-white text-center">
-        <h1 className="text-3xl md:text-4xl font-semibold">
+      <div className="relative z-10 max-w-3xl w-full px-4 sm:px-6 md:px-10 text-white text-center">
+        <h1 className="text-[28px] sm:text-4xl md:text-5xl font-semibold">
           Subscribe to download <br /> our brochure
         </h1>
 
-        <p className="mt-4 text-sm md:text-base text-gray-200">
+        <p className="mt-4 text-xs sm:text-sm md:text-base text-gray-200">
           Our Brochure will keep you up to date with industry changes, new
           courses, upcoming dates and promotions. To sign up, simply fill in
           your details below:
@@ -46,7 +46,7 @@ function Brochure() {
         <FormProvider {...methods}>
           <form
             onSubmit={methods.handleSubmit(onSubmit)}
-            className="mt-12 space-y-6 text-left bg-white p-13 rounded-2xl max-w-lg mx-auto "
+            className="mt-8 sm:mt-12 space-y-6 text-left bg-white p-6 sm:p-13 rounded-2xl max-w-lg mx-auto"
           >
             <FormInput name="name" label="Name" placeholder="Enter your name" />
 
