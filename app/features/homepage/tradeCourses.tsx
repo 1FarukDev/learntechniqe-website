@@ -42,7 +42,7 @@ function TradeCourses() {
                 More Information
               </Button>
             </div>
-            <Image src={ElectricalIcon} alt="Electrical Icon" />
+            <Image src={ElectricalIcon} alt="Electrical Icon" className="w-12 h-12 sm:w-16 sm:h-16 md:w-auto md:h-auto shrink-0" />
           </div>
 
           <div className="bg-[#01636B] flex items-center justify-between rounded-lg p-4 sm:p-5 shadow-xl gap-4">
@@ -54,7 +54,7 @@ function TradeCourses() {
                 More Information
               </Button>
             </div>
-            <Image src={AirconIcon} alt="Air-con Icon" />
+            <Image src={AirconIcon} alt="Air-con Icon" className="w-12 h-12 sm:w-16 sm:h-16 md:w-auto md:h-auto shrink-0" />
           </div>
 
           <div className="bg-[#01636B] flex items-center justify-between rounded-lg p-4 sm:p-5 shadow-xl gap-4">
@@ -66,7 +66,7 @@ function TradeCourses() {
                 More Information
               </Button>
             </div>
-            <Image src={AssessmentIcon} alt="Assessment Icon" />
+            <Image src={AssessmentIcon} alt="Assessment Icon" className="w-12 h-12 sm:w-16 sm:h-16 md:w-auto md:h-auto shrink-0" />
           </div>
 
           <div className="bg-[#01636B] flex items-center justify-between rounded-lg p-4 sm:p-5 shadow-xl gap-4">
@@ -78,7 +78,7 @@ function TradeCourses() {
                 More Information
               </Button>
             </div>
-            <Image src={PLCIcon} alt="PLC Icon" />
+            <Image src={PLCIcon} alt="PLC Icon" className="w-12 h-12 sm:w-16 sm:h-16 md:w-auto md:h-auto shrink-0" />
           </div>
         </div>
       </div>
