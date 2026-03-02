@@ -34,7 +34,7 @@ function MegaMenu({
 
   return (
     <div
-      className={`fixed left-0 right-0 bg-white shadow-2xl z-50 border-t border-gray-100 transition-all duration-500 ease-in-out flex flex-col ${
+      className={`fixed left-0 right-0 bg-white shadow-2xl z-50 border-t border-gray-100 animate-mega-menu-in transition-[top,padding] duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col ${
         scrolled ? "top-23" : "top-18"
       }`}
       style={{ height: "calc(90vh - (scrolled ? 5.75rem : 4.5rem))", maxHeight: "calc(90vh - 4.5rem)" }}
@@ -42,7 +42,7 @@ function MegaMenu({
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto">
         <div
-          className={`mx-auto px-8 py-8 transition-all duration-500 ease-in-out ${
+          className={`mx-auto px-8 py-8 transition-[max-width,padding] duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             scrolled ? "max-w-7xl" : "max-w-screen-2xl"
           }`}
         >
@@ -71,13 +71,13 @@ function MegaMenu({
                           {sub.label}
                           <ChevronDown
                             size={16}
-                            className={`transition-transform duration-200 text-gray-500 ${
+                            className={`transition-transform duration-150 ease-out text-gray-500 ${
                               isOpen ? "rotate-180" : ""
                             }`}
                           />
                         </button>
                         {isOpen && (
-                          <div className="bg-gray-50 rounded-lg mt-1 mb-1 py-2 px-3 flex flex-col gap-1">
+                          <div className="bg-gray-50 rounded-lg mt-1 mb-1 py-2 px-3 flex flex-col gap-1 animate-mega-menu-in">
                             {sub.items.map((item, itemIdx) => (
                               <Link
                                 key={itemIdx}
@@ -102,7 +102,7 @@ function MegaMenu({
       {/* Sticky footer */}
       <div className="border-t border-gray-200 bg-white px-8 py-4 flex-shrink-0">
         <div
-          className={`mx-auto flex items-center justify-between transition-all duration-500 ease-in-out ${
+          className={`mx-auto flex items-center justify-between transition-[max-width] duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             scrolled ? "max-w-7xl" : "max-w-screen-2xl"
           }`}
         >
@@ -143,7 +143,6 @@ function Header({ data }: { data: HeaderData }) {
   const [showMegaMenu, setShowMegaMenu] = useState(false);
   const megaMenuTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pathname = usePathname();
-  const isHomePage = pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -153,7 +152,10 @@ function Header({ data }: { data: HeaderData }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const useWhiteStyle = !isHomePage && !scrolled && !showMegaMenu;
+  // White header only on pages with dark hero (e.g. /courses). 404 and other pages use black.
+  const pagesWithDarkHero = ["/courses"];
+  const useWhiteStyle =
+    pagesWithDarkHero.includes(pathname) && !scrolled && !showMegaMenu;
 
   const handleMouseEnter = () => {
     if (megaMenuTimeout.current) clearTimeout(megaMenuTimeout.current);
@@ -163,17 +165,17 @@ function Header({ data }: { data: HeaderData }) {
   const handleMouseLeave = () => {
     megaMenuTimeout.current = setTimeout(() => {
       setShowMegaMenu(false);
-    }, 150);
+    }, 80);
   };
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 flex justify-center transition-all duration-500 ease-in-out ${
+      className={`fixed top-0 left-0 right-0 z-50 flex justify-center ${
         showMegaMenu ? "bg-white" : ""
       }`}
     >
       <div
-        className={`w-full transition-all duration-500 ease-in-out ${
+        className={`w-full transition-[max-width,margin,padding,box-shadow,border-radius] duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           scrolled && !showMegaMenu
             ? "max-w-7xl mt-3 mx-4 rounded-2xl bg-white/80 backdrop-blur-md shadow-lg px-6 py-2"
             : scrolled && showMegaMenu
@@ -209,9 +211,9 @@ function Header({ data }: { data: HeaderData }) {
             >
               <button className="flex items-center gap-1 hover:opacity-70 transition-opacity">
                 <p>Courses</p>
-                <ChevronDown
-                  size={14}
-                  className={`transition-transform duration-200 ${
+                        <ChevronDown
+                          size={14}
+                          className={`transition-transform duration-150 ease-out ${
                     showMegaMenu ? "rotate-180" : ""
                   }`}
                 />

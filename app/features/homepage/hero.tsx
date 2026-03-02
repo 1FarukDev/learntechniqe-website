@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import FirstImage from "@/app/assets/png/010763a3052b54b4c1698aa779c00ac7c6ee3d6e.jpg";
 import SecondImage from "@/app/assets/png/22d5c2b039b0485213666e8075a240a93aa4bb9d.png";
 import ThirdImage from "@/app/assets/png/32743f1db038b2a1c51268ee3d04b3737c7bef67.jpg";
@@ -36,13 +36,6 @@ const transforms = [
 function Hero() {
   const [offset, setOffset] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setOffset((prev) => prev + 1);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <div className="pt-40">
