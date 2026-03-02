@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import ArrowRight from "@/app/assets/svg/arrow-front.svg";
 import ArrowBack from "@/app/assets/svg/arrow-back.svg";
 import Image from "next/image";
@@ -9,11 +9,19 @@ import CourseCard from "@/components/course-card";
 const Courses: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ left: 0 });
+  }, []);
+
   const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;
 
     const { scrollLeft, clientWidth } = scrollRef.current;
-    const scrollAmount = clientWidth;
+    // On mobile, scroll by one card width (min 280px, ~85vw for peek effect)
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+    const scrollAmount = isMobile
+      ? Math.min(320, Math.floor(window.innerWidth * 0.88))
+      : clientWidth;
 
     if (direction === "left") {
       scrollRef.current.scrollTo({
@@ -57,17 +65,20 @@ const Courses: React.FC = () => {
 
       <div
         ref={scrollRef}
-        className="flex overflow-x-auto gap-4 py-4 no-scrollbar"
+        className="flex overflow-x-auto gap-4 py-4 no-scrollbar snap-x snap-mandatory overscroll-x-contain md:snap-none pl-4 sm:pl-6 pr-4 sm:pr-6"
         style={{
-          paddingLeft: "max(20px, calc((100vw - 80rem) / 2 + 20px))",
-          paddingRight: "20px",
+          scrollPaddingLeft: "1rem",
+          scrollPaddingRight: "1rem",
         }}
       >
-        <CourseCard />
-        <CourseCard />
-        <CourseCard />
-        <CourseCard />
-        <CourseCard />
+        {[1, 2, 3, 4, 5].map((i) => (
+          <div
+            key={i}
+            className="snap-start shrink-0 w-[max(280px,min(320px,calc(100vw-56px)))] md:w-auto md:min-w-0"
+          >
+            <CourseCard />
+          </div>
+        ))}
       </div>
     </section>
   );
