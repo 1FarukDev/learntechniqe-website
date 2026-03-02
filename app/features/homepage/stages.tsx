@@ -39,7 +39,7 @@ function Stages() {
           </Button>
         </div>
 
-        <div className="bg-[#011430] w-full lg:w-1/2 relative pt-10 sm:pt-15 pb-5 px-6 sm:px-10 rounded-2xl flex flex-col">
+        <div className="bg-[#01636B] w-full lg:w-1/2 relative pt-10 sm:pt-15 pb-5 px-6 sm:px-10 rounded-2xl flex flex-col">
           <Image
             src={SecondStar}
             alt="2 Stars"
