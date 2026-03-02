@@ -94,11 +94,10 @@ function Hero() {
             <button
               key={i}
               aria-label={`Go to slide ${i + 1}`}
-              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                (offset % allImages.length) === i
+              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${(offset % allImages.length) === i
                   ? "bg-[#01636B] scale-125"
                   : "bg-[#9A9A9A]/60"
-              }`}
+                }`}
               onClick={() => setOffset(i)}
             />
           ))}

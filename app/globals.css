@@ -268,8 +268,93 @@ body {
   animation: mega-menu-in 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Mobile menu slide-in (ease-in) */
+@keyframes mobile-menu-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes mobile-menu-panel-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-mobile-menu-overlay {
+  animation: mobile-menu-overlay-in 0.3s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+.animate-mobile-menu-panel {
+  animation: mobile-menu-panel-in 0.3s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+/* Find a course modal - smooth ease-in */
+@keyframes modal-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-panel-slide-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes modal-panel-slide-bottom {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-modal-overlay {
+  animation: modal-overlay-in 0.35s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+.animate-modal-panel-right {
+  animation: modal-panel-slide-right 0.35s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+.animate-modal-panel-bottom {
+  animation: modal-panel-slide-bottom 0.35s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+/* Sheet/Modal - slide in from bottom (mobile) or right (web) */
+[data-slot="sheet-content"][data-state="open"][data-side="bottom"] {
+  animation: modal-panel-slide-bottom 0.35s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+[data-slot="sheet-content"][data-state="open"][data-side="right"] {
+  animation: modal-panel-slide-right 0.35s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+[data-slot="sheet-overlay"][data-state="open"] {
+  animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
+}
+
 /* Nohemi for all headings - use !important to override any conflicting styles */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-heading) !important;
 }
 
