@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Header from "./shared/header";
 import Footer from "./shared/footer";
+import HeaderWrapper from "./shared/headerWrapper";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -39,8 +40,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${outfit.variable} ${lato.variable} ${nohemi.variable} antialiased`}>
-        <Header />
+      <body
+        className={`${outfit.variable} ${lato.variable} ${nohemi.variable} antialiased`}
+      >
+        <HeaderWrapper />
         {children}
         <Footer />
       </body>

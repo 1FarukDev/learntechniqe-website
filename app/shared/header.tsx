@@ -7,73 +7,25 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown } from "lucide-react";
+import { Icon } from "@iconify/react";
+import type { HeaderData } from "@/types/header";
 
-const megaMenuData = [
-  {
-    title: "ELECTRICAL",
-    description:
-      "We have a wide range of electrician courses aimed at different levels, whether you're looking to start a career as an electrician.",
-    cardColor: "bg-[#E8F4F4]",
-    subcategories: [
-      {
-        label: "Course Packages",
-        items: ["Package A", "Package B", "Package C"],
-      },
-      { label: "PAT Testing", items: ["PAT Level 1", "PAT Level 2"] },
-      {
-        label: "Electrical Vehicle Charging",
-        items: ["EV Installer", "EV Advanced"],
-      },
-    ],
-  },
-  {
-    title: "AIRCON & REFRIGERATION",
-    description:
-      "We have a wide range of electrician courses aimed at different levels, whether you're looking to start a career as an electrician.",
-    cardColor: "bg-[#FEF3DC]",
-    subcategories: [
-      { label: "Course Packages", items: ["TCR15", "TCR10", "TC20"] },
-      { label: "Electrical Courses", items: ["Course A", "Course B"] },
-      { label: "Electrical Courses", items: ["Course C", "Course D"] },
-    ],
-  },
-  {
-    title: "PLC & AUTOMATION",
-    description:
-      "We have a wide range of electrician courses aimed at different levels, whether you're looking to start a career as an electrician.",
-    cardColor: "bg-[#E8EEF8]",
-    subcategories: [
-      {
-        label: "Electrical Courses",
-        items: ["PLC Fundamentals", "PLC Advanced"],
-      },
-      {
-        label: "Electrical Courses",
-        items: ["Automation Basics", "Automation Pro"],
-      },
-      { label: "Electrical Courses", items: ["SCADA Intro", "SCADA Advanced"] },
-    ],
-  },
-  {
-    title: "Electrical Courses",
-    description:
-      "We have a wide range of electrician courses aimed at different levels, whether you're looking to start a career as an electrician.",
-    cardColor: "bg-[#E8F5E8]",
-    subcategories: [
-      { label: "Electrical Courses", items: ["18th Edition", "17th Edition"] },
-      {
-        label: "Electrical Courses",
-        items: ["City & Guilds 2365", "City & Guilds 2357"],
-      },
-      {
-        label: "Electrical Courses",
-        items: ["Inspection & Testing", "Solar PV"],
-      },
-    ],
-  },
-];
+const socialIconMap: Record<string, string> = {
+  facebook: "mdi:facebook",
+  instagram: "mdi:instagram",
+  youtube: "mdi:youtube",
+  linkedin: "mdi:linkedin",
+  twitter: "mdi:twitter",
+  tiktok: "ic:baseline-tiktok",
+};
 
-function MegaMenu({ scrolled }: { scrolled: boolean }) {
+function MegaMenu({
+  scrolled,
+  data,
+}: {
+  scrolled: boolean;
+  data: HeaderData;
+}) {
   const [openSubcategory, setOpenSubcategory] = useState<string | null>(null);
 
   const toggleSubcategory = (key: string) => {
@@ -82,98 +34,103 @@ function MegaMenu({ scrolled }: { scrolled: boolean }) {
 
   return (
     <div
-      className={`fixed left-0 right-0 bg-white shadow-2xl z-50 border-t border-gray-100 transition-all duration-500 ease-in-out ${
+      className={`fixed left-0 right-0 bg-white shadow-2xl z-50 border-t border-gray-100 transition-all duration-500 ease-in-out flex flex-col ${
         scrolled ? "top-23" : "top-18"
       }`}
+      style={{ height: "calc(90vh - (scrolled ? 5.75rem : 4.5rem))", maxHeight: "calc(90vh - 4.5rem)" }}
     >
-      <div
-        className={`mx-auto px-8 py-8 transition-all duration-500 ease-in-out ${
-          scrolled ? "max-w-7xl" : "max-w-screen-2xl"
-        }`}
-      >
-        <div className="grid grid-cols-4 gap-6">
-          {megaMenuData.map((col, colIdx) => (
-            <div key={colIdx} className="flex flex-col gap-4">
-              <div className={`${col.cardColor} rounded-2xl p-5`}>
-                <h3 className="font-bold text-sm text-gray-900 mb-2">
-                  {col.title}
-                </h3>
-                <p className="text-xs text-gray-600 leading-relaxed">
-                  {col.description}
-                </p>
-              </div>
+      {/* Scrollable content */}
+      <div className="flex-1 overflow-y-auto">
+        <div
+          className={`mx-auto px-8 py-8 transition-all duration-500 ease-in-out ${
+            scrolled ? "max-w-7xl" : "max-w-screen-2xl"
+          }`}
+        >
+          <div className="grid grid-cols-4 gap-6">
+            {data.megaMenuColumns.map((col, colIdx) => (
+              <div key={colIdx} className="flex flex-col gap-4">
+                <div className={`${col.cardColor} rounded-2xl p-5`}>
+                  <h3 className="font-bold text-sm text-gray-900 mb-2">
+                    {col.title}
+                  </h3>
+                  <p className="text-xs text-gray-600 leading-relaxed">
+                    {col.description}
+                  </p>
+                </div>
 
-              <div className="flex flex-col gap-1">
-                {col.subcategories.map((sub, subIdx) => {
-                  const key = `${colIdx}-${subIdx}`;
-                  const isOpen = openSubcategory === key;
-                  return (
-                    <div key={subIdx}>
-                      <button
-                        onClick={() => toggleSubcategory(key)}
-                        className="w-full flex items-center justify-between py-2.5 px-1 text-sm font-semibold text-gray-800 hover:text-teal-700 transition-colors border-b border-gray-100"
-                      >
-                        {sub.label}
-                        <ChevronDown
-                          size={16}
-                          className={`transition-transform duration-200 text-gray-500 ${
-                            isOpen ? "rotate-180" : ""
-                          }`}
-                        />
-                      </button>
-                      {isOpen && (
-                        <div className="bg-gray-50 rounded-lg mt-1 mb-1 py-2 px-3 flex flex-col gap-1">
-                          {sub.items.map((item, itemIdx) => (
-                            <Link
-                              key={itemIdx}
-                              href="#"
-                              className="text-sm text-gray-600 hover:text-teal-700 py-0.5 transition-colors"
-                            >
-                              {item}
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+                <div className="flex flex-col gap-1">
+                  {col.subcategories.map((sub, subIdx) => {
+                    const key = `${colIdx}-${subIdx}`;
+                    const isOpen = openSubcategory === key;
+                    return (
+                      <div key={subIdx}>
+                        <button
+                          onClick={() => toggleSubcategory(key)}
+                          className="w-full flex items-center justify-between py-2.5 px-1 text-sm font-semibold text-gray-800 hover:text-teal-700 transition-colors border-b border-gray-100"
+                        >
+                          {sub.label}
+                          <ChevronDown
+                            size={16}
+                            className={`transition-transform duration-200 text-gray-500 ${
+                              isOpen ? "rotate-180" : ""
+                            }`}
+                          />
+                        </button>
+                        {isOpen && (
+                          <div className="bg-gray-50 rounded-lg mt-1 mb-1 py-2 px-3 flex flex-col gap-1">
+                            {sub.items.map((item, itemIdx) => (
+                              <Link
+                                key={itemIdx}
+                                href={item.slug?.current ? `/courses/${item.slug.current}` : item.href}
+                                className="text-sm text-gray-600 hover:text-teal-700 py-0.5 transition-colors"
+                              >
+                                {item.label}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
+      </div>
 
-        <div className="mt-8 pt-6 border-t border-gray-200 grid grid-cols-4 gap-6 text-sm text-gray-500">
-          <Link
-            href="#"
-            className="hover:text-teal-700 font-medium transition-colors"
-          >
-            Why choose us?
-          </Link>
-          <Link
-            href="#"
-            className="hover:text-teal-700 font-medium transition-colors"
-          >
-            Help & Support
-          </Link>
-          <Link
-            href="#"
-            className="hover:text-teal-700 font-medium transition-colors"
-          >
-            General FAQs
-          </Link>
-          <div className="flex items-center gap-3 justify-end">
-            {["facebook", "instagram", "youtube", "linkedin"].map(
-              (platform) => (
-                <Link
-                  key={platform}
-                  href="#"
-                  className="w-8 h-8 rounded-full bg-[#F5A623] flex items-center justify-center hover:opacity-80 transition-opacity"
-                >
-                  <span className="sr-only">{platform}</span>
-                  <div className="w-4 h-4 bg-white rounded-sm opacity-80" />
-                </Link>
-              ),
-            )}
+      {/* Sticky footer */}
+      <div className="border-t border-gray-200 bg-white px-8 py-4 flex-shrink-0">
+        <div
+          className={`mx-auto flex items-center justify-between transition-all duration-500 ease-in-out ${
+            scrolled ? "max-w-7xl" : "max-w-screen-2xl"
+          }`}
+        >
+          <div className="flex items-center gap-8 text-sm text-gray-500">
+            {data.megaMenuFooter.links.map((link, idx) => (
+              <Link
+                key={idx}
+                href={link.href}
+                className="hover:text-teal-700 font-medium transition-colors"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+          <div className="flex items-center gap-3">
+            {data.megaMenuFooter.socialLinks.map((social) => (
+              <Link
+                key={social.platform}
+                href={social.href}
+                className="w-8 h-8 rounded-full bg-[#F5A623] flex items-center justify-center hover:opacity-80 transition-opacity"
+              >
+                <span className="sr-only">{social.platform}</span>
+                <Icon
+                  icon={socialIconMap[social.platform]}
+                  className="w-4 h-4 text-white"
+                />
+              </Link>
+            ))}
           </div>
         </div>
       </div>
@@ -181,7 +138,7 @@ function MegaMenu({ scrolled }: { scrolled: boolean }) {
   );
 }
 
-function Header() {
+function Header({ data }: { data: HeaderData }) {
   const [scrolled, setScrolled] = useState(false);
   const [showMegaMenu, setShowMegaMenu] = useState(false);
   const megaMenuTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -259,21 +216,14 @@ function Header() {
                   }`}
                 />
               </button>
-              {showMegaMenu && <MegaMenu scrolled={scrolled} />}
+              {showMegaMenu && <MegaMenu scrolled={scrolled} data={data} />}
             </div>
 
-            <Link href="#">
-              <p>Am2 Assessment</p>
-            </Link>
-            <Link href="#">
-              <p>Resettlement</p>
-            </Link>
-            <Link href="#">
-              <p>Contact</p>
-            </Link>
-            <Link href="#">
-              <p>Blog</p>
-            </Link>
+            {data.navLinks.map((link) => (
+              <Link key={link.label} href={link.href}>
+                <p>{link.label}</p>
+              </Link>
+            ))}
           </nav>
         </section>
       </div>
