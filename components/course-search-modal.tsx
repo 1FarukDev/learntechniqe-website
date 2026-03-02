@@ -55,11 +55,7 @@ export function CourseSearchModal({ open, onOpenChange }: CourseSearchModalProps
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side={isMobile ? "bottom" : "right"}
-        className={
-          isMobile
-            ? "h-[85vh] rounded-t-2xl border-t data-[side=bottom]:slide-in-from-bottom"
-            : "sm:max-w-md w-full"
-        }
+        className={isMobile ? "h-[85vh] rounded-t-2xl border-t" : "sm:max-w-md w-full"}
       >
         <SheetHeader className="text-left">
           <SheetTitle className="font-heading text-xl">Find a course</SheetTitle>
@@ -71,13 +67,13 @@ export function CourseSearchModal({ open, onOpenChange }: CourseSearchModalProps
         <div className="flex flex-col gap-6 px-4 pb-6 overflow-y-auto flex-1">
           {/* Advanced search */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+            <Search className="absolute left-3 top-[60%] -translate-y-1/2 size-4 text-muted-foreground" />
             <Input
               placeholder="Search courses (e.g. electrical, AM2, PLC...)"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="pl-10 h-12"
-              autoFocus
+              className="pl-10 h-12 mt-2"
+              autoFocus={!isMobile}
             />
           </div>
 
@@ -132,7 +128,7 @@ export function CourseSearchModal({ open, onOpenChange }: CourseSearchModalProps
             onClick={() => onOpenChange(false)}
             className="block"
           >
-            <Button className="w-full bg-[#01636B] uppercase">
+            <Button className="w-full bg-[#01636B] h-12 uppercase">
               See all courses
             </Button>
           </Link>
