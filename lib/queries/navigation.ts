@@ -14,8 +14,11 @@ export const headerQuery = groq`
         label,
         items[] {
           label,
-          href,
-          slug { current }
+          "href": select(
+            defined(slug.current) => "/courses/" + slug.current,
+            defined(href) => href,
+            "#"
+          )
         }
       }
     },

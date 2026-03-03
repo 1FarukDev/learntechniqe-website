@@ -167,7 +167,7 @@ function MegaMenu({
             {data.megaMenuFooter.links.map((link, idx) => (
               <Link
                 key={idx}
-                href={link.href}
+                href={`${link.href}`}
                 onClick={onClose}
                 className="hover:text-teal-700 font-medium transition-colors"
               >
@@ -212,12 +212,11 @@ function Header({ data }: { data: HeaderData }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mega menu on route change
+  
   useEffect(() => {
     setShowMegaMenu(false);
   }, [pathname]);
 
-  // White text on non-home pages when not scrolled and menu not open
   const useWhiteStyle = !isHomePage && !scrolled && !showMegaMenu;
 
   const handleClose = () => setShowMegaMenu(false);
