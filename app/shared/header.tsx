@@ -6,7 +6,7 @@ import Elmlogo from "@/app/assets/svg/elm.svg";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { Icon } from "@iconify/react";
 import type { HeaderData } from "@/types/header";
 
@@ -19,8 +19,27 @@ const socialIconMap: Record<string, string> = {
   tiktok: "ic:baseline-tiktok",
 };
 
+function hexToRgba(hex: string, alpha: number) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
 function MegaMenu({ scrolled, data }: { scrolled: boolean; data: HeaderData }) {
   const [openSubcategory, setOpenSubcategory] = useState<string | null>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setVisible(true), 10);
+    // Lock body scroll when mega menu is open
+    document.body.style.overflow = "hidden";
+    return () => {
+      clearTimeout(timer);
+      // Restore body scroll when mega menu closes
+      document.body.style.overflow = "";
+    };
+  }, []);
 
   const toggleSubcategory = (key: string) => {
     setOpenSubcategory((prev) => (prev === key ? null : key));
@@ -28,71 +47,123 @@ function MegaMenu({ scrolled, data }: { scrolled: boolean; data: HeaderData }) {
 
   return (
     <div
-      className={`fixed left-0 right-0 bg-white shadow-2xl z-50 border-t border-gray-100 animate-mega-menu-in transition-[top,padding] duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col ${scrolled ? "top-23" : "top-18"}`}
-      style={{ height: "calc(90vh - (scrolled ? 5.75rem : 4.5rem))", maxHeight: "calc(90vh - 4.5rem)" }}
+      className={`fixed left-0 right-0 bg-white shadow-2xl z-50 border-t border-gray-100 ${
+        scrolled ? "top-23" : "top-18"
+      }`}
+      style={{
+        height: "calc(90vh - (scrolled ? 5.75rem : 4.5rem))",
+        maxHeight: "90vh",
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(-12px)",
+        transition: "opacity 400ms ease, transform 400ms ease",
+        display: "flex",
+        flexDirection: "column",
+      }}
     >
-      {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto">
-        <div
-          className={`mx-auto px-8 py-8 transition-[max-width,padding] duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] ${scrolled ? "max-w-7xl" : "max-w-screen-2xl"}`}
-        >
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {data.megaMenuColumns.map((col, colIdx) => (
-              <div key={colIdx} className="flex flex-col gap-4">
-                <div className={`${col.cardColor} rounded-2xl p-5`}>
-                  <h3 className="font-bold text-sm text-gray-900 mb-2">
-                    {col.title}
-                  </h3>
-                  <p className="text-xs text-gray-600 leading-relaxed">
-                    {col.description}
-                  </p>
-                </div>
+      <div
+        className={`mx-auto px-8 py-8 w-full flex flex-col flex-1 min-h-0 transition-all duration-500 ease-in-out ${
+          scrolled ? "max-w-7xl" : "max-w-screen-2xl"
+        }`}
+      >
+        <div className="grid grid-cols-3 gap-6 flex-1 min-h-0">
+          {data.megaMenuColumns.map((col, colIdx) => (
+            <div
+              key={colIdx}
+              className="flex flex-col gap-4 min-h-0"
+              style={{
+                opacity: visible ? 1 : 0,
+                transform: visible ? "translateY(0)" : "translateY(-8px)",
+                transition: `opacity 400ms ease ${colIdx * 60}ms, transform 400ms ease ${colIdx * 60}ms`,
+              }}
+            >
+              {/* Card — always visible, never scrolls away */}
+              <div
+                style={{ backgroundColor: col.cardColor }}
+                className="rounded-2xl p-5 flex-shrink-0"
+              >
+                <h3 className="font-bold text-sm text-gray-900 mb-2">
+                  {col.title}
+                </h3>
+                <p className="text-xs text-gray-600 leading-relaxed">
+                  {col.description}
+                </p>
+              </div>
 
-                <div className="flex flex-col gap-1">
-                  {col.subcategories.map((sub, subIdx) => {
-                    const key = `${colIdx}-${subIdx}`;
-                    const isOpen = openSubcategory === key;
-                    return (
-                      <div key={subIdx}>
-                        <button
-                          onClick={() => toggleSubcategory(key)}
-                          className="w-full flex items-center justify-between py-2.5 px-1 text-sm font-semibold text-gray-800 hover:text-teal-700 transition-colors border-b border-gray-100"
-                        >
-                          {sub.label}
-                          <ChevronDown
-                            size={16}
-                            className={`transition-transform duration-150 ease-out text-gray-500 ${isOpen ? "rotate-180" : ""}`}
-                          />
-                        </button>
-                        {isOpen && (
-                          <div className="bg-gray-50 rounded-lg mt-1 mb-1 py-2 px-3 flex flex-col gap-1 animate-mega-menu-in">
+              {/* Subcategories — scroll within column, never push footer */}
+              <div className="flex flex-col gap-1 overflow-y-auto flex-1 min-h-0 pr-1">
+                {col.subcategories.map((sub, subIdx) => {
+                  const key = `${colIdx}-${subIdx}`;
+                  const isOpen = openSubcategory === key;
+                  return (
+                    <div key={subIdx} className="flex-shrink-0">
+                      <button
+                        onClick={() => toggleSubcategory(key)}
+                        className="w-full flex items-center justify-between py-2.5 px-1 text-sm font-semibold text-gray-800 hover:text-teal-700 transition-colors border-b border-gray-100"
+                      >
+                        {sub.label}
+                        <ChevronDown
+                          size={16}
+                          className={`transition-transform duration-200 text-gray-500 ${
+                            isOpen ? "rotate-180" : ""
+                          }`}
+                        />
+                      </button>
+                      <div
+                        style={{
+                          display: "grid",
+                          gridTemplateRows: isOpen ? "1fr" : "0fr",
+                          opacity: isOpen ? 1 : 0,
+                          transition:
+                            "grid-template-rows 300ms ease, opacity 300ms ease",
+                        }}
+                      >
+                        <div className="overflow-hidden">
+                          <div
+                            style={{
+                              backgroundColor: hexToRgba(col.cardColor, 0.4),
+                            }}
+                            className="rounded-lg mt-1 mb-1 py-2 px-3 flex flex-col gap-1"
+                          >
                             {sub.items.map((item, itemIdx) => (
                               <Link
                                 key={itemIdx}
-                                href={item.slug?.current ? `/courses/${item.slug.current}` : item.href}
+                                href={
+                                  item.slug?.current
+                                    ? `/courses/${item.slug.current}`
+                                    : item.href
+                                }
                                 className="text-sm text-gray-600 hover:text-teal-700 py-0.5 transition-colors"
+                                style={{
+                                  opacity: isOpen ? 1 : 0,
+                                  transform: isOpen
+                                    ? "translateY(0)"
+                                    : "translateY(-4px)",
+                                  transition: `opacity 200ms ease ${itemIdx * 40}ms, transform 200ms ease ${itemIdx * 40}ms`,
+                                }}
                               >
                                 {item.label}
                               </Link>
                             ))}
                           </div>
-                        )}
+                        </div>
                       </div>
-                    );
-                  })}
-                </div>
+                    </div>
+                  );
+                })}
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-      </div>
 
-      {/* Sticky footer */}
-      <div className="border-t border-gray-200 bg-white px-8 py-4 flex-shrink-0">
+        {/* Footer — always pinned at bottom, never shifts */}
         <div
-          className={`mx-auto flex items-center justify-between transition-[max-width] duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] ${scrolled ? "max-w-7xl" : "max-w-screen-2xl"}`}
+          className="mt-8 pt-6 border-t border-gray-200 flex items-center justify-between text-sm text-gray-500 flex-shrink-0"
+          style={{
+            opacity: visible ? 1 : 0,
+            transition: "opacity 400ms ease 300ms",
+          }}
         >
-          <div className="flex items-center gap-8 text-sm text-gray-500">
+          <div className="flex items-center gap-8">
             {data.megaMenuFooter.links.map((link, idx) => (
               <Link
                 key={idx}
@@ -124,115 +195,9 @@ function MegaMenu({ scrolled, data }: { scrolled: boolean; data: HeaderData }) {
   );
 }
 
-function MobileNav({
-  data,
-  isOpen,
-  onClose,
-}: {
-  data: HeaderData;
-  isOpen: boolean;
-  onClose: () => void;
-}) {
-  const [openCourses, setOpenCourses] = useState(false);
-  const [openCategory, setOpenCategory] = useState<string | null>(null);
-
-  if (!isOpen) return null;
-
-  return (
-    <>
-      <div
-        className="fixed inset-0 bg-black/40 z-40 md:hidden animate-mobile-menu-overlay"
-        onClick={onClose}
-        aria-hidden="true"
-      />
-      <div className="fixed top-0 right-0 bottom-0 w-full max-w-sm bg-white shadow-2xl z-50 md:hidden overflow-y-auto animate-mobile-menu-panel">
-        <div className="flex justify-between items-center p-4 border-b border-gray-100">
-          <span className="font-semibold text-black">Menu</span>
-          <button
-            onClick={onClose}
-            className="p-2 -m-2 text-gray-600 hover:text-black"
-            aria-label="Close menu"
-          >
-            <X size={24} />
-          </button>
-        </div>
-        <nav className="flex flex-col py-4">
-          {/* Courses dropdown */}
-          <div className="border-b border-gray-100">
-            <button
-              onClick={() => setOpenCourses(!openCourses)}
-              className="w-full flex items-center justify-between py-4 px-6 text-left font-semibold text-black hover:bg-gray-50"
-            >
-              Courses
-              <ChevronDown
-                size={18}
-                className={`transition-transform duration-150 ${openCourses ? "rotate-180" : ""}`}
-              />
-            </button>
-            {openCourses && (
-              <div className="bg-gray-50 pb-4">
-                {data.megaMenuColumns.map((col, colIdx) => (
-                  <div key={colIdx} className="px-6">
-                    <button
-                      onClick={() =>
-                        setOpenCategory(openCategory === col.title ? null : col.title)
-                      }
-                      className="w-full flex items-center justify-between py-3 text-sm font-semibold text-gray-800"
-                    >
-                      {col.title}
-                      <ChevronDown
-                        size={16}
-                        className={`transition-transform duration-150 ${openCategory === col.title ? "rotate-180" : ""
-                          }`}
-                      />
-                    </button>
-                    {openCategory === col.title && (
-                      <div className="pl-4 pb-2 flex flex-col gap-1">
-                        {col.subcategories.map((sub, subIdx) => (
-                          <div key={subIdx} className="mb-2">
-                            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">
-                              {sub.label}
-                            </p>
-                            {sub.items.map((item, itemIdx) => (
-                              <Link
-                                key={itemIdx}
-                                href={item.slug?.current ? `/courses/${item.slug.current}` : item.href}
-                                onClick={onClose}
-                                className="block py-1.5 text-sm text-gray-700 hover:text-[#01636B]"
-                              >
-                                {item.label}
-                              </Link>
-                            ))}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {data.navLinks.map((link) => (
-            <Link
-              key={link.label}
-              href={link.href}
-              onClick={onClose}
-              className="py-4 px-6 font-semibold text-black hover:bg-gray-50 border-b border-gray-100"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-      </div>
-    </>
-  );
-}
-
 function Header({ data }: { data: HeaderData }) {
   const [scrolled, setScrolled] = useState(false);
   const [showMegaMenu, setShowMegaMenu] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const megaMenuTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pathname = usePathname();
 
@@ -244,15 +209,6 @@ function Header({ data }: { data: HeaderData }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    if (mobileMenuOpen) document.body.style.overflow = "hidden";
-    else document.body.style.overflow = "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [mobileMenuOpen]);
-
-  // White header only on pages with dark hero (e.g. /courses). 404 and other pages use black.
   const pagesWithDarkHero = ["/courses"];
   const useWhiteStyle =
     pagesWithDarkHero.includes(pathname) && !scrolled && !showMegaMenu;
@@ -270,44 +226,39 @@ function Header({ data }: { data: HeaderData }) {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 flex justify-center ${showMegaMenu ? "bg-white" : ""
-        }`}
+      className={`fixed top-0 left-0 right-0 z-50 flex justify-center ${
+        showMegaMenu ? "bg-white" : ""
+      }`}
     >
       <div
-        className={`w-full transition-[max-width,margin,padding,box-shadow,border-radius] duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] ${scrolled && !showMegaMenu
-          ? "max-w-7xl mt-3 mx-4 rounded-2xl bg-white/80 backdrop-blur-md shadow-lg px-6 py-2"
-          : scrolled && showMegaMenu
-            ? "max-w-7xl mt-3 mx-4 rounded-none px-6 py-2 shadow-none"
-            : showMegaMenu
-              ? "max-w-screen-2xl mt-0 mx-auto rounded-none px-8 py-0 shadow-none"
-              : "max-w-screen-2xl mt-0 mx-auto rounded-none shadow-none px-8 py-0"
-          }`}
+        className={`w-full transition-[max-width,margin,padding,box-shadow,border-radius] duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          scrolled && !showMegaMenu
+            ? "max-w-7xl mt-3 mx-4 rounded-2xl bg-white/80 backdrop-blur-md shadow-lg px-6 py-2"
+            : scrolled && showMegaMenu
+              ? "max-w-7xl mt-3 mx-4 rounded-none px-6 py-2 shadow-none"
+              : showMegaMenu
+                ? "max-w-screen-2xl mt-0 mx-auto rounded-none px-8 py-0 shadow-none"
+                : "max-w-screen-2xl mt-0 mx-auto rounded-none shadow-none px-8 py-0"
+        }`}
       >
         <section className="flex justify-between items-center">
-          <Link href="/" className="flex items-center py-3 sm:py-4 shrink-0">
+          <Link href="/" className="flex items-center py-4">
             <Image
               src={useWhiteStyle ? LearnTechniqueLogoWhite : LearnTechniqueLogo}
               alt="Learn Technique Logo"
               width={160}
               height={40}
-              className="h-8 w-auto sm:h-10"
             />
             <div
-              className={`w-px h-7 sm:h-9 mx-2 sm:mx-4 shrink-0 ${useWhiteStyle ? "bg-white" : "bg-black"}`}
+              className={`w-px h-9 mx-4 ${useWhiteStyle ? "bg-white" : "bg-black"}`}
             />
-            <Image
-              src={Elmlogo}
-              alt="Elm Logo"
-              width={80}
-              height={40}
-              className="h-8 w-auto sm:h-10"
-            />
+            <Image src={Elmlogo} alt="Elm Logo" width={80} height={40} />
           </Link>
 
-          {/* Desktop nav */}
           <nav
-            className={`hidden md:flex items-center gap-8 py-4 ${useWhiteStyle ? "text-white" : "text-black"
-              }`}
+            className={`flex items-center gap-8 py-4 ${
+              useWhiteStyle ? "text-white" : "text-black"
+            }`}
           >
             <div
               className="relative"
@@ -318,8 +269,9 @@ function Header({ data }: { data: HeaderData }) {
                 <p>Courses</p>
                 <ChevronDown
                   size={14}
-                  className={`transition-transform duration-150 ease-out ${showMegaMenu ? "rotate-180" : ""
-                    }`}
+                  className={`transition-transform duration-150 ease-out ${
+                    showMegaMenu ? "rotate-180" : ""
+                  }`}
                 />
               </button>
               {showMegaMenu && <MegaMenu scrolled={scrolled} data={data} />}
@@ -331,24 +283,8 @@ function Header({ data }: { data: HeaderData }) {
               </Link>
             ))}
           </nav>
-
-          {/* Mobile menu button */}
-          <button
-            onClick={() => setMobileMenuOpen(true)}
-            className={`md:hidden p-2 -m-2 rounded-lg hover:bg-white/10 ${useWhiteStyle ? "text-white" : "text-black"
-              }`}
-            aria-label="Open menu"
-          >
-            <Menu size={24} />
-          </button>
         </section>
       </div>
-
-      <MobileNav
-        data={data}
-        isOpen={mobileMenuOpen}
-        onClose={() => setMobileMenuOpen(false)}
-      />
     </header>
   );
 }
