@@ -26,17 +26,23 @@ function hexToRgba(hex: string, alpha: number) {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
-function MegaMenu({ scrolled, data }: { scrolled: boolean; data: HeaderData }) {
+function MegaMenu({
+  scrolled,
+  data,
+  onClose,
+}: {
+  scrolled: boolean;
+  data: HeaderData;
+  onClose: () => void;
+}) {
   const [openSubcategory, setOpenSubcategory] = useState<string | null>(null);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setVisible(true), 10);
-    // Lock body scroll when mega menu is open
     document.body.style.overflow = "hidden";
     return () => {
       clearTimeout(timer);
-      // Restore body scroll when mega menu closes
       document.body.style.overflow = "";
     };
   }, []);
@@ -76,7 +82,6 @@ function MegaMenu({ scrolled, data }: { scrolled: boolean; data: HeaderData }) {
                 transition: `opacity 400ms ease ${colIdx * 60}ms, transform 400ms ease ${colIdx * 60}ms`,
               }}
             >
-              {/* Card — always visible, never scrolls away */}
               <div
                 style={{ backgroundColor: col.cardColor }}
                 className="rounded-2xl p-5 flex-shrink-0"
@@ -89,7 +94,6 @@ function MegaMenu({ scrolled, data }: { scrolled: boolean; data: HeaderData }) {
                 </p>
               </div>
 
-              {/* Subcategories — scroll within column, never push footer */}
               <div className="flex flex-col gap-1 overflow-y-auto flex-1 min-h-0 pr-1">
                 {col.subcategories.map((sub, subIdx) => {
                   const key = `${colIdx}-${subIdx}`;
@@ -127,11 +131,8 @@ function MegaMenu({ scrolled, data }: { scrolled: boolean; data: HeaderData }) {
                             {sub.items.map((item, itemIdx) => (
                               <Link
                                 key={itemIdx}
-                                href={
-                                  item.slug?.current
-                                    ? `/courses/${item.slug.current}`
-                                    : item.href
-                                }
+                                href={item.href}
+                                onClick={onClose}
                                 className="text-sm text-gray-600 hover:text-teal-700 py-0.5 transition-colors"
                                 style={{
                                   opacity: isOpen ? 1 : 0,
@@ -155,7 +156,6 @@ function MegaMenu({ scrolled, data }: { scrolled: boolean; data: HeaderData }) {
           ))}
         </div>
 
-        {/* Footer — always pinned at bottom, never shifts */}
         <div
           className="mt-8 pt-6 border-t border-gray-200 flex items-center justify-between text-sm text-gray-500 flex-shrink-0"
           style={{
@@ -168,6 +168,7 @@ function MegaMenu({ scrolled, data }: { scrolled: boolean; data: HeaderData }) {
               <Link
                 key={idx}
                 href={link.href}
+                onClick={onClose}
                 className="hover:text-teal-700 font-medium transition-colors"
               >
                 {link.label}
@@ -179,6 +180,7 @@ function MegaMenu({ scrolled, data }: { scrolled: boolean; data: HeaderData }) {
               <Link
                 key={social.platform}
                 href={social.href}
+                onClick={onClose}
                 className="w-8 h-8 rounded-full bg-[#F5A623] flex items-center justify-center hover:opacity-80 transition-opacity"
               >
                 <span className="sr-only">{social.platform}</span>
@@ -200,6 +202,7 @@ function Header({ data }: { data: HeaderData }) {
   const [showMegaMenu, setShowMegaMenu] = useState(false);
   const megaMenuTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pathname = usePathname();
+  const isHomePage = pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -209,9 +212,15 @@ function Header({ data }: { data: HeaderData }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const pagesWithDarkHero = ["/courses"];
-  const useWhiteStyle =
-    pagesWithDarkHero.includes(pathname) && !scrolled && !showMegaMenu;
+  // Close mega menu on route change
+  useEffect(() => {
+    setShowMegaMenu(false);
+  }, [pathname]);
+
+  // White text on non-home pages when not scrolled and menu not open
+  const useWhiteStyle = !isHomePage && !scrolled && !showMegaMenu;
+
+  const handleClose = () => setShowMegaMenu(false);
 
   const handleMouseEnter = () => {
     if (megaMenuTimeout.current) clearTimeout(megaMenuTimeout.current);
@@ -242,7 +251,7 @@ function Header({ data }: { data: HeaderData }) {
         }`}
       >
         <section className="flex justify-between items-center">
-          <Link href="/" className="flex items-center py-4">
+          <Link href="/" className="flex items-center py-4" onClick={handleClose}>
             <Image
               src={useWhiteStyle ? LearnTechniqueLogoWhite : LearnTechniqueLogo}
               alt="Learn Technique Logo"
@@ -274,11 +283,17 @@ function Header({ data }: { data: HeaderData }) {
                   }`}
                 />
               </button>
-              {showMegaMenu && <MegaMenu scrolled={scrolled} data={data} />}
+              {showMegaMenu && (
+                <MegaMenu
+                  scrolled={scrolled}
+                  data={data}
+                  onClose={handleClose}
+                />
+              )}
             </div>
 
             {data.navLinks.map((link) => (
-              <Link key={link.label} href={link.href}>
+              <Link key={link.label} href={link.href} onClick={handleClose}>
                 <p>{link.label}</p>
               </Link>
             ))}
