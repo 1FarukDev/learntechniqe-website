@@ -65,7 +65,7 @@ const Courses: React.FC = () => {
 
       <div
         ref={scrollRef}
-        className="flex overflow-x-auto gap-4 py-4 no-scrollbar snap-x snap-mandatory overscroll-x-contain md:snap-none pl-4 sm:pl-6 pr-4 sm:pr-6"
+        className="flex overflow-x-auto gap-4 py-4 no-scrollbar snap-x snap-mandatory overscroll-x-contain md:snap-none pl-4 sm:pl-6 md:pl-[max(1.5rem,calc((100vw_-_1280px)_/_2_+_1.5rem))] pr-4 sm:pr-6"
         style={{
           scrollPaddingLeft: "1rem",
           scrollPaddingRight: "1rem",
