@@ -24,7 +24,7 @@ function Contact() {
     console.log(data);
   };
   return (
-    <section className="bg-[#E0ECED] -mx-5 px-0">
+    <section className="bg-[#E0ECED]  px-0">
       <div className="flex flex-col md:flex-row justify-between items-center max-w-6xl mx-auto py-10 sm:py-19 px-4 sm:px-6 gap-8 sm:gap-10">
         <div className="w-full md:w-[40%] flex flex-col gap-3 sm:gap-4">
           <h1 className="text-black font-semibold text-[32px] sm:text-[42px] md:text-[52px] leading-tight">
