@@ -38,7 +38,7 @@ function Hero() {
   const [searchOpen, setSearchOpen] = useState(false);
 
   return (
-    <div className="pt-40">
+    <div className="pt-40 md:px-0 px-4">
       <section className="flex flex-col items-center justify-center gap-5 text-center z-10 relative">
         <h1 className="font-outfit font-semibold text-[40px] sm:text-[44px] md:text-[56px] lg:text-[68px] leading-tight text-black">
           Electrical Skills for <br /> Everyone, by Experts.
@@ -60,9 +60,9 @@ function Hero() {
       </section>
 
       {/* Mobile: single image wheel carousel - one at a time with wheel-style dots */}
-      <section className="md:hidden relative w-full px-4 -mt-4">
+      <section className="md:hidden relative w-full  -mt-4">
         <div
-          className="relative w-full max-w-sm mx-auto aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl"
+          className="relative w-full max-w-sm mx-auto aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl"
           style={{
             perspective: "1200px",
             perspectiveOrigin: "center center",

@@ -4,7 +4,7 @@ import DiscountImage from '@/app/assets/png/discount.jpg'
 
 function Discount() {
   return (
-    <section className='py-15 sm:py-30 -mx-5 px-0'>
+    <section className='py-15 sm:py-30 -mx-5 md:px-0 px-4'>
       <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6">
         <Image
           src={DiscountImage}

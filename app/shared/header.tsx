@@ -26,8 +26,6 @@ function hexToRgba(hex: string, alpha: number) {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
-// ─── Desktop Mega Menu ────────────────────────────────────────────────────────
-
 function MegaMenu({
   scrolled,
   data,
@@ -69,7 +67,7 @@ function MegaMenu({
       }}
     >
       <div
-        className={`mx-auto px-8 py-8 w-full flex flex-col flex-1 min-h-0 transition-all duration-500 ease-in-out ${
+        className={`mx-auto px-4 md:px-8 py-8 w-full flex flex-col flex-1 min-h-0 transition-all duration-500 ease-in-out ${
           scrolled ? "max-w-7xl" : "max-w-screen-2xl"
         }`}
       >
@@ -199,8 +197,6 @@ function MegaMenu({
   );
 }
 
-// ─── Mobile Drawer ────────────────────────────────────────────────────────────
-
 function MobileDrawer({
   data,
   onClose,
@@ -290,7 +286,7 @@ function MobileDrawer({
                               <button
                                 onClick={() =>
                                   setOpenSubcategory((p) =>
-                                    p === key ? null : key
+                                    p === key ? null : key,
                                   )
                                 }
                                 className="w-full flex items-center justify-between px-3 py-2 text-sm text-gray-600 hover:text-[#016068] hover:bg-gray-50 rounded-lg transition"
@@ -365,8 +361,6 @@ function MobileDrawer({
   );
 }
 
-// ─── Main Header ──────────────────────────────────────────────────────────────
-
 function Header({ data }: { data: HeaderData }) {
   const [scrolled, setScrolled] = useState(false);
   const [showMegaMenu, setShowMegaMenu] = useState(false);
@@ -413,8 +407,8 @@ function Header({ data }: { data: HeaderData }) {
             : scrolled && showMegaMenu
               ? "max-w-7xl mt-3 mx-4 rounded-none px-6 py-2 shadow-none"
               : showMegaMenu
-                ? "max-w-screen-2xl mt-0 mx-auto rounded-none px-8 py-0 shadow-none"
-                : "max-w-screen-2xl mt-0 mx-auto rounded-none shadow-none px-8 py-0"
+                ? "max-w-screen-2xl mt-0 mx-auto rounded-none px-4 md:px-8 py-0 shadow-none"
+                : "max-w-screen-2xl mt-0 mx-auto rounded-none shadow-none px-4 md:px-8 py-0"
         }`}
       >
         <section className="flex justify-between items-center">
@@ -429,13 +423,18 @@ function Header({ data }: { data: HeaderData }) {
               alt="Learn Technique Logo"
               width={160}
               height={40}
+              className="w-24 md:w-40"
             />
             <div
-              className={`w-px h-9 mx-4 ${
-                useWhiteStyle ? "bg-white" : "bg-black"
-              }`}
+              className={`w-px h-9 mx-2 md:mx-4 ${useWhiteStyle ? "bg-white" : "bg-black"}`}
             />
-            <Image src={Elmlogo} alt="Elm Logo" width={80} height={40} />
+            <Image
+              src={Elmlogo}
+              alt="Elm Logo"
+              width={80}
+              height={40}
+              className="w-12 md:w-20"
+            />
           </Link>
 
           {/* Desktop Nav */}
@@ -474,9 +473,8 @@ function Header({ data }: { data: HeaderData }) {
             ))}
           </nav>
 
-          {/* Mobile Hamburger */}
           <button
-            className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition"
+            className="md:hidden p-1 rounded-lg hover:bg-gray-100 transition"
             onClick={() => setShowMobileDrawer(true)}
           >
             <Menu
@@ -489,10 +487,7 @@ function Header({ data }: { data: HeaderData }) {
 
       {/* Mobile Drawer */}
       {showMobileDrawer && (
-        <MobileDrawer
-          data={data}
-          onClose={() => setShowMobileDrawer(false)}
-        />
+        <MobileDrawer data={data} onClose={() => setShowMobileDrawer(false)} />
       )}
     </header>
   );

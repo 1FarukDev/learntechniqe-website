@@ -39,7 +39,7 @@ function AllBlogPosts() {
       <div className="max-w-7xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="flex items-center justify-between mb-10">
-          <h1 className="text-4xl font-bold text-black">All Blog Posts</h1>
+          <h1 className="text-2xl md:text-4xl font-bold text-black">All Blog Posts</h1>
 
           {/* Filter Dropdown */}
           <div className="relative">

@@ -9,21 +9,21 @@ import Image from "next/image";
 
 function TradeCourses() {
   return (
-    <section className="relative mt-10 overflow-hidden -mx-5 px-0">
+    <section className="relative mt-10 overflow-hidden md:px-0 px-4 -mx-5 ">
       <div
-        className="absolute inset-0 bg-cover bg-center"
+        className="absolute inset-0 bg-cover bg-center "
         style={{ backgroundImage: `url(${BackgroundImage.src})` }}
       />
 
       <div
-        className="absolute inset-0 bg-linear-to-b 
+        className="absolute inset-0 bg-linear-to-b  
     from-[#014757]/95 
     via-[#014757]/90 
     via-80%
-    to-black/80"
+    to-black/80 "
       />
 
-      <div className="relative z-10 px-4 sm:px-6 md:px-10 py-15 sm:py-25 max-w-7xl mx-auto">
+      <div className="relative z-10 px-4 sm:px-6 md:px-10 py-15 sm:py-25 max-w-7xl mx-auto ">
         <h1 className="font-semibold text-[32px] sm:text-[44px] md:text-[52px] leading-tight text-white text-center">
           Our Trade Courses
         </h1>

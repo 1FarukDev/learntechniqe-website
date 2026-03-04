@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 
 function Stages() {
   return (
-    <main className="flex flex-col items-center justify-center gap-6 w-full mt-20 sm:mt-16 md:mt-35 text-center max-w-7xl mx-auto ">
+    <main className="flex md:px-0 px-4 flex-col items-center justify-center gap-6 w-full mt-20 sm:mt-16 md:mt-35 text-center max-w-7xl mx-auto ">
       <h1 className="font-semibold text-[32px] sm:text-[44px] md:text-[56px] lg:text-[68px] leading-tight text-black px-2">
         There’s a Course For Everyone
       </h1>
