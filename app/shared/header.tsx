@@ -1,12 +1,12 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
-import LearnTechniqueLogo from "@/app/assets/svg/learntechnique.svg";
+import LearnTechniqueLogo from "@/app/assets/svg/learntechnique.png";
 import LearnTechniqueLogoWhite from "@/app/assets/svg/learntechnique-white.png";
 import Elmlogo from "@/app/assets/svg/elm.svg";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, X, Menu } from "lucide-react";
 import { Icon } from "@iconify/react";
 import type { HeaderData } from "@/types/header";
 
@@ -25,6 +25,8 @@ function hexToRgba(hex: string, alpha: number) {
   const b = parseInt(hex.slice(5, 7), 16);
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
+
+// ─── Desktop Mega Menu ────────────────────────────────────────────────────────
 
 function MegaMenu({
   scrolled,
@@ -197,28 +199,196 @@ function MegaMenu({
   );
 }
 
+// ─── Mobile Drawer ────────────────────────────────────────────────────────────
+
+function MobileDrawer({
+  data,
+  onClose,
+}: {
+  data: HeaderData;
+  onClose: () => void;
+}) {
+  const [coursesOpen, setCoursesOpen] = useState(false);
+  const [openColumn, setOpenColumn] = useState<number | null>(null);
+  const [openSubcategory, setOpenSubcategory] = useState<string | null>(null);
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
+
+  return (
+    <>
+      {/* Backdrop */}
+      <div className="fixed inset-0 bg-black/40 z-40" onClick={onClose} />
+
+      {/* Drawer */}
+      <div className="fixed top-0 right-0 h-full w-[85vw] max-w-sm bg-white z-50 flex flex-col shadow-2xl overflow-y-auto">
+        {/* Drawer Header */}
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+          <Link href="/" onClick={onClose}>
+            <Image
+              src={LearnTechniqueLogo}
+              alt="Learn Technique"
+              width={130}
+              height={34}
+            />
+          </Link>
+          <button
+            onClick={onClose}
+            className="p-2 rounded-lg hover:bg-gray-100 transition"
+          >
+            <X size={20} className="text-gray-600" />
+          </button>
+        </div>
+
+        {/* Nav Links */}
+        <nav className="flex flex-col px-4 py-4 gap-1 flex-1">
+          {/* Courses accordion */}
+          <div>
+            <button
+              onClick={() => setCoursesOpen((p) => !p)}
+              className="w-full flex items-center justify-between px-3 py-3 text-sm font-semibold text-gray-800 hover:bg-gray-50 rounded-lg transition"
+            >
+              Courses
+              <ChevronDown
+                size={16}
+                className={`transition-transform text-gray-500 ${
+                  coursesOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            {coursesOpen && (
+              <div className="ml-3 mt-1 flex flex-col gap-1">
+                {data.megaMenuColumns.map((col, colIdx) => (
+                  <div key={colIdx}>
+                    <button
+                      onClick={() =>
+                        setOpenColumn((p) => (p === colIdx ? null : colIdx))
+                      }
+                      className="w-full flex items-center justify-between px-3 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 rounded-lg transition"
+                    >
+                      {col.title}
+                      <ChevronDown
+                        size={14}
+                        className={`transition-transform text-gray-400 ${
+                          openColumn === colIdx ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+
+                    {openColumn === colIdx && (
+                      <div className="ml-3 flex flex-col gap-1 mb-1">
+                        {col.subcategories.map((sub, subIdx) => {
+                          const key = `${colIdx}-${subIdx}`;
+                          const isOpen = openSubcategory === key;
+                          return (
+                            <div key={subIdx}>
+                              <button
+                                onClick={() =>
+                                  setOpenSubcategory((p) =>
+                                    p === key ? null : key
+                                  )
+                                }
+                                className="w-full flex items-center justify-between px-3 py-2 text-sm text-gray-600 hover:text-[#016068] hover:bg-gray-50 rounded-lg transition"
+                              >
+                                {sub.label}
+                                <ChevronDown
+                                  size={13}
+                                  className={`transition-transform text-gray-400 ${
+                                    isOpen ? "rotate-180" : ""
+                                  }`}
+                                />
+                              </button>
+                              {isOpen && (
+                                <div className="ml-3 flex flex-col gap-0.5 mb-1">
+                                  {sub.items.map((item, itemIdx) => (
+                                    <Link
+                                      key={itemIdx}
+                                      href={item.href}
+                                      onClick={onClose}
+                                      className="px-3 py-1.5 text-xs text-gray-500 hover:text-[#016068] rounded-lg hover:bg-gray-50 transition"
+                                    >
+                                      {item.label}
+                                    </Link>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Other nav links */}
+          {data.navLinks.map((link) => (
+            <Link
+              key={link.label}
+              href={link.href}
+              onClick={onClose}
+              className="px-3 py-3 text-sm font-semibold text-gray-800 hover:bg-gray-50 rounded-lg transition"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Drawer Footer */}
+        <div className="px-5 py-4 border-t border-gray-100">
+          <div className="flex items-center gap-3">
+            {data.megaMenuFooter.socialLinks.map((social) => (
+              <Link
+                key={social.platform}
+                href={social.href}
+                onClick={onClose}
+                className="w-8 h-8 rounded-full bg-[#F5A623] flex items-center justify-center hover:opacity-80 transition-opacity"
+              >
+                <span className="sr-only">{social.platform}</span>
+                <Icon
+                  icon={socialIconMap[social.platform]}
+                  className="w-4 h-4 text-white"
+                />
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ─── Main Header ──────────────────────────────────────────────────────────────
+
 function Header({ data }: { data: HeaderData }) {
   const [scrolled, setScrolled] = useState(false);
   const [showMegaMenu, setShowMegaMenu] = useState(false);
+  const [showMobileDrawer, setShowMobileDrawer] = useState(false);
   const megaMenuTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pathname = usePathname();
-  const isHomePage = pathname === "/" || pathname === "/not-found";
+
+  const noNavbarPages = ["/", "/not-found"];
+  const isHomePage = noNavbarPages.includes(pathname);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  
   useEffect(() => {
     setShowMegaMenu(false);
+    setShowMobileDrawer(false);
   }, [pathname]);
 
   const useWhiteStyle = !isHomePage && !scrolled && !showMegaMenu;
-
   const handleClose = () => setShowMegaMenu(false);
 
   const handleMouseEnter = () => {
@@ -227,9 +397,7 @@ function Header({ data }: { data: HeaderData }) {
   };
 
   const handleMouseLeave = () => {
-    megaMenuTimeout.current = setTimeout(() => {
-      setShowMegaMenu(false);
-    }, 80);
+    megaMenuTimeout.current = setTimeout(() => setShowMegaMenu(false), 80);
   };
 
   return (
@@ -250,7 +418,12 @@ function Header({ data }: { data: HeaderData }) {
         }`}
       >
         <section className="flex justify-between items-center">
-          <Link href="/" className="flex items-center py-4" onClick={handleClose}>
+          {/* Logo */}
+          <Link
+            href="/"
+            className="flex items-center py-4"
+            onClick={handleClose}
+          >
             <Image
               src={useWhiteStyle ? LearnTechniqueLogoWhite : LearnTechniqueLogo}
               alt="Learn Technique Logo"
@@ -258,13 +431,16 @@ function Header({ data }: { data: HeaderData }) {
               height={40}
             />
             <div
-              className={`w-px h-9 mx-4 ${useWhiteStyle ? "bg-white" : "bg-black"}`}
+              className={`w-px h-9 mx-4 ${
+                useWhiteStyle ? "bg-white" : "bg-black"
+              }`}
             />
             <Image src={Elmlogo} alt="Elm Logo" width={80} height={40} />
           </Link>
 
+          {/* Desktop Nav */}
           <nav
-            className={`flex items-center gap-8 py-4 ${
+            className={`hidden md:flex items-center gap-8 py-4 ${
               useWhiteStyle ? "text-white" : "text-black"
             }`}
           >
@@ -297,8 +473,27 @@ function Header({ data }: { data: HeaderData }) {
               </Link>
             ))}
           </nav>
+
+          {/* Mobile Hamburger */}
+          <button
+            className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition"
+            onClick={() => setShowMobileDrawer(true)}
+          >
+            <Menu
+              size={24}
+              className={useWhiteStyle ? "text-white" : "text-gray-800"}
+            />
+          </button>
         </section>
       </div>
+
+      {/* Mobile Drawer */}
+      {showMobileDrawer && (
+        <MobileDrawer
+          data={data}
+          onClose={() => setShowMobileDrawer(false)}
+        />
+      )}
     </header>
   );
 }
