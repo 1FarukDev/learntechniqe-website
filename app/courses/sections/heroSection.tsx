@@ -3,7 +3,7 @@ import BackgroundImage from "@/app/assets/png/courses.jpg";
 
 function HeroSection() {
   return (
-    <section className="relative w-full h-120 overflow-hidden">
+    <section className="relative w-full h-80 sm:h-96 md:h-120 overflow-hidden">
       <img
         src={BackgroundImage.src ?? BackgroundImage}
         alt=""
@@ -15,14 +15,13 @@ function HeroSection() {
 
       <div className="relative z-20 w-full h-full flex flex-col items-center justify-center text-center px-6 pb-20 text-white">
         <h1 className="font-outfit text-4xl md:text-5xl font-semibold tracking-wide mb-4">
-        Courses
+          Courses
         </h1>
 
         <p className="font-outfit text-sm md:text-base leading-7 text-white/90 ">
           Carefully put-together data-backed courses taught by seasoned experts.
-          <br />
-          Our processes and facilities are world-class with multiple credible
-          accreditations.
+       
+       
         </p>
       </div>
 

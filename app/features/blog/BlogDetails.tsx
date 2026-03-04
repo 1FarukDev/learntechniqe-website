@@ -1,18 +1,19 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   Search,
   ChevronDown,
-  ChevronLeft,
-  ChevronRight,
   SlidersHorizontal,
   X,
 } from "lucide-react";
 import BlogCard from "@/components/blog-card";
 import BackgroundImage from "@/app/assets/png/featuredcard.png";
+import ArrowRight from "@/app/assets/svg/arrow-front.svg";
+import ArrowBack from "@/app/assets/svg/arrow-back.svg";
 import { FormInput } from "@/components/Input";
 import { useForm, FormProvider } from "react-hook-form";
 
@@ -53,16 +54,29 @@ function BlogDetailPage() {
   const [recentOpen, setRecentOpen] = useState(true);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
+  useEffect(() => {
+    document.body.style.overflow = drawerOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [drawerOpen]);
+
   const methods = useForm({
     defaultValues: { search: "" },
   });
 
   const { handleSubmit } = methods;
 
-  const scroll = (dir: "left" | "right") => {
+  const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;
-    scrollRef.current.scrollBy({
-      left: dir === "left" ? -400 : 400,
+    const { scrollLeft, clientWidth } = scrollRef.current;
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+    const scrollAmount = isMobile
+      ? Math.min(320, Math.floor(window.innerWidth * 0.88))
+      : clientWidth;
+    scrollRef.current.scrollTo({
+      left:
+        direction === "left"
+          ? scrollLeft - scrollAmount
+          : scrollLeft + scrollAmount,
       behavior: "smooth",
     });
   };
@@ -136,42 +150,44 @@ function BlogDetailPage() {
 
   return (
     <main className="bg-white min-h-screen">
-      {drawerOpen && (
-        <>
-          <div
-            className="fixed inset-0 bg-black/40 z-40 lg:hidden"
-            onClick={() => setDrawerOpen(false)}
-          />
+      {drawerOpen &&
+        createPortal(
+          <>
+            <div
+              className="fixed inset-0 bg-black/40 z-[60] lg:hidden"
+              onClick={() => setDrawerOpen(false)}
+            />
 
-          <div
-            className="fixed top-0 left-0 h-full w-[80vw] max-w-xs bg-white z-50 flex flex-col shadow-2xl overflow-y-auto lg:hidden"
-            style={{
-              animation: "slideInLeft 250ms ease forwards",
-            }}
-          >
-            <style>{`
-              @keyframes slideInLeft {
-                from { transform: translateX(-100%); }
-                to { transform: translateX(0); }
-              }
-            `}</style>
+            <div
+              className="fixed inset-y-0 left-0 w-[80vw] max-w-xs bg-white z-[70] flex flex-col shadow-2xl overflow-y-auto overscroll-y-contain lg:hidden"
+              style={{
+                animation: "slideInLeft 250ms ease forwards",
+              }}
+            >
+              <style>{`
+                @keyframes slideInLeft {
+                  from { transform: translateX(-100%); }
+                  to { transform: translateX(0); }
+                }
+              `}</style>
 
-            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-              <h3 className="font-semibold text-gray-800 text-sm">
-                Categories & Recent Posts
-              </h3>
-              <button
-                onClick={() => setDrawerOpen(false)}
-                className="p-2 rounded-lg hover:bg-gray-100 transition"
-              >
-                <X size={18} className="text-gray-600" />
-              </button>
+              <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+                <h3 className="font-semibold text-gray-800 text-sm">
+                  Categories & Recent Posts
+                </h3>
+                <button
+                  onClick={() => setDrawerOpen(false)}
+                  className="p-2 rounded-lg hover:bg-gray-100 transition"
+                >
+                  <X size={18} className="text-gray-600" />
+                </button>
+              </div>
+
+              <div className="px-5 py-5 flex-1">{SidebarContent}</div>
             </div>
-
-            <div className="px-5 py-5 flex-1">{SidebarContent}</div>
-          </div>
-        </>
-      )}
+          </>,
+          document.body
+        )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
         <button
@@ -245,38 +261,45 @@ function BlogDetailPage() {
             <h2 className="text-2xl sm:text-3xl font-bold text-black">
               More like this
             </h2>
-            <div className="flex items-center gap-3 sm:gap-5">
-              <button
-                onClick={() => scroll("left")}
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition"
-              >
-                <ChevronLeft size={16} />
-              </button>
-              <button
-                onClick={() => scroll("right")}
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#0D7377] flex items-center justify-center text-white hover:bg-[#0a5f63] transition"
-              >
-                <ChevronRight size={16} />
-              </button>
-              <Button className="hidden sm:flex bg-[#0D7377] hover:bg-[#0a5f63] text-white px-6 sm:px-8 tracking-widest text-xs sm:text-sm">
-                SEE ALL BLOG POSTS
+            <div className="flex items-center gap-4 sm:gap-8">
+              <div className="flex items-center gap-3 sm:gap-5">
+                <div
+                  onClick={() => scroll("left")}
+                  className="h-9 w-9 sm:h-10 sm:w-10 bg-[#9A9A9A] flex items-center justify-center rounded-full hover:bg-[#016068] active:bg-[#0E7377] cursor-pointer shrink-0 transition-colors"
+                >
+                  <Image src={ArrowBack} alt="Scroll left" />
+                </div>
+                <div
+                  onClick={() => scroll("right")}
+                  className="h-9 w-9 sm:h-10 sm:w-10 bg-[#9A9A9A] flex items-center justify-center rounded-full hover:bg-[#016068] active:bg-[#0E7377] cursor-pointer shrink-0 transition-colors"
+                >
+                  <Image src={ArrowRight} alt="Scroll right" />
+                </div>
+              </div>
+              <Button className="hidden sm:flex uppercase bg-[#016068] h-12 sm:h-17.25 px-8 sm:px-15 text-sm sm:text-base">
+                See All Blog Posts
               </Button>
             </div>
           </div>
 
+          <Button className="flex sm:hidden w-full uppercase bg-[#016068] hover:bg-[#014d54] text-white tracking-widest text-sm mb-4 h-12">
+            See All Blog Posts
+          </Button>
+
           <div
             ref={scrollRef}
-            className="flex gap-4 sm:gap-6 overflow-x-auto pb-4 scroll-smooth"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            className="flex overflow-x-auto gap-4 py-4 no-scrollbar snap-x snap-mandatory overscroll-x-contain md:snap-none"
+            style={{ scrollPaddingLeft: "1rem", scrollPaddingRight: "1rem" }}
           >
             {morePosts.map((post) => (
-              <BlogCard key={post.id} post={post} variant="small" />
+              <div
+                key={post.id}
+                className="snap-start shrink-0 w-[max(280px,min(320px,calc(100vw-56px)))] md:w-auto md:min-w-0"
+              >
+                <BlogCard post={post} variant="small" fluid />
+              </div>
             ))}
           </div>
-
-          <Button className="flex sm:hidden w-full mt-4 bg-[#0D7377] hover:bg-[#0a5f63] text-white tracking-widest text-sm">
-            SEE ALL BLOG POSTS
-          </Button>
         </section>
       </div>
     </main>

@@ -46,13 +46,13 @@ const Courses: React.FC = () => {
           <div className="flex items-center gap-3 sm:gap-5">
             <div
               onClick={() => scroll("left")}
-              className="h-9 w-9 sm:h-10 sm:w-10 bg-[#9A9A9A] flex items-center justify-center rounded-full hover:bg-[#016068] cursor-pointer shrink-0"
+              className="h-9 w-9 sm:h-10 sm:w-10 bg-[#9A9A9A] flex items-center justify-center rounded-full hover:bg-[#016068] active:bg-[#0E7377] cursor-pointer shrink-0 transition-colors"
             >
               <Image src={ArrowBack} alt="Arrow Back" />
             </div>
             <div
               onClick={() => scroll("right")}
-              className="h-9 w-9 sm:h-10 sm:w-10 bg-[#9A9A9A] flex items-center justify-center rounded-full hover:bg-[#016068] cursor-pointer shrink-0"
+              className="h-9 w-9 sm:h-10 sm:w-10 bg-[#9A9A9A] flex items-center justify-center rounded-full hover:bg-[#016068] active:bg-[#0E7377] cursor-pointer shrink-0 transition-colors"
             >
               <Image src={ArrowRight} alt="Arrow Right" />
             </div>
@@ -65,7 +65,7 @@ const Courses: React.FC = () => {
 
       <div
         ref={scrollRef}
-        className="flex overflow-x-auto gap-4 py-4 no-scrollbar snap-x snap-mandatory overscroll-x-contain md:snap-none pl-4 sm:pl-6 pr-4 sm:pr-6"
+        className="flex overflow-x-auto gap-4 py-4 no-scrollbar snap-x snap-mandatory overscroll-x-contain md:snap-none pl-4 sm:pl-6 md:pl-[max(1.5rem,calc((100vw_-_1280px)_/_2_+_1.5rem))] pr-4 sm:pr-6"
         style={{
           scrollPaddingLeft: "1rem",
           scrollPaddingRight: "1rem",

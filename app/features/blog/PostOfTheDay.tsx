@@ -1,10 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import BackgroundImage from "@/app/assets/png/featuredcard.png";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import ArrowRight from "@/app/assets/svg/arrow-front.svg";
+import ArrowBack from "@/app/assets/svg/arrow-back.svg";
 import BlogCard from "@/components/blog-card";
 import { useRouter } from "next/navigation";
 
@@ -31,10 +32,24 @@ function CarouselSection({
   const scrollRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
-  const scroll = (dir: "left" | "right") => {
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ left: 0 });
+  }, []);
+
+  const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;
-    const amount = dir === "left" ? -400 : 400;
-    scrollRef.current.scrollBy({ left: amount, behavior: "smooth" });
+    const { scrollLeft, clientWidth } = scrollRef.current;
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+    const scrollAmount = isMobile
+      ? Math.min(320, Math.floor(window.innerWidth * 0.88))
+      : clientWidth;
+    scrollRef.current.scrollTo({
+      left:
+        direction === "left"
+          ? scrollLeft - scrollAmount
+          : scrollLeft + scrollAmount,
+      behavior: "smooth",
+    });
   };
 
   return (
@@ -43,43 +58,49 @@ function CarouselSection({
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black">
           {title}
         </h2>
-        <div className="flex items-center gap-3 sm:gap-7">
-          <button
-            onClick={() => scroll("left")}
-            className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition"
-          >
-            <ChevronLeft size={16} />
-          </button>
-          <button
-            onClick={() => scroll("right")}
-            className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#0D7377] flex items-center justify-center text-white hover:bg-[#0a5f63] transition"
-          >
-            <ChevronRight size={16} />
-          </button>
+        <div className="flex items-center gap-4 sm:gap-8">
+          <div className="flex items-center gap-3 sm:gap-5">
+            <div
+              onClick={() => scroll("left")}
+              className="h-9 w-9 sm:h-10 sm:w-10 bg-[#9A9A9A] flex items-center justify-center rounded-full hover:bg-[#016068] active:bg-[#0E7377] cursor-pointer shrink-0 transition-colors"
+            >
+              <Image src={ArrowBack} alt="Scroll left" />
+            </div>
+            <div
+              onClick={() => scroll("right")}
+              className="h-9 w-9 sm:h-10 sm:w-10 bg-[#9A9A9A] flex items-center justify-center rounded-full hover:bg-[#016068] active:bg-[#0E7377] cursor-pointer shrink-0 transition-colors"
+            >
+              <Image src={ArrowRight} alt="Scroll right" />
+            </div>
+          </div>
           <Button
             onClick={() => router.push("/blog/all")}
-            className="hidden sm:flex bg-[#0D7377] hover:bg-[#0a5f63] text-white px-6 sm:px-8 tracking-widest text-xs sm:text-sm"
+            className="hidden sm:flex uppercase bg-[#016068] h-12 sm:h-17.25 px-8 sm:px-15 text-sm sm:text-base"
           >
-            SEE ALL BLOG POSTS
+            See All Blog Posts
           </Button>
         </div>
       </div>
 
-      {/* Mobile "See All" button */}
       <Button
         onClick={() => router.push("/blog/all")}
-        className="flex sm:hidden w-full bg-[#0D7377] hover:bg-[#0a5f63] text-white tracking-widest text-sm mb-4"
+        className="flex sm:hidden w-full uppercase bg-[#016068] hover:bg-[#014d54] text-white tracking-widest text-sm mb-4 h-12"
       >
-        SEE ALL BLOG POSTS
+        See All Blog Posts
       </Button>
 
       <div
         ref={scrollRef}
-        className="flex gap-4 sm:gap-6 overflow-x-auto pb-4 scroll-smooth"
-        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        className="flex overflow-x-auto gap-4 py-4 no-scrollbar snap-x snap-mandatory overscroll-x-contain md:snap-none"
+        style={{ scrollPaddingLeft: "1rem", scrollPaddingRight: "1rem" }}
       >
         {posts.map((post) => (
-          <BlogCard key={post.id} post={post} variant={variant} />
+          <div
+            key={post.id}
+            className="snap-start shrink-0 w-[max(280px,min(320px,calc(100vw-56px)))] md:w-auto md:min-w-0"
+          >
+            <BlogCard post={post} variant={variant} fluid />
+          </div>
         ))}
       </div>
     </section>

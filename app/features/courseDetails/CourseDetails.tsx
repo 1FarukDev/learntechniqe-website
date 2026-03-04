@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useRef, useState, useCallback } from "react";
 import { Plus, Minus } from "lucide-react";
 
 type Topic = {
@@ -181,11 +181,10 @@ function AccordionList({ topics }: { topics: Topic[] }) {
           <div key={i} className="rounded-sm overflow-hidden">
             <button
               onClick={() => setOpenIndex(isOpen ? -1 : i)}
-              className={`w-full flex items-center justify-between px-5 py-4 text-left transition-colors duration-200 ${
-                isOpen
+              className={`w-full flex items-center justify-between px-5 py-4 text-left transition-colors duration-200 ${isOpen
                   ? "bg-[#016068] text-white"
                   : "bg-[#e8edf2] text-gray-700 hover:bg-gray-200"
-              }`}
+                }`}
             >
               <span className="font-semibold text-sm">{topic.title}</span>
               {isOpen ? (
@@ -196,9 +195,8 @@ function AccordionList({ topics }: { topics: Topic[] }) {
             </button>
 
             <div
-              className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                isOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
-              }`}
+              className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
+                }`}
             >
               <div className="bg-white px-6 py-5">
                 <ul className="flex flex-col gap-5">
@@ -222,9 +220,19 @@ function CourseDetails() {
   const [activeTab, setActiveTab] = useState<Tab>("syllabus");
   const [animating, setAnimating] = useState(false);
   const [displayedTab, setDisplayedTab] = useState<Tab>("syllabus");
+  const tabScrollRef = useRef<HTMLDivElement>(null);
 
-  const handleTabChange = (tab: Tab) => {
+  const scrollTabIntoView = useCallback((el: HTMLButtonElement | null) => {
+    if (!el || !tabScrollRef.current) return;
+    const container = tabScrollRef.current;
+    const offsetLeft = el.offsetLeft - container.offsetLeft;
+    const scrollTarget = offsetLeft - (container.clientWidth / 2 - el.clientWidth / 2);
+    container.scrollTo({ left: scrollTarget, behavior: "smooth" });
+  }, []);
+
+  const handleTabChange = (tab: Tab, el: HTMLButtonElement | null) => {
     if (tab === activeTab) return;
+    scrollTabIntoView(el);
     setAnimating(true);
     setTimeout(() => {
       setDisplayedTab(tab);
@@ -241,17 +249,37 @@ function CourseDetails() {
 
   return (
     <div className="bg-white">
-      <section className="py-12  max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-3 border border-gray-200 rounded-sm overflow-hidden mb-10">
+      <section className="py-12 max-w-7xl mx-auto px-6">
+        {/* Desktop: grid tabs */}
+        <div className="hidden sm:grid grid-cols-3 border border-gray-200 rounded-sm overflow-hidden mb-10">
           {tabs.map((tab) => (
             <button
               key={tab.key}
-              onClick={() => handleTabChange(tab.key)}
-              className={`py-5 text-xs font-semibold uppercase tracking-widest transition-all duration-200 border-r last:border-r-0 border-gray-200 ${
-                activeTab === tab.key
+              onClick={(e) => handleTabChange(tab.key, e.currentTarget)}
+              className={`py-5 text-xs font-semibold uppercase tracking-widest transition-all duration-200 border-r last:border-r-0 border-gray-200 ${activeTab === tab.key
                   ? "bg-[#4a5568] text-white"
                   : "bg-[#e8edf2] text-gray-500 hover:bg-gray-200"
-              }`}
+                }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Mobile: horizontally scrollable pill buttons */}
+        <div
+          ref={tabScrollRef}
+          className="flex sm:hidden gap-2.5 overflow-x-auto pb-1 mb-8 -mx-6 px-6 no-scrollbar"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+          {tabs.map((tab) => (
+            <button
+              key={tab.key}
+              onClick={(e) => handleTabChange(tab.key, e.currentTarget)}
+              className={`shrink-0 px-5 py-3 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-200 ${activeTab === tab.key
+                  ? "bg-[#4a5568] text-white shadow-md"
+                  : "bg-[#e8edf2] text-gray-500 hover:bg-gray-200"
+                }`}
             >
               {tab.label}
             </button>
@@ -259,9 +287,8 @@ function CourseDetails() {
         </div>
 
         <div
-          className={`transition-all duration-200 ease-in-out ${
-            animating ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"
-          }`}
+          className={`transition-all duration-200 ease-in-out ${animating ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"
+            }`}
         >
           <AccordionList key={displayedTab} topics={tabContent[displayedTab]} />
         </div>

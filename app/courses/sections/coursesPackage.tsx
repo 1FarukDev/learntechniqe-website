@@ -1,7 +1,8 @@
 "use client";
 import { FilterAccordion } from "@/components/accordion";
 import { FormInput } from "@/components/Input";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useForm, FormProvider } from "react-hook-form";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import ArrowRight from "@/app/assets/svg/arrow-front.svg";
@@ -10,24 +11,18 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import CourseCard from "@/components/course-card";
 
-function CoursesPackage() {
-  const [drawerOpen, setDrawerOpen] = useState(false);
-
-  const methods = useForm({
-    defaultValues: {
-      search: "",
-      expertiseLevel: "",
-      category: "",
-      location: "",
-    },
-  });
-
-  const { handleSubmit, watch, setValue } = methods;
-
-  const expertiseLevel = watch("expertiseLevel");
-  const category = watch("category");
-  const location = watch("location");
+function CourseCarousel({
+  title,
+  count,
+}: {
+  title: string;
+  count: string;
+}) {
   const scrollRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ left: 0 });
+  }, []);
 
   const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;
@@ -44,6 +39,83 @@ function CoursesPackage() {
       behavior: "smooth",
     });
   };
+
+  return (
+    <div>
+      <div
+        className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4"
+        style={{ paddingRight: "max(0rem, calc((100vw - 80rem) / 2 + 1rem))" }}
+      >
+        <div>
+          <h3 className="text-black font-semibold text-lg sm:text-xl">
+            {title}
+          </h3>
+          <p className="text-[#9A9A9A] font-normal text-sm sm:text-base">
+            {count}
+          </p>
+        </div>
+        <div className="flex items-center gap-4 sm:gap-4">
+          <div className="flex items-center gap-3 sm:gap-3">
+            <button
+              type="button"
+              onClick={() => scroll("left")}
+              className="h-9 w-9 sm:h-10 sm:w-10 bg-[#9A9A9A] flex items-center justify-center rounded-full hover:bg-[#016068] active:bg-[#0E7377] transition-colors cursor-pointer shrink-0"
+            >
+              <Image src={ArrowBack} alt="Scroll left" />
+            </button>
+            <button
+              type="button"
+              onClick={() => scroll("right")}
+              className="h-9 w-9 sm:h-10 sm:w-10 bg-[#9A9A9A] flex items-center justify-center rounded-full hover:bg-[#016068] active:bg-[#0E7377] transition-colors cursor-pointer shrink-0"
+            >
+              <Image src={ArrowRight} alt="Scroll right" />
+            </button>
+          </div>
+          <Button className="uppercase bg-[#016068] px-6 sm:px-10 h-10 sm:h-11 text-xs sm:text-sm flex-1 sm:flex-initial">
+            All Courses
+          </Button>
+        </div>
+      </div>
+      <div
+        ref={scrollRef}
+        className="-mx-4 flex overflow-x-auto gap-4 py-4 no-scrollbar snap-x snap-mandatory overscroll-x-contain md:snap-none pl-4 pr-4 md:mx-0 md:pl-0 md:pr-0"
+        style={{ scrollPaddingLeft: "1rem", scrollPaddingRight: "1rem" }}
+      >
+        {[1, 2, 3, 4, 5].map((i) => (
+          <div
+            key={i}
+            className="snap-start shrink-0 w-[max(280px,min(320px,calc(100vw-56px)))] md:w-auto md:min-w-0"
+          >
+            <CourseCard />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CoursesPackage() {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  useEffect(() => {
+    document.body.style.overflow = drawerOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [drawerOpen]);
+
+  const methods = useForm({
+    defaultValues: {
+      search: "",
+      expertiseLevel: "",
+      category: "",
+      location: "",
+    },
+  });
+
+  const { handleSubmit, watch, setValue } = methods;
+
+  const expertiseLevel = watch("expertiseLevel");
+  const category = watch("category");
+  const location = watch("location");
 
   const SidebarContent = (
     <FormProvider {...methods}>
@@ -104,7 +176,7 @@ function CoursesPackage() {
 
       <p className="bg-[#F5F5F5] p-4 text-sm">
         We have a wide range of electrician courses aimed at different
-        levels, whether you're looking to start a career as an
+        levels, whether you&apos;re looking to start a career as an
         electrician hoping to enter the industry or already work as a
         qualified electrician who is looking to extend their services or
         knowledge, we will have an electricians course for you. Being
@@ -124,205 +196,71 @@ function CoursesPackage() {
   );
 
   return (
-    <section className="py-8 sm:py-10 bg-white">
+    <section className="py-8 sm:py-10 bg-white overflow-x-clip">
+      {drawerOpen &&
+        createPortal(
+          <>
+            <div
+              className="fixed inset-0 bg-black/40 z-[60] md:hidden"
+              onClick={() => setDrawerOpen(false)}
+            />
+            <div
+              className="fixed inset-y-0 left-0 w-[85vw] max-w-sm bg-white z-[70] flex flex-col shadow-2xl overflow-y-auto overscroll-y-contain md:hidden"
+              style={{ animation: "slideInLeft 250ms ease forwards" }}
+            >
+              <style>{`
+                @keyframes slideInLeft {
+                  from { transform: translateX(-100%); }
+                  to { transform: translateX(0); }
+                }
+              `}</style>
 
-      {/* ── Mobile Drawer ─────────────────────────────────────────────────── */}
-      {drawerOpen && (
-        <>
-          <div
-            className="fixed inset-0 bg-black/40 z-40 md:hidden"
-            onClick={() => setDrawerOpen(false)}
-          />
-          <div
-            className="fixed top-0 left-0 h-full w-[85vw] max-w-sm bg-white z-50 flex flex-col shadow-2xl overflow-y-auto md:hidden"
-            style={{ animation: "slideInLeft 250ms ease forwards" }}
-          >
-            <style>{`
-              @keyframes slideInLeft {
-                from { transform: translateX(-100%); }
-                to { transform: translateX(0); }
-              }
-            `}</style>
+              <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 shrink-0">
+                <h3 className="font-semibold text-gray-800 text-sm">Filters</h3>
+                <button
+                  onClick={() => setDrawerOpen(false)}
+                  className="p-2 rounded-lg hover:bg-gray-100 transition"
+                >
+                  <X size={18} className="text-gray-600" />
+                </button>
+              </div>
 
-            {/* Drawer header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 shrink-0">
-              <h3 className="font-semibold text-gray-800 text-sm">Filters</h3>
-              <button
-                onClick={() => setDrawerOpen(false)}
-                className="p-2 rounded-lg hover:bg-gray-100 transition"
-              >
-                <X size={18} className="text-gray-600" />
-              </button>
+              <div className="px-5 py-5 pb-10 flex-1">{SidebarContent}</div>
             </div>
+          </>,
+          document.body
+        )}
 
-            {/* Drawer content */}
-            <div className="px-5 py-5 flex-1">{SidebarContent}</div>
-          </div>
-        </>
-      )}
-
-      <div className="max-w-7xl mx-auto px-4">
-
-        {/* Mobile filter trigger */}
+      <div className="max-w-7xl mx-auto px-4 md:hidden">
         <button
-          className="md:hidden mb-5 flex items-center gap-2 text-sm font-semibold text-[#016068] border border-[#016068] rounded-lg px-4 py-2 hover:bg-[#016068]/5 transition"
+          className="mb-5 flex items-center gap-2 text-sm font-semibold text-[#016068] border border-[#016068] rounded-lg px-4 py-2 hover:bg-[#016068]/5 transition"
           onClick={() => setDrawerOpen(true)}
         >
           <SlidersHorizontal size={16} />
           Filters
         </button>
+      </div>
 
-        <div className="flex items-start flex-col md:flex-row gap-10">
+      <div className="px-4 md:px-0 md:flex md:items-start md:gap-10">
+        <aside
+          className="hidden md:block w-72 shrink-0"
+          style={{ marginLeft: "max(1rem, calc((100vw - 80rem) / 2 + 1rem))" }}
+        >
+          <h3 className="text-black font-semibold text-xl mb-4">
+            75 Courses
+          </h3>
+          {SidebarContent}
+        </aside>
 
-          {/* Desktop sidebar */}
-          <aside className="hidden md:block w-72 shrink-0">
-            <h3 className="text-black font-semibold text-xl mb-4">
-              75 Courses
-            </h3>
-            {SidebarContent}
-          </aside>
+        <div className="flex-1 min-w-0">
+          <CourseCarousel title="Course Packages" count="24 courses" />
 
-          {/* Course sections */}
-          <div className="flex-1 min-w-0">
+          <div className="mt-8 sm:mt-10">
+            <CourseCarousel title="PAT Testing" count="24 courses" />
+          </div>
 
-            {/* Course Packages */}
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h3 className="text-black font-semibold text-lg sm:text-xl">
-                    Course Packages
-                  </h3>
-                  <p className="text-[#9A9A9A] font-normal text-sm sm:text-base">
-                    24 courses
-                  </p>
-                </div>
-                <div className="flex items-center gap-2 sm:gap-4">
-                  <div className="flex items-center gap-2 sm:gap-3">
-                    <button
-                      type="button"
-                      onClick={() => scroll("left")}
-                      className="h-8 w-8 sm:h-10 sm:w-10 bg-[#9A9A9A] flex items-center justify-center rounded-full hover:bg-[#016068] transition-colors cursor-pointer"
-                    >
-                      <Image src={ArrowBack} alt="Scroll left" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => scroll("right")}
-                      className="h-8 w-8 sm:h-10 sm:w-10 bg-[#9A9A9A] flex items-center justify-center rounded-full hover:bg-[#016068] transition-colors cursor-pointer"
-                    >
-                      <Image src={ArrowRight} alt="Scroll right" />
-                    </button>
-                  </div>
-                  <Button className="uppercase bg-[#016068] px-4 sm:px-10 h-9 sm:h-11 text-xs sm:text-sm">
-                    All Courses
-                  </Button>
-                </div>
-              </div>
-              <div
-                ref={scrollRef}
-                className="flex overflow-x-auto gap-4 py-4 no-scrollbar snap-x snap-mandatory overscroll-x-contain md:snap-none"
-                style={{ scrollPaddingLeft: "1rem", scrollPaddingRight: "1rem" }}
-              >
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <div key={i} className="snap-start shrink-0 w-[max(280px,min(320px,calc(100vw-56px)))] md:w-auto md:min-w-0">
-                    <CourseCard />
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* PAT Testing */}
-            <div className="mt-8 sm:mt-10">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h3 className="text-black font-semibold text-lg sm:text-xl">
-                    PAT Testing
-                  </h3>
-                  <p className="text-[#9A9A9A] font-normal text-sm sm:text-base">
-                    24 courses
-                  </p>
-                </div>
-                <div className="flex items-center gap-2 sm:gap-4">
-                  <div className="flex items-center gap-2 sm:gap-3">
-                    <button
-                      type="button"
-                      onClick={() => scroll("left")}
-                      className="h-8 w-8 sm:h-10 sm:w-10 bg-[#9A9A9A] flex items-center justify-center rounded-full hover:bg-[#016068] transition-colors cursor-pointer"
-                    >
-                      <Image src={ArrowBack} alt="Scroll left" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => scroll("right")}
-                      className="h-8 w-8 sm:h-10 sm:w-10 bg-[#9A9A9A] flex items-center justify-center rounded-full hover:bg-[#016068] transition-colors cursor-pointer"
-                    >
-                      <Image src={ArrowRight} alt="Scroll right" />
-                    </button>
-                  </div>
-                  <Button className="uppercase bg-[#016068] px-4 sm:px-10 h-9 sm:h-11 text-xs sm:text-sm">
-                    All Courses
-                  </Button>
-                </div>
-              </div>
-              <div
-                ref={scrollRef}
-                className="flex overflow-x-auto gap-4 py-4 no-scrollbar snap-x snap-mandatory overscroll-x-contain md:snap-none"
-                style={{ scrollPaddingLeft: "1rem", scrollPaddingRight: "1rem" }}
-              >
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <div key={i} className="snap-start shrink-0 w-[max(280px,min(320px,calc(100vw-56px)))] md:w-auto md:min-w-0">
-                    <CourseCard />
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Electrical Vehicle Charging */}
-            <div className="mt-8 sm:mt-10">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h3 className="text-black font-semibold text-lg sm:text-xl">
-                    Electrical Vehicle Charging
-                  </h3>
-                  <p className="text-[#9A9A9A] font-normal text-sm sm:text-base">
-                    24 courses
-                  </p>
-                </div>
-                <div className="flex items-center gap-2 sm:gap-4">
-                  <div className="flex items-center gap-2 sm:gap-3">
-                    <button
-                      type="button"
-                      onClick={() => scroll("left")}
-                      className="h-8 w-8 sm:h-10 sm:w-10 bg-[#9A9A9A] flex items-center justify-center rounded-full hover:bg-[#016068] transition-colors cursor-pointer"
-                    >
-                      <Image src={ArrowBack} alt="Scroll left" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => scroll("right")}
-                      className="h-8 w-8 sm:h-10 sm:w-10 bg-[#9A9A9A] flex items-center justify-center rounded-full hover:bg-[#016068] transition-colors cursor-pointer"
-                    >
-                      <Image src={ArrowRight} alt="Scroll right" />
-                    </button>
-                  </div>
-                  <Button className="uppercase bg-[#016068] px-4 sm:px-10 h-9 sm:h-11 text-xs sm:text-sm">
-                    All Courses
-                  </Button>
-                </div>
-              </div>
-              <div
-                ref={scrollRef}
-                className="flex overflow-x-hidden gap-4 py-4 no-scrollbar snap-x snap-mandatory overscroll-x-contain md:snap-none"
-                style={{ scrollPaddingLeft: "1rem", scrollPaddingRight: "1rem" }}
-              >
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <div key={i} className="snap-start shrink-0 w-[max(280px,min(320px,calc(100vw-56px)))] md:w-auto md:min-w-0">
-                    <CourseCard />
-                  </div>
-                ))}
-              </div>
-            </div>
-
+          <div className="mt-8 sm:mt-10">
+            <CourseCarousel title="Electrical Vehicle Charging" count="24 courses" />
           </div>
         </div>
       </div>

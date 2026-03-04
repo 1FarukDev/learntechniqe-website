@@ -34,7 +34,7 @@ function Brochure() {
 
       <div className="relative z-10 max-w-3xl w-full px-4 sm:px-6 md:px-10 text-white text-center">
         <h1 className="text-[28px] sm:text-4xl md:text-5xl font-semibold">
-          Subscribe to download <br /> our brochure
+          Subscribe To Download <br /> Our Brochure
         </h1>
 
         <p className="mt-4 text-xs sm:text-sm md:text-base text-gray-200">
