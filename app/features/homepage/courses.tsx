@@ -46,13 +46,13 @@ const Courses: React.FC = () => {
           <div className="flex items-center gap-3 sm:gap-5">
             <div
               onClick={() => scroll("left")}
-              className="h-9 w-9 sm:h-10 sm:w-10 bg-[#9A9A9A] flex items-center justify-center rounded-full hover:bg-[#016068] cursor-pointer shrink-0"
+              className="h-9 w-9 sm:h-10 sm:w-10 bg-[#9A9A9A] flex items-center justify-center rounded-full hover:bg-[#016068] active:bg-[#0E7377] cursor-pointer shrink-0 transition-colors"
             >
               <Image src={ArrowBack} alt="Arrow Back" />
             </div>
             <div
               onClick={() => scroll("right")}
-              className="h-9 w-9 sm:h-10 sm:w-10 bg-[#9A9A9A] flex items-center justify-center rounded-full hover:bg-[#016068] cursor-pointer shrink-0"
+              className="h-9 w-9 sm:h-10 sm:w-10 bg-[#9A9A9A] flex items-center justify-center rounded-full hover:bg-[#016068] active:bg-[#0E7377] cursor-pointer shrink-0 transition-colors"
             >
               <Image src={ArrowRight} alt="Arrow Right" />
             </div>

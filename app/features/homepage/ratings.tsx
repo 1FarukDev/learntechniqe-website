@@ -12,7 +12,7 @@ function Ratings() {
     <section className="max-w-5xl mx-auto py-15 sm:py-30 md:px-0 px-4">
       <div className="mx-auto max-w-7xl flex flex-col sm:flex-row justify-between md:items-start items-center gap-4 mb-6 px-0">
         <h1 className="text-black font-semibold text-[20px] sm:text-[30px] md:text-[34px]">
-          What our students say about us
+          What Our Students Say About Us
         </h1>
         <div className="flex items-center gap-8">
           <Button className="uppercase bg-[#016068] h-12 sm:h-17.25 px-8 sm:px-15 text-sm sm:text-base">

@@ -104,7 +104,7 @@ const Location: React.FC = () => {
         </div>
 
         {/* Image with Arrows */}
-        <div className="relative w-full md:w-1/2 h-64 sm:h-96 md:h-[450px] lg:h-[650px] order-1 md:order-2">
+        <div className="relative w-full md:w-1/2 aspect-[626.32/488.05] max-w-[626.32px] max-h-[488.05px] order-1 md:order-2">
           <Image
             src={current.image}
             alt={current.title}

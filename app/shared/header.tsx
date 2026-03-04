@@ -53,9 +53,8 @@ function MegaMenu({
 
   return (
     <div
-      className={`fixed left-0 right-0 bg-white shadow-2xl z-50 border-t border-gray-100 ${
-        scrolled ? "top-23" : "top-18"
-      }`}
+      className={`fixed left-0 right-0 bg-white shadow-2xl z-50 border-t border-gray-100 ${scrolled ? "top-23" : "top-18"
+        }`}
       style={{
         height: "calc(90vh - (scrolled ? 5.75rem : 4.5rem))",
         maxHeight: "90vh",
@@ -67,9 +66,8 @@ function MegaMenu({
       }}
     >
       <div
-        className={`mx-auto px-4 md:px-8 py-8 w-full flex flex-col flex-1 min-h-0 transition-all duration-500 ease-in-out ${
-          scrolled ? "max-w-7xl" : "max-w-screen-2xl"
-        }`}
+        className={`mx-auto px-4 md:px-8 py-8 w-full flex flex-col flex-1 min-h-0 transition-all duration-500 ease-in-out ${scrolled ? "max-w-7xl" : "max-w-screen-2xl"
+          }`}
       >
         <div className="grid grid-cols-3 gap-6 flex-1 min-h-0">
           {data.megaMenuColumns.map((col, colIdx) => (
@@ -107,9 +105,8 @@ function MegaMenu({
                         {sub.label}
                         <ChevronDown
                           size={16}
-                          className={`transition-transform duration-200 text-gray-500 ${
-                            isOpen ? "rotate-180" : ""
-                          }`}
+                          className={`transition-transform duration-200 text-gray-500 ${isOpen ? "rotate-180" : ""
+                            }`}
                         />
                       </button>
                       <div
@@ -251,9 +248,8 @@ function MobileDrawer({
               Courses
               <ChevronDown
                 size={16}
-                className={`transition-transform text-gray-500 ${
-                  coursesOpen ? "rotate-180" : ""
-                }`}
+                className={`transition-transform text-gray-500 ${coursesOpen ? "rotate-180" : ""
+                  }`}
               />
             </button>
 
@@ -270,9 +266,8 @@ function MobileDrawer({
                       {col.title}
                       <ChevronDown
                         size={14}
-                        className={`transition-transform text-gray-400 ${
-                          openColumn === colIdx ? "rotate-180" : ""
-                        }`}
+                        className={`transition-transform text-gray-400 ${openColumn === colIdx ? "rotate-180" : ""
+                          }`}
                       />
                     </button>
 
@@ -294,9 +289,8 @@ function MobileDrawer({
                                 {sub.label}
                                 <ChevronDown
                                   size={13}
-                                  className={`transition-transform text-gray-400 ${
-                                    isOpen ? "rotate-180" : ""
-                                  }`}
+                                  className={`transition-transform text-gray-400 ${isOpen ? "rotate-180" : ""
+                                    }`}
                                 />
                               </button>
                               {isOpen && (
@@ -396,20 +390,18 @@ function Header({ data }: { data: HeaderData }) {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 flex justify-center ${
-        showMegaMenu ? "bg-white" : ""
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 flex justify-center ${showMegaMenu ? "bg-white" : ""
+        }`}
     >
       <div
-        className={`w-full transition-[max-width,margin,padding,box-shadow,border-radius] duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          scrolled && !showMegaMenu
+        className={`w-full transition-[max-width,margin,padding,box-shadow,border-radius] duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] ${scrolled && !showMegaMenu
             ? "max-w-7xl mt-3 mx-4 rounded-2xl bg-white/80 backdrop-blur-md shadow-lg px-6 py-2"
             : scrolled && showMegaMenu
               ? "max-w-7xl mt-3 mx-4 rounded-none px-6 py-2 shadow-none"
               : showMegaMenu
                 ? "max-w-screen-2xl mt-0 mx-auto rounded-none px-4 md:px-8 py-0 shadow-none"
                 : "max-w-screen-2xl mt-0 mx-auto rounded-none shadow-none px-4 md:px-8 py-0"
-        }`}
+          }`}
       >
         <section className="flex justify-between items-center">
           {/* Logo */}
@@ -439,9 +431,8 @@ function Header({ data }: { data: HeaderData }) {
 
           {/* Desktop Nav */}
           <nav
-            className={`hidden md:flex items-center gap-8 py-4 ${
-              useWhiteStyle ? "text-white" : "text-black"
-            }`}
+            className={`hidden md:flex items-center gap-8 py-4 ${useWhiteStyle ? "text-white" : "text-black"
+              }`}
           >
             <div
               className="relative"
@@ -452,9 +443,8 @@ function Header({ data }: { data: HeaderData }) {
                 <p>Courses</p>
                 <ChevronDown
                   size={14}
-                  className={`transition-transform duration-150 ease-out ${
-                    showMegaMenu ? "rotate-180" : ""
-                  }`}
+                  className={`transition-transform duration-150 ease-out ${showMegaMenu ? "rotate-180" : ""
+                    }`}
                 />
               </button>
               {showMegaMenu && (

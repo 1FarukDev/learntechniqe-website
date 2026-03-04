@@ -10,13 +10,13 @@ function CourseCard() {
   const router = useRouter();
 
   return (
-    <section className="bg-[#FFF9ED] min-w-[280px] sm:min-w-70 max-w-[320px] sm:max-w-117 shrink-0 rounded-bl-md rounded-br-md">
-      <div className="w-full relative h-56 sm:h-70 md:h-80">
+    <section className="bg-[#FFF9ED] min-w-[280px] sm:min-w-70 max-w-[320px] sm:max-w-117 shrink-0 rounded-bl-md rounded-br-md rounded-tl-md rounded-tr-md">
+      <div className="w-full relative h-56 sm:h-70 md:h-80 ">
         <Image
           src={CardImage}
           alt="Course Card"
           fill
-          className="object-cover"
+          className="object-cover rounded-t-md"
         />
       </div>
 

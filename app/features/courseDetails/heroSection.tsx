@@ -8,7 +8,7 @@ import Cap from "@/app/assets/svg/cap.svg";
 
 function CourseHero() {
   return (
-    <section className="relative w-full min-h-screen overflow-hidden">
+    <section className="relative w-full  overflow-hidden">
       <Image
         src={HeroImage}
         alt="Course background"
@@ -21,7 +21,7 @@ function CourseHero() {
 
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 py-20 sm:py-28 lg:py-35 flex flex-col lg:flex-row items-start gap-8 lg:gap-12">
 
-        
+
         <div className="w-full lg:w-[55%] text-white">
           <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-5 sm:mb-6">
             <span className="bg-[#016068] text-white text-xs font-semibold px-4 py-1.5 rounded-sm">
@@ -66,7 +66,7 @@ function CourseHero() {
           </a>
         </div>
 
-        
+
         <div className="w-full lg:w-[42%] p-6 sm:p-8 flex flex-col gap-5 bg-white rounded-2xl overflow-hidden">
           <div>
             <p className="text-[#14AE5C] font-outfit font-bold text-4xl sm:text-5xl">
