@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { MapPin, Globe, ChevronDown } from "lucide-react";
+import { MapPin, Globe, ChevronDown, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CityGuildsLogo from "@/app/assets/certifications/city.png";
 import EalLogo from "@/app/assets/certifications/eal.svg";
@@ -174,6 +174,12 @@ const courseDates: CourseDate[] = [
 
 const INITIAL_SHOW = 5;
 
+const CADEMY_EMBED_URL =
+  "https://cademy.io/embed/learntechnique/cg-2391-52-initial-and-periodic-inspection-and-testing-of-electrical-installations/dates";
+
+const CADEMY_DIRECT_URL =
+  "https://learntechnique.cademy.io/cg-2391-52-initial-and-periodic-inspection-and-testing-of-electrical-installations?utm_source=ref_link&utm_medium=checkout_embed&utm_campaign=category_link&utm_term=learntechnique";
+
 function BookCourse() {
   const [showAll, setShowAll] = useState(false);
   const [location, setLocation] = useState("All locations");
@@ -186,16 +192,20 @@ function BookCourse() {
   const visible = showAll ? filtered : filtered.slice(0, INITIAL_SHOW);
   const remaining = filtered.length - INITIAL_SHOW;
 
+
+
+
   return (
     <div className="bg-white">
-      <section className="py-12  max-w-7xl mx-auto px-6">
-        <h2 className="font-outfit font-bold text-4xl text-black mb-8">
+      <section className="py-8 sm:py-12 max-w-7xl mx-auto px-4 sm:px-6">
+        <h2 className="font-outfit font-bold text-3xl sm:text-4xl text-black mb-6 sm:mb-8">
           Book Course
         </h2>
 
-        <div className="flex flex-col md:flex-row gap-15 mb-10">
-          <div className="flex items-stretch gap-3">
-            <div className="border border-gray-200 rounded-xl p-4 w-44 flex flex-col justify-between bg-gray-50">
+        {/* Prerequisites & Accreditation */}
+        <div className="flex flex-col md:flex-row gap-6 md:gap-15 mb-8 sm:mb-10">
+          <div className="flex items-stretch gap-3 flex-wrap sm:flex-nowrap">
+            <div className="border border-gray-200 rounded-xl p-4 w-full sm:w-44 flex flex-col justify-between bg-gray-50">
               <p className="text-gray-800 font-semibold text-sm leading-snug mb-3">
                 Course <br /> Pre-Requisites:
               </p>
@@ -212,7 +222,7 @@ function BookCourse() {
                 height={50}
                 className="object-contain"
               />
-              <p className="text-[#14AE5C] bg-[#DCF2E9] p-2 py-1  rounded-full text-xs font-normal mt-4">
+              <p className="text-[#14AE5C] bg-[#DCF2E9] p-2 py-1 rounded-full text-xs font-normal mt-4">
                 Accredited
               </p>
             </div>
@@ -244,7 +254,8 @@ function BookCourse() {
           </div>
         </div>
 
-        <div className="flex justify-center mb-8 py-5">
+        {/* Location filter */}
+        <div className="flex justify-center mb-6 sm:mb-8 py-3 sm:py-5">
           <div className="relative w-full max-w-md">
             <Globe className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <select
@@ -263,48 +274,56 @@ function BookCourse() {
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto ">
+        {/* Course date cards */}
+        <div className="max-w-4xl mx-auto">
           <div className="flex flex-col gap-3 mb-8">
             {visible.map((date, i) => (
               <div
                 key={i}
-                className="flex items-center gap-4 bg-gray-50 border border-gray-100 rounded-xl px-5 py-4"
+                className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 bg-gray-50 border border-gray-100 rounded-xl px-4 sm:px-5 py-4"
               >
-                <div className="w-14 shrink-0 rounded-lg overflow-hidden text-center shadow-sm">
-                  <div className="bg-red-500 text-white text-xs font-bold py-1 uppercase tracking-wider">
-                    {date.month}
+                {/* Date badge + info */}
+                <div className="flex items-center gap-4 flex-1 min-w-0">
+                  <div className="w-14 shrink-0 rounded-lg overflow-hidden text-center shadow-sm">
+                    <div className="bg-red-500 text-white text-xs font-bold py-1 uppercase tracking-wider">
+                      {date.month}
+                    </div>
+                    <div className="bg-white text-gray-800 font-bold text-xl py-1.5 border border-t-0 border-gray-200 rounded-b-lg">
+                      {date.day}
+                    </div>
                   </div>
-                  <div className="bg-white text-gray-800 font-bold text-xl py-1.5 border border-t-0 border-gray-200 rounded-b-lg">
-                    {date.day}
+
+                  <div className="flex-1 min-w-0">
+                    <p className="text-gray-700 text-sm font-medium">
+                      <span className="text-gray-500">From: </span>
+                      {date.from}
+                    </p>
+                    <p className="text-gray-700 text-sm font-medium">
+                      <span className="text-gray-500">To: </span>
+                      {date.to}
+                    </p>
+                    <p className="text-gray-400 text-xs mt-1">
+                      {date.spaces} spaces left
+                    </p>
                   </div>
                 </div>
 
-                <div className="flex-1 min-w-0">
-                  <p className="text-gray-700 text-sm font-medium">
-                    <span className="text-gray-500">From: </span>
-                    {date.from}
+                <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4">
+                  <div className="flex items-center gap-1.5 bg-[#e6f7f4] text-[#016068] text-xs font-semibold px-3 py-1.5 rounded-full shrink-0">
+                    <MapPin className="w-3 h-3" />
+                    {date.location}
+                  </div>
+
+                  <p className="text-gray-700 font-semibold text-sm sm:w-28 text-center shrink-0">
+                    {date.price}
                   </p>
-                  <p className="text-gray-700 text-sm font-medium">
-                    <span className="text-gray-500">To: </span>
-                    {date.to}
-                  </p>
-                  <p className="text-gray-400 text-xs mt-1">
-                    {date.spaces} spaces left
-                  </p>
+                  <Button
+                    onClick={() => window.open(CADEMY_DIRECT_URL, "_blank")}
+                    className="bg-[#016068] hover:bg-[#014d54] text-white font-semibold rounded-full px-5 sm:px-6 h-9 sm:h-10 shrink-0 text-xs sm:text-sm"
+                  >
+                    Book
+                  </Button>
                 </div>
-
-                <div className="flex items-center gap-1.5 bg-[#e6f7f4] text-[#016068] text-xs font-semibold px-3 py-1.5 rounded-full shrink-0">
-                  <MapPin className="w-3 h-3" />
-                  {date.location}
-                </div>
-
-                <p className="text-gray-700 font-semibold text-sm w-28 text-center shrink-0">
-                  {date.price}
-                </p>
-
-                <Button className="bg-[#016068] hover:bg-[#014d54] text-white font-semibold rounded-full px-6 h-10 shrink-0">
-                  Book
-                </Button>
               </div>
             ))}
           </div>
@@ -313,7 +332,7 @@ function BookCourse() {
             <div className="flex justify-center">
               <Button
                 onClick={() => setShowAll(true)}
-                className="bg-[#016068] hover:bg-[#014d54] text-white font-semibold px-20 h-12 "
+                className="bg-[#016068] hover:bg-[#014d54] text-white font-semibold px-12 sm:px-20 h-12 w-full sm:w-auto"
               >
                 See {remaining} more
               </Button>
