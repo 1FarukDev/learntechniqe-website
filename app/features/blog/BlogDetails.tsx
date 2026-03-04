@@ -3,7 +3,14 @@
 import React, { useRef, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Search, ChevronDown, ChevronLeft, ChevronRight, SlidersHorizontal, X } from "lucide-react";
+import {
+  Search,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  SlidersHorizontal,
+  X,
+} from "lucide-react";
 import BlogCard from "@/components/blog-card";
 import BackgroundImage from "@/app/assets/png/featuredcard.png";
 import { FormInput } from "@/components/Input";
@@ -74,7 +81,6 @@ function BlogDetailPage() {
         </form>
       </FormProvider>
 
-      {/* Categories */}
       <div className="border border-gray-200 rounded-lg overflow-hidden">
         <button
           onClick={() => setCategoriesOpen((p) => !p)}
@@ -101,7 +107,6 @@ function BlogDetailPage() {
         )}
       </div>
 
-      {/* Recent Posts */}
       <div className="border border-gray-200 rounded-lg overflow-hidden">
         <button
           onClick={() => setRecentOpen((p) => !p)}
@@ -131,17 +136,15 @@ function BlogDetailPage() {
 
   return (
     <main className="bg-white min-h-screen">
-
-      {/* ── Mobile Drawer ─────────────────────────────────────────────────── */}
       {drawerOpen && (
         <>
-          {/* Backdrop */}
           <div
             className="fixed inset-0 bg-black/40 z-40 lg:hidden"
             onClick={() => setDrawerOpen(false)}
           />
-          {/* Drawer */}
-          <div className="fixed top-0 left-0 h-full w-[80vw] max-w-xs bg-white z-50 flex flex-col shadow-2xl overflow-y-auto lg:hidden"
+
+          <div
+            className="fixed top-0 left-0 h-full w-[80vw] max-w-xs bg-white z-50 flex flex-col shadow-2xl overflow-y-auto lg:hidden"
             style={{
               animation: "slideInLeft 250ms ease forwards",
             }}
@@ -153,7 +156,6 @@ function BlogDetailPage() {
               }
             `}</style>
 
-            {/* Drawer header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
               <h3 className="font-semibold text-gray-800 text-sm">
                 Categories & Recent Posts
@@ -166,28 +168,21 @@ function BlogDetailPage() {
               </button>
             </div>
 
-            {/* Drawer content */}
-            <div className="px-5 py-5 flex-1">
-              {SidebarContent}
-            </div>
+            <div className="px-5 py-5 flex-1">{SidebarContent}</div>
           </div>
         </>
       )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
-
-        {/* Mobile filter trigger */}
         <button
           className="lg:hidden mb-4 flex items-center gap-2 text-sm font-semibold text-[#016068] border border-[#016068] rounded-lg px-4 py-2 hover:bg-[#016068]/5 transition"
           onClick={() => setDrawerOpen(true)}
         >
           <SlidersHorizontal size={16} />
-          Filters
+          Options
         </button>
 
-        {/* Main layout */}
         <div className="flex flex-col lg:flex-row gap-8 items-start mb-10">
-          {/* Article content */}
           <div className="w-full lg:flex-1">
             <div className="rounded-xl overflow-hidden">
               <div className="relative w-full h-64 sm:h-80 md:h-96 lg:h-110">
@@ -240,13 +235,11 @@ function BlogDetailPage() {
             </div>
           </div>
 
-          {/* Desktop sidebar */}
           <aside className="hidden lg:flex w-[220px] flex-shrink-0 flex-col gap-4">
             {SidebarContent}
           </aside>
         </div>
 
-        {/* More Like This */}
         <section>
           <div className="flex items-center justify-between mb-6 sm:mb-8">
             <h2 className="text-2xl sm:text-3xl font-bold text-black">
@@ -281,7 +274,6 @@ function BlogDetailPage() {
             ))}
           </div>
 
-          {/* Mobile See All button */}
           <Button className="flex sm:hidden w-full mt-4 bg-[#0D7377] hover:bg-[#0a5f63] text-white tracking-widest text-sm">
             SEE ALL BLOG POSTS
           </Button>
