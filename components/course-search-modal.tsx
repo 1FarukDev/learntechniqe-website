@@ -124,8 +124,7 @@ export function CourseSearchModal({ open, onOpenChange }: CourseSearchModalProps
           </div>
 
           <Link
-            href="#"
-            onClick={() => onOpenChange(false)}
+            href="/courses"
             className="block"
           >
             <Button className="w-full bg-[#01636B] h-12 uppercase">

@@ -6,6 +6,7 @@ import BackgroundImage from "@/app/assets/png/featuredcard.png";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import BlogCard from "@/components/blog-card";
+import { useRouter } from "next/navigation";
 
 interface BlogPost {
   id: number;
@@ -15,9 +16,6 @@ interface BlogPost {
   category: string;
   image: string;
 }
-
-
-
 
 interface CarouselSectionProps {
   title: string;
@@ -38,6 +36,7 @@ function CarouselSection({
     scrollRef.current.scrollBy({ left: amount, behavior: "smooth" });
   };
 
+  const router = useRouter();
   return (
     <section className="max-w-7xl mx-auto px-6 py-10">
       <div className="flex items-center justify-between mb-8">
@@ -55,7 +54,10 @@ function CarouselSection({
           >
             <ChevronRight size={18} />
           </button>
-          <Button className="bg-[#0D7377] h- hover:bg-[#0a5f63] text-white px-8 tracking-widest text-sm">
+          <Button
+            onClick={() => router.push("/blog/all")}
+            className="bg-[#0D7377] h- hover:bg-[#0a5f63] text-white px-8 tracking-widest text-sm"
+          >
             SEE ALL BLOG POSTS
           </Button>
         </div>
@@ -99,11 +101,14 @@ const latestPosts: BlogPost[] = Array.from({ length: 5 }, (_, i) => ({
 }));
 
 function PostOfTheDay() {
+  const router = useRouter();
   return (
     <main className="bg-white">
       <div className="max-w-7xl mx-auto py-12 px-6 flex justify-between items-center">
         <h1 className="text-4xl font-bold">Post of the Day</h1>
-        <Button className="px-10">SEE ALL BLOG POSTS</Button>
+        <Button className="px-10" onClick={() => router.push("/blog/all")}>
+          SEE ALL BLOG POSTS
+        </Button>
       </div>
 
       <div className="max-w-7xl mx-auto px-6 pb-12">
@@ -152,7 +157,10 @@ function PostOfTheDay() {
             </div>
 
             <div className="mt-8">
-              <Button className="w-full bg-yellow-500 hover:bg-yellow-400 text-white font-semibold tracking-widest py-6 text-sm rounded-lg">
+              <Button
+                onClick={() => router.push("/blog/post-of-the-day")}
+                className="w-full bg-yellow-500 hover:bg-yellow-400 text-white font-semibold tracking-widest py-6 text-sm rounded-lg"
+              >
                 READ ARTICLE
               </Button>
             </div>

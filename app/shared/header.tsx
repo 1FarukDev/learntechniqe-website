@@ -202,7 +202,7 @@ function Header({ data }: { data: HeaderData }) {
   const [showMegaMenu, setShowMegaMenu] = useState(false);
   const megaMenuTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pathname = usePathname();
-  const isHomePage = pathname === "/";
+  const isHomePage = pathname === "/" || pathname === "/not-found";
 
   useEffect(() => {
     const handleScroll = () => {

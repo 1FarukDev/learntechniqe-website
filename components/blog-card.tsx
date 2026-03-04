@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
 
 interface BlogPost {
   id: number;
@@ -14,8 +15,6 @@ interface BlogCardProps {
   post: BlogPost;
   variant?: "large" | "small";
   highlighted?: boolean;
-  /** When true the card fills its parent (grid cells, flex children, etc.)
-   *  When false (default in carousel) a fixed pixel width is applied */
   fluid?: boolean;
 }
 
@@ -26,7 +25,7 @@ function BlogCard({
   fluid = false,
 }: BlogCardProps) {
   const fixedWidth = variant === "large" ? "w-100" : "w-75";
-
+  const router = useRouter();
   return (
     <div
       className={`bg-white rounded-md overflow-hidden shadow-sm border shrink-0 flex flex-col ${
@@ -66,6 +65,9 @@ function BlogCard({
             className={`hover:bg-[#0a5f63] text-white text-xs font-semibold tracking-widest px-8 rounded-md h-10.75 ${
               variant === "large" ? "bg-[#14AE5C]" : "bg-[#016068]"
             }`}
+            onClick={() => {
+              router.push(`/blog/${post.id}`);
+            }}
           >
             READ BLOG
           </Button>
