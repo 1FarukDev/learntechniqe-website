@@ -395,7 +395,7 @@ function Header({ data }: { data: HeaderData }) {
     >
       <div
         className={`w-full transition-[max-width,margin,padding,box-shadow,border-radius] duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] ${scrolled && !showMegaMenu
-            ? "max-w-7xl mt-3 mx-4 rounded-2xl bg-white/80 backdrop-blur-md shadow-lg px-6 py-2"
+            ? "max-w-7xl mt-3 mx-4 rounded-2xl bg-white/80 backdrop-blur-md shadow-lg px-4 md:px-6 py-px md:py-2"
             : scrolled && showMegaMenu
               ? "max-w-7xl mt-3 mx-4 rounded-none px-6 py-2 shadow-none"
               : showMegaMenu
@@ -415,17 +415,17 @@ function Header({ data }: { data: HeaderData }) {
               alt="Learn Technique Logo"
               width={160}
               height={40}
-              className="w-24 md:w-40"
+              className="w-18 md:w-38"
             />
             <div
-              className={`w-px h-9 mx-2 md:mx-4 ${useWhiteStyle ? "bg-white" : "bg-black"}`}
+              className={`w-px h-7 md:h-9 mx-2 md:mx-4 ${useWhiteStyle ? "bg-white" : "bg-black"}`}
             />
             <Image
               src={Elmlogo}
               alt="Elm Logo"
-              width={80}
+              width={160}
               height={40}
-              className="w-12 md:w-20"
+              className="w-18 md:w-38"
             />
           </Link>
 

@@ -22,6 +22,7 @@ function Ratings() {
       </div>
 
       <div className="grid md:grid-cols-2 gap-4 sm:gap-6 px-0 mt-6 sm:mt-10">
+        {/* Card 1 — image first on both mobile and desktop */}
         <div className="flex h-full">
           <div className="flex items-stretch gap-4 w-full relative">
             <div className="relative shrink-0 w-40 sm:w-55 h-full">
@@ -40,7 +41,7 @@ function Ratings() {
               </div>
             </div>
 
-            <div className="bg-[#2E364B] p-6 rounded-lg flex flex-col justify-between text-white w-full h-full">
+            <div className="bg-[#2E364B] p-3 md:p-6 rounded-lg flex flex-col justify-between text-white w-full h-full">
               <div>
                 <div className="flex gap-2 mb-4 justify-center">
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -48,26 +49,29 @@ function Ratings() {
                       key={star}
                       src={ReviewStar}
                       alt={`Star ${star}`}
-                      className="w-5 h-5"
+                      className="md:w-5 md:h-5 w-3 h-3"
                     />
                   ))}
                 </div>
 
                 <hr />
 
-                <h3 className="font-semibold text-base sm:text-lg my-2">Amazing Classes</h3>
+                <h3 className="font-semibold text-base sm:text-lg my-2">
+                  Amazing Classes
+                </h3>
 
                 <p className="text-sm text-gray-300">
-                  “What can I say, will recommend this course to all my work
-                  colleagues. Also Wendy was a star from start to finish.”
+                  "What can I say, will recommend this course to all my work
+                  colleagues. Also Wendy was a star from start to finish."
                 </p>
               </div>
             </div>
           </div>
         </div>
 
+        {/* Card 2 — text first on desktop, image first on mobile (flex-row-reverse on mobile) */}
         <div className="flex h-full">
-          <div className="flex items-stretch gap-4 w-full">
+          <div className="flex flex-row-reverse md:flex-row items-stretch gap-4 w-full">
             <div className="relative shrink-0 w-40 sm:w-55 h-full">
               <div className="relative w-full h-full">
                 <Image
@@ -84,7 +88,7 @@ function Ratings() {
               </div>
             </div>
 
-            <div className="bg-[#2E364B] p-6 rounded-lg flex flex-col justify-between text-white w-full h-full">
+            <div className="bg-[#2E364B] p-3 md:p-6 rounded-lg flex flex-col justify-between text-white w-full h-full">
               <div>
                 <div className="flex gap-2 justify-center mb-4">
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -92,7 +96,7 @@ function Ratings() {
                       key={star}
                       src={ReviewStar}
                       alt={`Star ${star}`}
-                      className="w-5 h-5"
+                      className="md:w-5 md:h-5 w-3 h-3"
                     />
                   ))}
                 </div>
@@ -102,17 +106,18 @@ function Ratings() {
                 </h3>
 
                 <p className="text-sm text-gray-300">
-                  “The course structure was excellent and easy to follow. Highly
-                  recommend to anyone wanting to level up their skills.”
+                  "The course structure was excellent and easy to follow. Highly
+                  recommend to anyone wanting to level up their skills."
                 </p>
               </div>
             </div>
           </div>
         </div>
 
+        {/* Card 3 — text first on desktop, image first on mobile (flex-row-reverse on mobile) */}
         <div className="flex h-full">
-          <div className="flex items-stretch gap-4 w-full">
-            <div className="bg-[#2E364B] p-6 rounded-lg flex flex-col justify-between text-white w-full h-full">
+          <div className="flex flex-row-reverse md:flex-row items-stretch gap-4 w-full">
+            <div className="bg-[#2E364B] p-3 md:p-6 rounded-lg flex flex-col justify-between text-white w-full h-full">
               <div>
                 <div className="flex gap-2 justify-center mb-4">
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -120,7 +125,7 @@ function Ratings() {
                       key={star}
                       src={ReviewStar}
                       alt={`Star ${star}`}
-                      className="w-5 h-5"
+                      className="md:w-5 md:h-5 w-3 h-3"
                     />
                   ))}
                 </div>
@@ -130,8 +135,8 @@ function Ratings() {
                 </h3>
 
                 <p className="text-sm text-gray-300">
-                  “The instructors were incredibly helpful and supportive
-                  throughout the entire journey.”
+                  "The instructors were incredibly helpful and supportive
+                  throughout the entire journey."
                 </p>
               </div>
             </div>
@@ -153,9 +158,10 @@ function Ratings() {
           </div>
         </div>
 
+        {/* Card 4 — text first on desktop, image first on mobile (flex-row-reverse on mobile) */}
         <div className="flex h-full">
           <div className="flex items-stretch gap-4 w-full">
-            <div className="bg-[#2E364B] p-6 rounded-lg flex flex-col justify-between text-white w-full h-full">
+            <div className="bg-[#2E364B] p-3 md:p-6 rounded-lg flex flex-col justify-between text-white w-full h-full">
               <div>
                 <div className="flex gap-2 justify-center mb-4">
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -163,7 +169,7 @@ function Ratings() {
                       key={star}
                       src={ReviewStar}
                       alt={`Star ${star}`}
-                      className="w-5 h-5"
+                      className="md:w-5 md:h-5 w-3 h-3"
                     />
                   ))}
                 </div>
@@ -173,8 +179,8 @@ function Ratings() {
                 </h3>
 
                 <p className="text-sm text-gray-300">
-                  “Excellent content and real-world examples. I feel much more
-                  confident after completing this course.”
+                  "Excellent content and real-world examples. I feel much more
+                  confident after completing this course."
                 </p>
               </div>
             </div>
