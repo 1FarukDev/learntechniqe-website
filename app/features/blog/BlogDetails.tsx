@@ -213,7 +213,7 @@ function BlogDetailPage() {
             </div>
             <div className="text-sm text-gray-800 leading-relaxed space-y-4 my-8 sm:my-16">
               <p>
-                The UK's air conditioning and refrigeration industry is booming.
+                The UK's air conditioning andddd refrigeration industry is booming.
                 With rising demand for skilled technicians across commercial,
                 industrial, and residential sectors, now is the perfect time to
                 launch or advance your career in this essential trade.
