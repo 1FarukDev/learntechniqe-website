@@ -10,7 +10,7 @@ function page() {
       <AnimatedSection variant="fade-in" visibleOnLoad>
         <HeroSection title="Complete Guide to Air Conditioning Training: Start Your HVAC Career in 2026" />
       </AnimatedSection>
-      <AnimatedSection variant="fade-up">
+      <AnimatedSection variant="fade-up" className="-mt-10">
         <PostOfTheDay />
       </AnimatedSection>
       <AnimatedSection variant="fade-up">

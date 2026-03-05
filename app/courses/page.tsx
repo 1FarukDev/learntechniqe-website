@@ -16,7 +16,7 @@ function page() {
 Our processes and facilities are word-class with multiple credible accreditations."
         />
       </AnimatedSection>
-      <AnimatedSection variant="fade-up">
+      <AnimatedSection variant="fade-up" className="-mt-10">
         <CoursesPackage />
       </AnimatedSection>
       <AnimatedSection variant="fade-up">

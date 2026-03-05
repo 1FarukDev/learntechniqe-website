@@ -137,7 +137,7 @@ function PostOfTheDay() {
           Post of the Day
         </h1>
         <Button
-          className="w-full sm:w-auto px-10"
+          className="w-full sm:w-auto px-10 md:h-17.25 h-12"
           onClick={() => router.push("/blog/all")}
         >
           SEE ALL BLOG POSTS
