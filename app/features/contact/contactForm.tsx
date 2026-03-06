@@ -31,27 +31,27 @@ function ContactForm() {
     };
 
     return (
-        <section className="bg-white md:px-0 px-4">
+        <section className="bg-[#E0ECED] md:px-0 px-4">
             <div className="flex flex-col md:flex-row justify-between items-start max-w-7xl mx-auto py-10 sm:py-19 px-0 sm:px-6 gap-8 sm:gap-10">
                 {/* Left: Office Info */}
-                <div className="w-full md:w-[40%] flex flex-col gap-3 sm:gap-4">
-                    <h2 className="text-black font-semibold text-[32px] sm:text-[42px] md:text-[52px] leading-tight">
+                <div className="w-full md:w-[40%] flex flex-col gap-3 sm:gap-4 text-black">
+                    <h2 className="font-semibold text-[32px] sm:text-[42px] md:text-[52px] leading-tight">
                         Head Office
                     </h2>
-                    <h6 className="text-black font-bold text-base sm:text-xl">
+                    <h6 className="font-bold text-base sm:text-xl">
                         Technique Learning Solutions
                     </h6>
-                    <p className="text-black font-normal text-sm sm:text-base">
+                    <p className="font-normal text-sm sm:text-base">
                         Technique Tower Business Park <br /> High Street <br /> Clay Cross{" "}
                         <br /> Chesterfield <br /> Derbyshire <br />
                         S45 9EA
                     </p>
                     <div>
-                        <h6 className="font-bold text-sm sm:text-base">CALL</h6>
+                        <h6 className="font-bold text-sm sm:text-base uppercase">CALL</h6>
                         <h6 className="font-bold text-base">0800 112 3310</h6>
                     </div>
                     <div>
-                        <h6 className="font-bold text-sm sm:text-base">EMAIL</h6>
+                        <h6 className="font-bold text-sm sm:text-base uppercase">EMAIL</h6>
                         <h6 className="font-bold text-base">info@learntechnique.com</h6>
                     </div>
 
@@ -88,7 +88,7 @@ function ContactForm() {
                     <FormProvider {...methods}>
                         <form
                             onSubmit={methods.handleSubmit(onSubmit)}
-                            className="space-y-6 text-left bg-[#F7F7F7] p-6 sm:p-13 rounded-2xl max-w-full mx-auto"
+                            className="space-y-6 text-left bg-white p-6 sm:p-13 rounded-2xl max-w-full mx-auto shadow-sm"
                         >
                             <div className="flex flex-col sm:flex-row gap-4">
                                 <FormInput
@@ -124,7 +124,7 @@ function ContactForm() {
 
                             <Button
                                 type="submit"
-                                className="bg-[#01656B] text-white! h-15 uppercase font-bold text-base px-10"
+                                className="bg-[#14AE5C] text-white! h-15 uppercase font-bold text-base px-10"
                             >
                                 Send Message
                             </Button>

@@ -26,7 +26,7 @@ function NewsletterSection() {
     };
 
     return (
-        <section className="relative min-h-[60vh] sm:min-h-[70vh] flex items-center justify-center overflow-hidden py-10 sm:py-0">
+        <section className="relative min-h-[60vh] sm:min-h-[70vh] flex items-center justify-center overflow-hidden py-10 sm:pt-20 sm:pb-30">
             <div
                 className="absolute inset-0 bg-cover bg-center"
                 style={{ backgroundImage: `url(${BackgroundImage.src})` }}
