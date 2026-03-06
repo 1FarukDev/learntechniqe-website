@@ -2,7 +2,7 @@ import React from "react";
 
 function AboutSection() {
     return (
-        <section className="relative bg-white py-10 sm:py-24 overflow-hidden">
+        <section className="relative bg-white pb-10 sm:pb-24 overflow-hidden">
             <div className="max-w-4xl mx-auto px-4 text-center z-10 relative">
                 {/* Text Content */}
                 <div className="flex flex-col gap-6">
