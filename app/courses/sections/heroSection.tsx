@@ -20,8 +20,7 @@ function HeroSection() {
 
         <p className="font-outfit text-sm md:text-base leading-7 text-white/90 ">
           Carefully put-together data-backed courses taught by seasoned experts.
-       
-       
+
         </p>
       </div>
 

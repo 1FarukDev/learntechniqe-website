@@ -196,7 +196,7 @@ function CoursesPackage() {
   );
 
   return (
-    <section className="py-8 sm:py-10 bg-white overflow-x-clip">
+    <section className="sm:py-10 bg-white overflow-x-clip">
       {drawerOpen &&
         createPortal(
           <>
