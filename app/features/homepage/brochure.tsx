@@ -15,7 +15,7 @@ function Brochure() {
   const methods = useForm<FormValues>({
     defaultValues: {
       email: "",
-      name: "" ,
+      name: "",
     },
   });
 
