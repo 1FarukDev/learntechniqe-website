@@ -1,0 +1,175 @@
+"use client";
+
+import React, { useState } from "react";
+import ThirdImage from "@/app/assets/png/32743f1db038b2a1c51268ee3d04b3737c7bef67.jpg";
+import Image from "next/image";
+import ArrowRight from "@/app/assets/svg/arrow-front.svg";
+import ArrowBack from "@/app/assets/svg/arrow-back.svg";
+
+const slides = [
+  {
+    quote:
+      '"Our motivation is to ensure that all our candidates will obtain the highest level of training and attain nationally recognized qualifications, giving the ability to exceed national standards and contribute to the professionalism of the industry"',
+    label: "WHAT DRIVES US",
+  },
+  {
+    quote:
+      '"We believe in hands-on, real-world experience that prepares every candidate to meet the demands of modern industry with confidence and expertise."',
+    label: "WHAT DRIVES US",
+  },
+  {
+    quote:
+      '"Our commitment to excellence means we continuously invest in our facilities, our people, and our programmes to stay ahead of industry developments."',
+    label: "WHAT DRIVES US",
+  },
+];
+
+export default function HeroSection() {
+  const [current, setCurrent] = useState(2);
+
+  const prev = () => setCurrent((c) => (c - 1 + slides.length) % slides.length);
+  const next = () => setCurrent((c) => (c + 1) % slides.length);
+
+  return (
+    <div className="w-full">
+      <div className="relative w-full bg-[white] overflow-hidden">
+        <div className="relative h-full flex flex-col">
+          <div className="relative flex-none pt-30 z-20">
+            <div className="relative max-w-6xl mx-auto">
+              <div className="z-10 px-24 max-w-5xl mx-auto text-center">
+                <p
+                  className="text-sm font-bold tracking-widest mb-6 "
+                  style={{ color: "#1a9b8a", letterSpacing: "0.2em" }}
+                >
+                  {slides[current].label}
+                </p>
+                <blockquote
+                  className="text-3xl font-black leading-snug text-gray-900"
+                  style={{
+                    fontFamily: "'Barlow Condensed', 'Barlow', sans-serif",
+                  }}
+                >
+                  {slides[current].quote}
+                </blockquote>
+              </div>
+
+              <button
+                onClick={prev}
+                className="absolute left-6 top-0 bottom-0 my-auto z-20 w-10 h-10 rounded-full bg-[#9A9A9A] hover:bg-[#E99E20] active:bg-[#E99E20] cursor-pointer flex items-center justify-center text-white transition-colors"
+                aria-label="Previous"
+              >
+                <Image src={ArrowBack} alt="Arrow back" />
+              </button>
+              <button
+                onClick={next}
+                className="absolute right-6 top-0 bottom-0 my-auto z-20 w-10 bg-[#9A9A9A]  hover:bg-[#E99E20] active:bg-[#E99E20] cursor-pointer h-10 rounded-full flex items-center justify-center text-white transition-colors"
+                aria-label="Next"
+              >
+                <Image src={ArrowRight} alt="Arrow back" />
+              </button>
+            </div>
+          </div>
+
+          <div className="w-full -mt-30" style={{ position: "relative" }}>
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                height: "200px",
+                background: "#ffffff",
+                clipPath: "ellipse(55% 100% at 50% 0%)",
+                zIndex: 2,
+              }}
+            />
+
+            <div
+              style={{
+                height: "90vh",
+                position: "relative",
+                margin: "0 -60px",
+              }}
+            >
+              <Image
+                src={ThirdImage}
+                alt="Training workshop"
+                fill
+                style={{ objectFit: "cover", objectPosition: "center" }}
+                priority
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: "200px",
+                  background: "#016068",
+                  clipPath: "ellipse(55% 100% at 50% 100%)",
+                  zIndex: 2,
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        className="w-full px-16 pb-14"
+        style={{ backgroundColor: "#016068" }}
+      >
+        <div
+          className="flex justify-center gap-3 py-4 z-100"
+          style={{ backgroundColor: "#016068" }}
+        >
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrent(i)}
+              className="w-5 h-5 rounded-sm transition-colors"
+              style={{
+                backgroundColor:
+                  i === current ? "#1a1a1a" : "rgba(255,255,255,0.5)",
+              }}
+              aria-label={`Slide ${i + 1}`}
+            />
+          ))}
+        </div>
+        <div className="max-w-7xl mx-auto grid grid-cols-2 gap-12 text-white text-sm leading-relaxed">
+          <p className="font-normal text-base text-[#FEFEFE]">
+            We take a lot of pride in our centres and you'll see for yourself
+            the time and effort we have invested in them. With a control centre
+            focusing on PLC training in the north we work hard to supply the
+            very best training as close to you as possible. Our ever-expanding
+            business and centres shows how committed we are to the very best
+            professional training and we don't stop there. With our comfortable
+            lounge area fitted with plenty of sofas, chairs, dining areas,
+            vending machines, tool promotions, magazines and a large TV for your
+            entertainment. Our classrooms are kitted out with the latest
+            projector screens, heating/cooling systems and all the technical
+            gear you will need to learn whichever course you learn on your
+            visit.
+          </p>
+          <div>
+            <p className="font-normal text-base text-[#FEFEFE]">
+              Since the formation of Technique Learning Solutions, on-going
+              re-investment and diversity has demonstrated our commitment to our
+              clients, staff and the future. This can be evidenced by viewing
+              our own facility in Derbyshire, which sets new standards in
+              quality and training our competitors can only dream of. We have
+              classrooms, workshops and an IT suite making use of an array of
+              test rigs, enabling candidate's virtual "real life" situations.
+            </p>
+            <p >Not to mention dining and relaxation areas.</p>
+            <p>
+              Whether you are a sole trader, from a blue chip company,
+              unemployed, or retraining… we will have the appropriate course for
+              you.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

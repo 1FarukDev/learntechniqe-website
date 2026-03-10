@@ -362,7 +362,7 @@ function Header({ data }: { data: HeaderData }) {
   const megaMenuTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pathname = usePathname();
 
-  const noNavbarPages = ["/", "/not-found"];
+  const noNavbarPages = ["/", "/not-found", '/company'];
   const isHomePage = noNavbarPages.includes(pathname);
 
   useEffect(() => {
