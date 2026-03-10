@@ -15,7 +15,7 @@ function PricingBanner() {
                 "linear-gradient(to bottom, #001734 0%, #001734 10%, #016068 100%)",
             }}
           >
-            <div>
+            <div className="max-w-xl mx-auto w-full">
               <h2 className="font-outfit font-bold text-2xl sm:text-3xl md:text-4xl text-white leading-tight mb-6 sm:mb-10 text-center">
                 Take the <span className="text-[#4DD9AC]">First Step</span>
                 <br />
@@ -34,7 +34,7 @@ function PricingBanner() {
               </div>
             </div>
 
-            <p className="text-[#FEFEFE] font-outfit font-semibold text-base sm:text-xl text-center leading-7">
+            <p className="text-[#FEFEFE] font-outfit font-semibold text-base sm:text-xl text-center leading-7 max-w-xl mx-auto">
               That's £500 in savings, plus you gain skills that can fast-track
               your earning potential for years to come.
             </p>

@@ -40,22 +40,24 @@ function Hero() {
   return (
     <div className="pt-40 md:px-0 px-4">
       <section className="flex flex-col items-center justify-center gap-5 text-center z-10 relative">
-        <h1 className="font-outfit font-semibold text-[40px] sm:text-[44px] md:text-[56px] lg:text-[68px] leading-tight text-black">
-          Electrical Skills for <br /> Everyone, by Experts.
-        </h1>
-        <p className="font-normal text-base text-black">
-          Carefully put-together data-backed courses taught by seasoned experts.{" "}
-          <br className="hidden md:block" />
-          Our processes and facilities are word-class with multiple credible
-          accreditations.
-        </p>
-        <div className="mb-12 md:mb-16">
-          <Button
-            onClick={() => setSearchOpen(true)}
-            className="px-12 py-7 bg-[#01636B] text-[#F5F5F5] rounded-md uppercase"
-          >
-            Find a course
-          </Button>
+        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6">
+          <h1 className="font-outfit font-semibold text-[40px] sm:text-[44px] md:text-[56px] lg:text-[68px] leading-tight text-black">
+            Electrical Skills for <br /> Everyone, by Experts.
+          </h1>
+          <p className="font-normal text-base text-black">
+            Carefully put-together data-backed courses taught by seasoned experts.{" "}
+            <br className="hidden md:block" />
+            Our processes and facilities are word-class with multiple credible
+            accreditations.
+          </p>
+          <div className="mb-12 md:mb-16">
+            <Button
+              onClick={() => setSearchOpen(true)}
+              className="px-12 py-7 bg-[#01636B] text-[#F5F5F5] rounded-md uppercase"
+            >
+              Find a course
+            </Button>
+          </div>
         </div>
       </section>
 

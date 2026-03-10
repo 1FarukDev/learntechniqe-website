@@ -85,7 +85,7 @@ export default function HeroSection() {
             />
 
             <div
-              className="mx-0 md:-mx-[60px] h-[45vh] md:h-[90vh] relative"
+              className="mx-0 md:-mx-[60px] h-[45vh] md:h-[60vh] lg:h-[65vh] relative"
             >
               <Image
                 src={ThirdImage}

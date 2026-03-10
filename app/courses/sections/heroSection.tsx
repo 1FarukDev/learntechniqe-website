@@ -14,14 +14,16 @@ function HeroSection() {
       <div className="absolute inset-0 z-10 bg-linear-to-b from-[#00000061] to-[#016068]" />
 
       <div className="relative z-20 w-full h-full flex flex-col items-center justify-center text-center px-6 pb-20 text-white">
-        <h1 className="font-outfit text-4xl md:text-5xl font-semibold tracking-wide mb-4">
-          Courses
-        </h1>
+        <div className="max-w-7xl mx-auto w-full">
+          <h1 className="font-outfit text-4xl md:text-5xl font-semibold tracking-wide mb-4">
+            Courses
+          </h1>
 
-        <p className="font-outfit text-sm md:text-base leading-7 text-white/90 ">
-          Carefully put-together data-backed courses taught by seasoned experts.
+          <p className="font-outfit text-sm md:text-base leading-7 text-white/90 ">
+            Carefully put-together data-backed courses taught by seasoned experts.
 
-        </p>
+          </p>
+        </div>
       </div>
 
       <svg

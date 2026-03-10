@@ -14,10 +14,12 @@ function HeroSection() {
       <div className="absolute inset-0 z-10 bg-linear-to-b from-[#00000061] to-[#016068]" />
 
       <div className="relative z-20 w-full h-full flex flex-col items-center justify-center text-center px-4 sm:px-8 md:px-6 pb-16 sm:pb-20 text-white">
-        <h1 className="font-outfit text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold tracking-wide mb-4">
-          Complete Guide to Air Conditioning <br className="hidden sm:block" />
-          Training: Start Your HVAC Career in 2026
-        </h1>
+        <div className="max-w-7xl mx-auto w-full">
+          <h1 className="font-outfit text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold tracking-wide mb-4">
+            Complete Guide to Air Conditioning <br className="hidden sm:block" />
+            Training: Start Your HVAC Career in 2026
+          </h1>
+        </div>
       </div>
 
       <svg

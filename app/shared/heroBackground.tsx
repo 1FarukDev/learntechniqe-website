@@ -47,14 +47,16 @@ function HeroSection({
       />
 
       <div className="relative z-20 w-full h-full flex flex-col items-center justify-center text-center px-4 sm:px-8 md:px-6 pb-16 sm:pb-20 text-white">
-        <h1 className="font-outfit text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold tracking-wide md:mb-4">
+        <div className="max-w-7xl mx-auto w-full">
+          <h1 className="font-outfit text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold tracking-wide md:mb-4">
           {title}
         </h1>
         {description && (
-          <p className="text-sm sm:text-base md:text-lg text-white/80 max-w-2xl">
+          <p className="text-sm sm:text-base md:text-lg text-white/80 max-w-2xl mx-auto">
             {description}
           </p>
         )}
+        </div>
       </div>
 
       <svg
