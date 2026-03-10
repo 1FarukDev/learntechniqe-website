@@ -121,7 +121,7 @@ function FAQRow({
       
       <button
         onClick={onToggle}
-        className="w-full flex items-center justify-between px-5 py-4 text-left"
+        className="w-full flex items-center justify-between gap-3 px-4 sm:px-5 py-4 text-left"
         style={{
           backgroundColor: open ? "#016068" : "#E0E3E5",
           cursor: "pointer",
@@ -129,7 +129,7 @@ function FAQRow({
         }}
       >
         <span
-          className="font-bold text-sm pr-4"
+          className="font-bold text-sm pr-4 text-left break-words"
           style={{
             color: open ? "#ffffff" : "#000000",
           }}
@@ -249,9 +249,9 @@ export default function FAQSection() {
   };
 
   return (
-    <section className="w-full bg-white px-12 py-16">
-      <div className="text-center mb-14">
-        <h2 className="text-black text-5xl font-semibold mb-3">F.A.Qs</h2>
+    <section className="w-full bg-white px-4 sm:px-8 md:px-12 py-12 md:py-16">
+      <div className="text-center mb-10 md:mb-14">
+        <h2 className="text-black text-3xl sm:text-4xl md:text-5xl font-semibold mb-3">F.A.Qs</h2>
         <p className="text-black text-base font-normal max-w-2xl mx-auto leading-relaxed">
           General Questions.
         </p>

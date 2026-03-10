@@ -168,9 +168,9 @@ export default function StudentAccommodation() {
     "flex items-center gap-2 rounded-md p-4 px-8 cursor-pointer transition-all";
 
   return (
-    <section className="w-full bg-white px-12 py-20">
-      <div className="text-center mb-14">
-        <h2 className="text-black text-5xl font-semibold mb-3">
+    <section className="w-full bg-white px-4 sm:px-8 md:px-12 py-12 md:py-20">
+      <div className="text-center mb-10 md:mb-14">
+        <h2 className="text-black text-3xl sm:text-4xl md:text-5xl font-semibold mb-3">
           Student Accommodation
         </h2>
         <p className="text-black text-base font-normal max-w-2xl mx-auto leading-relaxed">
@@ -206,7 +206,7 @@ export default function StudentAccommodation() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto grid grid-cols-3 gap-6">
+      <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
         {activeLocation.hotels.map((hotel, i) => (
           <HotelCard key={i} hotel={hotel} />
         ))}

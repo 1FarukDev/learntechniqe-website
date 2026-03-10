@@ -45,7 +45,7 @@ function Hero() {
         </h1>
         <p className="font-normal text-base text-black">
           Carefully put-together data-backed courses taught by seasoned experts.{" "}
-          <br />
+          <br className="hidden md:block" />
           Our processes and facilities are word-class with multiple credible
           accreditations.
         </p>
@@ -62,7 +62,7 @@ function Hero() {
       {/* Mobile: single image wheel carousel - one at a time with wheel-style dots */}
       <section className="md:hidden relative w-full  -mt-4">
         <div
-          className="relative w-full max-w-sm mx-auto aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl"
+          className="relative w-full max-w-md mx-auto aspect-[5/3] rounded-2xl overflow-hidden shadow-2xl"
           style={{
             perspective: "1200px",
             perspectiveOrigin: "center center",
@@ -95,8 +95,8 @@ function Hero() {
               key={i}
               aria-label={`Go to slide ${i + 1}`}
               className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${(offset % allImages.length) === i
-                  ? "bg-[#01636B] scale-125"
-                  : "bg-[#9A9A9A]/60"
+                ? "bg-[#01636B] scale-125"
+                : "bg-[#9A9A9A]/60"
                 }`}
               onClick={() => setOffset(i)}
             />

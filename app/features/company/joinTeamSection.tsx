@@ -43,12 +43,12 @@ export default function JoinOurTeam() {
 
   return (
     <section
-      className="w-full px-16 py-16"
+      className="w-full px-4 sm:px-8 md:px-16 py-12 md:py-16"
       style={{ backgroundColor: "#0d1b2e" }}
     >
       <div className="max-w-6xl mx-auto">
-        <div className="mb-10">
-          <h2 className="text-white text-5xl font-semibold mb-3">
+        <div className="mb-8 md:mb-10">
+          <h2 className="text-white text-3xl sm:text-4xl md:text-5xl font-semibold mb-3">
             Join Our Team
           </h2>
           <p
@@ -96,9 +96,9 @@ export default function JoinOurTeam() {
           })}
         </div>
 
-        <div className="grid grid-cols-2 gap-6 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
           <div
-            className="rounded-2xl p-8 flex flex-col gap-5"
+            className="rounded-2xl p-5 sm:p-8 flex flex-col gap-5"
             style={{ backgroundColor: "#ffffff" }}
           >
             <div className="flex gap-2 flex-wrap">
@@ -138,8 +138,7 @@ export default function JoinOurTeam() {
           </div>
 
           <div
-            className="rounded-2xl overflow-hidden relative"
-            style={{ minHeight: "400px" }}
+            className="rounded-2xl overflow-hidden relative min-h-[280px] md:min-h-[400px]"
           >
             {selectedJob.image ? (
               <>

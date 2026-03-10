@@ -16,7 +16,7 @@ function PricingBanner() {
             }}
           >
             <div>
-              <h2 className="font-outfit font-bold text-2xl sm:text-3xl md:text-4xl text-white leading-tight mb-6 sm:mb-10">
+              <h2 className="font-outfit font-bold text-2xl sm:text-3xl md:text-4xl text-white leading-tight mb-6 sm:mb-10 text-center">
                 Take the <span className="text-[#4DD9AC]">First Step</span>
                 <br />
                 Towards Your <span className="text-[#4DD9AC]">New Career</span>

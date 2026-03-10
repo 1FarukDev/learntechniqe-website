@@ -64,27 +64,16 @@ const tutors: Tutor[] = [
 function TutorCard({ tutor }: { tutor: Tutor }) {
   return (
     <div className="flex flex-col items-center">
-      <div className="relative w-full" style={{ paddingTop: "52px" }}>
+      <div className="relative w-full pt-8 sm:pt-[52px]">
         <div
-          className="w-full rounded-2xl"
+          className="w-full rounded-2xl h-32 sm:h-[190px] relative"
           style={{
             backgroundColor: tutor.accentColor,
-            height: "190px",
-            position: "relative",
           }}
         />
 
         <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "100%",
-            height: "240px",
-            overflow: "hidden",
-            pointerEvents: "none",
-          }}
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-40 sm:h-[240px] overflow-hidden pointer-events-none"
         >
           {tutor.image ? (
             <Image
@@ -111,7 +100,7 @@ function TutorCard({ tutor }: { tutor: Tutor }) {
 
       <div className="text-center mt-3 px-1">
         <p
-          className="font-bold text-[#000000] text-xl leading-snug"
+          className="font-bold text-[#000000] text-base sm:text-xl leading-snug"
         >
           {tutor.name}
         </p>
@@ -124,12 +113,12 @@ function TutorCard({ tutor }: { tutor: Tutor }) {
 export default function TutorsSection() {
   return (
     <section
-      className="w-full px-12 py-16"
+      className="w-full px-4 sm:px-8 md:px-12 py-12 md:py-16"
       style={{ backgroundColor: "#dff0f0" }}
     >
-      <div className="text-center mb-14">
+      <div className="text-center mb-10 md:mb-14">
         <h2
-          className="text-black text-5xl font-semibold mb-3"
+          className="text-black text-3xl sm:text-4xl md:text-5xl font-semibold mb-3"
         >
           Our Tutors
         </h2>
@@ -139,7 +128,7 @@ export default function TutorsSection() {
         </p>
       </div>
 
-      <div className="max-w-5xl mx-auto grid grid-cols-4 gap-8">
+      <div className="max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
         {tutors.map((tutor) => (
           <TutorCard key={tutor.name} tutor={tutor} />
         ))}

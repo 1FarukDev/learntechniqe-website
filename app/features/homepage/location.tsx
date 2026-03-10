@@ -27,7 +27,7 @@ const locationData: Record<
     address: "Technique Tower Business Park\nHigh Street, Clay Cross\nDerbyshire, S45 9EA",
   },
   stirling: {
-    image: StirlingImage, 
+    image: StirlingImage,
     subtitle: "Stirling",
     title: "Our Stirling\nTraining Centre",
     address: "Stirling Business Centre\nWellgreen Road, Stirling\nScotland FK8 2DZ",
@@ -57,11 +57,10 @@ const Location: React.FC = () => {
       <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-0">
         <div
           onClick={() => setActiveTab("clay")}
-          className={`${baseClasses} ${
-            activeTab === "clay"
+          className={`${baseClasses} ${activeTab === "clay"
               ? "bg-[#0088FF] text-white"
               : "bg-[#ECF0F0] text-[#627080]"
-          }`}
+            }`}
         >
           <MapPin />
           <p className="uppercase">Clay Cross</p>
@@ -69,11 +68,10 @@ const Location: React.FC = () => {
 
         <div
           onClick={() => setActiveTab("stirling")}
-          className={`${baseClasses} sm:ml-4 ${
-            activeTab === "stirling"
+          className={`${baseClasses} sm:ml-4 ${activeTab === "stirling"
               ? "bg-[#0088FF] text-white"
               : "bg-[#ECF0F0] text-[#627080]"
-          }`}
+            }`}
         >
           <MapPin />
           <p className="uppercase">Stirling</p>

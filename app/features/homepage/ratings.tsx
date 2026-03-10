@@ -11,7 +11,7 @@ function Ratings() {
   return (
     <section className="max-w-5xl mx-auto py-15 sm:py-30 md:px-0 px-4">
       <div className="mx-auto max-w-7xl flex flex-col sm:flex-row justify-between md:items-start items-center gap-4 mb-6 px-0">
-        <h1 className="text-black font-semibold text-[20px] sm:text-[30px] md:text-[34px]">
+        <h1 className="text-black font-semibold text-[26px] sm:text-[30px] md:text-[34px]">
           What Our Students Say About Us
         </h1>
         <div className="flex items-center gap-8">
@@ -43,7 +43,7 @@ function Ratings() {
 
             <div className="bg-[#2E364B] p-3 md:p-6 rounded-lg flex flex-col justify-between text-white w-full h-full">
               <div>
-                <div className="flex gap-2 mb-4 justify-center">
+                <div className="flex gap-2 mb-4 justify-start">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <Image
                       key={star}
@@ -90,7 +90,7 @@ function Ratings() {
 
             <div className="bg-[#2E364B] p-3 md:p-6 rounded-lg flex flex-col justify-between text-white w-full h-full">
               <div>
-                <div className="flex gap-2 justify-center mb-4">
+                <div className="flex gap-2 justify-start mb-4">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <Image
                       key={star}
@@ -119,7 +119,7 @@ function Ratings() {
           <div className="flex flex-row-reverse md:flex-row items-stretch gap-4 w-full">
             <div className="bg-[#2E364B] p-3 md:p-6 rounded-lg flex flex-col justify-between text-white w-full h-full">
               <div>
-                <div className="flex gap-2 justify-center mb-4">
+                <div className="flex gap-2 justify-start mb-4">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <Image
                       key={star}
@@ -163,7 +163,7 @@ function Ratings() {
           <div className="flex items-stretch gap-4 w-full">
             <div className="bg-[#2E364B] p-3 md:p-6 rounded-lg flex flex-col justify-between text-white w-full h-full">
               <div>
-                <div className="flex gap-2 justify-center mb-4">
+                <div className="flex gap-2 justify-start mb-4">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <Image
                       key={star}

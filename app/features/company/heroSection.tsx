@@ -34,9 +34,9 @@ export default function HeroSection() {
     <div className="w-full">
       <div className="relative w-full bg-[white] overflow-hidden">
         <div className="relative h-full flex flex-col">
-          <div className="relative flex-none pt-30 z-20">
+          <div className="relative flex-none pt-24 md:pt-30 z-20">
             <div className="relative max-w-6xl mx-auto">
-              <div className="z-10 px-24 max-w-5xl mx-auto text-center">
+              <div className="z-10 px-4 sm:px-12 md:px-24 max-w-5xl mx-auto text-center">
                 <p
                   className="text-sm font-bold tracking-widest mb-6 "
                   style={{ color: "#1a9b8a", letterSpacing: "0.2em" }}
@@ -44,7 +44,7 @@ export default function HeroSection() {
                   {slides[current].label}
                 </p>
                 <blockquote
-                  className="text-3xl font-black leading-snug text-gray-900"
+                  className="text-xl sm:text-2xl md:text-3xl font-black leading-snug text-gray-900"
                   style={{
                     fontFamily: "'Barlow Condensed', 'Barlow', sans-serif",
                   }}
@@ -55,14 +55,14 @@ export default function HeroSection() {
 
               <button
                 onClick={prev}
-                className="absolute left-6 top-0 bottom-0 my-auto z-20 w-10 h-10 rounded-full bg-[#9A9A9A] hover:bg-[#E99E20] active:bg-[#E99E20] cursor-pointer flex items-center justify-center text-white transition-colors"
+                className="absolute left-2 sm:left-6 top-0 bottom-0 my-auto z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#9A9A9A] hover:bg-[#E99E20] active:bg-[#E99E20] cursor-pointer flex items-center justify-center text-white transition-colors"
                 aria-label="Previous"
               >
                 <Image src={ArrowBack} alt="Arrow back" />
               </button>
               <button
                 onClick={next}
-                className="absolute right-6 top-0 bottom-0 my-auto z-20 w-10 bg-[#9A9A9A]  hover:bg-[#E99E20] active:bg-[#E99E20] cursor-pointer h-10 rounded-full flex items-center justify-center text-white transition-colors"
+                className="absolute right-2 sm:right-6 top-0 bottom-0 my-auto z-20 w-9 h-9 sm:w-10 sm:h-10 bg-[#9A9A9A] hover:bg-[#E99E20] active:bg-[#E99E20] cursor-pointer rounded-full flex items-center justify-center text-white transition-colors"
                 aria-label="Next"
               >
                 <Image src={ArrowRight} alt="Arrow back" />
@@ -70,7 +70,7 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <div className="w-full -mt-30" style={{ position: "relative" }}>
+          <div className="w-full -mt-16 md:-mt-30" style={{ position: "relative" }}>
             <div
               style={{
                 position: "absolute",
@@ -85,11 +85,7 @@ export default function HeroSection() {
             />
 
             <div
-              style={{
-                height: "90vh",
-                position: "relative",
-                margin: "0 -60px",
-              }}
+              className="mx-0 md:-mx-[60px] h-[45vh] md:h-[90vh] relative"
             >
               <Image
                 src={ThirdImage}
@@ -116,7 +112,7 @@ export default function HeroSection() {
       </div>
 
       <div
-        className="w-full px-16 pb-14"
+        className="w-full px-4 sm:px-8 md:px-16 pb-14"
         style={{ backgroundColor: "#016068" }}
       >
         <div
@@ -136,7 +132,7 @@ export default function HeroSection() {
             />
           ))}
         </div>
-        <div className="max-w-7xl mx-auto grid grid-cols-2 gap-12 text-white text-sm leading-relaxed">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 text-white text-sm leading-relaxed">
           <p className="font-normal text-base text-[#FEFEFE]">
             We take a lot of pride in our centres and you'll see for yourself
             the time and effort we have invested in them. With a control centre

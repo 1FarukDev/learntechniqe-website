@@ -39,7 +39,7 @@ const Courses: React.FC = () => {
   return (
     <section className="bg-[#D4D8DB99] py-10 sm:py-20 -mx-5 md:px-0 px-4">
       <div className="mx-auto max-w-7xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 px-4 sm:px-6">
-        <h1 className="text-black font-semibold text-[26px] sm:text-[30px] md:text-[34px]">
+        <h1 className="text-black font-semibold text-[26px] sm:text-[30px] md:text-[34px] text-center sm:text-left w-full sm:w-auto">
           Our Most Popular Courses
         </h1>
         <div className="flex items-center gap-4 sm:gap-8 w-full sm:w-auto">

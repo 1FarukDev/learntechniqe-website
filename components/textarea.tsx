@@ -32,7 +32,7 @@ export const FormTextarea: React.FC<FormTextareaProps> = ({
       {label && (
         <label
           htmlFor={name}
-          className="text-sm font-medium text-foreground"
+          className="text-base font-bold text-black"
         >
           {label}
         </label>

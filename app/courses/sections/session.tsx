@@ -23,8 +23,8 @@ function Session() {
 
         <p className="text-white/85 font-outfit text-sm md:text-base leading-7 font-normal">
           We bring the full training experience to your location, saving you
-          time while <br /> delivering hands-on, results-driven sessions built around
-          your environment and <br /> goals, and available for direct staff training
+          time while <br className="hidden md:block" /> delivering hands-on, results-driven sessions built around
+          your environment and <br className="hidden md:block" /> goals, and available for direct staff training
           when needed.
         </p>
 

@@ -42,8 +42,8 @@ function ContactForm() {
                         Technique Learning Solutions
                     </h6>
                     <p className="font-normal text-sm sm:text-base">
-                        Technique Tower Business Park <br /> High Street <br /> Clay Cross{" "}
-                        <br /> Chesterfield <br /> Derbyshire <br />
+                        Technique Tower Business Park <br className="hidden md:block" /> High Street <br className="hidden md:block" /> Clay Cross{" "}
+                        <br className="hidden md:block" /> Chesterfield <br className="hidden md:block" /> Derbyshire <br className="hidden md:block" />
                         S45 9EA
                     </p>
                     <div>

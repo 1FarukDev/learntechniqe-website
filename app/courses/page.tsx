@@ -12,8 +12,7 @@ function page() {
       <AnimatedSection variant="fade-in" visibleOnLoad>
         <HeroSection
           title="Electrical Courses"
-          description="Carefully put-together data-backed courses taught by seasoned experts. 
-Our processes and facilities are word-class with multiple credible accreditations."
+          description="Carefully put-together data-backed courses taught by seasoned experts. Our processes and facilities are word-class with multiple credible accreditations."
         />
       </AnimatedSection>
       <AnimatedSection variant="fade-up" className="-mt-10">

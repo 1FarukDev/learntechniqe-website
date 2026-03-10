@@ -20,22 +20,24 @@ export function TeamCard({ member }: TeamCardProps) {
 
   return (
     <div
-      style={{ perspective: "1000px", minHeight: "420px" }}
+      className="min-h-[320px] md:min-h-[420px]"
+      style={{ perspective: "1000px" }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
       <div
+        className="min-h-[320px] md:min-h-[420px]"
         style={{
           position: "relative",
           width: "100%",
           height: "100%",
-          minHeight: "420px",
           transformStyle: "preserve-3d",
           transition: "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
           transform: hovered ? "rotateY(180deg)" : "rotateY(0deg)",
         }}
       >
         <div
+          className="flex flex-col"
           style={{
             position: "absolute",
             inset: 0,
@@ -43,21 +45,19 @@ export function TeamCard({ member }: TeamCardProps) {
             WebkitBackfaceVisibility: "hidden",
             borderRadius: "1rem",
             overflow: "hidden",
-            display: "flex",
-            flexDirection: "column",
             backgroundColor: "rgba(255,255,255,0.12)",
             border: "1px solid rgba(255,255,255,0.15)",
           }}
         >
-          <div className="flex flex-col items-center text-center px-6 pt-8 pb-5">
-            <h3 className="text-white text-3xl font-semibold mb-1 leading-tight">
+          <div className="flex flex-col items-center text-center px-3 md:px-6 pt-4 md:pt-8 pb-3 md:pb-5">
+            <h3 className="text-white text-xl md:text-3xl font-semibold mb-1 leading-tight">
               {member.name.split(" ").map((word, i) => (
                 <span key={i} className="block">
                   {word}
                 </span>
               ))}
             </h3>
-            <p className="text-white text-sm mb-4" style={{ opacity: 0.75 }}>
+            <p className="text-white text-xs md:text-sm mb-2 md:mb-4" style={{ opacity: 0.75 }}>
               {member.role}
             </p>
             <button
@@ -68,8 +68,7 @@ export function TeamCard({ member }: TeamCardProps) {
             </button>
           </div>
           <div
-            className="flex-1 relative mx-4 mb-4 rounded-xl overflow-hidden"
-            style={{ minHeight: "220px" }}
+            className="flex-1 relative mx-2 md:mx-4 mb-2 md:mb-4 rounded-xl overflow-hidden min-h-[140px] md:min-h-[220px]"
           >
             {member.image ? (
               <Image
@@ -114,12 +113,11 @@ export function TeamCard({ member }: TeamCardProps) {
             justifyContent: "center",
             backgroundColor: "#0d2a3a",
             border: "1px solid rgba(255,255,255,0.15)",
-            padding: "2rem",
-            gap: "1.25rem",
           }}
+          className="p-4 md:p-8 flex flex-col items-center justify-center gap-2 md:gap-5"
         >
           <h3
-            className="text-white text-2xl font-black leading-tight text-center"
+            className="text-white text-lg md:text-2xl font-black leading-tight text-center"
             style={{ fontFamily: "'Barlow Condensed', 'Barlow', sans-serif" }}
           >
             {member.name.split(" ").map((word, i) => (
@@ -137,7 +135,7 @@ export function TeamCard({ member }: TeamCardProps) {
 
           {member.bio ? (
             <p
-              className="text-white text-sm text-center leading-relaxed"
+              className="text-white text-xs md:text-sm text-center leading-relaxed"
               style={{ fontFamily: "'Barlow', sans-serif", opacity: 0.9 }}
             >
               {member.bio}
@@ -211,11 +209,11 @@ const team: TeamMember[] = [
 export default function LeadershipSection() {
   return (
     <section
-      className="w-full px-12 py-16"
+      className="w-full px-4 sm:px-8 md:px-12 py-12 md:py-16"
       style={{ backgroundColor: "#016068" }}
     >
-      <div className="text-center mb-12">
-        <h2 className="text-white text-5xl font-semibold mb-3">
+      <div className="text-center mb-10 md:mb-12">
+        <h2 className="text-white text-3xl sm:text-4xl md:text-5xl font-semibold mb-3">
           Our Leadership Team
         </h2>
         <p
@@ -224,12 +222,12 @@ export default function LeadershipSection() {
         >
           Our staff pride themselves in the up most professionalism and
           experience
-          <br />
+          <br className="hidden md:block" />
           to guarantee a happy customer service!
         </p>
       </div>
 
-      <div className="max-w-5xl mx-auto grid grid-cols-3 gap-6">
+      <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
         {team.map((member) => (
           <TeamCard key={member.name} member={member} />
         ))}

@@ -11,7 +11,7 @@ import { AnimatedSection } from "@/components/animated-section";
 
 function page() {
   return (
-    <div>
+    <div className="overflow-x-hidden">
       <AnimatedSection variant="fade-in" visibleOnLoad>
         <HeroSection />
       </AnimatedSection>
