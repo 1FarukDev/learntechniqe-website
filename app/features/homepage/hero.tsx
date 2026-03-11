@@ -39,8 +39,8 @@ function Hero() {
 
   return (
     <div className="pt-40 md:px-0 px-4">
-      <section className="flex flex-col items-center justify-center gap-5 text-center z-10 relative">
-        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6">
+      <section className="flex flex-col items-center justify-center gap-6 text-center z-10 relative">
+        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 flex flex-col gap-6">
           <h1 className="font-outfit font-semibold text-[40px] sm:text-[44px] md:text-[56px] lg:text-[68px] leading-tight text-black">
             Electrical Skills for <br /> Everyone, by Experts.
           </h1>
@@ -50,7 +50,7 @@ function Hero() {
             Our processes and facilities are word-class with multiple credible
             accreditations.
           </p>
-          <div className="mb-12 md:mb-16 mt-5">
+          <div className="mb-12 md:mb-16">
             <Button
               onClick={() => setSearchOpen(true)}
               className="px-12 py-7 bg-[#01636B] text-[#F5F5F5] rounded-md uppercase"

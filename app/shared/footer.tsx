@@ -2,8 +2,6 @@ import React from "react";
 import FooterLogo from "@/app/assets/png/logo-white.png";
 import Image from "next/image";
 import Link from "next/link";
-import { Facebook, Instagram, Youtube, Linkedin } from "lucide-react";
-import { Icon } from "@iconify/react";
 
 function Footer() {
   return (
@@ -101,7 +99,7 @@ function Footer() {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 md:px-10 py-4 sm:py-6 flex flex-col md:flex-row items-center font-semibold justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 md:px-10 py-4 sm:py-6 flex flex-col md:flex-row items-center font-semibold justify-center md:justify-start gap-4">
           <p className="text-white text-xs sm:text-sm text-center md:text-left">
             2026 Technique Learning Solutions | All Rights Reserved |{" "}
             <Link
@@ -118,41 +116,6 @@ function Footer() {
               Sitemap
             </Link>
           </p>
-
-          <div className="flex gap-4">
-            <Link href="#" className="text-[#FFFFFF]">
-              <Icon
-                icon="ic:baseline-facebook"
-                width="40"
-                height="40"
-                className="text-[#FFFFFF]"
-              />
-            </Link>
-            <Link href="#" className="text-[#FFFFFF]">
-              <Icon
-                icon="mage:instagram-circle"
-                width="40"
-                height="40"
-                className="text-[#FFFFFF]"
-              />
-            </Link>
-            <Link href="#" className="text-[#FFFFFF]">
-              <Icon
-                icon="lineicons:youtube-music"
-                width="40"
-                height="40"
-                className="text-[#FFFFFF]"
-              />
-            </Link>
-            <Link href="#" className="text-[#FFFFFF]">
-              <Icon
-                icon="entypo-social:linkedin-with-circle"
-                width="40"
-                height="40"
-                className="text-[#FFFFFF]"
-              />
-            </Link>
-          </div>
         </div>
       </div>
     </footer>

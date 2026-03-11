@@ -58,22 +58,6 @@ function NewsletterSection() {
                             placeholder="Enter your email address"
                             type="email"
                         />
-
-                        <select
-                            {...methods.register("course")}
-                            className="w-full h-12 px-4 rounded-lg bg-white border border-gray-200 text-sm text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#01656B]/30"
-                            defaultValue=""
-                        >
-                            <option value="" disabled>
-                                What courses are you interested in?
-                            </option>
-                            <option value="electrical">Electrical Courses</option>
-                            <option value="plumbing">Plumbing Courses</option>
-                            <option value="hvac">HVAC / Air Conditioning</option>
-                            <option value="smart-energy">Smart Energy</option>
-                            <option value="testing">Testing & Inspection</option>
-                        </select>
-
                         <Button
                             type="submit"
                             className="w-full bg-[#242A3A] text-white! h-13 uppercase font-bold text-sm"

@@ -37,7 +37,7 @@ export function TeamCard({ member }: TeamCardProps) {
         }}
       >
         <div
-          className="flex flex-col"
+          className="flex flex-col items-center"
           style={{
             position: "absolute",
             inset: 0,
@@ -68,14 +68,14 @@ export function TeamCard({ member }: TeamCardProps) {
             </button>
           </div>
           <div
-            className="flex-1 relative mx-2 md:mx-4 mb-2 md:mb-4 rounded-xl overflow-hidden min-h-[140px] md:min-h-[220px]"
+            className="flex-1 relative mx-2 md:mx-4 mb-2 md:mb-4 rounded-xl overflow-hidden min-h-[140px] md:min-h-[220px] w-full max-w-full"
           >
             {member.image ? (
               <Image
                 src={member.image}
                 alt={member.name}
                 fill
-                style={{ objectFit: "cover", objectPosition: "top center" }}
+                style={{ objectFit: "cover", objectPosition: "center center" }}
               />
             ) : (
               <div
@@ -127,7 +127,7 @@ export function TeamCard({ member }: TeamCardProps) {
             ))}
           </h3>
           <p
-            className="text-white text-xs font-semibold tracking-wider uppercase"
+            className="text-white text-xs font-semibold tracking-wider uppercase text-center"
             style={{ opacity: 0.6 }}
           >
             {member.role}

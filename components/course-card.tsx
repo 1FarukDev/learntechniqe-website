@@ -32,7 +32,7 @@ function CourseCard() {
           href="#"
           className="bg-[#627080] border border-[#9A9A9A] text-white font-semibold text-[10px] sm:text-xs px-3 sm:px-4 py-1"
         >
-          More Information
+          £132000
         </Link>
       </div>
 

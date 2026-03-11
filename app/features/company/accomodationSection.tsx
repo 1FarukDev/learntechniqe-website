@@ -138,7 +138,7 @@ function HotelCard({ hotel }: { hotel: Hotel }) {
           </span>
         </div>
 
-        <div className="text-sm text-black leading-relaxed">
+        <div className="text-sm text-black leading-relaxed text-center">
           {hotel.address.map((line, i) => (
             <p key={i}>{line}</p>
           ))}
@@ -183,11 +183,10 @@ export default function StudentAccommodation() {
       <div className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-0 mb-10">
         <div
           onClick={() => setActiveTab("clay-cross")}
-          className={`${baseClasses} ${
-            activeTab === "clay-cross"
+          className={`${baseClasses} ${activeTab === "clay-cross"
               ? "bg-[#0088FF] text-white"
               : "bg-[#ECF0F0] text-[#627080]"
-          }`}
+            }`}
         >
           <MapPin />
           <p className="uppercase">Clay Cross</p>
@@ -195,11 +194,10 @@ export default function StudentAccommodation() {
 
         <div
           onClick={() => setActiveTab("stirling")}
-          className={`${baseClasses} sm:ml-4 ${
-            activeTab === "stirling"
+          className={`${baseClasses} sm:ml-4 ${activeTab === "stirling"
               ? "bg-[#0088FF] text-white"
               : "bg-[#ECF0F0] text-[#627080]"
-          }`}
+            }`}
         >
           <MapPin />
           <p className="uppercase">Stirling</p>

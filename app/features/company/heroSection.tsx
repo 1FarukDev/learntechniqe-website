@@ -34,7 +34,7 @@ export default function HeroSection() {
     <div className="w-full">
       <div className="relative w-full bg-[white] overflow-hidden">
         <div className="relative h-full flex flex-col">
-          <div className="relative flex-none pt-24 md:pt-30 z-20">
+          <div className="relative flex-none pt-24 md:pt-30 pb-12 md:pb-8 z-20">
             <div className="relative max-w-6xl mx-auto">
               <div className="z-10 px-4 sm:px-12 md:px-24 max-w-5xl mx-auto text-center">
                 <p
@@ -74,17 +74,15 @@ export default function HeroSection() {
             className="w-full -mt-16 md:-mt-30"
             style={{ position: "relative" }}
           >
+            {/* Mobile: smaller curve so more image shows */}
             <div
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                height: "200px",
-                background: "#ffffff",
-                clipPath: "ellipse(55% 100% at 50% 0%)",
-                zIndex: 2,
-              }}
+              className="md:hidden h-16 absolute top-0 left-0 right-0 z-[2] bg-white"
+              style={{ clipPath: "ellipse(90% 100% at 50% 0%)" }}
+            />
+            {/* Desktop: full curve */}
+            <div
+              className="hidden md:block h-50 absolute top-0 left-0 right-0 z-[2] bg-white"
+              style={{ clipPath: "ellipse(55% 100% at 50% 0%)" }}
             />
 
             <div className="mx-0 md:-mx-[60px] h-[45vh] md:h-[60vh] lg:h-[65vh] relative">
@@ -95,13 +93,27 @@ export default function HeroSection() {
                 style={{ objectFit: "cover", objectPosition: "center" }}
                 priority
               />
+              {/* Mobile: smaller curve so more image shows */}
               <div
+                className="md:hidden h-16"
                 style={{
                   position: "absolute",
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  height: "200px",
+                  background: "#016068",
+                  clipPath: "ellipse(90% 100% at 50% 100%)",
+                  zIndex: 2,
+                }}
+              />
+              {/* Desktop: full curve */}
+              <div
+                className="hidden md:block h-50"
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
                   background: "#016068",
                   clipPath: "ellipse(55% 100% at 50% 100%)",
                   zIndex: 2,
