@@ -23,7 +23,7 @@ function TradeCourses() {
     to-black/80 "
       />
 
-      <div className="relative z-10 px-4 sm:px-6 md:px-10 py-15 sm:py-25 max-w-7xl mx-auto ">
+      <div className="relative z-10 py-15 sm:py-25 max-w-7xl mx-auto md:px-0 px-4 ">
         <h1 className="font-semibold text-[32px] sm:text-[44px] md:text-[52px] leading-tight text-white text-center">
           Our Trade Courses
         </h1>

@@ -9,7 +9,7 @@ import Image from "next/image";
 
 function Ratings() {
   return (
-    <section className="max-w-5xl mx-auto py-15 sm:py-30 md:px-0 px-4">
+    <section className="max-w-7xl mx-auto py-15 sm:py-30 md:px-0 px-4">
       <div className="mx-auto max-w-7xl flex flex-col sm:flex-row justify-between md:items-start items-center gap-4 mb-6 px-0">
         <h1 className="text-black font-semibold text-[26px] sm:text-[30px] md:text-[34px]">
           What Our Students Say About Us

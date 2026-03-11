@@ -2,10 +2,10 @@ import React from 'react'
 import Image from 'next/image'
 import DiscountImage from '@/app/assets/png/discount.jpg'
 
-function Discount() {
+function CampaignBanner() {
   return (
     <section className='py-15 sm:py-30 -mx-5 md:px-0 px-4'>
-      <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6">
+      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6">
         <Image
           src={DiscountImage}
           alt="Discount"
@@ -18,4 +18,4 @@ function Discount() {
   )
 }
 
-export default Discount
+export default CampaignBanner
