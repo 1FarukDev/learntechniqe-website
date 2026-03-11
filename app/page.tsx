@@ -6,7 +6,7 @@ import Location from "./features/homepage/location";
 import Brochure from "./features/homepage/brochure";
 import Ratings from "./features/homepage/ratings";
 import Certification from "./features/homepage/certification";
-import Discount from "./features/homepage/discount";
+import CampaignBanner from "./features/homepage/campaignBanner";
 import Contact from "./features/homepage/contact";
 import { AnimatedSection } from "@/components/animated-section";
 
@@ -38,7 +38,7 @@ export default function Home() {
         <Certification />
       </AnimatedSection>
       <AnimatedSection variant="fade-up">
-        <Discount />
+        <CampaignBanner />
       </AnimatedSection>
       <AnimatedSection variant="fade-up">
         <Contact />
