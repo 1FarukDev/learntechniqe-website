@@ -70,7 +70,10 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <div className="w-full -mt-16 md:-mt-30" style={{ position: "relative" }}>
+          <div
+            className="w-full -mt-16 md:-mt-30"
+            style={{ position: "relative" }}
+          >
             <div
               style={{
                 position: "absolute",
@@ -84,9 +87,7 @@ export default function HeroSection() {
               }}
             />
 
-            <div
-              className="mx-0 md:-mx-[60px] h-[45vh] md:h-[60vh] lg:h-[65vh] relative"
-            >
+            <div className="mx-0 md:-mx-[60px] h-[45vh] md:h-[60vh] lg:h-[65vh] relative">
               <Image
                 src={ThirdImage}
                 alt="Training workshop"
@@ -134,34 +135,45 @@ export default function HeroSection() {
         </div>
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 text-white text-sm leading-relaxed">
           <p className="font-normal text-base text-[#FEFEFE]">
-            We take a lot of pride in our centres and you'll see for yourself
-            the time and effort we have invested in them. With a control centre
-            focusing on PLC training in the north we work hard to supply the
-            very best training as close to you as possible. Our ever-expanding
-            business and centres shows how committed we are to the very best
-            professional training and we don't stop there. With our comfortable
-            lounge area fitted with plenty of sofas, chairs, dining areas,
-            vending machines, tool promotions, magazines and a large TV for your
-            entertainment. Our classrooms are kitted out with the latest
-            projector screens, heating/cooling systems and all the technical
-            gear you will need to learn whichever course you learn on your
-            visit.
+            We take great pride in our training centres, and you’ll quickly see
+            the time, care, and investment that has gone into creating an
+            environment designed for effective learning. Our facilities have
+            been developed to provide high-quality training across a range of
+            disciplines, including Electrical, HVAC, and PLC & Automation
+            courses. With our dedicated centre of excellence, we work hard to
+            deliver the very best training as close to you as possible. Our
+            continually expanding centres reflect our commitment to delivering
+            industry-leading professional training and supporting learners at
+            every stage of their careers.
+          </p>
+          <p className="font-normal text-base text-[#FEFEFE]">
+            To ensure a comfortable and welcoming experience, our centres
+            include several spacious lounge areas equipped with sofas, seating
+            areas, dining spaces, vending machines, magazines, tool promotions,
+            and a large TV for relaxation during breaks. Our classrooms are
+            fully equipped with modern projector screens, climate control
+            systems, and all the technical equipment required to support
+            hands-on learning across our Electrical, HVAC, and PLC & Automation
+            courses.
           </p>
           <div>
             <p className="font-normal text-base text-[#FEFEFE]">
-              Since the formation of Technique Learning Solutions, on-going
-              re-investment and diversity has demonstrated our commitment to our
-              clients, staff and the future. This can be evidenced by viewing
-              our own facility in Derbyshire, which sets new standards in
-              quality and training our competitors can only dream of. We have
-              classrooms, workshops and an IT suite making use of an array of
-              test rigs, enabling candidate's virtual "real life" situations.
+              Since the formation of Technique Learning Solutions, ongoing
+              reinvestment and development have demonstrated our strong
+              commitment to our clients, staff, and the future of technical
+              training. Our flagship facility in Derbyshire showcases these
+              standards, featuring modern classrooms, practical workshops, and a
+              dedicated IT suite. These spaces make use of a wide range of test
+              rigs and training equipment, allowing candidates to experience
+              realistic, real- world scenarios in a controlled learning
+              environment.
             </p>
-            <p >Not to mention dining and relaxation areas.</p>
             <p>
-              Whether you are a sole trader, from a blue chip company,
-              unemployed, or retraining… we will have the appropriate course for
-              you.
+              Whether you are a sole trader, part of an established engineering
+              or facilities company, currently unemployed, or looking to
+              retrain, we offer a range of Electrical, HVAC, and PLC &
+              Automation courses designed to support your goals and help you
+              take the next step in your career.
             </p>
           </div>
         </div>

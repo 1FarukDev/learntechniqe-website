@@ -50,7 +50,7 @@ function Hero() {
             Our processes and facilities are word-class with multiple credible
             accreditations.
           </p>
-          <div className="mb-12 md:mb-16">
+          <div className="mb-12 md:mb-16 mt-5">
             <Button
               onClick={() => setSearchOpen(true)}
               className="px-12 py-7 bg-[#01636B] text-[#F5F5F5] rounded-md uppercase"
@@ -60,8 +60,6 @@ function Hero() {
           </div>
         </div>
       </section>
-
-      {/* Mobile: single image wheel carousel - one at a time with wheel-style dots */}
       <section className="md:hidden relative w-full  -mt-4">
         <div
           className="relative w-full max-w-md mx-auto aspect-[5/3] rounded-2xl overflow-hidden shadow-2xl"
