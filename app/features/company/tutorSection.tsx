@@ -24,38 +24,32 @@ const tutors: Tutor[] = [
     accentColor: "#2563EB",
   },
   {
-    name: "Stephen Rush",
-    role: "Air Conditioning and Refrigeration Tutor",
+    name: "Chris Harrison",
+    role: "Electrical Tutor",
     image: Andie,
     accentColor: "#F59E0B",
   },
   {
-    name: "David Brenton",
-    role: "AM2 Tutor/Assessor",
+    name: "Kingsley Owomero",
+    role: "Electrical Tutor",
     image: Andie,
     accentColor: "#16A34A",
   },
   {
-    name: "John Burton",
-    role: "Electrical Tutor",
+    name: "Arsham Hassanpour",
+    role: "PLC & Automation Tutor",
     image: Andie,
     accentColor: "#2563EB",
   },
   {
-    name: "Simon Baker",
-    role: "Electrical Tutor",
+    name: "Paria Faramarzi",
+    role: "PLC & Automation Tutor ",
     image: Andie,
     accentColor: "#2563EB",
   },
   {
     name: "Tim Morris",
     role: "Air Conditioning and Refrigeration Tutor",
-    image: Andie,
-    accentColor: "#F59E0B",
-  },
-  {
-    name: "Mohammadali Hassanpour",
-    role: "PLC Tutor",
     image: Andie,
     accentColor: "#F59E0B",
   },
@@ -83,7 +77,6 @@ function TutorCard({ tutor }: { tutor: Tutor }) {
               style={{ objectFit: "contain", objectPosition: "bottom center" }}
             />
           ) : (
-            // Placeholder silhouette
             <div className="w-full h-full flex items-end justify-center pb-2">
               <svg
                 viewBox="0 0 100 120"

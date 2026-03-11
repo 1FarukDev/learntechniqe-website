@@ -57,7 +57,10 @@ export function TeamCard({ member }: TeamCardProps) {
                 </span>
               ))}
             </h3>
-            <p className="text-white text-xs md:text-sm mb-2 md:mb-4" style={{ opacity: 0.75 }}>
+            <p
+              className="text-white text-xs md:text-sm mb-2 md:mb-4"
+              style={{ opacity: 0.75 }}
+            >
               {member.role}
             </p>
             <button
@@ -67,9 +70,7 @@ export function TeamCard({ member }: TeamCardProps) {
               More Information
             </button>
           </div>
-          <div
-            className="flex-1 relative mx-2 md:mx-4 mb-2 md:mb-4 rounded-xl overflow-hidden min-h-[140px] md:min-h-[220px] w-full max-w-full"
-          >
+          <div className="flex-1 relative mx-2 md:mx-4 mb-2 md:mb-4 rounded-xl overflow-hidden min-h-[140px] md:min-h-[220px] w-full max-w-full">
             {member.image ? (
               <Image
                 src={member.image}
@@ -176,33 +177,33 @@ const team: TeamMember[] = [
     name: "Mark Crook",
     role: "Company Director",
     image: MarkImage,
-    bio: "Mark co-founded Technique Learning Solutions with a vision to deliver world-class vocational training across the UK.",
+    bio: "With over 30 years of experience in the training sector, Mark is a fully qualified, time-served  engineer bringing a wealth of expertise to Technique Learning Solutions.  Mark is known for his innovative approach to training, which is deeply embedded in the  ethos of Technique Learning Solutions. He remains actively involved in both delivering  training and overseeing and leading the day-to-day operations of the centre, ensuring the  highest standards of learning and service. During your course, you may have the opportunity to meet Mark or attend one of his training  sessions. He is always happy to answer questions and share his insights, so don’t hesitate to  reach out. ",
   },
   {
     name: "Simon Marples",
-    role: "Company Director",
+    role: "National Operations Manager ",
     image: SimonImage,
-    bio: "Simon brings decades of industry experience to TLS, driving strategic growth and ensuring the highest training standards.",
+    bio: "Simon is our Operations Manager, and forms a part of the senior management team. He  provides inspired leadership for our organisation and maintains good quality standards for the  products, productivity and efficiency of our organisation, and oversees the management of  labour, policy decisions and quality and safety control.  He works close with our Commercial Manager to ensure that all employees observe company  policies and procedures. They concentrate on matters concerning the company’s regulations  and work to improve the operational procedures, principles and systems in the  management areas. ",
   },
   {
-    name: "Andy Sharp",
+    name: "Oliver Crook",
     role: "Commercial Manager",
-    bio: "Andy oversees commercial operations and partnerships, helping TLS expand its reach across industries nationwide.",
+    bio: "Oliver is our Commercial Manager, and forms part of the senior management team. He is responsible for identifying and pursuing new business opportunities, building strategic partnerships, and overseeing contracts. He leads the company’s sales and marketing strategy with a strong focus on growth and profitability. Oliver’s excellent interpersonal and communication skills enable him to develop and maintain effective relationships with clients and partners. He works closely with our Operations Manager to ensure that all employees adhere to company policies and procedures, monitors compliance with regulations, and works continuously to enhance operational processes, systems, and management practices across the organisation.  ",
   },
   {
     name: "Mic Barber",
-    role: "Office Manager",
-    bio: "Mic heads up the office, managing day to day admin and sales. Mic is first point of contact for course enquiries and queries at Technique Learning Solutions and is always praised for his customer service.",
+    role: "Centre Course & Certification Coordinator ",
+    bio: "Mic ensures all courses run smoothly from booking to certification, coordinating across multiple centres and awarding bodies. ",
   },
   {
-    name: "Alex Miller",
-    role: "Centre Course & Certification Coordinator",
-    bio: "Alex ensures all courses run smoothly from booking to certification, coordinating across multiple centres and awarding bodies.",
+    name: "Georgina Thompson",
+    role: "Sales & Administration ",
+    bio: "Georgina forms part of our Sales & Administration team. She is customer-focused Sales and Administration Advisor, skilled in managing client accounts, supporting the team, providing expert advice on all of our courses and guiding you down the right path. ",
   },
   {
-    name: "Niki Wilde",
-    role: "Centre Administration",
-    bio: "Niki keeps the centre running day to day, supporting candidates and staff with a friendly and professional approach.",
+    name: "Paige Campbell",
+    role: "Sales & Administration ",
+    bio: "Paige forms part of our Sales & Administration team. An organised and experienced Sales professional, skilled in supporting our team, managing client accounts and providing expert advice on all of our courses and guiding you down the right path. ",
   },
 ];
 

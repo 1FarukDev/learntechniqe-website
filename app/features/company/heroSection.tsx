@@ -74,12 +74,11 @@ export default function HeroSection() {
             className="w-full -mt-16 md:-mt-30"
             style={{ position: "relative" }}
           >
-            {/* Mobile: smaller curve so more image shows */}
             <div
               className="md:hidden h-16 absolute top-0 left-0 right-0 z-[2] bg-white"
               style={{ clipPath: "ellipse(90% 100% at 50% 0%)" }}
             />
-            {/* Desktop: full curve */}
+
             <div
               className="hidden md:block h-50 absolute top-0 left-0 right-0 z-[2] bg-white"
               style={{ clipPath: "ellipse(55% 100% at 50% 0%)" }}
@@ -93,7 +92,7 @@ export default function HeroSection() {
                 style={{ objectFit: "cover", objectPosition: "center" }}
                 priority
               />
-              {/* Mobile: smaller curve so more image shows */}
+
               <div
                 className="md:hidden h-16"
                 style={{
@@ -106,7 +105,7 @@ export default function HeroSection() {
                   zIndex: 2,
                 }}
               />
-              {/* Desktop: full curve */}
+
               <div
                 className="hidden md:block h-50"
                 style={{
@@ -146,29 +145,19 @@ export default function HeroSection() {
           ))}
         </div>
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 text-white text-sm leading-relaxed">
-          <p className="font-normal text-base text-[#FEFEFE]">
-            We take great pride in our training centres, and you’ll quickly see
-            the time, care, and investment that has gone into creating an
-            environment designed for effective learning. Our facilities have
-            been developed to provide high-quality training across a range of
-            disciplines, including Electrical, HVAC, and PLC & Automation
-            courses. With our dedicated centre of excellence, we work hard to
-            deliver the very best training as close to you as possible. Our
-            continually expanding centres reflect our commitment to delivering
-            industry-leading professional training and supporting learners at
-            every stage of their careers.
-          </p>
-          <p className="font-normal text-base text-[#FEFEFE]">
-            To ensure a comfortable and welcoming experience, our centres
-            include several spacious lounge areas equipped with sofas, seating
-            areas, dining spaces, vending machines, magazines, tool promotions,
-            and a large TV for relaxation during breaks. Our classrooms are
-            fully equipped with modern projector screens, climate control
-            systems, and all the technical equipment required to support
-            hands-on learning across our Electrical, HVAC, and PLC & Automation
-            courses.
-          </p>
-          <div>
+          <div className="flex flex-col gap-6">
+            <p className="font-normal text-base text-[#FEFEFE]">
+              We take great pride in our training centres, and you'll quickly
+              see the time, care, and investment that has gone into creating an
+              environment designed for effective learning. Our facilities have
+              been developed to provide high-quality training across a range of
+              disciplines, including Electrical, HVAC, and PLC & Automation
+              courses. <br /> With our dedicated centre of excellence, we work
+              hard to deliver the very best training as close to you as
+              possible. Our continually expanding centres reflect our commitment
+              to delivering industry-leading professional training and
+              supporting learners at every stage of their careers.
+            </p>
             <p className="font-normal text-base text-[#FEFEFE]">
               Since the formation of Technique Learning Solutions, ongoing
               reinvestment and development have demonstrated our strong
@@ -177,10 +166,23 @@ export default function HeroSection() {
               standards, featuring modern classrooms, practical workshops, and a
               dedicated IT suite. These spaces make use of a wide range of test
               rigs and training equipment, allowing candidates to experience
-              realistic, real- world scenarios in a controlled learning
+              realistic, real-world scenarios in a controlled learning
               environment.
             </p>
-            <p>
+          </div>
+
+          <div className="flex flex-col gap-6">
+            <p className="font-normal text-base text-[#FEFEFE]">
+              To ensure a comfortable and welcoming experience, our centres
+              include several spacious lounge areas equipped with sofas, seating
+              areas, dining spaces, vending machines, magazines, tool
+              promotions, and a large TV for relaxation during breaks. Our
+              classrooms are fully equipped with modern projector screens,
+              climate control systems, and all the technical equipment required
+              to support hands-on learning across our Electrical, HVAC, and PLC
+              & Automation courses.
+            </p>
+            <p className="font-normal text-base text-[#FEFEFE]">
               Whether you are a sole trader, part of an established engineering
               or facilities company, currently unemployed, or looking to
               retrain, we offer a range of Electrical, HVAC, and PLC &
