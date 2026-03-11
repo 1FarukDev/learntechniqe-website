@@ -4,6 +4,7 @@ import ElectricalIcon from "@/app/assets/svg/electrical.svg";
 import AirconIcon from "@/app/assets/svg/fridge.svg";
 import AssessmentIcon from "@/app/assets/svg/healthicons.svg";
 import PLCIcon from "@/app/assets/svg/healthicons_training.svg";
+
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
@@ -42,7 +43,11 @@ function TradeCourses() {
                 More Information
               </Button>
             </div>
-            <Image src={ElectricalIcon} alt="Electrical Icon" className="w-12 h-12 sm:w-16 sm:h-16 md:w-auto md:h-auto shrink-0" />
+            <Image
+              src={ElectricalIcon}
+              alt="Electrical Icon"
+              className="w-12 h-12 sm:w-16 sm:h-16 md:w-auto md:h-auto shrink-0"
+            />
           </div>
 
           <div className="bg-[#01636B] flex items-center justify-between rounded-lg p-4 sm:p-5 shadow-xl gap-4">
@@ -50,35 +55,54 @@ function TradeCourses() {
               <h1 className="text-white text-[24px] sm:text-[30px] md:text-[36px] leading-tight font-normal">
                 Air-con and <br /> Refrigeration Courses
               </h1>
-              <Button variant={'secondary'} className="uppercase bg-[#ECF0F0] w-full h-12 sm:h-16 text-black text-sm sm:text-base">
+              <Button
+                variant={"secondary"}
+                className="uppercase bg-[#ECF0F0] w-full h-12 sm:h-16 text-black text-sm sm:text-base"
+              >
                 More Information
               </Button>
             </div>
-            <Image src={AirconIcon} alt="Air-con Icon" className="w-12 h-12 sm:w-16 sm:h-16 md:w-auto md:h-auto shrink-0" />
+            <Image
+              src={AirconIcon}
+              alt="Air-con Icon"
+              className="w-12 h-12 sm:w-16 sm:h-16 md:w-auto md:h-auto shrink-0"
+            />
           </div>
-
-          <div className="bg-[#01636B] flex items-center justify-between rounded-lg p-4 sm:p-5 shadow-xl gap-4">
-            <div className="flex flex-col gap-4 sm:gap-10 w-1/2 min-w-0">
-              <h1 className="text-white text-[24px] sm:text-[30px] md:text-[36px] leading-tight font-normal">
-                AM2 <br /> Assessment
-              </h1>
-              <Button variant={'secondary'} className="uppercase bg-[#ECF0F0] text-black w-full h-12 sm:h-16 text-sm sm:text-base">
-                More Information
-              </Button>
-            </div>
-            <Image src={AssessmentIcon} alt="Assessment Icon" className="w-12 h-12 sm:w-16 sm:h-16 md:w-auto md:h-auto shrink-0" />
-          </div>
-
           <div className="bg-[#01636B] flex items-center justify-between rounded-lg p-4 sm:p-5 shadow-xl gap-4">
             <div className="flex flex-col gap-4 sm:gap-10 w-1/2 min-w-0">
               <h1 className="text-white text-[24px] sm:text-[30px] md:text-[36px] leading-tight font-normal">
                 PLC Training <br /> Courses
               </h1>
-              <Button variant={'secondary'} className="uppercase bg-[#ECF0F0] text-black w-full h-12 sm:h-16 text-sm sm:text-base">
+              <Button
+                variant={"secondary"}
+                className="uppercase bg-[#ECF0F0] text-black w-full h-12 sm:h-16 text-sm sm:text-base"
+              >
                 More Information
               </Button>
             </div>
-            <Image src={PLCIcon} alt="PLC Icon" className="w-12 h-12 sm:w-16 sm:h-16 md:w-auto md:h-auto shrink-0" />
+            <Image
+              src={PLCIcon}
+              alt="PLC Icon"
+              className="w-12 h-12 sm:w-16 sm:h-16 md:w-auto md:h-auto shrink-0"
+            />
+          </div>
+          <div className="bg-[#01636B] flex items-center justify-between rounded-lg p-4 sm:p-5 shadow-xl gap-4">
+            <div className="flex flex-col gap-4 sm:gap-10 w-1/2 min-w-0">
+              <h1 className="text-white text-[24px] sm:text-[30px] md:text-[36px] leading-tight font-normal">
+                AM2 <br /> Assessment
+              </h1>
+              <Button
+                variant={"secondary"}
+                className="uppercase bg-[#ECF0F0] text-black w-full h-12 sm:h-16 text-sm sm:text-base"
+              >
+                More Information
+              </Button>
+            </div>
+            <Image
+              src={AssessmentIcon}
+              alt="Assessment Icon"
+              className="w-12 h-12 sm:w-16 sm:h-16 md:w-auto md:h-auto shrink-0"
+            />
           </div>
         </div>
       </div>

@@ -15,41 +15,72 @@ interface FAQItem {
 
 const faqs: FAQItem[] = [
   {
-    question:
-      "Why choose Technique Learning Solutions for your Electrical Course?",
+    question: "Can I really become an electrician with no experience?",
     intro:
-      "Technique Learning Solutions is one of the UK's preferred providers of electrical courses.\nThere are many reasons why you should train on an electrical course with us including:",
+      "Yes, absolutely. Most of our students start with zero electrical experience. Our courses are specifically designed for complete beginners. Here’s what makes it work: ",
     bullets: [
       {
-        text: "Our electrical courses can easily fit around your personal circumstances. You tell us when you can attend and what you want to achieve and we will endeavour to tailor the electrical course around you. There aren't many Training Providers which offer this unrivalled flexibility.",
+        text: "Individual workstations - You get your own equipment, so you’re not waiting around or watching others ",
       },
       {
-        text: "ALL our electrical courses are fully accredited, meaning you get a City & Guilds, LCL Awards and/or EAL qualifications",
+        text: "Over 50% hands-on training - You learn by doing, not just listening ",
       },
       {
-        text: "We work to ISO9001, ISO14001, and ISO 18001 standards, this ensures quality training, consistently delivered.",
+        text: "Small class sizes (1-10 students) - Tutors give you personal attention when you’re stuck ",
       },
       {
-        text: "On your electrical course you will be taught by expert, industry trained tutors. Our class sizes are kept to a minimum. Please take a minute to Meet the team which is made up of some of the most experienced people in the electrical training business teaching electrical courses.",
-      },
-      {
-        text: "You will benefit from being in a purpose built, state of the art electrical courses training facility, please take a look at our virtual tour to see the facilities.",
+        text: "Experienced tutors - Our instructors have decades of real-world experience and know how to teach beginners ",
       },
     ],
     outro: [
-      "The aim of each electrical course is to provide you with the skill level and competence which will allow you to work safely and efficiently when carrying out work on electrical installations, equipment and systems. This is achieved by using the most realistic and up to date training facilities we believe you can work on.",
-      "We guarantee that during the electrical courses you will learn a whole manner of things, from using various testing equipment to rewiring a house. You will be given the electrical skills and qualifications you need on your electrical course to get into the industry and develop your career.",
+      "The average age of our career-changing students is 38. We’ve successfully trained people in their 40s and 50s who had never touched electrical equipment before. ",
+      "What you need: Willingness to learn, basic problem-solving skills, and commitment to the course. That’s it. ",
+      "Follow-up support: If you struggle with any module, we offer free retakes and extra trainer sessions until you pass. ",
     ],
   },
   {
-    question:
-      '"I\'m getting on a bit" Is it like going back to school and will I feel out of place?',
+    question: '"How do I pay for the course? Can I pay monthly? ',
+    intro:
+      "Yes, we offer flexible payment options including monthly payment plans. Payment options include: ",
+
+    bullets: [
+      {
+        text: "Full payment upfront (often with early booking discounts) ",
+      },
+      {
+        text: "Monthly payment plans - Spread the cost over several months ",
+      },
+      {
+        text: "Employer sponsorship - Many companies pay for employee training",
+      },
+      {
+        text: "Finance options - We can guide you through available finance schemes ",
+      },
+    ],
     outro: [
-      "Not at all! Our courses are designed for people of all ages and backgrounds. We have students ranging from school leavers to those in their 60s looking to retrain. Our tutors ensure everyone feels welcome and supported throughout their learning journey.",
+      "To discuss your specific situation: ",
+      "Call us on 0800 112 3310 or email info@learntechnique.com. Our team will walk you through what’s available and help you find the best option for your budget. ",
+      "Important: Don’t let cost stop you from enquiring. We’ve helped hundreds of students find ways to afford training, including those who thought it was out of reach. ",
     ],
   },
   {
-    question: "When will I have to pay for the course?",
+    question: "What happens if I fail the course or assessment? ",
+    intro:
+      "You can retake the assessment/exams and extra support until you pass. Here’s our policy: ",
+    bullets: [
+      {
+        text: "Retakes - If you don’t pass first time, you can retake the assessment at a small cost, this cost is set by the awarding bodies. ",
+      },
+      {
+        text: "Extra trainer sessions - We provide additional one-on-one support if you’re struggling ",
+      },
+      {
+        text: "No time pressure - We work with you at your pace until you’re confident ",
+      },
+      {
+        text: "Finance options - We can guide you through available finance schemes ",
+      },
+    ],
     outro: [
       "Payment is typically required before the course start date. We will confirm the exact payment schedule when you book your place. We offer flexible payment options to suit your circumstances.",
     ],
@@ -99,7 +130,6 @@ const faqs: FAQItem[] = [
   },
 ];
 
-
 function FAQRow({
   faq,
   open,
@@ -118,7 +148,6 @@ function FAQRow({
         marginBottom: "0.75rem",
       }}
     >
-      
       <button
         onClick={onToggle}
         className="w-full flex items-center justify-between gap-3 px-4 sm:px-5 py-4 text-left"
@@ -141,8 +170,8 @@ function FAQRow({
             style={{
               width: 28,
               height: 28,
-            //   borderRadius: "50%",
-            //   border: `2px solid ${open ? "rgba(255,255,255,0.6)" : "#9ca3af"}`,
+              //   borderRadius: "50%",
+              //   border: `2px solid ${open ? "rgba(255,255,255,0.6)" : "#9ca3af"}`,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -172,9 +201,7 @@ function FAQRow({
         <div className="px-6 py-5" style={{ backgroundColor: "#ffffff" }}>
           {/* Intro text */}
           {faq.intro && (
-            <p
-              className="text-sm text-black mb-5 leading-relaxed whitespace-pre-line"
-            >
+            <p className="text-sm text-black mb-5 leading-relaxed whitespace-pre-line">
               {faq.intro}
             </p>
           )}
@@ -210,9 +237,7 @@ function FAQRow({
                         flexShrink: 0,
                       }}
                     />
-                    <p
-                      className="text-sm text-black leading-relaxed"
-                    >
+                    <p className="text-sm text-black leading-relaxed">
                       {b.text}
                     </p>
                   </li>
@@ -225,11 +250,7 @@ function FAQRow({
           {faq.outro && (
             <div className="flex flex-col gap-3">
               {faq.outro.map((para, i) => (
-                <p
-                  key={i}
-                  className="text-sm text-black leading-relaxed"
-                 
-                >
+                <p key={i} className="text-sm text-black leading-relaxed">
                   {para}
                 </p>
               ))}
@@ -251,7 +272,9 @@ export default function FAQSection() {
   return (
     <section className="w-full bg-white px-4 sm:px-8 md:px-12 py-12 md:py-16">
       <div className="text-center mb-10 md:mb-14">
-        <h2 className="text-black text-3xl sm:text-4xl md:text-5xl font-semibold mb-3">F.A.Qs</h2>
+        <h2 className="text-black text-3xl sm:text-4xl md:text-5xl font-semibold mb-3">
+          F.A.Qs
+        </h2>
         <p className="text-black text-base font-normal max-w-2xl mx-auto leading-relaxed">
           General Questions.
         </p>

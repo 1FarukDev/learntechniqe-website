@@ -50,7 +50,7 @@ function Contact() {
           </div>
           <div>
             <h6 className="font-bold text-sm sm:text-base">EMAIL</h6>
-            <h6 className="font-bold text-base">info@technique.com</h6>
+            <h6 className="font-bold text-base"> info@learntechnique.com </h6>
           </div>
 
           <div className="flex gap-4">

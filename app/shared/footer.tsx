@@ -15,7 +15,7 @@ function Footer() {
               className="mb-6 sm:mb-8 w-40 sm:w-50"
             />
             <p className="text-white text-xs sm:text-sm leading-relaxed">
-              Elm Training Services is the Nottingham approved AM2 Test <br />{" "}
+              Elm Training Services is the Chesterfield approved AM2 Test <br />{" "}
               Centre providing the Achievement Measurement 2 practical <br />{" "}
               skills test.
             </p>

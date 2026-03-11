@@ -12,21 +12,29 @@ function Stages() {
         There’s a Course For Everyone
       </h1>
       <p className="font-normal text-sm sm:text-base text-black px-2">
-        Whether you are new to the electrical industry, an experienced
-        electrician,
-        <br className="hidden sm:block" /> or in an allied trade, we can help find the right course for you
+        Whether you're beginning your journey in the electrical, HVAC, or
+        automation industry, or you're an experienced professional ready to
+        upskill
+        <br className="hidden sm:block" /> we’ll help you find the perfect
+        course to take the next step.
       </p>
       <section className="flex flex-col lg:flex-row items-stretch justify-center gap-6 sm:gap-10 w-full my-12 sm:my-16 md:my-20">
         <div className="bg-[#D4D8DB] w-full lg:w-1/2 pt-10 sm:pt-15 pb-5 px-6 sm:px-10 rounded-2xl border border-[#bcbdbd] flex flex-col">
           <div>
             <div className="flex items-center justify-between gap-3 sm:gap-0 mb-4 sm:mb-8 h-20 sm:h-25">
-              <h1 className="text-black font-semibold text-[26px] sm:text-[36px] leading-tight shrink-0">Beginner</h1>
-              <Image src={FirstStar} alt="1 Star" className="shrink-0 w-10 h-10 sm:w-auto sm:h-auto" />
+              <h1 className="text-black font-semibold text-[26px] sm:text-[36px] leading-tight shrink-0">
+                Beginner
+              </h1>
+              <Image
+                src={FirstStar}
+                alt="1 Star"
+                className="shrink-0 w-10 h-10 sm:w-auto sm:h-auto"
+              />
             </div>
 
             <p className="text-start mb-4 sm:mb-8 text-sm sm:text-base leading-relaxed">
-              You’re new to the game but a keen learner <br />
-              looking for the right institution to hone your skills.
+              Taking the first step in your journey <br /> and ready to start building
+              your skills
             </p>
 
             <h5 className="text-start font-semibold uppercase text-sm sm:text-base mb-4 sm:mb-0">
@@ -48,14 +56,17 @@ function Stages() {
           <div className="relative z-10">
             <div className="flex items-center justify-between gap-3 sm:gap-0 mb-4 sm:mb-8 h-20 sm:h-25">
               <h1 className="text-white text-[26px] sm:text-[36px] font-semibold text-start leading-tight shrink-0">
-                Existing <br /> Electrician
+                Existing <br /> Professional
               </h1>
-              <Image src={ThirdStar} alt="3 Stars" className="shrink-0 w-30 h-30 sm:w-auto sm:h-auto" />
+              <Image
+                src={ThirdStar}
+                alt="3 Stars"
+                className="shrink-0 w-30 h-30 sm:w-auto sm:h-auto"
+              />
             </div>
 
             <p className="text-start text-white mb-4 sm:mb-8 text-sm sm:text-base leading-relaxed">
-              You’re new to the game but a keen learner <br />
-              looking for the right institution to hone your skills.
+              An experienced professional looking <br /> to expand and refine your expertise. 
             </p>
 
             <h5 className="text-start font-semibold uppercase text-sm sm:text-base text-white mb-4 sm:mb-10">
