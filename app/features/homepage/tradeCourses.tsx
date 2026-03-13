@@ -7,6 +7,7 @@ import PLCIcon from "@/app/assets/svg/healthicons_training.svg";
 
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 
 function TradeCourses() {
   return (
@@ -39,8 +40,8 @@ function TradeCourses() {
               <h1 className="text-white text-[24px] sm:text-[30px] md:text-[36px] leading-tight font-normal">
                 Electrical <br /> Courses
               </h1>
-              <Button className="uppercase bg-[#01636B] w-full h-12 sm:h-16 text-sm sm:text-base">
-                More Information
+              <Button asChild className="uppercase bg-[#01636B] w-full h-12 sm:h-16 text-sm sm:text-base">
+                <Link href="/courses/electrical">More Information</Link>
               </Button>
             </div>
             <Image
@@ -56,10 +57,11 @@ function TradeCourses() {
                 Air-con and <br /> Refrigeration Courses
               </h1>
               <Button
+                asChild
                 variant={"secondary"}
                 className="uppercase bg-[#ECF0F0] w-full h-12 sm:h-16 text-black text-sm sm:text-base"
               >
-                More Information
+                <Link href="/courses/aircon-refrigeration">More Information</Link>
               </Button>
             </div>
             <Image
@@ -74,10 +76,11 @@ function TradeCourses() {
                 PLC Training <br /> Courses
               </h1>
               <Button
+                asChild
                 variant={"secondary"}
                 className="uppercase bg-[#ECF0F0] text-black w-full h-12 sm:h-16 text-sm sm:text-base"
               >
-                More Information
+                <Link href="/courses/plc">More Information</Link>
               </Button>
             </div>
             <Image
@@ -92,10 +95,17 @@ function TradeCourses() {
                 AM2 <br /> Assessment
               </h1>
               <Button
+                asChild
                 variant={"secondary"}
                 className="uppercase bg-[#ECF0F0] text-black w-full h-12 sm:h-16 text-sm sm:text-base"
               >
-                More Information
+                <a
+                  href="https://learntechnique.com/electrician-courses/am2-assessment/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  More Information
+                </a>
               </Button>
             </div>
             <Image

@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import React from "react";
+import Link from "next/link";
 import FirstImage from "@/app/assets/png/review1.png";
 import SecondImage from "@/app/assets/png/review2.png";
 import ThirdImage from "@/app/assets/png/review3.png";
@@ -15,8 +16,14 @@ function Ratings() {
           What Our Students Say About Us
         </h1>
         <div className="flex items-center gap-8">
-          <Button className="uppercase bg-[#016068] h-12 sm:h-17.25 px-8 sm:px-15 text-sm sm:text-base">
-            See All Reviews
+          <Button asChild className="uppercase bg-[#016068] h-12 sm:h-17.25 px-8 sm:px-15 text-sm sm:text-base">
+            <Link
+              href="https://www.coursecheck.com/provider/188/technique-training-ltd"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              See All Reviews
+            </Link>
           </Button>
         </div>
       </div>

@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, RegisterOptions } from 'react-hook-form'
 import { Input } from './ui/input'
 import { cn } from '@/lib/utils'
 
@@ -12,6 +12,7 @@ interface FormInputProps extends React.ComponentProps<typeof Input> {
   wrapperClassName?: string
   iconLeft?: React.ReactNode
   iconRight?: React.ReactNode
+  rules?: RegisterOptions
 }
 
 export const FormInput: React.FC<FormInputProps> = ({
@@ -21,6 +22,7 @@ export const FormInput: React.FC<FormInputProps> = ({
   wrapperClassName,
   iconLeft,
   iconRight,
+  rules,
   ...props
 }) => {
   const {
@@ -48,7 +50,7 @@ export const FormInput: React.FC<FormInputProps> = ({
         )}
         <Input
           id={name}
-          {...register(name)}
+          {...register(name, rules)}
           className={cn(
             hasIconLeft && 'pl-10',
             hasIconRight && 'pr-10',

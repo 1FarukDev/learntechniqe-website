@@ -1,12 +1,11 @@
 import React from "react";
-
-import CoursesPackage from "./sections/coursesPackage";
-import Session from "./sections/session";
-import Contact from "../features/homepage/contact";
+import CoursesPackage from "../sections/coursesPackage";
+import Session from "../sections/session";
+import Contact from "@/app/features/homepage/contact";
 import { AnimatedSection } from "@/components/animated-section";
-import HeroSection from "../shared/heroBackground";
+import HeroSection from "@/app/shared/heroBackground";
 
-function page() {
+export default function ElectricalCoursesPage() {
   return (
     <main>
       <AnimatedSection variant="fade-in" visibleOnLoad>
@@ -27,5 +26,3 @@ function page() {
     </main>
   );
 }
-
-export default page;

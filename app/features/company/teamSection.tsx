@@ -17,6 +17,9 @@ interface TeamCardProps {
 
 export function TeamCard({ member }: TeamCardProps) {
   const [hovered, setHovered] = useState(false);
+  const [bioExpanded, setBioExpanded] = useState(false);
+  const bio = member.bio ?? "";
+  const isLongBio = bio.length > 200;
 
   return (
     <div
@@ -135,12 +138,32 @@ export function TeamCard({ member }: TeamCardProps) {
           </p>
 
           {member.bio ? (
-            <p
-              className="text-white text-xs md:text-sm text-center leading-relaxed"
-              style={{ fontFamily: "'Barlow', sans-serif", opacity: 0.9 }}
-            >
-              {member.bio}
-            </p>
+            <div className="flex flex-col items-center w-full flex-1 min-h-0 overflow-hidden">
+              <p
+                className={`text-white text-xs md:text-sm text-center leading-relaxed w-full ${
+                  !bioExpanded && isLongBio ? "line-clamp-5" : "overflow-y-auto"
+                }`}
+                style={{
+                  fontFamily: "'Barlow', sans-serif",
+                  opacity: 0.9,
+                  maxHeight: bioExpanded ? "12rem" : "8.5rem",
+                }}
+              >
+                {member.bio}
+              </p>
+              {isLongBio && (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setBioExpanded(!bioExpanded);
+                  }}
+                  className="mt-2 text-xs font-semibold text-[#22c55e] hover:text-[#16a34a] transition-colors shrink-0"
+                >
+                  {bioExpanded ? "Show less" : "Read more"}
+                </button>
+              )}
+            </div>
           ) : (
             <p
               className="text-white text-sm text-center leading-relaxed"

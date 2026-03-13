@@ -50,10 +50,10 @@ function Footer() {
               Qualifications
             </Link>
             <Link
-              href="#"
+              href="/terms-and-conditions"
               className="text-white text-sm hover:text-white/80 transition-colors"
             >
-              Terms &amp; Condition
+              Terms &amp; Conditions
             </Link>
             <Link
               href="#"
@@ -77,10 +77,10 @@ function Footer() {
               Our Policies
             </Link>
             <Link
-              href="#"
+              href="/privacy-policy"
               className="text-white text-sm hover:text-white/80 transition-colors"
             >
-              Private Policy
+              Privacy Policy
             </Link>
             <Link
               href="#"
@@ -103,7 +103,7 @@ function Footer() {
           <p className="text-white text-xs sm:text-sm text-center md:text-left">
             2026 Technique Learning Solutions | All Rights Reserved |{" "}
             <Link
-              href="#"
+              href="/terms-and-conditions"
               className="underline hover:text-white transition-colors"
             >
               Terms and Conditions

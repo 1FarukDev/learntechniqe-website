@@ -4,7 +4,7 @@ import { FormInput } from "@/components/Input";
 import { FormTextarea } from "@/components/textarea";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/react";
-import React from "react";
+import React, { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 type FormValues = {
@@ -16,6 +16,7 @@ type FormValues = {
 };
 
 function ContactForm() {
+    const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
     const methods = useForm<FormValues>({
         defaultValues: {
             first_name: "",
@@ -26,8 +27,21 @@ function ContactForm() {
         },
     });
 
-    const onSubmit = (data: FormValues) => {
-        console.log(data);
+    const onSubmit = async (data: FormValues) => {
+        setStatus("loading");
+        try {
+            const res = await fetch("/api/zapier/contact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+            const json = await res.json();
+            if (!res.ok) throw new Error(json.error || "Failed to submit");
+            setStatus("success");
+            methods.reset();
+        } catch {
+            setStatus("error");
+        }
     };
 
     return (
@@ -95,11 +109,13 @@ function ContactForm() {
                                     name="first_name"
                                     label="First Name"
                                     placeholder="Enter your first name"
+                                    rules={{ required: "First name is required" }}
                                 />
                                 <FormInput
                                     name="last_name"
                                     label="Last Name"
                                     placeholder="Enter your last name"
+                                    rules={{ required: "Last name is required" }}
                                 />
                             </div>
 
@@ -108,11 +124,19 @@ function ContactForm() {
                                     name="number"
                                     label="Phone Number"
                                     placeholder="Enter your phone"
+                                    rules={{ required: "Phone number is required" }}
                                 />
                                 <FormInput
                                     name="email"
                                     label="Email Address"
                                     placeholder="Enter your email"
+                                    rules={{
+                                      required: "Email is required",
+                                      pattern: {
+                                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                        message: "Please enter a valid email",
+                                      },
+                                    }}
                                 />
                             </div>
 
@@ -120,13 +144,22 @@ function ContactForm() {
                                 name="message"
                                 label="Message"
                                 placeholder="Enter your message"
+                                rules={{ required: "Message is required" }}
                             />
+
+                            {status === "success" && (
+                                <p className="text-sm text-green-600 font-medium">Thank you! Your message has been sent.</p>
+                            )}
+                            {status === "error" && (
+                                <p className="text-sm text-red-600 font-medium">Something went wrong. Please try again.</p>
+                            )}
 
                             <Button
                                 type="submit"
+                                disabled={status === "loading"}
                                 className="bg-[#14AE5C] text-white! h-15 uppercase font-bold text-base px-10"
                             >
-                                Send Message
+                                {status === "loading" ? "Sending..." : "Send Message"}
                             </Button>
                         </form>
                     </FormProvider>

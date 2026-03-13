@@ -10,13 +10,74 @@ import ArrowBack from "@/app/assets/svg/arrow-back.svg";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import CourseCard from "@/components/course-card";
+import Link from "next/link";
+
+const CATEGORY_CONFIG = {
+  electrical: {
+    courseCount: "75",
+    filterCategories: [
+      { label: "Course Packages", value: "course-packages" },
+      { label: "PAT Testing", value: "pat-testing" },
+      { label: "Electrical Vehicle Charging", value: "ev-charging" },
+      { label: "18th Edition Courses", value: "18th-edition" },
+      { label: "Extra Experience", value: "extra-experience" },
+      { label: "Inspection and Testing", value: "inspection-testing" },
+      { label: "Part P", value: "part-p" },
+      { label: "Online Courses", value: "online-courses" },
+    ],
+    carousels: [
+      { title: "Course Packages", count: "24 courses" },
+      { title: "PAT Testing", count: "24 courses" },
+      { title: "Electrical Vehicle Charging", count: "24 courses" },
+    ],
+    sidebarText:
+      "We have a wide range of electrician courses aimed at different levels, whether you're looking to start a career as an electrician hoping to enter the industry or already work as a qualified electrician who is looking to extend their services or knowledge, we will have an electricians course for you. Being able to provide practical electrical training to both experienced electricians as well as new starters means we are able to offer unbiased advice on what is the correct training for your individual circumstances. Our courses are designed to be as practical as they can be, we believe this is the best way to learn! Our courses are all taught by knowledgeable, experienced industry experts. We have training centres across the UK, all of which are kitted out with state-of-the-art equipment for candidates to practice and work with – these are just some reasons we have high pass rates for our electrical training courses.",
+  },
+  "aircon-refrigeration": {
+    courseCount: "45",
+    filterCategories: [
+      { label: "Course Packages", value: "course-packages" },
+      { label: "F Gas", value: "f-gas" },
+      { label: "Hydrocarbon", value: "hydrocarbon" },
+      { label: "Pipework & Brazing", value: "pipework-brazing" },
+      { label: "Total Air Conditioning", value: "total-aircon" },
+    ],
+    carousels: [
+      { title: "Course Packages", count: "12 courses" },
+      { title: "F Gas Regulations", count: "8 courses" },
+      { title: "Total Air Conditioning & Refrigeration", count: "10 courses" },
+    ],
+    sidebarText:
+      "Our air conditioning and refrigeration courses cover everything from F-Gas certification to comprehensive total air conditioning packages. Whether you're new to the industry or an experienced technician looking to upskill, we offer hands-on training with state-of-the-art equipment. Our courses are designed to provide practical, real-world skills that you can apply immediately in your career.",
+  },
+  plc: {
+    courseCount: "35",
+    filterCategories: [
+      { label: "Course Packages", value: "course-packages" },
+      { label: "SCADA", value: "scada" },
+      { label: "Manufacturer Specific", value: "manufacturer" },
+      { label: "Beginner/Intermediate/Advanced", value: "experience" },
+    ],
+    carousels: [
+      { title: "Course Packages", count: "15 courses" },
+      { title: "SCADA & Communications", count: "8 courses" },
+      { title: "Manufacturer Specific (Siemens, Allen Bradley, Mitsubishi)", count: "12 courses" },
+    ],
+    sidebarText:
+      "Our PLC training courses range from beginner to advanced levels, with City & Guilds and EAL accredited qualifications. Learn programmable logic controllers, SCADA systems, industrial networking, and manufacturer-specific training. Our experienced instructors provide hands-on training with industry-standard equipment to ensure you gain the practical skills needed for automation and control systems.",
+  },
+} as const;
+
+type CategoryType = keyof typeof CATEGORY_CONFIG;
 
 function CourseCarousel({
   title,
   count,
+  allCoursesHref = "/courses",
 }: {
   title: string;
   count: string;
+  allCoursesHref?: string;
 }) {
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
@@ -71,8 +132,8 @@ function CourseCarousel({
               <Image src={ArrowRight} alt="Scroll right" />
             </button>
           </div>
-          <Button className="uppercase bg-[#016068] px-6 sm:px-10 h-10 sm:h-11 text-xs sm:text-sm flex-1 sm:flex-initial">
-            All Courses
+          <Button asChild className="uppercase bg-[#016068] px-6 sm:px-10 h-10 sm:h-11 text-xs sm:text-sm flex-1 sm:flex-initial">
+            <Link href={allCoursesHref}>All Courses</Link>
           </Button>
         </div>
       </div>
@@ -94,8 +155,13 @@ function CourseCarousel({
   );
 }
 
-function CoursesPackage() {
+function CoursesPackage({
+  category = "electrical",
+}: {
+  category?: CategoryType;
+}) {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const config = CATEGORY_CONFIG[category];
 
   useEffect(() => {
     document.body.style.overflow = drawerOpen ? "hidden" : "";
@@ -114,7 +180,7 @@ function CoursesPackage() {
   const { handleSubmit, watch, setValue } = methods;
 
   const expertiseLevel = watch("expertiseLevel");
-  const category = watch("category");
+  const filterCategory = watch("category");
   const location = watch("location");
 
   const SidebarContent = (
@@ -128,29 +194,22 @@ function CoursesPackage() {
           wrapperClassName="mb-6"
         />
 
-        <FilterAccordion
-          title="Expertise Level"
-          options={[
-            { label: "Beginner", value: "beginner" },
-            { label: "Existing Electrician", value: "existing-electrician" },
-          ]}
-          selectedValue={expertiseLevel}
-          onChange={(val) => setValue("expertiseLevel", val)}
-        />
+        {category === "electrical" && (
+          <FilterAccordion
+            title="Expertise Level"
+            options={[
+              { label: "Beginner", value: "beginner" },
+              { label: "Existing Electrician", value: "existing-electrician" },
+            ]}
+            selectedValue={expertiseLevel}
+            onChange={(val) => setValue("expertiseLevel", val)}
+          />
+        )}
 
         <FilterAccordion
           title="Categories"
-          options={[
-            { label: "Course Packages", value: "course-packages" },
-            { label: "PAT Testing", value: "pat-testing" },
-            { label: "Electrical Vehicle Charging", value: "ev-charging" },
-            { label: "18th Edition Courses", value: "18th-edition" },
-            { label: "Extra Experience", value: "extra-experience" },
-            { label: "Inspection and Testing", value: "inspection-testing" },
-            { label: "Part P", value: "part-p" },
-            { label: "Online Courses", value: "online-courses" },
-          ]}
-          selectedValue={category}
+          options={[...config.filterCategories]}
+          selectedValue={filterCategory}
           onChange={(val) => setValue("category", val)}
         />
 
@@ -175,22 +234,7 @@ function CoursesPackage() {
       <hr className="my-4" />
 
       <p className="bg-[#F5F5F5] p-4 text-sm">
-        We have a wide range of electrician courses aimed at different
-        levels, whether you&apos;re looking to start a career as an
-        electrician hoping to enter the industry or already work as a
-        qualified electrician who is looking to extend their services or
-        knowledge, we will have an electricians course for you. Being
-        able to provide practical electrical training to both
-        experienced electricians as well as new starters means we are
-        able to offer unbiased advice on what is the correct training
-        for your individual circumstances. Our courses are designed to
-        be as practical as they can be, we believe this is the best way
-        to learn! Our courses are all taught by knowledgeable,
-        experienced industry experts. We have training centres across
-        the UK, all of which are kitted out with state-of-the-art
-        equipment for candidates to practice and work with – these are
-        just some reasons we have high pass rates for our electrical
-        training courses.
+        {config.sidebarText}
       </p>
     </FormProvider>
   );
@@ -247,21 +291,21 @@ function CoursesPackage() {
           style={{ marginLeft: "max(1rem, calc((100vw - 80rem) / 2 + 1rem))" }}
         >
           <h3 className="text-black font-semibold text-xl mb-4">
-            75 Courses
+            {config.courseCount} Courses
           </h3>
           {SidebarContent}
         </aside>
 
         <div className="flex-1 min-w-0">
-          <CourseCarousel title="Course Packages" count="24 courses" />
-
-          <div className="mt-8 sm:mt-10">
-            <CourseCarousel title="PAT Testing" count="24 courses" />
-          </div>
-
-          <div className="mt-8 sm:mt-10">
-            <CourseCarousel title="Electrical Vehicle Charging" count="24 courses" />
-          </div>
+          {config.carousels.map((carousel, index) => (
+            <div key={carousel.title} className={index > 0 ? "mt-8 sm:mt-10" : ""}>
+              <CourseCarousel
+                title={carousel.title}
+                count={carousel.count}
+                allCoursesHref="/courses"
+              />
+            </div>
+          ))}
         </div>
       </div>
     </section>

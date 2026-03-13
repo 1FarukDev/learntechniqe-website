@@ -4,6 +4,7 @@ import SecondStar from "@/app/assets/svg/2card.svg";
 import ThirdStar from "@/app/assets/svg/3stars.svg";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 function Stages() {
   return (
@@ -42,8 +43,8 @@ function Stages() {
             </h5>
           </div>
 
-          <Button className="bg-[#01636B] h-14 sm:h-17.25 uppercase mt-auto text-sm sm:text-base">
-            Find courses
+          <Button asChild className="bg-[#01636B] h-14 sm:h-17.25 uppercase mt-auto text-sm sm:text-base">
+            <Link href="/courses">Find courses</Link>
           </Button>
         </div>
 
@@ -74,8 +75,8 @@ function Stages() {
             </h5>
           </div>
 
-          <Button className="bg-[#E99E20] h-14 sm:h-17.25 uppercase mt-auto text-sm sm:text-base relative z-10">
-            Find courses
+          <Button asChild className="bg-[#E99E20] h-14 sm:h-17.25 uppercase mt-auto text-sm sm:text-base relative z-10">
+            <Link href="/courses">Find courses</Link>
           </Button>
         </div>
       </section>

@@ -5,6 +5,7 @@ import ArrowBack from "@/app/assets/svg/arrow-back.svg";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import CourseCard from "@/components/course-card";
+import Link from "next/link";
 
 const Courses: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -57,8 +58,8 @@ const Courses: React.FC = () => {
               <Image src={ArrowRight} alt="Arrow Right" />
             </div>
           </div>
-          <Button className="uppercase bg-[#016068] h-12 sm:h-17.25 px-8 sm:px-15 text-sm sm:text-base flex-1 sm:flex-initial">
-            See All Courses
+          <Button asChild className="uppercase bg-[#016068] h-12 sm:h-17.25 px-8 sm:px-15 text-sm sm:text-base flex-1 sm:flex-initial">
+            <Link href="/courses">See All Courses</Link>
           </Button>
         </div>
       </div>

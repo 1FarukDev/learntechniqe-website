@@ -1,13 +1,17 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { MapPin } from "lucide-react";
-import React, { useState } from "react";
+import { MapPin, X } from "lucide-react";
+import Link from "next/link";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import ClayImage from "@/app/assets/png/clay.png";
 import ArrowRight from "@/app/assets/svg/arrow-front.svg";
 import ArrowBack from "@/app/assets/svg/arrow-back.svg";
 import StirlingImage from "@/app/assets/png/striling.jpg";
+
+const GOOGLE_MAPS_EMBED_URL =
+  "https://www.google.com/maps/d/u/0/embed?mid=1nU1ecA3H6TsQO1OTKn53eeOG6iqgvIAS";
 const tabs = ["clay", "stirling"] as const;
 type Tab = (typeof tabs)[number];
 
@@ -36,6 +40,14 @@ const locationData: Record<
 
 const Location: React.FC = () => {
   const [activeTab, setActiveTab] = useState<Tab>("clay");
+  const [mapOpen, setMapOpen] = useState(false);
+
+  useEffect(() => {
+    document.body.style.overflow = mapOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mapOpen]);
 
   const baseClasses =
     "flex items-center gap-2 rounded-md p-4 px-8 cursor-pointer transition-all";
@@ -92,13 +104,51 @@ const Location: React.FC = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <Button className="uppercase bg-[#01656B] text-white h-12 sm:h-17.25 px-8 sm:px-10 text-sm sm:text-base">
-              More Info
+            <Button asChild className="uppercase bg-[#01656B] text-white h-12 sm:h-17.25 px-8 sm:px-10 text-sm sm:text-base">
+              <Link href="/contact">More Info</Link>
             </Button>
-            <Button className="uppercase bg-[#14AE5C] text-white h-12 sm:h-17.25 px-6 sm:px-8 text-sm sm:text-base">
+            <Button
+              onClick={() => setMapOpen(true)}
+              className="uppercase bg-[#14AE5C] text-white h-12 sm:h-17.25 px-6 sm:px-8 text-sm sm:text-base"
+            >
               Google Maps
             </Button>
           </div>
+
+          {mapOpen && (
+            <div
+              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60"
+              onClick={() => setMapOpen(false)}
+            >
+              <div
+                className="relative bg-white rounded-lg shadow-2xl max-w-4xl w-full overflow-hidden"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="flex items-center justify-between p-4 border-b">
+                  <h3 className="font-semibold text-lg">Our Training Centres</h3>
+                  <button
+                    onClick={() => setMapOpen(false)}
+                    className="p-2 rounded-lg hover:bg-gray-100 transition"
+                    aria-label="Close map"
+                  >
+                    <X size={24} />
+                  </button>
+                </div>
+                <div className="aspect-video w-full">
+                  <iframe
+                    src={GOOGLE_MAPS_EMBED_URL}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="Technique Training Centres Map"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Image with Arrows */}

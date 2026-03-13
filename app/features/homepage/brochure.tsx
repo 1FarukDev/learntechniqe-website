@@ -2,7 +2,7 @@
 
 import { FormInput } from "@/components/Input";
 import { Button } from "@/components/ui/button";
-import React from "react";
+import React, { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import BackgroundImage from "@/app/assets/png/881da83f746febd0519b1816f0e94e64c9dbca31.jpg";
 
@@ -12,6 +12,7 @@ type FormValues = {
 };
 
 function Brochure() {
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const methods = useForm<FormValues>({
     defaultValues: {
       email: "",
@@ -19,8 +20,21 @@ function Brochure() {
     },
   });
 
-  const onSubmit = (data: FormValues) => {
-    console.log(data);
+  const onSubmit = async (data: FormValues) => {
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/zapier/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...data, source: "brochure" }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || "Failed to submit");
+      setStatus("success");
+      methods.reset();
+    } catch {
+      setStatus("error");
+    }
   };
 
   return (
@@ -48,17 +62,36 @@ function Brochure() {
             onSubmit={methods.handleSubmit(onSubmit)}
             className="mt-8 sm:mt-12 space-y-6 text-left bg-white p-6 sm:p-13 rounded-2xl max-w-lg mx-auto"
           >
-            <FormInput name="name" label="Name" placeholder="Enter your name" />
+            <FormInput
+              name="name"
+              label="Name"
+              placeholder="Enter your name"
+              rules={{ required: "Name is required" }}
+            />
 
             <FormInput
               name="email"
               label="Email"
               placeholder="Enter your email"
               type="email"
+              rules={{
+                required: "Email is required",
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: "Please enter a valid email",
+                },
+              }}
             />
 
-            <Button type="submit" className="w-full bg-[#242A3A] h-15 uppercase font-bold text-basae">
-              Subscribe
+            {status === "success" && (
+              <p className="text-sm text-green-600 font-medium">Thank you! You&apos;ve been subscribed.</p>
+            )}
+            {status === "error" && (
+              <p className="text-sm text-red-600 font-medium">Something went wrong. Please try again.</p>
+            )}
+
+            <Button type="submit" disabled={status === "loading"} className="w-full bg-[#242A3A] h-15 uppercase font-bold text-basae">
+              {status === "loading" ? "Subscribing..." : "Subscribe"}
             </Button>
           </form>
         </FormProvider>

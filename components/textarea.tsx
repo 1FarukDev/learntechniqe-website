@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, RegisterOptions } from 'react-hook-form'
 import { Textarea } from './ui/textarea'
 import { cn } from '@/lib/utils'
 
@@ -11,6 +11,7 @@ interface FormTextareaProps
   label?: string
   className?: string
   wrapperClassName?: string
+  rules?: RegisterOptions
 }
 
 export const FormTextarea: React.FC<FormTextareaProps> = ({
@@ -18,6 +19,7 @@ export const FormTextarea: React.FC<FormTextareaProps> = ({
   label,
   className,
   wrapperClassName,
+  rules,
   ...props
 }) => {
   const {
@@ -40,7 +42,7 @@ export const FormTextarea: React.FC<FormTextareaProps> = ({
 
       <Textarea
         id={name}
-        {...register(name)}
+        {...register(name, rules)}
         aria-invalid={!!error}
         className={cn(
           error &&
