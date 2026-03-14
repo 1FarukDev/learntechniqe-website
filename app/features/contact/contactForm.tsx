@@ -157,7 +157,7 @@ function ContactForm() {
                             <Button
                                 type="submit"
                                 disabled={status === "loading"}
-                                className="bg-[#14AE5C] text-white! h-15 uppercase font-bold text-base px-10"
+                                className="h-14 sm:h-17.25 bg-[#14AE5C] text-white uppercase font-bold text-sm sm:text-base px-8 sm:px-10"
                             >
                                 {status === "loading" ? "Sending..." : "Send Message"}
                             </Button>

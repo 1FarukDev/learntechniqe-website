@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FirstImage from "@/app/assets/png/010763a3052b54b4c1698aa779c00ac7c6ee3d6e.jpg";
 import SecondImage from "@/app/assets/png/22d5c2b039b0485213666e8075a240a93aa4bb9d.png";
 import ThirdImage from "@/app/assets/png/32743f1db038b2a1c51268ee3d04b3737c7bef67.jpg";
@@ -37,11 +37,36 @@ function Hero() {
   const [offset, setOffset] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
 
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 768px)");
+    let intervalId: ReturnType<typeof setInterval> | null = null;
+
+    const startOrStop = () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+      }
+      if (mq.matches) {
+        intervalId = setInterval(() => {
+          setOffset((prev) => (prev + 1) % allImages.length);
+        }, 4000);
+      }
+    };
+
+    startOrStop();
+    mq.addEventListener("change", startOrStop);
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+      mq.removeEventListener("change", startOrStop);
+    };
+  }, []);
+
   return (
-    <div className="pt-40 md:px-0 px-4">
+    <div className="pt-30 md:pt-40 md:px-0 px-4">
       <section className="flex flex-col items-center justify-center gap-6 text-center z-10 relative">
         <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 flex flex-col gap-6">
-          <h1 className="font-outfit font-semibold text-[40px] sm:text-[44px] md:text-[56px] lg:text-[68px] leading-tight text-black">
+          <h1 className="font-semibold text-[32px] sm:text-[44px] md:text-[56px] lg:text-[68px] leading-tight text-black px-2">
             Technical Skills for <br /> Everyone, by Experts.
           </h1>
           <p className="font-normal text-base text-black">
@@ -53,7 +78,7 @@ function Hero() {
           <div className="mb-12 md:mb-16">
             <Button
               onClick={() => setSearchOpen(true)}
-              className="px-12 py-7 bg-[#01636B] text-[#F5F5F5] rounded-md uppercase"
+              className="h-14 sm:h-17.25 bg-[#01636B] text-[#F5F5F5] rounded-md uppercase text-sm sm:text-base px-8 sm:px-12"
             >
               Find a course
             </Button>
@@ -94,11 +119,10 @@ function Hero() {
             <button
               key={i}
               aria-label={`Go to slide ${i + 1}`}
-              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                offset % allImages.length === i
-                  ? "bg-[#01636B] scale-125"
-                  : "bg-[#9A9A9A]/60"
-              }`}
+              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${offset % allImages.length === i
+                ? "bg-[#01636B] scale-125"
+                : "bg-[#9A9A9A]/60"
+                }`}
               onClick={() => setOffset(i)}
             />
           ))}

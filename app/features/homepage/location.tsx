@@ -76,7 +76,7 @@ const Location: React.FC = () => {
 
   return (
     <section className="py-15 sm:py-30 max-w-7xl mx-auto md:px-0 px-4">
-      <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-0">
+      <div className="flex flex-row justify-center sm:justify-end gap-2">
         <div
           onClick={() => switchTab("clay")}
           className={`${baseClasses} ${activeTab === "clay"
@@ -90,7 +90,7 @@ const Location: React.FC = () => {
 
         <div
           onClick={() => switchTab("stirling")}
-          className={`${baseClasses} sm:ml-4 ${activeTab === "stirling"
+          className={`${baseClasses} ${activeTab === "stirling"
             ? "bg-[#0088FF] text-white"
             : "bg-[#ECF0F0] text-[#627080]"
             }`}

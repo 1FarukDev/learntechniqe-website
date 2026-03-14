@@ -185,11 +185,21 @@ function HotelCard({ hotel }: { hotel: Hotel }) {
 
 export default function StudentAccommodation() {
   const [activeTab, setActiveTab] = useState("clay-cross");
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const activeLocation = locations.find((l) => l.id === activeTab)!;
 
   const baseClasses =
     "flex items-center gap-2 rounded-md p-4 px-8 cursor-pointer transition-all";
+
+  const switchTab = (newTab: string) => {
+    if (newTab === activeTab) return;
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setActiveTab(newTab);
+      setIsTransitioning(false);
+    }, 200);
+  };
 
   return (
     <section className="w-full bg-white px-4 sm:px-8 md:px-12 py-12 md:py-20">
@@ -204,9 +214,9 @@ export default function StudentAccommodation() {
         </p>
       </div>
 
-      <div className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-0 mb-10">
+      <div className="flex flex-row justify-center gap-2 mb-10">
         <div
-          onClick={() => setActiveTab("clay-cross")}
+          onClick={() => switchTab("clay-cross")}
           className={`${baseClasses} ${activeTab === "clay-cross"
             ? "bg-[#0088FF] text-white"
             : "bg-[#ECF0F0] text-[#627080]"
@@ -217,8 +227,8 @@ export default function StudentAccommodation() {
         </div>
 
         <div
-          onClick={() => setActiveTab("stirling")}
-          className={`${baseClasses} sm:ml-4 ${activeTab === "stirling"
+          onClick={() => switchTab("stirling")}
+          className={`${baseClasses} ${activeTab === "stirling"
             ? "bg-[#0088FF] text-white"
             : "bg-[#ECF0F0] text-[#627080]"
             }`}
@@ -228,7 +238,11 @@ export default function StudentAccommodation() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+      <div
+        className={`max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 transition-opacity duration-200 ease-in-out ${
+          isTransitioning ? "opacity-0" : "opacity-100"
+        }`}
+      >
         {activeLocation.hotels.map((hotel, i) => (
           <HotelCard key={i} hotel={hotel} />
         ))}

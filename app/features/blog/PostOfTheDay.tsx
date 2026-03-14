@@ -194,7 +194,7 @@ function PostOfTheDay() {
             <div className="mt-6 sm:mt-8">
               <Button
                 onClick={() => router.push("/blog/post-of-the-day")}
-                className="w-full bg-yellow-500 hover:bg-yellow-400 text-white font-semibold tracking-widest py-5 sm:py-6 text-sm rounded-lg"
+                className="w-full h-14 sm:h-17.25 bg-yellow-500 hover:bg-yellow-400 text-white font-semibold tracking-widest text-sm sm:text-base rounded-lg"
               >
                 READ ARTICLE
               </Button>

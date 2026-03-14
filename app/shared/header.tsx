@@ -214,9 +214,9 @@ function MobileDrawer({
 
   return (
     <>
-      <div className="fixed inset-0 bg-black/40 z-40" onClick={onClose} />
+      <div className="fixed inset-0 bg-black/40 z-40 animate-mobile-menu-overlay" onClick={onClose} />
 
-      <div className="fixed top-0 right-0 h-full w-[85vw] max-w-sm bg-white z-50 flex flex-col shadow-2xl overflow-y-auto">
+      <div className="fixed top-0 right-0 h-full w-full bg-white z-50 flex flex-col shadow-2xl overflow-y-auto animate-mobile-menu-panel">
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
           <Link href="/" onClick={onClose}>
             <Image
@@ -239,36 +239,38 @@ function MobileDrawer({
           <div>
             <button
               onClick={() => setCoursesOpen((p) => !p)}
-              className="w-full flex items-center justify-between px-3 py-3 text-sm font-semibold text-gray-800 hover:bg-gray-50 rounded-lg transition"
+              className="w-full flex items-center justify-between px-3 py-3 text-sm font-bold text-gray-900 hover:text-teal-700 rounded-lg transition-colors border-b border-gray-100"
             >
               COURSES
               <ChevronDown
                 size={20}
-                className={`transition-transform text-gray-500 f ${coursesOpen ? "rotate-180" : ""
-                  }`}
+                className={`transition-transform duration-200 ease-out text-gray-500 ${coursesOpen ? "rotate-180" : ""}`}
               />
             </button>
 
-            {coursesOpen && (
-              <div className="ml-3 mt-1 flex flex-col gap-1">
+            <div
+              className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${coursesOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+            >
+              <div className="ml-3 mt-1 flex flex-col gap-1 min-h-0 overflow-hidden">
                 {data.megaMenuColumns.map((col, colIdx) => (
                   <div key={colIdx}>
                     <button
                       onClick={() =>
                         setOpenColumn((p) => (p === colIdx ? null : colIdx))
                       }
-                      className="w-full flex items-center justify-between px-3 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 rounded-lg transition"
+                      className="w-full flex items-center justify-between px-3 py-2.5 text-sm font-semibold text-gray-800 hover:text-teal-700 rounded-lg transition"
                     >
                       {col.title}
                       <ChevronDown
                         size={20}
-                        className={`transition-transform text-gray-400 ${openColumn === colIdx ? "rotate-180" : ""
-                          }`}
+                        className={`transition-transform duration-200 ease-out text-gray-400 ${openColumn === colIdx ? "rotate-180" : ""}`}
                       />
                     </button>
 
-                    {openColumn === colIdx && (
-                      <div className="ml-3 flex flex-col gap-1 mb-1">
+                    <div
+                      className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${openColumn === colIdx ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+                    >
+                      <div className="ml-3 flex flex-col gap-1 mb-1 min-h-0 overflow-hidden">
                         {col.subcategories.map((sub, subIdx) => {
                           const key = `${colIdx}-${subIdx}`;
                           const isOpen = openSubcategory === key;
@@ -280,38 +282,44 @@ function MobileDrawer({
                                     p === key ? null : key,
                                   )
                                 }
-                                className="w-full flex items-center justify-between px-3 py-2 text-sm text-gray-600 hover:text-[#016068] hover:bg-gray-50 rounded-lg transition"
+                                className="w-full flex items-center justify-between px-3 py-2.5 text-sm font-semibold text-gray-800 hover:text-teal-700 transition-colors border-b border-gray-100"
                               >
                                 {sub.label}
                                 <ChevronDown
                                   size={20}
-                                  className={`transition-transform text-gray-400 ${isOpen ? "rotate-180" : ""
-                                    }`}
+                                  className={`transition-transform duration-200 ease-out text-gray-400 ${isOpen ? "rotate-180" : ""}`}
                                 />
                               </button>
-                              {isOpen && (
-                                <div className="ml-3 flex flex-col gap-0.5 mb-1">
+                              <div
+                                className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+                              >
+                                <div
+                                  className="ml-3 flex flex-col gap-0.5 mb-1 min-h-0 overflow-hidden rounded-lg  px-3"
+                                  style={{
+                                    backgroundColor: hexToRgba(col.cardColor, 0.4),
+                                  }}
+                                >
                                   {sub.items.map((item, itemIdx) => (
                                     <Link
                                       key={itemIdx}
                                       href={item.href}
                                       onClick={onClose}
-                                      className="px-3 py-1.5 text-xs text-gray-500 hover:text-[#016068] rounded-lg hover:bg-gray-50 transition"
+                                      className="px-3 py-1.5 text-sm text-gray-600 hover:text-teal-700 rounded-lg transition-colors"
                                     >
                                       {item.label}
                                     </Link>
                                   ))}
                                 </div>
-                              )}
+                              </div>
                             </div>
                           );
                         })}
                       </div>
-                    )}
+                    </div>
                   </div>
                 ))}
               </div>
-            )}
+            </div>
           </div>
 
           {/* Other nav links */}
@@ -320,7 +328,7 @@ function MobileDrawer({
               key={link.label}
               href={link.href}
               onClick={onClose}
-              className="px-3 py-3 text-sm font-semibold text-gray-800 hover:bg-gray-50 rounded-lg transition uppercase"
+              className="px-3 py-3 text-sm font-semibold text-gray-800 hover:text-teal-700 rounded-lg transition-colors uppercase"
             >
               {link.label}
             </Link>
@@ -391,12 +399,12 @@ function Header({ data }: { data: HeaderData }) {
     >
       <div
         className={`w-full transition-[max-width,margin,padding,box-shadow,border-radius] duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] ${scrolled && !showMegaMenu
-            ? "max-w-7xl mt-3 mx-4 rounded-2xl bg-white/80 backdrop-blur-md shadow-lg px-4 md:px-6 py-px md:py-2"
-            : scrolled && showMegaMenu
-              ? "max-w-7xl mt-3 mx-4 rounded-none px-6 py-2 shadow-none"
-              : showMegaMenu
-                ? "max-w-screen-2xl mt-0 mx-auto rounded-none px-4 md:px-8 py-0 shadow-none"
-                : "max-w-screen-2xl mt-0 mx-auto rounded-none shadow-none px-4 md:px-8 py-0"
+          ? "max-w-7xl mt-3 mx-4 rounded-2xl bg-white/80 backdrop-blur-md shadow-lg px-4 md:px-6 py-px md:py-2"
+          : scrolled && showMegaMenu
+            ? "max-w-7xl mt-3 mx-4 rounded-none px-6 py-2 shadow-none"
+            : showMegaMenu
+              ? "max-w-screen-2xl mt-0 mx-auto rounded-none px-4 md:px-8 py-0 shadow-none"
+              : "max-w-screen-2xl mt-0 mx-auto rounded-none shadow-none px-4 md:px-8 py-0"
           }`}
       >
         <section className="flex justify-between items-center">
