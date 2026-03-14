@@ -145,7 +145,7 @@ function CourseCarousel({
         {[1, 2, 3, 4, 5].map((i) => (
           <div
             key={i}
-            className="snap-start shrink-0 w-[max(280px,min(320px,calc(100vw-56px)))] md:w-auto md:min-w-0"
+            className="snap-start shrink-0 w-[max(220px,min(260px,calc(100vw-56px)))] md:w-auto md:min-w-0"
           >
             <CourseCard />
           </div>

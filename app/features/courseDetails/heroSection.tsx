@@ -5,8 +5,15 @@ import { Button } from "@/components/ui/button";
 import CityGuildsLogo from "@/app/assets/svg/city.svg";
 import Clock from "@/app/assets/svg/clock.svg";
 import Cap from "@/app/assets/svg/cap.svg";
+import { CourseEnquiryForm } from "./CourseEnquiryForm";
+import { RequestCourseOverview } from "./RequestCourseOverview";
 
-function CourseHero() {
+interface CourseHeroProps {
+  courseName?: string;
+  courseUrl?: string;
+}
+
+function CourseHero({ courseName = "Total Industrial Electrical Maintenance 10", courseUrl = "" }: CourseHeroProps) {
   return (
     <section className="relative w-full  overflow-hidden">
       <Image
@@ -58,12 +65,7 @@ function CourseHero() {
             </p>
           </div>
 
-          <a
-            href="#"
-            className="inline-block mt-6 sm:mt-8 text-[#4DD9AC] font-semibold text-sm underline underline-offset-4 hover:text-white transition-colors"
-          >
-            Request Course Overview
-          </a>
+          <RequestCourseOverview courseName={courseName} courseUrl={courseUrl} />
         </div>
 
 
@@ -137,13 +139,11 @@ function CourseHero() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 sm:gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-5">
             <Button className="bg-[#F5A623] hover:bg-[#e09410] text-white font-outfit font-semibold uppercase tracking-widest text-xs sm:text-sm h-12 sm:h-14">
               Book Now
             </Button>
-            <Button className="bg-[#016068] hover:bg-[#014d54] text-white font-outfit font-semibold uppercase tracking-widest text-xs sm:text-sm h-12 sm:h-14">
-              Contact Us
-            </Button>
+            <CourseEnquiryForm courseName={courseName} courseUrl={courseUrl} />
           </div>
         </div>
       </div>

@@ -27,12 +27,13 @@ async function CourseDetail({ params }: CoursePageProps) {
 
   if (!course) return notFound();
 
+  const courseName = course.title || "Course";
+  const courseUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "https://learntechnique.com"}/courses/${slug}`;
+
   return (
     <main>
       <AnimatedSection variant="fade-in" visibleOnLoad>
-        <CourseHero
-        //  course={course}
-        />
+        <CourseHero courseName={courseName} courseUrl={courseUrl} />
       </AnimatedSection>
       <AnimatedSection variant="fade-up">
         <CourseDetails

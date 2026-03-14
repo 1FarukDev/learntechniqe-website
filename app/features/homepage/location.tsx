@@ -41,6 +41,7 @@ const locationData: Record<
 const Location: React.FC = () => {
   const [activeTab, setActiveTab] = useState<Tab>("clay");
   const [mapOpen, setMapOpen] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = mapOpen ? "hidden" : "";
@@ -52,14 +53,23 @@ const Location: React.FC = () => {
   const baseClasses =
     "flex items-center gap-2 rounded-md p-4 px-8 cursor-pointer transition-all";
 
+  const switchTab = (newTab: Tab) => {
+    if (newTab === activeTab) return;
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setActiveTab(newTab);
+      setIsTransitioning(false);
+    }, 200);
+  };
+
   const handlePrev = () => {
     const currentIndex = tabs.indexOf(activeTab);
-    setActiveTab(tabs[(currentIndex - 1 + tabs.length) % tabs.length]);
+    switchTab(tabs[(currentIndex - 1 + tabs.length) % tabs.length]);
   };
 
   const handleNext = () => {
     const currentIndex = tabs.indexOf(activeTab);
-    setActiveTab(tabs[(currentIndex + 1) % tabs.length]);
+    switchTab(tabs[(currentIndex + 1) % tabs.length]);
   };
 
   const current = locationData[activeTab];
@@ -68,7 +78,7 @@ const Location: React.FC = () => {
     <section className="py-15 sm:py-30 max-w-7xl mx-auto md:px-0 px-4">
       <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-0">
         <div
-          onClick={() => setActiveTab("clay")}
+          onClick={() => switchTab("clay")}
           className={`${baseClasses} ${activeTab === "clay"
             ? "bg-[#0088FF] text-white"
             : "bg-[#ECF0F0] text-[#627080]"
@@ -79,7 +89,7 @@ const Location: React.FC = () => {
         </div>
 
         <div
-          onClick={() => setActiveTab("stirling")}
+          onClick={() => switchTab("stirling")}
           className={`${baseClasses} sm:ml-4 ${activeTab === "stirling"
             ? "bg-[#0088FF] text-white"
             : "bg-[#ECF0F0] text-[#627080]"
@@ -92,7 +102,11 @@ const Location: React.FC = () => {
 
       <div className="flex flex-col md:flex-row mt-6 sm:mt-10 justify-between items-center gap-6">
         {/* Text Content */}
-        <div className="flex flex-col gap-4 sm:gap-8 mt-6 sm:mt-13 w-full md:w-1/2 order-2 md:order-1">
+        <div
+          className={`flex flex-col gap-4 sm:gap-8 mt-6 sm:mt-13 w-full md:w-1/2 order-2 md:order-1 transition-opacity duration-200 ease-in-out ${
+            isTransitioning ? "opacity-0" : "opacity-100"
+          }`}
+        >
           <h3 className="text-[#01656B] font-bold text-sm sm:text-base">
             {current.subtitle}
           </h3>
@@ -152,7 +166,11 @@ const Location: React.FC = () => {
         </div>
 
         {/* Image with Arrows */}
-        <div className="relative w-full md:w-1/2 aspect-[626.32/488.05] max-w-[626.32px] max-h-[488.05px] order-1 md:order-2">
+        <div
+          className={`relative w-full md:w-1/2 aspect-[626.32/488.05] max-w-[626.32px] max-h-[488.05px] order-1 md:order-2 transition-opacity duration-200 ease-in-out ${
+            isTransitioning ? "opacity-0" : "opacity-100"
+          }`}
+        >
           <Image
             src={current.image}
             alt={current.title}
