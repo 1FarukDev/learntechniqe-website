@@ -30,10 +30,6 @@ export default function Home() {
       </AnimatedSection>
       <AnimatedSection variant="scale">
         <Brochure />
-      </AnimatedSection>
-      <AnimatedSection variant="fade-up">
-        <Ratings />
-      </AnimatedSection>
       <AnimatedSection variant="fade-left">
         <Certification />
       </AnimatedSection>
@@ -42,7 +38,11 @@ export default function Home() {
       </AnimatedSection>
       <AnimatedSection variant="fade-up">
         <Contact />
+      </AnimatedSection>   </AnimatedSection>
+      <AnimatedSection variant="fade-up">
+        <Ratings />
       </AnimatedSection>
+   
     </div>
   );
 }

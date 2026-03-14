@@ -44,6 +44,12 @@ function Footer() {
 
           <div className="flex flex-col gap-4">
             <Link
+              href="/pathways"
+              className="text-white text-sm hover:text-white/80 transition-colors"
+            >
+              Career Pathways
+            </Link>
+            <Link
               href="#"
               className="text-white text-sm hover:text-white/80 transition-colors"
             >

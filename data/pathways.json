@@ -1,0 +1,204 @@
+{
+  "page": {
+    "hero": {
+      "title": "Electrical Career Pathways",
+      "subtitle": "Get Qualified. Get Recognised.",
+      "description": "Whether you're new to the industry looking to train, or an experienced professional needing to qualify – we have a pathway that will suit your requirements.",
+      "ctaPrimary": "View Pathways",
+      "ctaSecondary": "Enquire Now",
+      "ctaSecondaryHref": "/contact"
+    },
+    "comparison": {
+      "title": "Course Pathways Comparison",
+      "description": "Below we have listed the various pathways available to help you achieve your electrical qualifications.",
+      "disclaimer": "All pathways are delivered at our training centres in Clay Cross and Stirling."
+    },
+    "process": {
+      "title": "Process",
+      "subtitle": "Consultation with our course advisors",
+      "items": [
+        "Your consultation is valid for 30 days. If you have not enrolled within 30 days, you will need to book a new consultation.",
+        "Depending on the pathway, you may need to submit evidence of previous qualifications or experience to meet eligibility criteria.",
+        "Our advisors will guide you through the best pathway for your career goals and experience level."
+      ]
+    },
+    "cta": {
+      "title": "Thinking About a Career Change?",
+      "headline": "Become a Qualified Electrician",
+      "description": "No prior electrical experience required. The UK needs skilled electricians, and Pathway 1 is designed specifically for adults looking to enter the industry.",
+      "benefits": [
+        "Flexible training options to fit around your work",
+        "Clear pathway to industry-recognised qualifications"
+      ],
+      "buttonText": "Explore Pathway 1",
+      "pathwayHref": "/courses/electrical"
+    }
+  },
+  "calculator": {
+    "courses": [
+      {
+        "id": "course-1",
+        "name": "Total Electrical 20",
+        "priceIncVat": 5400,
+        "paymentPlanAvailable": true
+      },
+      {
+        "id": "course-2",
+        "name": "Total Industrial Electrical Maintenance 10",
+        "priceIncVat": 2994,
+        "paymentPlanAvailable": true
+      },
+      {
+        "id": "course-3",
+        "name": "City & Guilds 2391-52 Inspection and Testing",
+        "priceIncVat": 1194,
+        "paymentPlanAvailable": false
+      },
+      {
+        "id": "course-4",
+        "name": "City & Guilds BS:7671 18th Edition",
+        "priceIncVat": 450,
+        "paymentPlanAvailable": false
+      },
+      {
+        "id": "course-5",
+        "name": "PLC 10",
+        "priceIncVat": 2394,
+        "paymentPlanAvailable": true
+      },
+      {
+        "id": "course-6",
+        "name": "AM2 Assessment",
+        "priceIncVat": 540,
+        "paymentPlanAvailable": false
+      },
+      {
+        "id": "course-7",
+        "name": "Total Air Conditioning & Refrigeration 10",
+        "priceIncVat": 2994,
+        "paymentPlanAvailable": true
+      }
+    ],
+    "platinumUpgrade": {
+      "name": "Platinum Upgrade",
+      "priceIncVat": 594,
+      "description": "Upload & Reference on ePortfolio"
+    }
+  },
+  "pathways": [
+    {
+      "id": "pathway-1",
+      "image": "courses",
+      "title": "Electrical Career Starter",
+      "badge": "Beginner",
+      "description": "Comprehensive training route combining Total Electrical 20 package with 18th Edition and Inspection & Testing for new electricians.",
+      "href": "/courses/electrical",
+      "eligibility": [
+        "No electrical installation knowledge required",
+        "No prior qualifications needed",
+        "Suitable for career changers"
+      ],
+      "attendance": "Classroom attendance at our training centres",
+      "exams": "Multiple exams and practical assessments",
+      "duration": "20 days intensive",
+      "location": "Clay Cross & Stirling",
+      "priceExVat": 4500,
+      "priceIncVat": 5400,
+      "paymentPlan": true,
+      "deposit": 540,
+      "monthlyInstalment": 270,
+      "instalments": 18
+    },
+    {
+      "id": "pathway-2",
+      "image": "session",
+      "title": "Industrial Electrical Fast Track",
+      "badge": "Experienced",
+      "description": "Fast-track your qualification with Total Industrial Electrical Maintenance 10 for those with some electrical experience.",
+      "href": "/courses/electrical",
+      "eligibility": [
+        "Basic electrical knowledge",
+        "18th Edition Wiring Regulations",
+        "Some installation experience"
+      ],
+      "attendance": "Classroom attendance",
+      "exams": "Multiple exams and practical assessments",
+      "duration": "10 days",
+      "location": "Clay Cross & Stirling",
+      "priceExVat": 2495,
+      "priceIncVat": 2994,
+      "paymentPlan": true,
+      "deposit": 299,
+      "monthlyInstalment": 269,
+      "instalments": 10
+    },
+    {
+      "id": "pathway-3",
+      "image": "training",
+      "title": "Inspection & Testing",
+      "badge": "Qualified",
+      "description": "City & Guilds 2391-52 Initial and Periodic Inspection & Testing for qualified electricians.",
+      "href": "/courses/electrical",
+      "eligibility": [
+        "18th Edition Wiring Regulations",
+        "Level 2 or 3 Electrical Installation",
+        "Experience in electrical installations"
+      ],
+      "attendance": "Classroom attendance",
+      "exams": "Written exam and practical assessment",
+      "duration": "5 days",
+      "location": "Clay Cross & Stirling",
+      "priceExVat": 995,
+      "priceIncVat": 1194,
+      "paymentPlan": true,
+      "deposit": 119,
+      "monthlyInstalment": 107,
+      "instalments": 10
+    },
+    {
+      "id": "pathway-4",
+      "image": "coursedetails",
+      "title": "AM2 Assessment",
+      "badge": "Assessment",
+      "description": "Achievement Measurement 2 practical assessment for electricians completing their qualification.",
+      "href": "https://learntechnique.com/electrician-courses/am2-assessment/",
+      "external": true,
+      "eligibility": [
+        "Completed NVQ or equivalent",
+        "Ready for final assessment"
+      ],
+      "attendance": "Assessment at our centre",
+      "exams": "Practical assessment only",
+      "duration": "1 day",
+      "location": "Clay Cross",
+      "priceExVat": 450,
+      "priceIncVat": 540,
+      "paymentPlan": false,
+      "deposit": 540,
+      "monthlyInstalment": 0,
+      "instalments": 0
+    },
+    {
+      "id": "pathway-5",
+      "image": "cardimage",
+      "title": "PLC & Automation",
+      "badge": "Specialist",
+      "description": "PLC 10 course for those looking to specialise in industrial automation and control systems.",
+      "href": "/courses/plc",
+      "eligibility": [
+        "Electrical background preferred",
+        "Interest in automation"
+      ],
+      "attendance": "Classroom attendance",
+      "exams": "EAL certification",
+      "duration": "10 days",
+      "location": "Clay Cross & Stirling",
+      "priceExVat": 1995,
+      "priceIncVat": 2394,
+      "paymentPlan": true,
+      "deposit": 239,
+      "monthlyInstalment": 215,
+      "instalments": 10
+    }
+  ]
+}
