@@ -65,19 +65,21 @@ function LeadershipSection() {
                             <p className="text-sm sm:text-base text-white/80 mb-4">{leader.role}</p>
 
                             {/* The specific card styling from the design */}
-                            <div className="w-full max-w-[220px] aspect-[4/5] bg-[#025055] p-2 rounded-md mb-4 flex flex-col items-center justify-end relative">
+                            <div className="w-full max-w-[220px] aspect-[4/5] bg-[#025055] rounded-md mb-4 flex flex-col items-center justify-end relative overflow-hidden">
                                 <Icon icon="jam:linkedin-circle" width="32" height="32" className="text-[#14AE5C] absolute top-4 right-4 z-20" />
 
                                 {leader.image ? (
-                                    <Image
-                                        src={leader.image}
-                                        alt={leader.name}
-                                        fill
-                                        className="object-cover rounded inline-block p-1"
-                                    />
+                                    <div className="absolute inset-3 rounded overflow-hidden">
+                                        <Image
+                                            src={leader.image}
+                                            alt={leader.name}
+                                            fill
+                                            className="object-cover"
+                                        />
+                                    </div>
                                 ) : (
                                     // Silhouette placeholder matching the design
-                                    <div className="w-full h-full bg-[#01656B] flex flex-col justify-end items-center rounded overflow-hidden p-1">
+                                    <div className="absolute inset-3 bg-[#01656B] flex flex-col justify-end items-center rounded overflow-hidden">
                                         <div className="w-20 h-20 bg-[#025055] rounded-full mb-2 shrink-0"></div>
                                         <div className="w-32 h-32 bg-[#025055] rounded-t-[50px] translate-y-8"></div>
                                     </div>

@@ -73,17 +73,17 @@ export function TeamCard({ member }: TeamCardProps) {
               More Information
             </button>
           </div>
-          <div className="flex-1 relative mx-2 md:mx-4 mb-2 md:mb-4 rounded-xl overflow-hidden min-h-[140px] md:min-h-[220px] w-full max-w-full">
+          <div className="flex-1 relative mx-2 md:mx-4 mb-2 md:mb-4 rounded-xl overflow-hidden min-h-[140px] md:min-h-[220px] w-full max-w-full ">
             {member.image ? (
               <Image
                 src={member.image}
                 alt={member.name}
                 fill
-                style={{ objectFit: "cover", objectPosition: "center center" }}
+                style={{ objectFit: "cover", objectPosition: "center center", paddingRight: "15px", paddingLeft: "15px"}}
               />
             ) : (
               <div
-                className="absolute inset-0 flex items-center justify-center"
+                className="absolute inset-0 flex items-center justify-center pr-15 pl-15"
                 style={{ backgroundColor: "rgba(0,80,90,0.5)" }}
               >
                 <svg
@@ -140,9 +140,8 @@ export function TeamCard({ member }: TeamCardProps) {
           {member.bio ? (
             <div className="flex flex-col items-center w-full flex-1 min-h-0 overflow-hidden">
               <p
-                className={`text-white text-xs md:text-sm text-center leading-relaxed w-full ${
-                  !bioExpanded && isLongBio ? "line-clamp-5" : "overflow-y-auto"
-                }`}
+                className={`text-white text-xs md:text-sm text-center leading-relaxed w-full ${!bioExpanded && isLongBio ? "line-clamp-5" : "overflow-y-auto"
+                  }`}
                 style={{
                   fontFamily: "'Barlow', sans-serif",
                   opacity: 0.9,
@@ -172,7 +171,7 @@ export function TeamCard({ member }: TeamCardProps) {
               Bio coming soon.
             </p>
           )}
-
+{/* 
           <button
             className="flex items-center justify-center gap-2 px-4 py-1.5 rounded-full text-white text-xs font-semibold mt-2"
             style={{ backgroundColor: "#22c55e", minWidth: "130px" }}
@@ -188,7 +187,7 @@ export function TeamCard({ member }: TeamCardProps) {
               <path d="M15 18l-6-6 6-6" />
             </svg>
             Go Back
-          </button>
+          </button> */}
         </div>
       </div>
     </div>

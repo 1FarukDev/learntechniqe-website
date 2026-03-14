@@ -27,9 +27,9 @@ function page() {
       <AnimatedSection variant="fade-in">
         <FAQSection />
       </AnimatedSection>
-      <AnimatedSection variant="fade-in">
+      {/* <AnimatedSection variant="fade-in">
         <JoinOurTeam />
-      </AnimatedSection>
+      </AnimatedSection> */}
       <AnimatedSection variant="fade-in">
         <Location />
       </AnimatedSection>

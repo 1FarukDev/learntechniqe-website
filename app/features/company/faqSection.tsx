@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { Plus, Minus } from "lucide-react";
 
 interface BulletPoint {
   text: string;
@@ -139,125 +140,60 @@ function FAQRow({
   open: boolean;
   onToggle: () => void;
 }) {
+  const hasContent = faq.intro || (faq.bullets && faq.bullets.length > 0) || (faq.outro && faq.outro.length > 0);
+
   return (
-    <div
-      style={{
-        borderRadius: "0.5rem",
-        overflow: "hidden",
-        border: "1px solid #e5e7eb",
-        marginBottom: "0.75rem",
-      }}
-    >
+    <div className="rounded-sm overflow-hidden">
       <button
         onClick={onToggle}
-        className="w-full flex items-center justify-between gap-3 px-4 sm:px-5 py-4 text-left"
-        style={{
-          backgroundColor: open ? "#016068" : "#E0E3E5",
-          cursor: "pointer",
-          border: "none",
-        }}
+        className={`w-full flex items-center justify-between px-5 py-4 text-left transition-colors duration-200 ${
+          open ? "bg-[#016068] text-white" : "bg-[#e8edf2] text-gray-700 hover:bg-gray-200"
+        }`}
       >
-        <span
-          className="font-bold text-sm pr-4 text-left break-words"
-          style={{
-            color: open ? "#ffffff" : "#000000",
-          }}
-        >
+        <span className="font-semibold text-sm pr-4 text-left break-words">
           {faq.question}
         </span>
-        <div style={{ flexShrink: 0 }}>
-          <div
-            style={{
-              width: 28,
-              height: 28,
-              //   borderRadius: "50%",
-              //   border: `2px solid ${open ? "rgba(255,255,255,0.6)" : "#9ca3af"}`,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 14 14"
-              fill="none"
-              stroke={open ? "white" : "#9ca3af"}
-              strokeWidth="2"
-              style={{
-                transition: "transform 0.3s ease",
-                transform: open ? "rotate(45deg)" : "rotate(0deg)",
-              }}
-            >
-              <line x1="7" y1="1" x2="7" y2="13" />
-              <line x1="1" y1="7" x2="13" y2="7" />
-            </svg>
-          </div>
-        </div>
+        {open ? (
+          <Minus className="w-4 h-4 shrink-0" />
+        ) : (
+          <Plus className="w-4 h-4 shrink-0" />
+        )}
       </button>
 
-      {/* Answer body */}
-      {open && (
-        <div className="px-6 py-5" style={{ backgroundColor: "#ffffff" }}>
-          {/* Intro text */}
+      <div
+        className={`overflow-hidden transition-all duration-300 ease-in-out ${
+          open && hasContent ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <div className="bg-white px-6 py-5">
           {faq.intro && (
-            <p className="text-sm text-black mb-5 leading-relaxed whitespace-pre-line">
+            <p className="text-sm text-gray-700 mb-5 leading-relaxed whitespace-pre-line">
               {faq.intro}
             </p>
           )}
 
-          {/* Bullet points with vertical line */}
           {faq.bullets && faq.bullets.length > 0 && (
-            <div className="relative ml-2 mb-5">
-              {/* Vertical line */}
-              <div
-                style={{
-                  position: "absolute",
-                  left: 5,
-                  top: 8,
-                  bottom: 8,
-                  width: 1,
-                  backgroundColor: "#016068",
-                  borderRadius: 2,
-                }}
-              />
-              <ul className="flex flex-col gap-5">
-                {faq.bullets.map((b, i) => (
-                  <li key={i} className="flex items-start gap-4 pl-6 relative">
-                    {/* Dot */}
-                    <div
-                      style={{
-                        position: "absolute",
-                        left: 0,
-                        top: 6,
-                        width: 10,
-                        height: 10,
-                        borderRadius: "50%",
-                        backgroundColor: "#14AE5C",
-                        flexShrink: 0,
-                      }}
-                    />
-                    <p className="text-sm text-black leading-relaxed">
-                      {b.text}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <ul className="flex flex-col gap-5 mb-5">
+              {faq.bullets.map((b, i) => (
+                <li key={i} className="flex items-start gap-4">
+                  <span className="mt-1.5 w-2.5 h-2.5 rounded-full bg-[#016068] shrink-0" />
+                  <p className="text-gray-700 text-sm leading-6">{b.text}</p>
+                </li>
+              ))}
+            </ul>
           )}
 
-          {/* Outro paragraphs */}
-          {faq.outro && (
+          {faq.outro && faq.outro.length > 0 && (
             <div className="flex flex-col gap-3">
               {faq.outro.map((para, i) => (
-                <p key={i} className="text-sm text-black leading-relaxed">
+                <p key={i} className="text-gray-700 text-sm leading-6">
                   {para}
                 </p>
               ))}
             </div>
           )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
@@ -280,7 +216,7 @@ export default function FAQSection() {
         </p>
       </div>
 
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto flex flex-col gap-3">
         {faqs.map((faq, i) => (
           <FAQRow
             key={i}

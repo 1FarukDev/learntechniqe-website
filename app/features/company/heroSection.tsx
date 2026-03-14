@@ -36,21 +36,30 @@ export default function HeroSection() {
         <div className="relative h-full flex flex-col">
           <div className="relative flex-none pt-24 md:pt-30 pb-12 md:pb-8 z-20">
             <div className="relative max-w-6xl mx-auto">
-              <div className="z-10 px-4 sm:px-12 md:px-24 max-w-5xl mx-auto text-center">
+              <div className="z-10 px-4 sm:px-12 md:px-24 max-w-5xl mx-auto text-center min-h-[180px] sm:min-h-[200px] md:min-h-[220px] flex flex-col justify-center">
                 <p
-                  className="text-sm font-bold tracking-widest mb-6 "
+                  className="text-xs font-bold tracking-widest mb-4 font-heading"
                   style={{ color: "#1a9b8a", letterSpacing: "0.2em" }}
                 >
                   {slides[current].label}
                 </p>
-                <blockquote
-                  className="text-xl sm:text-2xl md:text-3xl font-black leading-snug text-gray-900"
-                  style={{
-                    fontFamily: "'Barlow Condensed', 'Barlow', sans-serif",
-                  }}
-                >
+                <blockquote className="text-base sm:text-lg md:text-xl font-semibold leading-snug text-gray-900 font-heading">
                   {slides[current].quote}
                 </blockquote>
+                <div className="flex justify-center gap-3 mt-6">
+                  {slides.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setCurrent(i)}
+                      className="w-5 h-5 rounded-sm transition-colors"
+                      style={{
+                        backgroundColor:
+                          i === current ? "#1a1a1a" : "rgba(0,0,0,0.2)",
+                      }}
+                      aria-label={`Slide ${i + 1}`}
+                    />
+                  ))}
+                </div>
               </div>
 
               <button
@@ -84,7 +93,7 @@ export default function HeroSection() {
               style={{ clipPath: "ellipse(55% 100% at 50% 0%)" }}
             />
 
-            <div className="mx-0 md:-mx-[60px] h-[45vh] md:h-[60vh] lg:h-[65vh] relative">
+            <div className="mx-0 md:-mx-[60px] h-[45vh] md:h-[60vh] lg:h-[72vh] xl:h-[78vh] 2xl:h-[80vh] relative">
               <Image
                 src={ThirdImage}
                 alt="Training workshop"
@@ -124,27 +133,10 @@ export default function HeroSection() {
       </div>
 
       <div
-        className="w-full px-4 sm:px-8 md:px-16 pb-14"
+        className="relative z-10 w-full px-4 sm:px-8 md:px-16 pb-14 -mt-6 md:-mt-10 lg:-mt-12"
         style={{ backgroundColor: "#016068" }}
       >
-        <div
-          className="flex justify-center gap-3 py-4 z-100"
-          style={{ backgroundColor: "#016068" }}
-        >
-          {slides.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrent(i)}
-              className="w-5 h-5 rounded-sm transition-colors"
-              style={{
-                backgroundColor:
-                  i === current ? "#1a1a1a" : "rgba(255,255,255,0.5)",
-              }}
-              aria-label={`Slide ${i + 1}`}
-            />
-          ))}
-        </div>
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 text-white text-sm leading-relaxed">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 text-white text-sm leading-relaxed pt-6">
           <div className="flex flex-col gap-6">
             <p className="font-normal text-base text-[#FEFEFE]">
               We take great pride in our training centres, and you'll quickly

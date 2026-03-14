@@ -208,8 +208,8 @@ export default function StudentAccommodation() {
         <div
           onClick={() => setActiveTab("clay-cross")}
           className={`${baseClasses} ${activeTab === "clay-cross"
-              ? "bg-[#0088FF] text-white"
-              : "bg-[#ECF0F0] text-[#627080]"
+            ? "bg-[#0088FF] text-white"
+            : "bg-[#ECF0F0] text-[#627080]"
             }`}
         >
           <MapPin />
@@ -219,8 +219,8 @@ export default function StudentAccommodation() {
         <div
           onClick={() => setActiveTab("stirling")}
           className={`${baseClasses} sm:ml-4 ${activeTab === "stirling"
-              ? "bg-[#0088FF] text-white"
-              : "bg-[#ECF0F0] text-[#627080]"
+            ? "bg-[#0088FF] text-white"
+            : "bg-[#ECF0F0] text-[#627080]"
             }`}
         >
           <MapPin />

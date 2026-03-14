@@ -70,8 +70,8 @@ const Location: React.FC = () => {
         <div
           onClick={() => setActiveTab("clay")}
           className={`${baseClasses} ${activeTab === "clay"
-              ? "bg-[#0088FF] text-white"
-              : "bg-[#ECF0F0] text-[#627080]"
+            ? "bg-[#0088FF] text-white"
+            : "bg-[#ECF0F0] text-[#627080]"
             }`}
         >
           <MapPin />
@@ -81,8 +81,8 @@ const Location: React.FC = () => {
         <div
           onClick={() => setActiveTab("stirling")}
           className={`${baseClasses} sm:ml-4 ${activeTab === "stirling"
-              ? "bg-[#0088FF] text-white"
-              : "bg-[#ECF0F0] text-[#627080]"
+            ? "bg-[#0088FF] text-white"
+            : "bg-[#ECF0F0] text-[#627080]"
             }`}
         >
           <MapPin />
