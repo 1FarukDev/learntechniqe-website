@@ -84,7 +84,7 @@ function MegaMenu({
             >
               <div
                 style={{ backgroundColor: col.cardColor }}
-                className="rounded-2xl p-5 flex-shrink-0"
+                className="rounded-2xl p-5 shrink-0"
               >
                 <h3 className="font-bold text-sm text-gray-900 mb-2">
                   {col.title}
@@ -99,7 +99,7 @@ function MegaMenu({
                   const key = `${colIdx}-${subIdx}`;
                   const isOpen = openSubcategory === key;
                   return (
-                    <div key={subIdx} className="flex-shrink-0">
+                    <div key={subIdx} className="shrink-0">
                       <button
                         onClick={() => toggleSubcategory(key)}
                         className="w-full flex items-center justify-between py-2.5 px-1 text-sm font-semibold text-gray-800 hover:text-teal-700 transition-colors border-b border-gray-100"
@@ -157,7 +157,7 @@ function MegaMenu({
         </div>
 
         <div
-          className="mt-8 pt-6 border-t border-gray-200 flex items-center justify-between text-sm text-gray-500 flex-shrink-0"
+          className="mt-8 pt-6 border-t border-gray-200 flex items-center justify-between text-sm text-gray-500 shrink-0"
           style={{
             opacity: visible ? 1 : 0,
             transition: "opacity 400ms ease 300ms",
