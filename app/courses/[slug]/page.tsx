@@ -37,17 +37,14 @@ async function CourseDetail({ params }: CoursePageProps) {
       </AnimatedSection>
       <AnimatedSection variant="fade-up">
         <CourseDetails
-        // course={course}
         />
       </AnimatedSection>
       <AnimatedSection variant="scale">
         <PricingBanner
-        // course={course}
         />
       </AnimatedSection>
       <AnimatedSection variant="fade-up">
         <BookCourse
-        // course={course}
         />
       </AnimatedSection>
       <AnimatedSection variant="fade-up">
