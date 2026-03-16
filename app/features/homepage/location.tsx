@@ -9,6 +9,7 @@ import ClayImage from "@/app/assets/png/clay.png";
 import ArrowRight from "@/app/assets/svg/arrow-front.svg";
 import ArrowBack from "@/app/assets/svg/arrow-back.svg";
 import StirlingImage from "@/app/assets/png/striling.jpg";
+import { createPortal } from "react-dom";
 
 const GOOGLE_MAPS_EMBED_URL =
   "https://www.google.com/maps/d/u/0/embed?mid=1nU1ecA3H6TsQO1OTKn53eeOG6iqgvIAS";
@@ -28,13 +29,15 @@ const locationData: Record<
     image: ClayImage,
     subtitle: "OUR TRAINING CENTRES",
     title: "Our New Centre of Excellence",
-    address: "Technique Tower Business Park\nHigh Street, Clay Cross\nDerbyshire, S45 9EA",
+    address:
+      "Technique Tower Business Park\nHigh Street, Clay Cross\nDerbyshire, S45 9EA",
   },
   stirling: {
     image: StirlingImage,
     subtitle: "Stirling",
     title: "Our Stirling\nTraining Centre",
-    address: "Stirling Business Centre\nWellgreen Road, Stirling\nScotland FK8 2DZ",
+    address:
+      "Stirling Business Centre\nWellgreen Road, Stirling\nScotland FK8 2DZ",
   },
 };
 
@@ -79,10 +82,11 @@ const Location: React.FC = () => {
       <div className="flex flex-row justify-center sm:justify-end gap-2">
         <div
           onClick={() => switchTab("clay")}
-          className={`${baseClasses} ${activeTab === "clay"
-            ? "bg-[#0088FF] text-white"
-            : "bg-[#ECF0F0] text-[#627080]"
-            }`}
+          className={`${baseClasses} ${
+            activeTab === "clay"
+              ? "bg-[#0088FF] text-white"
+              : "bg-[#ECF0F0] text-[#627080]"
+          }`}
         >
           <MapPin />
           <p className="uppercase">Clay Cross</p>
@@ -90,10 +94,11 @@ const Location: React.FC = () => {
 
         <div
           onClick={() => switchTab("stirling")}
-          className={`${baseClasses} ${activeTab === "stirling"
-            ? "bg-[#0088FF] text-white"
-            : "bg-[#ECF0F0] text-[#627080]"
-            }`}
+          className={`${baseClasses} ${
+            activeTab === "stirling"
+              ? "bg-[#0088FF] text-white"
+              : "bg-[#ECF0F0] text-[#627080]"
+          }`}
         >
           <MapPin />
           <p className="uppercase">Stirling</p>
@@ -101,7 +106,6 @@ const Location: React.FC = () => {
       </div>
 
       <div className="flex flex-col md:flex-row mt-6 sm:mt-10 justify-between items-center gap-6">
-        {/* Text Content */}
         <div
           className={`flex flex-col gap-4 sm:gap-8 mt-6 sm:mt-13 w-full md:w-1/2 order-2 md:order-1 transition-opacity duration-200 ease-in-out ${
             isTransitioning ? "opacity-0" : "opacity-100"
@@ -118,7 +122,10 @@ const Location: React.FC = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <Button asChild className="uppercase bg-[#01656B] text-white h-12 sm:h-17.25 px-8 sm:px-10 text-sm sm:text-base">
+            <Button
+              asChild
+              className="uppercase bg-[#01656B] text-white h-12 sm:h-17.25 px-8 sm:px-10 text-sm sm:text-base"
+            >
               <Link href="/contact">More Info</Link>
             </Button>
             <Button
@@ -129,43 +136,46 @@ const Location: React.FC = () => {
             </Button>
           </div>
 
-          {mapOpen && (
-            <div
-              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60"
-              onClick={() => setMapOpen(false)}
-            >
+          {mapOpen &&
+            createPortal(
               <div
-                className="relative bg-white rounded-lg shadow-2xl max-w-4xl w-full overflow-hidden"
-                onClick={(e) => e.stopPropagation()}
+                className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60"
+                onClick={() => setMapOpen(false)}
               >
-                <div className="flex items-center justify-between p-4 border-b">
-                  <h3 className="font-semibold text-lg">Our Training Centres</h3>
-                  <button
-                    onClick={() => setMapOpen(false)}
-                    className="p-2 rounded-lg hover:bg-gray-100 transition"
-                    aria-label="Close map"
-                  >
-                    <X size={24} />
-                  </button>
+                <div
+                  className="relative bg-white rounded-lg shadow-2xl max-w-4xl w-full overflow-hidden"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="flex items-center justify-between p-4 border-b">
+                    <h3 className="font-semibold text-lg">
+                      Our Training Centres
+                    </h3>
+                    <button
+                      onClick={() => setMapOpen(false)}
+                      className="p-2 rounded-lg hover:bg-gray-100 transition"
+                      aria-label="Close map"
+                    >
+                      <X size={24} />
+                    </button>
+                  </div>
+                  <div className="aspect-video w-full">
+                    <iframe
+                      src={GOOGLE_MAPS_EMBED_URL}
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title="Technique Training Centres Map"
+                    />
+                  </div>
                 </div>
-                <div className="aspect-video w-full">
-                  <iframe
-                    src={GOOGLE_MAPS_EMBED_URL}
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    title="Technique Training Centres Map"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
+              </div>,
+              document.body,
+            )}
         </div>
 
-        {/* Image with Arrows */}
         <div
           className={`relative w-full md:w-1/2 aspect-[626.32/488.05] max-w-[626.32px] max-h-[488.05px] order-1 md:order-2 transition-opacity duration-200 ease-in-out ${
             isTransitioning ? "opacity-0" : "opacity-100"
