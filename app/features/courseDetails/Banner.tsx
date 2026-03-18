@@ -1,13 +1,36 @@
 import React from "react";
 import Image from "next/image";
 import ElectricianImage from "@/app/assets/png/coursedetailbanner.png";
+import { PricingBannerData } from "@/lib/types/course";
+import { defaultPricingBannerData } from "@/lib/constants/course";
 
-function PricingBanner() {
+interface PricingBannerProps {
+  data?: PricingBannerData | null;
+}
+
+function PricingBanner({ data }: PricingBannerProps) {
+  const course = data ?? defaultPricingBannerData;
+
+  const price = course.price ?? defaultPricingBannerData.price;
+  const originalPrice =
+    course.originalPrice ?? defaultPricingBannerData.originalPrice;
+  const pricingTagline =
+    course.pricingTagline ?? defaultPricingBannerData.pricingTagline;
+
+  // Calculate savings badge dynamically
+  const savingsAmount = (() => {
+    if (!originalPrice || !price) return null;
+    const original = parseFloat(originalPrice.replace(/[^0-9.]/g, ""));
+    const current = parseFloat(price.replace(/[^0-9.]/g, ""));
+    if (isNaN(original) || isNaN(current)) return null;
+    const diff = original - current;
+    return diff > 0 ? `£${diff.toLocaleString()}` : null;
+  })();
+
   return (
     <div className="bg-white">
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <div className="rounded-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2 min-h-80 sm:min-h-100 md:min-h-120 relative">
-          {/* Left: Pricing content */}
           <div
             className="px-6 sm:px-10 py-10 sm:py-14 flex flex-col justify-between relative"
             style={{
@@ -24,23 +47,30 @@ function PricingBanner() {
 
               <div className="flex justify-center gap-6 mb-6 sm:mb-8">
                 <div className="text-center">
-                  <p className="text-white font-outfit text-3xl sm:text-4xl font-normal line-through decoration-red-400 decoration-2 mb-2">
-                    £1,950
-                  </p>
+                  {originalPrice && (
+                    <p className="text-white font-outfit text-3xl sm:text-4xl font-normal line-through decoration-red-400 decoration-2 mb-2">
+                      {originalPrice}
+                    </p>
+                  )}
                   <p className="text-white font-outfit font-black text-6xl sm:text-7xl leading-none">
-                    £1,450
+                    {price.split("+")[0].trim()}
+                    {price.includes("+") && (
+                      <span className="text-xl sm:text-xl font-semibold ml-1">
+                        +{price.split("+")[1]}
+                      </span>
+                    )}
                   </p>
                 </div>
               </div>
             </div>
 
-            <p className="text-[#FEFEFE] font-outfit font-semibold text-base sm:text-xl text-center leading-7 max-w-xl mx-auto">
-              That's £500 in savings, plus you gain skills that can fast-track
-              your earning potential for years to come.
-            </p>
+            {pricingTagline && (
+              <p className="text-[#FEFEFE] font-outfit font-semibold text-base sm:text-xl text-center leading-7 max-w-xl mx-auto">
+                {pricingTagline}
+              </p>
+            )}
           </div>
 
-  
           <div className="relative h-64 sm:h-80 md:h-auto">
             <Image
               src={ElectricianImage}
@@ -56,14 +86,17 @@ function PricingBanner() {
               }}
             />
           </div>
-          <div className="absolute left-1/2 bottom-45 md:top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 p-4 px-10 md:p-5 md:py-13  rounded-full bg-[#E99E20] flex flex-col items-center justify-center w-16 sm:w-20 md:w-auto">
-            <span className="text-white font-outfit text-xs font-normal">
-              Save
-            </span>
-            <span className="text-white font-outfit font-black text-xl md:text-2xl sm:text-4xl leading-tight">
-              £500
-            </span>
-          </div>
+
+          {savingsAmount && (
+            <div className="absolute left-1/2 bottom-45 md:top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 p-4 px-15 md:p-5 md:py-13 rounded-full bg-[#E99E20] flex flex-col items-center justify-center w-16 sm:w-20 md:w-auto">
+              <span className="text-white font-outfit text-xs font-normal">
+                Save
+              </span>
+              <span className="text-white font-outfit font-black text-xl md:text-3xl sm:text-3xl leading-tight">
+                {savingsAmount}
+              </span>
+            </div>
+          )}
         </div>
       </section>
     </div>

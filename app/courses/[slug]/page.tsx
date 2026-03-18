@@ -6,8 +6,14 @@ import Contact from "@/app/features/homepage/contact";
 import Ratings from "@/app/features/homepage/ratings";
 import { AnimatedSection } from "@/components/animated-section";
 import { client } from "@/lib/sanity/client";
-import { courseBySlugQuery } from "@/lib/queries/courses";
-import { coursesQuery } from "@/lib/queries/courses";
+import { courseBySlugQuery, coursesQuery } from "@/lib/queries/courses";
+import {
+  defaultBookCourseData,
+  defaultCourseDetailsData,
+  defaultCourseHeroData,
+  defaultPricingBannerData,
+} from "@/lib/constants/course";
+import { getCademyDates } from "@/lib/cademy";
 import { notFound } from "next/navigation";
 import React from "react";
 import Session from "../sections/session";
@@ -23,29 +29,74 @@ export async function generateStaticParams() {
 
 async function CourseDetail({ params }: CoursePageProps) {
   const { slug } = await params;
-  const course = await client.fetch(courseBySlugQuery, { slug });
+  const rawCourse = await client.fetch(courseBySlugQuery, { slug });
 
-  if (!course) return notFound();
+  if (!rawCourse) return notFound();
 
-  const courseName = course.title || "Course";
-  const courseUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "https://learntechnique.com"}/courses/${slug}`;
+  const cademyDates =
+    rawCourse?.cademyEmbedUrl && rawCourse?.cademyDirectUrl
+      ? await getCademyDates(
+          rawCourse.cademyEmbedUrl,
+          rawCourse.cademyDirectUrl,
+        )
+      : [];
+
+  const heroData = {
+    ...defaultCourseHeroData,
+    ...rawCourse,
+    tags: rawCourse?.tags ?? defaultCourseHeroData.tags,
+    description: rawCourse?.description ?? defaultCourseHeroData.description,
+    qualifications:
+      rawCourse?.qualifications ?? defaultCourseHeroData.qualifications,
+  };
+
+  const detailsData = {
+    ...defaultCourseDetailsData,
+    courseGoals: rawCourse?.courseGoals ?? defaultCourseDetailsData.courseGoals,
+    entryRequirements:
+      rawCourse?.entryRequirements ??
+      defaultCourseDetailsData.entryRequirements,
+    syllabus: rawCourse?.syllabus ?? defaultCourseDetailsData.syllabus,
+  };
+
+  const pricingData = {
+    ...defaultPricingBannerData,
+    price: rawCourse?.price ?? defaultPricingBannerData.price,
+    originalPrice:
+      rawCourse?.originalPrice ?? defaultPricingBannerData.originalPrice,
+    pricingTagline:
+      rawCourse?.pricingTagline ?? defaultPricingBannerData.pricingTagline,
+  };
+
+  const bookData = {
+    ...defaultBookCourseData,
+    title: rawCourse?.title ?? defaultBookCourseData.title,
+    prerequisites:
+      rawCourse?.prerequisites ?? defaultBookCourseData.prerequisites,
+    completionRewards:
+      rawCourse?.completionRewards ?? defaultBookCourseData.completionRewards,
+    qualifications:
+      rawCourse?.qualifications ?? defaultBookCourseData.qualifications,
+    cademyEmbedUrl:
+      rawCourse?.cademyEmbedUrl ?? defaultBookCourseData.cademyEmbedUrl,
+    cademyDirectUrl:
+      rawCourse?.cademyDirectUrl ?? defaultBookCourseData.cademyDirectUrl,
+    dates: cademyDates.length > 0 ? cademyDates : defaultBookCourseData.dates,
+  };
 
   return (
     <main>
       <AnimatedSection variant="fade-in" visibleOnLoad>
-        <CourseHero courseName={courseName} courseUrl={courseUrl} />
+        <CourseHero data={heroData} />
       </AnimatedSection>
       <AnimatedSection variant="fade-up">
-        <CourseDetails
-        />
+        <CourseDetails data={detailsData} />
       </AnimatedSection>
       <AnimatedSection variant="scale">
-        <PricingBanner
-        />
+        <PricingBanner data={pricingData} />
       </AnimatedSection>
       <AnimatedSection variant="fade-up">
-        <BookCourse
-        />
+        <BookCourse data={bookData} />
       </AnimatedSection>
       <AnimatedSection variant="fade-up">
         <Ratings />
