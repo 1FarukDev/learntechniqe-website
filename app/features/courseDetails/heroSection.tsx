@@ -126,13 +126,13 @@ function CourseHero({ data }: CourseHeroProps) {
                 {qualifications.map((q, i) => (
                   <div
                     key={i}
-                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4"
+                    className="flex flex-row items-start sm:items-center justify-between gap-3 sm:gap-4"
                   >
                     <p className="text-black font-semibold text-sm leading-snug flex-1">
                       {q.title}
                     </p>
                     {q.accreditationLogo && (
-                      <div className="shrink-0 border-[.5px] border-gray-200 rounded-md px-3 py-2 flex items-center gap-1.5 text-xs text-gray-400">
+                      <div className="shrink-0 border-[.5px] border-gray-200 rounded-md px-3 py-2 flex md:flex-row flex-col gap-3  items-center gap-1.5 text-xs text-gray-400">
                         {q.accreditedBy && <span>Accredited by</span>}
                         <Image
                           src={q.accreditationLogo}

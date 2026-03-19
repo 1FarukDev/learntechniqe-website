@@ -41,7 +41,7 @@ function BookCourse({ data }: BookCourseProps) {
               </div>
             )}
 
-            {qualifications.slice(0,2).map((q, i) =>
+            {qualifications.slice(0, 1).map((q, i) =>
               q.accreditationLogo ? (
                 <div
                   key={i}
@@ -85,15 +85,20 @@ function BookCourse({ data }: BookCourseProps) {
             <iframe
               src={cademyEmbedUrl}
               frameBorder="0"
-              style={{ width: "100%", minHeight: "600px", height: "auto" }}
+              className="w-full"
+              style={{
+                minHeight: "clamp(400px, 80vh, 1000px)",
+                height: "auto",
+              }}
               scrolling="no"
               onLoad={(e) => {
                 const iframe = e.currentTarget;
                 try {
-                  iframe.style.height =
-                    iframe.contentWindow?.document.body.scrollHeight + "px";
+                  const height =
+                    iframe.contentWindow?.document.body.scrollHeight;
+                  if (height) iframe.style.height = height + "px";
                 } catch {
-                  // cross-origin — can't access contentWindow, fallback to minHeight
+                  // cross-origin fallback
                 }
               }}
               sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-forms allow-modals allow-pointer-lock allow-storage-access-by-user-activation allow-top-navigation allow-top-navigation-by-user-activation allow-top-navigation-to-custom-protocols allow-presentation"
