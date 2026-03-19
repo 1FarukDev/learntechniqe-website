@@ -41,7 +41,7 @@ function BookCourse({ data }: BookCourseProps) {
               </div>
             )}
 
-            {qualifications.map((q, i) =>
+            {qualifications.slice(0,2).map((q, i) =>
               q.accreditationLogo ? (
                 <div
                   key={i}

@@ -28,9 +28,9 @@ function CourseHero({ data }: CourseHeroProps) {
     requestOverviewLink = "#",
   } = course;
 
-  const tags = course.tags ?? []
-  const description = course.description ?? []
-  const qualifications = course.qualifications ?? []
+  const tags = course.tags ?? [];
+  const description = course.description ?? [];
+  const qualifications = course.qualifications ?? [];
 
   return (
     <section className="relative w-full overflow-hidden">
@@ -44,8 +44,6 @@ function CourseHero({ data }: CourseHeroProps) {
       <div className="absolute inset-0 z-10 bg-linear-to-br from-[rgba(0,140,140,0.90)] via-[rgba(0,100,110,0.95)] to-[rgba(0,60,80,1)]" />
 
       <div className="relative z-20 max-w-7xl mx-auto md:px-0 px-4 sm:px-6 py-20 sm:py-28 lg:py-35 flex flex-col lg:justify-between lg:flex-row items-start gap-8 lg:gap-12">
-
-      
         <div className="w-full lg:w-[50%]  text-white">
           {tags.length > 0 && (
             <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-5 sm:mb-6">
@@ -79,12 +77,38 @@ function CourseHero({ data }: CourseHeroProps) {
           />
         </div>
 
- 
-        <div className="w-full lg:w-[42%] p-6 sm:p-8 flex flex-col gap-5 bg-white rounded-2xl overflow-hidden">
+        <div className="w-full lg:w-[50%] p-6 sm:p-8 flex flex-col gap-5 bg-white rounded-2xl overflow-hidden">
           <div>
             <p className="text-[#14AE5C] font-outfit font-bold text-4xl sm:text-5xl">
-              {price}
+              {price.split("+")[0].trim()}
+              {price.includes("+") && (
+                <span className="text-base   font-semibold ml-2 text-black/80">
+                  +{price.split("+")[1]}
+                </span>
+              )}
             </p>
+            {price.includes("+") && (
+              <p className="text-black font-semibold text-sm mt-1">
+                (
+                {price
+                  .split("+")[0]
+                  .trim()
+                  .replace(/[^0-9.]/g, "") &&
+                  `£${(
+                    parseFloat(
+                      price
+                        .split("+")[0]
+                        .trim()
+                        .replace(/[^0-9.,]/g, "")
+                        .replace(",", ""),
+                    ) * 1.2
+                  ).toLocaleString("en-GB", {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0,
+                  })} inc VAT`}
+                )
+              </p>
+            )}
           </div>
 
           {qualifications.length > 0 && (
@@ -108,11 +132,15 @@ function CourseHero({ data }: CourseHeroProps) {
                       {q.title}
                     </p>
                     {q.accreditationLogo && (
-                      <div className="shrink-0 border border-gray-200 rounded-md px-3 py-2 flex items-center gap-1.5 text-xs text-gray-400">
-                        <span>Accredited by</span>
+                      <div className="shrink-0 border-[.5px] border-gray-200 rounded-md px-3 py-2 flex items-center gap-1.5 text-xs text-gray-400">
+                        {q.accreditedBy && <span>Accredited by</span>}
                         <Image
                           src={q.accreditationLogo}
-                          alt={q.accreditationLogoAlt || q.accreditedBy || "Accreditation"}
+                          alt={
+                            q.accreditationLogoAlt ||
+                            q.accreditedBy ||
+                            "Accreditation"
+                          }
                           width={60}
                           height={40}
                         />

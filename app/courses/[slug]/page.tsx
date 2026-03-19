@@ -92,18 +92,18 @@ async function CourseDetail({ params }: CoursePageProps) {
       <AnimatedSection variant="fade-up">
         <CourseDetails data={detailsData} />
       </AnimatedSection>
-      <AnimatedSection variant="scale">
+      {/* <AnimatedSection variant="scale">
         <PricingBanner data={pricingData} />
-      </AnimatedSection>
+      </AnimatedSection> */}
       <AnimatedSection variant="fade-up">
         <BookCourse data={bookData} />
       </AnimatedSection>
       <AnimatedSection variant="fade-up">
         <Ratings />
       </AnimatedSection>
-      <AnimatedSection variant="fade-up">
+      {/* <AnimatedSection variant="fade-up">
         <Session />
-      </AnimatedSection>
+      </AnimatedSection> */}
       <AnimatedSection variant="fade-up">
         <Contact />
       </AnimatedSection>
