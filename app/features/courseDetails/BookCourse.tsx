@@ -3,6 +3,7 @@ import React from "react";
 import Image from "next/image";
 import { BookCourseData } from "@/lib/types/course";
 import { defaultBookCourseData } from "@/lib/constants/course";
+import { CademyBookingIframe } from "./CademyBookingIframe";
 
 interface BookCourseProps {
   data?: BookCourseData | null;
@@ -80,28 +81,11 @@ function BookCourse({ data }: BookCourseProps) {
           )}
         </div>
 
-        <div className="max-w-4xl mx-auto rounded-2xl overflow-hidden border-gray-100">
+        <div className="max-w-3xl mx-auto  overflow-hidden">
           {cademyEmbedUrl ? (
-            <iframe
+            <CademyBookingIframe
+              key={cademyEmbedUrl}
               src={cademyEmbedUrl}
-              frameBorder="0"
-              className="w-full"
-              style={{
-                minHeight: "clamp(400px, 80vh, 1000px)",
-                height: "auto",
-              }}
-              scrolling="no"
-              onLoad={(e) => {
-                const iframe = e.currentTarget;
-                try {
-                  const height =
-                    iframe.contentWindow?.document.body.scrollHeight;
-                  if (height) iframe.style.height = height + "px";
-                } catch {
-                  // cross-origin fallback
-                }
-              }}
-              sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-forms allow-modals allow-pointer-lock allow-storage-access-by-user-activation allow-top-navigation allow-top-navigation-by-user-activation allow-top-navigation-to-custom-protocols allow-presentation"
               title="Course booking dates"
             />
           ) : (
