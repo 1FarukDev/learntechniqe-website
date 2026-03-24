@@ -22,7 +22,7 @@ function BookCourse({ data }: BookCourseProps) {
     course.cademyEmbedUrl ?? defaultBookCourseData.cademyEmbedUrl;
 
   return (
-    <div className="bg-white">
+    <div className="bg-white" id="bookSection">
       <section className="py-8 sm:py-12 max-w-7xl mx-auto px-4 sm:px-6">
         <h2 className="font-outfit font-bold text-3xl sm:text-4xl text-black mb-6 sm:mb-8">
           Book Course

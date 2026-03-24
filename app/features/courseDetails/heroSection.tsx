@@ -1,3 +1,5 @@
+"use client"
+
 import React from "react";
 import Image from "next/image";
 import HeroImage from "@/app/assets/png/coursedetails.jpg";
@@ -31,6 +33,13 @@ function CourseHero({ data }: CourseHeroProps) {
   const tags = course.tags ?? [];
   const description = course.description ?? [];
   const qualifications = course.qualifications ?? [];
+
+  const handleBookNow = () => {
+    const bookSection = document.getElementById("bookSection");
+    if (bookSection) {
+      bookSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <section className="relative w-full overflow-hidden">
@@ -183,7 +192,10 @@ function CourseHero({ data }: CourseHeroProps) {
           )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-5">
-            <Button className="bg-[#F5A623] hover:bg-[#e09410] text-white font-outfit font-semibold uppercase tracking-widest text-xs sm:text-sm h-12 sm:h-14">
+            <Button
+              onClick={handleBookNow}
+              className="bg-[#F5A623] hover:bg-[#e09410] text-white font-outfit font-semibold uppercase tracking-widest text-xs sm:text-sm h-12 sm:h-14"
+            >
               Book Now
             </Button>
             <CourseEnquiryForm
