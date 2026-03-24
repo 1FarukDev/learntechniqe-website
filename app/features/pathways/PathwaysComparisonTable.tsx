@@ -5,24 +5,26 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export interface Pathway {
-  id: string;
-  image?: string;
-  title: string;
   badge: string;
-  description: string;
   href: string;
   external?: boolean;
-  eligibility: string[];
-  attendance: string;
-  exams: string;
-  duration: string;
-  location: string;
-  priceExVat: number;
-  priceIncVat: number;
-  paymentPlan: boolean;
-  deposit: number;
-  monthlyInstalment: number;
-  instalments: number;
+  pathway?: {
+    title: string;
+    eligibility?: string[];
+    attendance?: string;
+    duration?: string;
+    location?: string;
+    priceIncVat?: string | number;
+    priceExVat?: string | number;
+    paymentPlan?: string;
+    deposit?: string | number;
+    monthlyPayment?: string;
+    instalments?: string | number;
+    slug?: string;
+  };
+  image?: string;
+  title?: string | any;
+  description?: string | any;
 }
 
 interface PathwaysComparisonTableProps {
@@ -38,6 +40,12 @@ export function PathwaysComparisonTable({
   description,
   disclaimer,
 }: PathwaysComparisonTableProps) {
+  const parsePrice = (val: string | number | undefined): number => {
+    if (!val) return 0
+    if (typeof val === 'number') return val
+    return parseFloat(val.replace(/[^0-9.]/g, '')) || 0
+  }
+
   const formatPrice = (n: number) =>
     new Intl.NumberFormat("en-GB", {
       style: "currency",
@@ -59,70 +67,104 @@ export function PathwaysComparisonTable({
           <table className="w-full min-w-[800px] border-collapse text-sm">
             <thead>
               <tr className="bg-[#016068] text-white">
-                <th className="text-left p-3 md:p-4 font-semibold w-32">Criteria</th>
-                {pathways.map((p) => (
-                  <th key={p.id} className="text-left p-3 md:p-4 font-semibold min-w-[140px]">
-                    <span className="inline-block text-xs text-[#E99E20] font-medium mb-1 px-2 py-0.5 rounded bg-white/10">{p.badge}</span>
+                <th className="text-left p-3 md:p-4 font-semibold w-32">
+                  Criteria
+                </th>
+                {pathways.map((p, i) => (
+                  <th
+                    key={p.href ?? i}
+                    className="text-left p-3 md:p-4 font-semibold min-w-[140px]"
+                  >
+                    <span className="inline-block text-xs text-[#E99E20] font-medium mb-1 px-2 py-0.5 rounded bg-white/10">
+                      {p.badge}
+                    </span>
                     <br />
-                    {p.title}
+                    {p.pathway?.title}
                   </th>
                 ))}
               </tr>
             </thead>
             <tbody>
               <tr className="border-b border-gray-200 bg-gray-50">
-                <td className="p-3 md:p-4 font-semibold text-gray-700">Eligibility</td>
-                {pathways.map((p) => (
-                  <td key={p.id} className="p-3 md:p-4">
+                <td className="p-3 md:p-4 font-semibold text-gray-700">
+                  Eligibility
+                </td>
+                {pathways.map((p, i) => (
+                  <td key={p.href ?? i} className="p-3 md:p-4">
                     <ul className="list-disc list-inside space-y-1 text-xs">
-                      {p.eligibility.slice(0, 2).map((e, i) => (
-                        <li key={i}>{e}</li>
-                      ))}
+                      {(p.pathway?.eligibility ?? [])
+                        .slice(0, 2)
+                        .map((e, j) => (
+                          <li key={j}>{e}</li>
+                        ))}
                     </ul>
                   </td>
                 ))}
               </tr>
               <tr className="border-b border-gray-200">
-                <td className="p-3 md:p-4 font-semibold text-gray-700">Attendance</td>
-                {pathways.map((p) => (
-                  <td key={p.id} className="p-3 md:p-4 text-xs">{p.attendance}</td>
+                <td className="p-3 md:p-4 font-semibold text-gray-700">
+                  Attendance
+                </td>
+                {pathways.map((p, i) => (
+                  <td key={p.href ?? i} className="p-3 md:p-4 text-xs">
+                    {p.pathway?.attendance ?? "—"}
+                  </td>
                 ))}
               </tr>
               <tr className="border-b border-gray-200 bg-gray-50">
-                <td className="p-3 md:p-4 font-semibold text-gray-700">Duration</td>
-                {pathways.map((p) => (
-                  <td key={p.id} className="p-3 md:p-4 text-xs">{p.duration}</td>
-                ))}
-              </tr>
-              <tr className="border-b border-gray-200">
-                <td className="p-3 md:p-4 font-semibold text-gray-700">Location</td>
-                {pathways.map((p) => (
-                  <td key={p.id} className="p-3 md:p-4 text-xs">{p.location}</td>
-                ))}
-              </tr>
-              <tr className="border-b border-gray-200 bg-gray-50">
-                <td className="p-3 md:p-4 font-semibold text-gray-700">Price (Inc VAT)</td>
-                {pathways.map((p) => (
-                  <td key={p.id} className="p-3 md:p-4 font-semibold text-[#016068]">
-                    {formatPrice(p.priceIncVat)}
+                <td className="p-3 md:p-4 font-semibold text-gray-700">
+                  Duration
+                </td>
+                {pathways.map((p, i) => (
+                  <td key={p.href ?? i} className="p-3 md:p-4 text-xs">
+                    {p.pathway?.duration ?? "—"}
                   </td>
                 ))}
               </tr>
               <tr className="border-b border-gray-200">
-                <td className="p-3 md:p-4 font-semibold text-gray-700">Payment Plan</td>
-                {pathways.map((p) => (
-                  <td key={p.id} className="p-3 md:p-4 text-xs">
-                    {p.paymentPlan ? "Yes" : "Pay in full"}
+                <td className="p-3 md:p-4 font-semibold text-gray-700">
+                  Location
+                </td>
+                {pathways.map((p, i) => (
+                  <td key={p.href ?? i} className="p-3 md:p-4 text-xs">
+                    {p.pathway?.location ?? "—"}
                   </td>
                 ))}
               </tr>
-              {pathways.some((p) => p.paymentPlan) && (
+              <tr className="border-b border-gray-200 bg-gray-50">
+                <td className="p-3 md:p-4 font-semibold text-gray-700">
+                  Price (Inc VAT)
+                </td>
+                {pathways.map((p, i) => (
+                  <td
+                    key={p.href ?? i}
+                    className="p-3 md:p-4 font-semibold text-[#016068]"
+                  >
+                    {p.pathway?.priceIncVat
+                      ? formatPrice(parsePrice(p.pathway.priceIncVat))
+                      : "—"}
+                  </td>
+                ))}
+              </tr>
+              <tr className="border-b border-gray-200">
+                <td className="p-3 md:p-4 font-semibold text-gray-700">
+                  Payment Plan
+                </td>
+                {pathways.map((p, i) => (
+                  <td key={p.href ?? i} className="p-3 md:p-4 text-xs">
+                    {p.pathway?.paymentPlan ?? "—"}
+                  </td>
+                ))}
+              </tr>
+              {pathways.some((p) => p.pathway?.paymentPlan === "Yes") && (
                 <tr className="border-b border-gray-200 bg-gray-50">
-                  <td className="p-3 md:p-4 font-semibold text-gray-700">Deposit / Monthly</td>
-                  {pathways.map((p) => (
-                    <td key={p.id} className="p-3 md:p-4 text-xs">
-                      {p.paymentPlan
-                        ? `${formatPrice(p.deposit)} / ${formatPrice(p.monthlyInstalment)} × ${p.instalments}`
+                  <td className="p-3 md:p-4 font-semibold text-gray-700">
+                    Deposit / Monthly
+                  </td>
+                  {pathways.map((p, i) => (
+                    <td key={p.href ?? i} className="p-3 md:p-4 text-xs">
+                      {p.pathway?.paymentPlan === "Yes" && p.pathway?.deposit
+                        ? `${formatPrice(parsePrice(p.pathway.deposit))} / ${p.pathway.monthlyPayment} × ${p.pathway.instalments}`
                         : "-"}
                     </td>
                   ))}
@@ -130,16 +172,26 @@ export function PathwaysComparisonTable({
               )}
               <tr className="bg-[#016068]/5">
                 <td className="p-3 md:p-4"></td>
-                {pathways.map((p) => (
-                  <td key={p.id} className="p-3 md:p-4">
+                {pathways.map((p, i) => (
+                  <td key={p.href ?? i} className="p-3 md:p-4">
                     {p.external ? (
-                      <Button asChild className="text-white rounded text-sm px-8 font-bold h-10 w-full max-w-[200px] bg-[#016068]">
-                        <a href={p.href} target="_blank" rel="noopener noreferrer">
+                      <Button
+                        asChild
+                        className="text-white rounded text-sm px-8 font-bold h-10 w-full max-w-[200px] bg-[#016068]"
+                      >
+                        <a
+                          href={p.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           View
                         </a>
                       </Button>
                     ) : (
-                      <Button asChild className="text-white rounded text-sm px-8 font-bold h-10 w-full max-w-[200px] bg-[#016068]">
+                      <Button
+                        asChild
+                        className="text-white rounded text-sm px-8 font-bold h-10 w-full max-w-[200px] bg-[#016068]"
+                      >
                         <Link href={p.href}>View Pathway</Link>
                       </Button>
                     )}

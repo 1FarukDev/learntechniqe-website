@@ -1,4 +1,4 @@
-import { groq } from 'next-sanity'
+import { groq } from "next-sanity";
 
 export const PATHWAYS_PAGE_QUERY = groq`
   *[_type == "pathwaysPage"][0] {
@@ -44,30 +44,72 @@ export const PATHWAYS_PAGE_QUERY = groq`
       }
     },
     pathways[] {
-      id,
-      image {
-        asset->{
-          url
-        },
-        alt,
-        hotspot
-      },
-      title,
       badge,
-      description,
       href,
       external,
-      eligibility[],
-      attendance,
-      exams,
-      duration,
-      location,
-      priceExVat,
-      priceIncVat,
-      paymentPlan,
-      deposit,
-      monthlyInstalment,
-      instalments
+      "pathway": pathway-> {
+        title,
+        "slug": slug.current,
+        "heroImage": heroImage.asset->url,
+        description,
+        price,
+        priceIncVat,
+        eligibility,
+        attendance,
+        duration,
+        location,
+        paymentPlan,
+        deposit,
+        monthlyPayment,
+        monthlyInstalment,
+        instalments,
+        priceExVat,
+        priceIncVat,
+        exams,
+      }
     }
   }
-`
+`;
+
+export const PATHWAYS_QUERY = groq`
+  *[_type == "pathwayDetail"] | order(title asc) {
+    title,
+    "slug": slug.current,
+    price,
+    heroImage,
+    tags,
+    description,
+    duration,
+  }
+`;
+
+export const PATHWAY_DETAIL_QUERY = groq`
+   *[_type == "pathwayDetail" && slug.current == $slug][0] {
+     title,
+     "slug": slug.current,
+     tags,
+     heroImage,
+     price,
+     originalPrice,
+     pricingTagline,
+     description,
+     requestOverviewLink,
+     qualifications[] {
+       title,
+       accreditedBy,
+       accreditationLogoAlt,
+       "accreditationLogo": accreditationLogo.asset->url,
+     },
+     duration,
+     durationNote,
+     durationNoteLink,
+     courseGoals,
+     entryRequirements,
+     syllabus,
+     prerequisites,
+     completionRewards,
+     cademyEmbedUrl,
+     cademyDirectUrl,
+     dates,
+   }
+ `;

@@ -9,13 +9,19 @@ interface PaymentCalculatorProps {
 }
 
 export function PaymentCalculator({ pathways }: PaymentCalculatorProps) {
-  const [selectedId, setSelectedId] = useState<string>(pathways[0]?.id ?? "");
+  const [selectedHref, setSelectedHref] = useState<string>(pathways[0]?.href ?? "");
   const [customMonths, setCustomMonths] = useState<number>(10);
 
   const selectedPathway = useMemo(
-    () => pathways.find((p) => p.id === selectedId),
-    [pathways, selectedId]
+    () => pathways.find((p) => p.href === selectedHref),
+    [pathways, selectedHref]
   );
+
+  const parsePrice = (val: string | number | undefined): number => {
+    if (!val) return 0
+    if (typeof val === 'number') return val
+    return parseFloat(val.replace(/[^0-9.]/g, '')) || 0
+  }
 
   const formatPrice = (n: number) =>
     new Intl.NumberFormat("en-GB", {
@@ -24,14 +30,15 @@ export function PaymentCalculator({ pathways }: PaymentCalculatorProps) {
       minimumFractionDigits: 2,
     }).format(n);
 
+  const priceIncVat = parsePrice(selectedPathway?.pathway?.priceIncVat)
+  const deposit = parsePrice(selectedPathway?.pathway?.deposit)
+
   const customCalculation = useMemo(() => {
-    if (!selectedPathway || !selectedPathway.paymentPlan) return null;
-    const total = selectedPathway.priceIncVat;
-    const deposit = selectedPathway.deposit;
-    const remaining = total - deposit;
-    const monthly = remaining / customMonths;
-    return { deposit, monthly, months: customMonths, total };
-  }, [selectedPathway, customMonths]);
+    if (!selectedPathway || selectedPathway.pathway?.paymentPlan !== 'Yes') return null
+    const remaining = priceIncVat - deposit
+    const monthly = remaining / customMonths
+    return { deposit, monthly, months: customMonths, total: priceIncVat }
+  }, [selectedPathway, customMonths, priceIncVat, deposit])
 
   return (
     <section className="bg-white py-12 sm:py-20 md:px-0 px-4 border-t border-gray-200">
@@ -48,13 +55,13 @@ export function PaymentCalculator({ pathways }: PaymentCalculatorProps) {
             Select Pathway
           </label>
           <select
-            value={selectedId}
-            onChange={(e) => setSelectedId(e.target.value)}
+            value={selectedHref}
+            onChange={(e) => setSelectedHref(e.target.value)}
             className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 mb-6 focus:ring-2 focus:ring-[#016068] focus:border-[#016068]"
           >
-            {pathways.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.title} – {formatPrice(p.priceIncVat)}
+            {pathways.map((p, i) => (
+              <option key={p.href ?? i} value={p.href}>
+                {p.pathway?.title} – {formatPrice(parsePrice(p.pathway?.priceIncVat))}
               </option>
             ))}
           </select>
@@ -64,11 +71,11 @@ export function PaymentCalculator({ pathways }: PaymentCalculatorProps) {
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">Total (Inc VAT)</span>
                 <span className="font-semibold text-[#016068]">
-                  {formatPrice(selectedPathway.priceIncVat)}
+                  {formatPrice(priceIncVat)}
                 </span>
               </div>
 
-              {selectedPathway.paymentPlan ? (
+              {selectedPathway.pathway?.paymentPlan === 'Yes' ? (
                 <>
                   <div className="pt-4 border-t border-gray-200">
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
