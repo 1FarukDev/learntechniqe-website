@@ -1,17 +1,34 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+
+export type CourseEnquiryFormHandle = {
+  open: () => void;
+};
 
 interface CourseEnquiryFormProps {
   courseName: string;
   courseUrl: string;
 }
 
-export function CourseEnquiryForm({ courseName, courseUrl }: CourseEnquiryFormProps) {
+export const CourseEnquiryForm = forwardRef<
+  CourseEnquiryFormHandle,
+  CourseEnquiryFormProps
+>(function CourseEnquiryForm({ courseName, courseUrl }, ref) {
   const [isOpen, setIsOpen] = useState(false);
+  const open = useCallback(() => setIsOpen(true), []);
+
+  useImperativeHandle(ref, () => ({ open }), [open]);
   const formRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -150,4 +167,6 @@ export function CourseEnquiryForm({ courseName, courseUrl }: CourseEnquiryFormPr
       </div>
     </>
   );
-}
+});
+
+CourseEnquiryForm.displayName = "CourseEnquiryForm";

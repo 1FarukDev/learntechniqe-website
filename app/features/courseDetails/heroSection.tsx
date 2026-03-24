@@ -1,13 +1,10 @@
-"use client"
+"use client";
 
 import React from "react";
 import Image from "next/image";
 import HeroImage from "@/app/assets/png/coursedetails.jpg";
-import { Button } from "@/components/ui/button";
-import Clock from "@/app/assets/svg/clock.svg";
-import Cap from "@/app/assets/svg/cap.svg";
-import { CourseEnquiryForm } from "./CourseEnquiryForm";
 import { RequestCourseOverview } from "./RequestCourseOverview";
+import CourseHeroInfoCard from "./CourseHeroInfoCard";
 import { CourseHeroData } from "@/lib/types/course";
 import { defaultCourseHeroData } from "@/lib/constants/course";
 import { urlFor } from "@/lib/sanity/image";
@@ -86,124 +83,17 @@ function CourseHero({ data }: CourseHeroProps) {
           />
         </div>
 
-        <div className="w-full lg:w-[50%] p-6 sm:p-8 flex flex-col gap-5 bg-white rounded-2xl overflow-hidden">
-          <div>
-            <p className="text-[#14AE5C] font-outfit font-bold text-4xl sm:text-5xl">
-              {price.split("+")[0].trim()}
-              {price.includes("+") && (
-                <span className="text-base   font-semibold ml-2 text-black/80">
-                  +{price.split("+")[1]}
-                </span>
-              )}
-            </p>
-            {price.includes("+") && (
-              <p className="text-black font-semibold text-sm mt-1">
-                (
-                {price
-                  .split("+")[0]
-                  .trim()
-                  .replace(/[^0-9.]/g, "") &&
-                  `£${(
-                    parseFloat(
-                      price
-                        .split("+")[0]
-                        .trim()
-                        .replace(/[^0-9.,]/g, "")
-                        .replace(",", ""),
-                    ) * 1.2
-                  ).toLocaleString("en-GB", {
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 0,
-                  })} inc VAT`}
-                )
-              </p>
-            )}
-          </div>
-
-          {qualifications.length > 0 && (
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-[#016068]">
-                  <Image src={Cap} alt="cap icon" width={20} height={20} />
-                </span>
-                <h3 className="text-[#016068] font-outfit font-bold text-sm sm:text-base">
-                  What is Obtained/Achieved?
-                </h3>
-              </div>
-
-              <div className="space-y-4 mt-2">
-                {qualifications.map((q, i) => (
-                  <div
-                    key={i}
-                    className="flex flex-row items-start sm:items-center justify-between gap-3 sm:gap-4"
-                  >
-                    <p className="text-black font-semibold text-sm leading-snug flex-1">
-                      {q.title}
-                    </p>
-                    {q.accreditationLogo && (
-                      <div className="shrink-0 border-[.5px] border-gray-200 rounded-md px-3 py-2 flex md:flex-row flex-col gap-3  items-center gap-1.5 text-xs text-gray-400">
-                        {q.accreditedBy && <span>Accredited by</span>}
-                        <Image
-                          src={q.accreditationLogo}
-                          alt={
-                            q.accreditationLogoAlt ||
-                            q.accreditedBy ||
-                            "Accreditation"
-                          }
-                          width={60}
-                          height={40}
-                        />
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {duration && (
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-[#016068]">
-                  <Image src={Clock} alt="clock icon" width={20} height={20} />
-                </span>
-                <h3 className="text-[#016068] font-outfit font-bold text-sm sm:text-base">
-                  Course Duration:
-                </h3>
-              </div>
-              <p className="text-black font-bold text-sm">{duration}</p>
-            </div>
-          )}
-
-          {durationNote && (
-            <div className="bg-[#E9FDFF] rounded-md">
-              <p className="text-black text-xs leading-6 p-3">
-                {durationNote}{" "}
-                <a
-                  href={requestOverviewLink}
-                  className="text-green-600 underline hover:opacity-80"
-                >
-                  {durationNoteLink}
-                </a>{" "}
-                if you would like to discuss the exact course dates for each
-                module.
-              </p>
-            </div>
-          )}
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-5">
-            <Button
-              onClick={handleBookNow}
-              className="bg-[#F5A623] hover:bg-[#e09410] text-white font-outfit font-semibold uppercase tracking-widest text-xs sm:text-sm h-12 sm:h-14"
-            >
-              Book Now
-            </Button>
-            <CourseEnquiryForm
-              courseName={title}
-              courseUrl={`/courses/${slug}`}
-            />
-          </div>
-        </div>
+        <CourseHeroInfoCard
+          title={title}
+          slug={slug}
+          price={price}
+          qualifications={qualifications}
+          duration={duration}
+          durationNote={durationNote}
+          durationNoteLink={durationNoteLink}
+          requestOverviewLink={requestOverviewLink}
+          onBookNow={handleBookNow}
+        />
       </div>
     </section>
   );
