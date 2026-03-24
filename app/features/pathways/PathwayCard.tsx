@@ -19,13 +19,13 @@ const PATHWAY_IMAGES: Record<string, typeof CoursesImage> = {
 };
 
 interface PathwayCardProps {
-  pathway: Pathway;
+  pathway: any;
 }
 
 export function PathwayCard({ pathway }: PathwayCardProps) {
-  const imageSrc = pathway.image ? pathway.image : CoursesImage;
+  const imageSrc = pathway.pathway.heroImage ? pathway.pathway.heroImage : CoursesImage;
 
-  console.log(pathway);
+
   return (
     <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow">
       <div className="relative w-full aspect-[16/10]">
@@ -42,9 +42,9 @@ export function PathwayCard({ pathway }: PathwayCardProps) {
           {pathway.badge}
         </span>
         <h3 className="text-xl font-semibold text-gray-900 mb-3">
-          {pathway.title}
+          {pathway.pathway.title}
         </h3>
-        <p className="text-gray-600 text-sm mb-6">{pathway.description}</p>
+        <p className="text-gray-600 text-sm mb-6">{pathway.pathway.description}</p>
         {pathway.external ? (
           <Button
             asChild

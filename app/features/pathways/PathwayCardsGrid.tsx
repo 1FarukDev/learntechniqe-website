@@ -7,6 +7,7 @@ interface PathwayCardsGridProps {
 }
 
 export function PathwayCardsGrid({ pathways }: PathwayCardsGridProps) {
+  console.log('pathways', pathways)
   return (
     <section className="bg-[#E0ECED] py-12 sm:py-20 md:px-0 px-4 ">
       <div className="max-w-7xl mx-auto">
