@@ -30,6 +30,13 @@ function useIsMobile() {
   return isMobile;
 }
 
+const emptyForm = {
+  first_name: "",
+  last_name: "",
+  number: "",
+  email: "",
+};
+
 export function RequestCourseOverviewModal({
   open,
   onOpenChange,
@@ -37,32 +44,33 @@ export function RequestCourseOverviewModal({
   courseUrl,
 }: RequestCourseOverviewModalProps) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [formData, setFormData] = useState({ name: "", phone: "", email: "" });
+  const [formData, setFormData] = useState(emptyForm);
   const isMobile = useIsMobile();
+
+  useEffect(() => {
+    if (!open) setStatus("idle");
+  }, [open]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
     try {
-      const [first, ...rest] = formData.name.trim().split(" ");
       const res = await fetch("/api/zapier/course-overview", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          source: "course_overview_request",
-          first_name: first || formData.name,
-          last_name: rest.join(" ") || "",
-          number: formData.phone,
+          first_name: formData.first_name,
+          last_name: formData.last_name,
+          number: formData.number,
           email: formData.email,
           course_name: courseName,
           course_url: courseUrl,
-          message: `Course Overview Request: ${courseName} (${courseUrl})`,
         }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Failed");
       setStatus("success");
-      setFormData({ name: "", phone: "", email: "" });
+      setFormData(emptyForm);
     } catch {
       setStatus("error");
     }
@@ -83,37 +91,53 @@ export function RequestCourseOverviewModal({
 
         <div className="flex flex-col gap-6 px-4 pb-6 overflow-y-auto flex-1">
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label htmlFor="overview-name" className="block text-sm font-semibold text-gray-700 mb-1">
-                Your Name <span className="text-red-500">*</span>
-              </label>
-              <Input
-                id="overview-name"
-                type="text"
-                placeholder="Enter your name"
-                value={formData.name}
-                onChange={(e) => setFormData((p) => ({ ...p, name: e.target.value }))}
-                required
-                className="bg-white h-12"
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="overview-first" className="block text-sm font-semibold text-gray-700 mb-1">
+                  First Name <span className="text-red-500">*</span>
+                </label>
+                <Input
+                  id="overview-first"
+                  type="text"
+                  placeholder="Enter your first name"
+                  value={formData.first_name}
+                  onChange={(e) => setFormData((p) => ({ ...p, first_name: e.target.value }))}
+                  required
+                  className="bg-white h-12"
+                />
+              </div>
+              <div>
+                <label htmlFor="overview-last" className="block text-sm font-semibold text-gray-700 mb-1">
+                  Last Name <span className="text-red-500">*</span>
+                </label>
+                <Input
+                  id="overview-last"
+                  type="text"
+                  placeholder="Enter your last name"
+                  value={formData.last_name}
+                  onChange={(e) => setFormData((p) => ({ ...p, last_name: e.target.value }))}
+                  required
+                  className="bg-white h-12"
+                />
+              </div>
             </div>
             <div>
               <label htmlFor="overview-phone" className="block text-sm font-semibold text-gray-700 mb-1">
-                Phone <span className="text-red-500">*</span>
+                Phone Number <span className="text-red-500">*</span>
               </label>
               <Input
                 id="overview-phone"
                 type="tel"
                 placeholder="Enter your phone number"
-                value={formData.phone}
-                onChange={(e) => setFormData((p) => ({ ...p, phone: e.target.value }))}
+                value={formData.number}
+                onChange={(e) => setFormData((p) => ({ ...p, number: e.target.value }))}
                 required
                 className="bg-white h-12"
               />
             </div>
             <div>
               <label htmlFor="overview-email" className="block text-sm font-semibold text-gray-700 mb-1">
-                Your Email <span className="text-red-500">*</span>
+                Email Address <span className="text-red-500">*</span>
               </label>
               <Input
                 id="overview-email"
@@ -125,7 +149,6 @@ export function RequestCourseOverviewModal({
                 className="bg-white h-12"
               />
             </div>
-
             {status === "success" && (
               <p className="text-sm text-green-600 font-medium">Thank you! We&apos;ll send the overview to your email soon.</p>
             )}

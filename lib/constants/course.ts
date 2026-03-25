@@ -40,6 +40,7 @@ export const defaultCourseHeroData: CourseHeroData = {
   duration: '10 Days',
   durationNote: 'Please note the course dates may not run consecutively. We will be in touch to confirm subsequent dates on this package course after registration.',
   durationNoteLink: 'Please get in touch',
+  bookingAvailable: true,
 }
 
 export const defaultCourseDetailsData: CourseDetailsData = {

@@ -10,6 +10,7 @@ export interface Pathway {
   external?: boolean;
   pathway?: {
     title: string;
+    heroImage?: string;
     eligibility?: string[];
     attendance?: string;
     duration?: string;
@@ -54,7 +55,7 @@ export function PathwaysComparisonTable({
     }).format(n);
 
   return (
-    <section id="pathways-table" className="bg-white md:px-0 px-4">
+    <section id="pathways-table" className="bg-white md:px-0 px-4 pb-12 sm:pb-20">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-10">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-[#016068] mb-3">

@@ -31,7 +31,7 @@ function HeroSection({
       : backgroundImage.src ?? "";
 
   return (
-    <section className={`relative w-full ${height} overflow-hidden`}>
+    <section className={`relative z-0 w-full ${height} overflow-hidden`}>
       <img
         src={imageSrc}
         alt=""

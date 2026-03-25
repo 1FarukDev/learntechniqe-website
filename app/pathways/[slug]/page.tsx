@@ -33,9 +33,17 @@ async function PathwayDetail({ params }: PathwayPageProps) {
 
   if (!rawCourse) return notFound();
 
+  const cademyEmbedRaw = rawCourse?.cademyEmbedUrl;
+  const cademyEmbedFromCms =
+    typeof cademyEmbedRaw === "string" ? cademyEmbedRaw.trim() : "";
+  const bookingAvailable = cademyEmbedFromCms.length > 0;
+
   const cademyDates =
-    rawCourse?.cademyEmbedUrl && rawCourse?.cademyDirectUrl
-      ? await getCademyDates(rawCourse.cademyEmbedUrl, rawCourse.cademyDirectUrl)
+    bookingAvailable && rawCourse?.cademyDirectUrl
+      ? await getCademyDates(
+          cademyEmbedFromCms,
+          rawCourse.cademyDirectUrl,
+        )
       : [];
 
   const heroData = {
@@ -44,6 +52,7 @@ async function PathwayDetail({ params }: PathwayPageProps) {
     tags: rawCourse?.tags ?? defaultCourseHeroData.tags,
     description: rawCourse?.description ?? defaultCourseHeroData.description,
     qualifications: rawCourse?.qualifications ?? defaultCourseHeroData.qualifications,
+    bookingAvailable,
   };
 
   const detailsData = {
@@ -66,7 +75,7 @@ async function PathwayDetail({ params }: PathwayPageProps) {
     prerequisites: rawCourse?.prerequisites ?? defaultBookCourseData.prerequisites,
     completionRewards: rawCourse?.completionRewards ?? defaultBookCourseData.completionRewards,
     qualifications: rawCourse?.qualifications ?? defaultBookCourseData.qualifications,
-    cademyEmbedUrl: rawCourse?.cademyEmbedUrl ?? defaultBookCourseData.cademyEmbedUrl,
+    cademyEmbedUrl: bookingAvailable ? cademyEmbedFromCms : undefined,
     cademyDirectUrl: rawCourse?.cademyDirectUrl ?? defaultBookCourseData.cademyDirectUrl,
     dates: cademyDates.length > 0 ? cademyDates : defaultBookCourseData.dates,
   };
@@ -79,9 +88,11 @@ async function PathwayDetail({ params }: PathwayPageProps) {
       <AnimatedSection variant="fade-up">
         <CourseDetails data={detailsData} />
       </AnimatedSection>
-      <AnimatedSection variant="fade-up">
-        <BookCourse data={bookData} />
-      </AnimatedSection>
+      {bookingAvailable && (
+        <AnimatedSection variant="fade-up">
+          <BookCourse data={bookData} />
+        </AnimatedSection>
+      )}
       <AnimatedSection variant="fade-up">
         <Ratings />
       </AnimatedSection>

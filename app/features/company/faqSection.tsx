@@ -302,26 +302,6 @@ function FAQRow({
           open && hasContent ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <style>{`
-          .faq-bullets li::before,
-          .faq-bullets li::after,
-          .faq-bullets span::before,
-          .faq-bullets span::after {
-            display: none !important;
-            content: none !important;
-            border: none !important;
-            background: none !important;
-            width: 0 !important;
-            height: 0 !important;
-          }
-          .faq-bullets {
-            border-left: none !important;
-          }
-          .faq-bullets li {
-            border-left: none !important;
-            padding-left: 0 !important;
-          }
-        `}</style>
         <div className="bg-white px-6 py-5">
           {faq.intro && (
             <p className="text-sm text-gray-800 font-medium mb-4 leading-relaxed">
@@ -330,30 +310,36 @@ function FAQRow({
           )}
 
           {faq.bullets && faq.bullets.length > 0 && (
-            <ul className="faq-bullets flex flex-col gap-2 mb-5" style={{ borderLeft: "none", paddingLeft: 0, listStyle: "none" }}>
-              {faq.bullets.map((b, i) => {
+            <ul className="mb-5 flex list-none flex-col pl-0">
+              {faq.bullets.map((b, i, arr) => {
                 const dashIndex = b.text.indexOf(" - ");
                 const label = dashIndex !== -1 ? b.text.slice(0, dashIndex) : null;
                 const body = dashIndex !== -1 ? b.text.slice(dashIndex + 3) : b.text;
+                const isFirst = i === 0;
+                const isLast = i === arr.length - 1;
                 return (
-                  <li key={i} className="flex items-start gap-4 py-2" style={{ borderLeft: "none", paddingLeft: 0 }}>
-                    <div style={{
-                      marginTop: "6px",
-                      width: "10px",
-                      height: "10px",
-                      minWidth: "10px",
-                      minHeight: "10px",
-                      borderRadius: "50%",
-                      backgroundColor: "#016068",
-                      flexShrink: 0,
-                      display: "block",
-                      overflow: "hidden",
-                      position: "static",
-                      border: "none",
-                      padding: 0,
-                    }} />
-                    <p className="text-gray-700 text-sm leading-6">
-                      {label && <span className="font-semibold text-gray-900">{label} — </span>}
+                  <li key={i} className="flex items-stretch gap-4">
+                    <div className="flex w-4 shrink-0 flex-col items-center self-stretch">
+                      {!isFirst && (
+                        <div className="h-5 w-px shrink-0 bg-gray-200" aria-hidden />
+                      )}
+                      <span
+                        className="z-[1] mt-1.5 size-2.5 shrink-0 rounded-full bg-[#016068] ring-2 ring-white"
+                        aria-hidden
+                      />
+                      {!isLast && (
+                        <div
+                          className="min-h-2 w-px flex-1 bg-gray-200"
+                          aria-hidden
+                        />
+                      )}
+                    </div>
+                    <p
+                      className={`flex-1 text-sm leading-6 text-gray-700 ${isLast ? "pb-0" : "pb-5"}`}
+                    >
+                      {label && (
+                        <span className="font-semibold text-gray-900">{label} — </span>
+                      )}
                       {body}
                     </p>
                   </li>

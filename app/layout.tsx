@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Outfit, Lato } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
-import Header from "./shared/header";
 import Footer from "./shared/footer";
 import HeaderWrapper from "./shared/headerWrapper";
+import { NavigationProgress } from "./navigation-progress";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -44,6 +44,7 @@ export default function RootLayout({
       <body
         className={`${outfit.variable} ${lato.variable} ${nohemi.variable} antialiased`}
       >
+        <NavigationProgress />
         <HeaderWrapper />
         {children}
         <Footer />

@@ -1,7 +1,7 @@
 "use client";
 import { FilterAccordion } from "@/components/accordion";
 import { FormInput } from "@/components/Input";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useForm, FormProvider } from "react-hook-form";
 import { Search, SlidersHorizontal, X } from "lucide-react";
@@ -11,79 +11,52 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import CourseCard from "@/components/course-card";
 import Link from "next/link";
+import type { CourseCardData } from "@/lib/course-categories";
 
-const CATEGORY_CONFIG = {
+export interface GroupedCategory {
+  value: string;
+  label: string;
+  courses: CourseCardData[];
+  courseType?: string;
+}
+
+const CATEGORY_CONFIG: Record<string, { sidebarText: string }> = {
   electrical: {
-    courseCount: "75",
-    filterCategories: [
-      { label: "Course Packages", value: "course-packages" },
-      { label: "PAT Testing", value: "pat-testing" },
-      { label: "Electrical Vehicle Charging", value: "ev-charging" },
-      { label: "18th Edition Courses", value: "18th-edition" },
-      { label: "Extra Experience", value: "extra-experience" },
-      { label: "Inspection and Testing", value: "inspection-testing" },
-      { label: "Part P", value: "part-p" },
-      { label: "Online Courses", value: "online-courses" },
-    ],
-    carousels: [
-      { title: "Course Packages", count: "24 courses" },
-      { title: "PAT Testing", count: "24 courses" },
-      { title: "Electrical Vehicle Charging", count: "24 courses" },
-    ],
     sidebarText:
       "We have a wide range of electrician courses aimed at different levels, whether you're looking to start a career as an electrician hoping to enter the industry or already work as a qualified electrician who is looking to extend their services or knowledge, we will have an electricians course for you. Being able to provide practical electrical training to both experienced electricians as well as new starters means we are able to offer unbiased advice on what is the correct training for your individual circumstances. Our courses are designed to be as practical as they can be, we believe this is the best way to learn! Our courses are all taught by knowledgeable, experienced industry experts. We have training centres across the UK, all of which are kitted out with state-of-the-art equipment for candidates to practice and work with – these are just some reasons we have high pass rates for our electrical training courses.",
   },
   "aircon-refrigeration": {
-    courseCount: "45",
-    filterCategories: [
-      { label: "Course Packages", value: "course-packages" },
-      { label: "F Gas", value: "f-gas" },
-      { label: "Hydrocarbon", value: "hydrocarbon" },
-      { label: "Pipework & Brazing", value: "pipework-brazing" },
-      { label: "Total Air Conditioning", value: "total-aircon" },
-    ],
-    carousels: [
-      { title: "Course Packages", count: "12 courses" },
-      { title: "F Gas Regulations", count: "8 courses" },
-      { title: "Total Air Conditioning & Refrigeration", count: "10 courses" },
-    ],
     sidebarText:
       "Our air conditioning and refrigeration courses cover everything from F-Gas certification to comprehensive total air conditioning packages. Whether you're new to the industry or an experienced technician looking to upskill, we offer hands-on training with state-of-the-art equipment. Our courses are designed to provide practical, real-world skills that you can apply immediately in your career.",
   },
   plc: {
-    courseCount: "35",
-    filterCategories: [
-      { label: "Course Packages", value: "course-packages" },
-      { label: "SCADA", value: "scada" },
-      { label: "Manufacturer Specific", value: "manufacturer" },
-      { label: "Beginner/Intermediate/Advanced", value: "experience" },
-    ],
-    carousels: [
-      { title: "Course Packages", count: "15 courses" },
-      { title: "SCADA & Communications", count: "8 courses" },
-      { title: "Manufacturer Specific (Siemens, Allen Bradley, Mitsubishi)", count: "12 courses" },
-    ],
     sidebarText:
       "Our PLC training courses range from beginner to advanced levels, with City & Guilds and EAL accredited qualifications. Learn programmable logic controllers, SCADA systems, industrial networking, and manufacturer-specific training. Our experienced instructors provide hands-on training with industry-standard equipment to ensure you gain the practical skills needed for automation and control systems.",
   },
-} as const;
+  all: {
+    sidebarText:
+      "Browse our complete range of accredited courses across electrical, air conditioning & refrigeration, and PLC & automation. Whether you're a beginner or an experienced professional, we have training to advance your career.",
+  },
+};
 
 type CategoryType = keyof typeof CATEGORY_CONFIG;
 
 function CourseCarousel({
   title,
   count,
+  courses,
   allCoursesHref = "/courses",
 }: {
   title: string;
   count: string;
+  courses: CourseCardData[];
   allCoursesHref?: string;
 }) {
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ left: 0 });
-  }, []);
+  }, [courses]);
 
   const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;
@@ -115,53 +88,68 @@ function CourseCarousel({
             {count}
           </p>
         </div>
-        <div className="flex items-center gap-4 sm:gap-4">
-          <div className="flex items-center gap-3 sm:gap-3">
-            <button
-              type="button"
-              onClick={() => scroll("left")}
-              className="h-9 w-9 sm:h-10 sm:w-10 bg-[#9A9A9A] flex items-center justify-center rounded-full hover:bg-[#016068] active:bg-[#0E7377] transition-colors cursor-pointer shrink-0"
-            >
-              <Image src={ArrowBack} alt="Scroll left" />
-            </button>
-            <button
-              type="button"
-              onClick={() => scroll("right")}
-              className="h-9 w-9 sm:h-10 sm:w-10 bg-[#9A9A9A] flex items-center justify-center rounded-full hover:bg-[#016068] active:bg-[#0E7377] transition-colors cursor-pointer shrink-0"
-            >
-              <Image src={ArrowRight} alt="Scroll right" />
-            </button>
+        {courses.length > 0 && (
+          <div className="flex items-center gap-4 sm:gap-4">
+            <div className="flex items-center gap-3 sm:gap-3">
+              <button
+                type="button"
+                onClick={() => scroll("left")}
+                className="h-9 w-9 sm:h-10 sm:w-10 bg-[#9A9A9A] flex items-center justify-center rounded-full hover:bg-[#016068] active:bg-[#0E7377] transition-colors cursor-pointer shrink-0"
+              >
+                <Image src={ArrowBack} alt="Scroll left" />
+              </button>
+              <button
+                type="button"
+                onClick={() => scroll("right")}
+                className="h-9 w-9 sm:h-10 sm:w-10 bg-[#9A9A9A] flex items-center justify-center rounded-full hover:bg-[#016068] active:bg-[#0E7377] transition-colors cursor-pointer shrink-0"
+              >
+                <Image src={ArrowRight} alt="Scroll right" />
+              </button>
+            </div>
+            <Button asChild className="uppercase bg-[#016068] px-6 sm:px-10 h-10 sm:h-11 text-xs sm:text-sm flex-1 sm:flex-initial">
+              <Link href={allCoursesHref}>All Courses</Link>
+            </Button>
           </div>
-          <Button asChild className="uppercase bg-[#016068] px-6 sm:px-10 h-10 sm:h-11 text-xs sm:text-sm flex-1 sm:flex-initial">
-            <Link href={allCoursesHref}>All Courses</Link>
-          </Button>
+        )}
+      </div>
+
+      {courses.length > 0 ? (
+        <div
+          ref={scrollRef}
+          className="-mx-4 flex overflow-x-auto gap-4 py-4 no-scrollbar snap-x snap-mandatory overscroll-x-contain md:snap-none pl-4 pr-4 md:mx-0 md:pl-0 md:pr-0"
+          style={{ scrollPaddingLeft: "1rem", scrollPaddingRight: "1rem" }}
+        >
+          {courses.map((course) => (
+            <div
+              key={course.slug}
+              className="snap-start shrink-0 w-[max(220px,min(260px,calc(100vw-56px)))] md:w-auto md:min-w-0"
+            >
+              <CourseCard course={course} />
+            </div>
+          ))}
         </div>
-      </div>
-      <div
-        ref={scrollRef}
-        className="-mx-4 flex overflow-x-auto gap-4 py-4 no-scrollbar snap-x snap-mandatory overscroll-x-contain md:snap-none pl-4 pr-4 md:mx-0 md:pl-0 md:pr-0"
-        style={{ scrollPaddingLeft: "1rem", scrollPaddingRight: "1rem" }}
-      >
-        {[1, 2, 3, 4, 5].map((i) => (
-          <div
-            key={i}
-            className="snap-start shrink-0 w-[max(220px,min(260px,calc(100vw-56px)))] md:w-auto md:min-w-0"
-          >
-            <CourseCard />
-          </div>
-        ))}
-      </div>
+      ) : (
+        <div className="rounded-lg bg-gray-50 border border-gray-100 py-10 text-center">
+          <p className="text-gray-400 text-sm">
+            No courses available in this category yet.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
 
 function CoursesPackage({
   category = "electrical",
+  grouped = [],
+  courseTypes = [],
 }: {
   category?: CategoryType;
+  grouped?: GroupedCategory[];
+  courseTypes?: { label: string; value: string }[];
 }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const config = CATEGORY_CONFIG[category];
+  const config = CATEGORY_CONFIG[category] ?? CATEGORY_CONFIG.all;
 
   useEffect(() => {
     document.body.style.overflow = drawerOpen ? "hidden" : "";
@@ -173,6 +161,7 @@ function CoursesPackage({
       search: "",
       expertiseLevel: "",
       category: "",
+      courseType: "",
       location: "",
     },
   });
@@ -181,11 +170,72 @@ function CoursesPackage({
 
   const expertiseLevel = watch("expertiseLevel");
   const filterCategory = watch("category");
+  const filterCourseType = watch("courseType");
   const location = watch("location");
+  const searchTerm = watch("search");
+
+  const totalCourses = useMemo(
+    () => grouped.reduce((sum, g) => sum + g.courses.length, 0),
+    [grouped],
+  );
+
+  const filteredByType = useMemo(() => {
+    if (!filterCourseType) return grouped;
+    return grouped.filter((g) => g.courseType === filterCourseType);
+  }, [grouped, filterCourseType]);
+
+  const filterCategories = useMemo(
+    () => filteredByType.map((g) => ({ label: g.label, value: g.value })),
+    [filteredByType],
+  );
+
+  const visibleGroups = useMemo(() => {
+    let groups = filteredByType;
+
+    if (filterCategory) {
+      groups = groups.filter((g) => g.value === filterCategory);
+    }
+
+    if (searchTerm.trim()) {
+      const term = searchTerm.trim().toLowerCase();
+      groups = groups
+        .map((g) => ({
+          ...g,
+          courses: g.courses.filter(
+            (c) =>
+              c.title.toLowerCase().includes(term) ||
+              (c.description ?? "").toLowerCase().includes(term),
+          ),
+        }))
+        .filter((g) => g.courses.length > 0);
+    }
+
+    if (expertiseLevel) {
+      const tagLabel =
+        expertiseLevel === "beginner" ? "Beginner" : "Existing Electrician";
+      groups = groups
+        .map((g) => ({
+          ...g,
+          courses: g.courses.filter((c) =>
+            c.tags?.some((t) => t.label === tagLabel),
+          ),
+        }))
+        .filter((g) => g.courses.length > 0);
+    }
+
+    return groups;
+  }, [filteredByType, filterCategory, searchTerm, expertiseLevel]);
+
+  const showCourseTypeFilter = category === "all" && courseTypes.length > 0;
+
+  const handleCourseTypeChange = (val: string) => {
+    setValue("courseType", val);
+    setValue("category", "");
+  };
 
   const SidebarContent = (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit((data) => console.log(data))}>
+      <form onSubmit={handleSubmit(() => {})}>
         <FormInput
           name="search"
           placeholder="Search by topic"
@@ -194,7 +244,16 @@ function CoursesPackage({
           wrapperClassName="mb-6"
         />
 
-        {category === "electrical" && (
+        {showCourseTypeFilter && (
+          <FilterAccordion
+            title="Course Type"
+            options={courseTypes}
+            selectedValue={filterCourseType}
+            onChange={handleCourseTypeChange}
+          />
+        )}
+
+        {(category === "electrical" || category === "all") && (
           <FilterAccordion
             title="Expertise Level"
             options={[
@@ -207,8 +266,8 @@ function CoursesPackage({
         )}
 
         <FilterAccordion
-          title="Categories"
-          options={[...config.filterCategories]}
+          title="Subcategories"
+          options={filterCategories}
           selectedValue={filterCategory}
           onChange={(val) => setValue("category", val)}
         />
@@ -240,7 +299,7 @@ function CoursesPackage({
   );
 
   return (
-    <section className="sm:py-10 bg-white overflow-x-clip">
+    <section className="relative z-10 sm:py-10 bg-white overflow-x-clip">
       {drawerOpen &&
         createPortal(
           <>
@@ -291,21 +350,37 @@ function CoursesPackage({
           style={{ marginLeft: "max(1rem, calc((100vw - 80rem) / 2 + 1rem))" }}
         >
           <h3 className="text-black font-semibold text-xl mb-4">
-            {config.courseCount} Courses
+            {totalCourses} Courses
           </h3>
           {SidebarContent}
         </aside>
 
         <div className="flex-1 min-w-0">
-          {config.carousels.map((carousel, index) => (
-            <div key={carousel.title} className={index > 0 ? "mt-8 sm:mt-10" : ""}>
-              <CourseCarousel
-                title={carousel.title}
-                count={carousel.count}
-                allCoursesHref="/courses"
-              />
+          {visibleGroups.length > 0 ? (
+            visibleGroups.map((group, index) => (
+              <div key={group.value} className={index > 0 ? "mt-8 sm:mt-10" : ""}>
+                <CourseCarousel
+                  title={group.label}
+                  count={`${group.courses.length} course${group.courses.length === 1 ? "" : "s"}`}
+                  courses={group.courses}
+                  allCoursesHref="/courses"
+                />
+              </div>
+            ))
+          ) : (
+            <div className="rounded-lg bg-gray-50 border border-gray-100 py-16 text-center">
+              <p className="text-gray-400 text-base">
+                No courses match your filters.
+              </p>
+              <button
+                type="button"
+                onClick={() => methods.reset()}
+                className="mt-3 text-sm font-semibold text-[#016068] underline underline-offset-2 hover:text-[#014d54]"
+              >
+                Clear all filters
+              </button>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </section>

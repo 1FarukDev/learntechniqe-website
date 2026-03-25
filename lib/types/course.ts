@@ -56,6 +56,8 @@ export interface CourseHeroData {
   duration?: string
   durationNote?: string
   durationNoteLink?: string
+  /** False when no Cademy embed URL — hide Book section; hero shows Request Overview instead of Book Now */
+  bookingAvailable?: boolean
 }
 
 export interface CourseDetailsData {

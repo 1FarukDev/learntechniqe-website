@@ -126,9 +126,6 @@ export function PathwaysCalculatorSticky({
         </div>
       </div>
 
-      {/* Spacer so content isn't hidden behind sticky bar */}
-      <div className="h-16 sm:h-20" />
-
       {/* Overlay */}
       {isOpen && (
         <div
@@ -242,7 +239,7 @@ function CalculatorContent({
           Courses *
         </label>
         <p className="text-xs text-gray-500 mb-2">Select the courses to add to your package</p>
-        <div className="space-y-2 max-h-40 overflow-y-auto border rounded-lg p-2">
+        <div className="space-y-2 max-h-72 overflow-y-auto border rounded-lg p-2">
           {courses.map((c) => (
             <label
               key={c.id}

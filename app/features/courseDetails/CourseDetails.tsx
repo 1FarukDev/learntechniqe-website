@@ -41,13 +41,35 @@ function AccordionList({ topics }: AccordionListProps) {
               }`}
             >
               <div className="bg-white px-6 py-5">
-                <ul className="flex flex-col gap-5">
-                  {topic.points.map((point, j) => (
-                    <li key={j} className="flex items-start gap-4">
-                      <span className="mt-1.5 w-2.5 h-2.5 rounded-full bg-[#016068] shrink-0" />
-                      <p className="text-gray-700 text-sm leading-6">{point}</p>
-                    </li>
-                  ))}
+                <ul className="flex flex-col">
+                  {topic.points.map((point, j) => {
+                    const isFirst = j === 0;
+                    const isLast = j === topic.points.length - 1;
+                    return (
+                      <li key={j} className="flex items-stretch gap-4">
+                        <div className="flex w-4 shrink-0 flex-col items-center self-stretch">
+                          {!isFirst && (
+                            <div className="h-5 w-px shrink-0 bg-gray-200" aria-hidden />
+                          )}
+                          <span
+                            className="z-[1] mt-1.5 size-2.5 shrink-0 rounded-full bg-[#016068] ring-2 ring-white"
+                            aria-hidden
+                          />
+                          {!isLast && (
+                            <div
+                              className="min-h-2 w-px flex-1 bg-gray-200"
+                              aria-hidden
+                            />
+                          )}
+                        </div>
+                        <p
+                          className={`flex-1 text-sm leading-6 text-gray-700 ${isLast ? "pb-0" : "pb-5"}`}
+                        >
+                          {point}
+                        </p>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             </div>

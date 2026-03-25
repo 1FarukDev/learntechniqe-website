@@ -51,7 +51,7 @@ export const PATHWAYS_PAGE_QUERY = groq`
         title,
         "slug": slug.current,
         "heroImage": heroImage.asset->url,
-        description,
+        "description": description[0],
         price,
         priceIncVat,
         eligibility,

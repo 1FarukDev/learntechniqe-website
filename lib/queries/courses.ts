@@ -1,4 +1,4 @@
-import { groq } from 'next-sanity'
+import { groq } from "next-sanity";
 
 export const coursesQuery = groq`
   *[_type == "course"] | order(title asc) {
@@ -10,7 +10,19 @@ export const coursesQuery = groq`
     description,
     duration,
   }
-`
+`;
+
+export const courseCardsQuery = groq`
+  *[_type == "course"] | order(title asc) {
+    title,
+    "slug": slug.current,
+    price,
+    duration,
+    "description": description[0],
+    "heroImage": heroImage.asset->url,
+    tags[]{ label, color },
+  }
+`;
 
 export const courseBySlugQuery = groq`
   *[_type == "course" && slug.current == $slug][0] {
@@ -41,4 +53,4 @@ export const courseBySlugQuery = groq`
     cademyDirectUrl,
     dates,
   }
-`
+`;

@@ -9,6 +9,7 @@ import { usePathname } from "next/navigation";
 import { ChevronDown, X, Menu } from "lucide-react";
 import { Icon } from "@iconify/react";
 import type { HeaderData } from "@/types/header";
+import { categoryHrefFromMegaMenuTitle } from "@/lib/course-categories";
 
 const socialIconMap: Record<string, string> = {
   facebook: "mdi:facebook",
@@ -85,7 +86,13 @@ function MegaMenu({
                 className="rounded-2xl p-5 shrink-0"
               >
                 <h3 className="font-bold text-sm text-gray-900 mb-2">
-                  {col.title}
+                  <Link
+                    href={categoryHrefFromMegaMenuTitle(col.title)}
+                    onClick={onClose}
+                    className="inline-block rounded-sm text-gray-900 underline-offset-2 hover:underline hover:text-teal-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700"
+                  >
+                    {col.title}
+                  </Link>
                 </h3>
                 <p className="text-sm text-gray-600 leading-relaxed">
                   {col.description}
@@ -254,18 +261,29 @@ function MobileDrawer({
               <div className="ml-3 mt-1 flex flex-col gap-1 min-h-0 overflow-hidden">
                 {data.megaMenuColumns.map((col, colIdx) => (
                   <div key={colIdx}>
-                    <button
-                      onClick={() =>
-                        setOpenColumn((p) => (p === colIdx ? null : colIdx))
-                      }
-                      className="w-full flex items-center justify-between px-3 py-2.5 text-sm font-semibold text-gray-800 hover:text-teal-700 rounded-lg transition"
-                    >
-                      {col.title}
-                      <ChevronDown
-                        size={20}
-                        className={`transition-transform duration-200 ease-out text-gray-400 ${openColumn === colIdx ? "rotate-180" : ""}`}
-                      />
-                    </button>
+                    <div className="flex items-stretch gap-1">
+                      <Link
+                        href={categoryHrefFromMegaMenuTitle(col.title)}
+                        onClick={onClose}
+                        className="flex-1 min-w-0 px-3 py-2.5 text-sm font-semibold text-gray-800 hover:text-teal-700 rounded-lg transition"
+                      >
+                        {col.title}
+                      </Link>
+                      <button
+                        type="button"
+                        aria-expanded={openColumn === colIdx}
+                        aria-label={`${openColumn === colIdx ? "Collapse" : "Expand"} ${col.title} subcategories`}
+                        onClick={() =>
+                          setOpenColumn((p) => (p === colIdx ? null : colIdx))
+                        }
+                        className="shrink-0 px-2 py-2.5 text-gray-500 hover:text-teal-700 rounded-lg transition"
+                      >
+                        <ChevronDown
+                          size={20}
+                          className={`transition-transform duration-200 ease-out ${openColumn === colIdx ? "rotate-180" : ""}`}
+                        />
+                      </button>
+                    </div>
 
                     <div
                       className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${openColumn === colIdx ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}

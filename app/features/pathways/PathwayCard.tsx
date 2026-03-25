@@ -27,8 +27,8 @@ export function PathwayCard({ pathway }: PathwayCardProps) {
 
 
   return (
-    <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow">
-      <div className="relative w-full aspect-[16/10]">
+    <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow h-full flex flex-col">
+      <div className="relative w-full aspect-[16/10] shrink-0">
         <Image
           src={imageSrc}
           alt={pathway.title}
@@ -37,31 +37,35 @@ export function PathwayCard({ pathway }: PathwayCardProps) {
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
       </div>
-      <div className="p-6 sm:p-8">
-        <span className="inline-block px-3 py-1 bg-[#E99E20]/20 text-[#016068] text-xs font-semibold rounded-full mb-4 border border-[#E99E20]/40">
+      <div className="p-6 sm:p-8 flex flex-col flex-1 min-h-0">
+        <span className="inline-block self-start px-3 py-1 bg-[#E99E20]/20 text-[#016068] text-xs font-semibold rounded-full mb-4 border border-[#E99E20]/40 shrink-0 w-fit max-w-full">
           {pathway.badge}
         </span>
-        <h3 className="text-xl font-semibold text-gray-900 mb-3">
+        <h3 className="text-xl font-semibold text-gray-900 mb-3 shrink-0">
           {pathway.pathway.title}
         </h3>
-        <p className="text-gray-600 text-sm mb-6">{pathway.pathway.description}</p>
-        {pathway.external ? (
-          <Button
-            asChild
-            className="text-white rounded text-sm px-8 font-bold h-10 w-full bg-[#016068]"
-          >
-            <a href={pathway.href} target="_blank" rel="noopener noreferrer">
-              View Pathway
-            </a>
-          </Button>
-        ) : (
-          <Button
-            asChild
-            className="text-white rounded text-sm px-8 font-bold h-10 w-full bg-[#016068]"
-          >
-            <Link href={pathway.href}>View Pathway</Link>
-          </Button>
-        )}
+        <p className="text-gray-600 text-sm leading-6 h-24 shrink-0 line-clamp-4">
+          {pathway.pathway.description}
+        </p>
+        <div className="mt-auto pt-6 shrink-0">
+          {pathway.external ? (
+            <Button
+              asChild
+              className="text-white rounded text-sm px-8 font-bold h-10 w-full bg-[#016068]"
+            >
+              <a href={pathway.href} target="_blank" rel="noopener noreferrer">
+                View Pathway
+              </a>
+            </Button>
+          ) : (
+            <Button
+              asChild
+              className="text-white rounded text-sm px-8 font-bold h-10 w-full bg-[#016068]"
+            >
+              <Link href={pathway.href}>View Pathway</Link>
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );

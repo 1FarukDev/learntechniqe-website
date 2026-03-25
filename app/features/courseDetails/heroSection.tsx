@@ -25,6 +25,7 @@ function CourseHero({ data }: CourseHeroProps) {
     durationNote,
     durationNoteLink = "Please get in touch",
     requestOverviewLink = "#",
+    bookingAvailable = true,
   } = course;
 
   const tags = course.tags ?? [];
@@ -77,10 +78,12 @@ function CourseHero({ data }: CourseHeroProps) {
             </div>
           )}
 
-          <RequestCourseOverview
-            courseName={title}
-            courseUrl={`/courses/${slug}`}
-          />
+          {bookingAvailable && (
+            <RequestCourseOverview
+              courseName={title}
+              courseUrl={`/courses/${slug}`}
+            />
+          )}
         </div>
 
         <CourseHeroInfoCard
@@ -93,6 +96,7 @@ function CourseHero({ data }: CourseHeroProps) {
           durationNoteLink={durationNoteLink}
           requestOverviewLink={requestOverviewLink}
           onBookNow={handleBookNow}
+          bookingAvailable={bookingAvailable}
         />
       </div>
     </section>

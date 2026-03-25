@@ -23,7 +23,7 @@ function Brochure() {
   const onSubmit = async (data: FormValues) => {
     setStatus("loading");
     try {
-      const res = await fetch("/api/zapier/newsletter", {
+      const res = await fetch("/api/zapier/brochure", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...data, source: "brochure" }),
@@ -90,7 +90,7 @@ function Brochure() {
               <p className="text-sm text-red-600 font-medium">Something went wrong. Please try again.</p>
             )}
 
-            <Button type="submit" disabled={status === "loading"} className="w-full bg-[#242A3A] h-15 uppercase font-bold text-basae">
+            <Button type="submit" disabled={status === "loading"} className="w-full bg-[#242A3A] h-15 uppercase font-bold text-base">
               {status === "loading" ? "Subscribing..." : "Subscribe"}
             </Button>
           </form>

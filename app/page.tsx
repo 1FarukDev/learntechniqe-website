@@ -9,8 +9,29 @@ import Certification from "./features/homepage/certification";
 import CampaignBanner from "./features/homepage/campaignBanner";
 import Contact from "./features/homepage/contact";
 import { AnimatedSection } from "@/components/animated-section";
+import { client } from "@/lib/sanity/client";
+import { courseCardsQuery } from "@/lib/queries/courses";
+import { headerQuery } from "@/lib/queries/navigation";
+import { categoriseFromHeader } from "@/lib/course-categories";
+import type { CourseCardData } from "@/lib/course-categories";
+import type { HeaderData } from "@/types/header";
 
-export default function Home() {
+export default async function Home() {
+  const [allCourses, headerData] = await Promise.all([
+    client.fetch<CourseCardData[]>(courseCardsQuery),
+    client.fetch<HeaderData>(headerQuery),
+  ]);
+
+  const electricalGroups = categoriseFromHeader(
+    headerData.megaMenuColumns,
+    allCourses,
+    "electrical",
+  );
+
+  const coursePackages =
+    electricalGroups.find((g) =>
+      g.label.toLowerCase().includes("course package"),
+    )?.courses ?? [];
   return (
     <div className="overflow-hidden ">
       <AnimatedSection variant="fade-in" visibleOnLoad>
@@ -23,7 +44,7 @@ export default function Home() {
         <TradeCourses />
       </AnimatedSection>
       <AnimatedSection variant="fade-up">
-        <Courses />
+        <Courses courses={coursePackages} />
       </AnimatedSection>
       <AnimatedSection variant="fade-up">
         <Location />

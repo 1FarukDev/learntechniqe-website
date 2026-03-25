@@ -6,8 +6,13 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import CourseCard from "@/components/course-card";
 import Link from "next/link";
+import type { CourseCardData } from "@/lib/course-categories";
 
-const Courses: React.FC = () => {
+interface CoursesProps {
+  courses?: CourseCardData[];
+}
+
+const Courses: React.FC<CoursesProps> = ({ courses = [] }) => {
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -18,7 +23,6 @@ const Courses: React.FC = () => {
     if (!scrollRef.current) return;
 
     const { scrollLeft, clientWidth } = scrollRef.current;
-    // On mobile, scroll by one card width (min 280px, ~85vw for peek effect)
     const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
     const scrollAmount = isMobile
       ? Math.min(320, Math.floor(window.innerWidth * 0.88))
@@ -36,6 +40,8 @@ const Courses: React.FC = () => {
       });
     }
   };
+
+  if (courses.length === 0) return null;
 
   return (
     <section className="bg-[#D4D8DB99] py-10 sm:py-20 -mx-5 md:px-0 px-4">
@@ -72,12 +78,12 @@ const Courses: React.FC = () => {
           scrollPaddingRight: "1rem",
         }}
       >
-        {[1, 2, 3, 4, 5].map((i) => (
+        {courses.map((course) => (
           <div
-            key={i}
+            key={course.slug}
             className="snap-start shrink-0 w-[max(220px,min(260px,calc(100vw-56px)))] md:w-auto md:min-w-0"
           >
-            <CourseCard />
+            <CourseCard course={course} />
           </div>
         ))}
       </div>

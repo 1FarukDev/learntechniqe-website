@@ -9,6 +9,7 @@ import {
   CourseEnquiryForm,
   type CourseEnquiryFormHandle,
 } from "./CourseEnquiryForm";
+import { RequestCourseOverview } from "./RequestCourseOverview";
 import type { CourseQualification } from "@/lib/types/course";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
@@ -24,6 +25,7 @@ interface CourseHeroInfoCardProps {
   durationNoteLink?: string;
   requestOverviewLink?: string;
   onBookNow?: () => void;
+  bookingAvailable?: boolean;
 }
 
 function CourseHeroInfoCard({
@@ -36,6 +38,7 @@ function CourseHeroInfoCard({
   durationNoteLink = "Please get in touch",
   requestOverviewLink: _requestOverviewLink = "#",
   onBookNow,
+  bookingAvailable = true,
 }: CourseHeroInfoCardProps) {
   const scrollableRef = useRef<HTMLDivElement>(null);
   const enquiryFormRef = useRef<CourseEnquiryFormHandle>(null);
@@ -112,7 +115,7 @@ function CourseHeroInfoCard({
             className={
               expanded
                 ? "min-h-0"
-                : "min-h-0 max-h-[min(42vh,var(--hero-card-max))] overflow-y-auto overscroll-contain pr-1 -mr-1 [scrollbar-gutter:stable] scroll-smooth"
+                : "min-h-0 max-h-[min(28vh,var(--hero-card-max))] overflow-y-auto overscroll-contain pr-1 -mr-1 [scrollbar-gutter:stable] scroll-smooth"
             }
             style={
               {
@@ -202,13 +205,21 @@ function CourseHeroInfoCard({
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-5 shrink-0">
-        <Button
-          type="button"
-          onClick={onBookNow}
-          className="bg-[#F5A623] hover:bg-[#e09410] text-white font-outfit font-semibold uppercase tracking-widest text-xs sm:text-sm h-12 sm:h-14"
-        >
-          Book Now
-        </Button>
+        {bookingAvailable ? (
+          <Button
+            type="button"
+            onClick={onBookNow}
+            className="bg-[#F5A623] hover:bg-[#e09410] text-white font-outfit font-semibold uppercase tracking-widest text-xs sm:text-sm h-12 sm:h-14"
+          >
+            Book Now
+          </Button>
+        ) : (
+          <RequestCourseOverview
+            courseName={title}
+            courseUrl={`/courses/${slug}`}
+            triggerClassName="w-full h-12 sm:h-14 rounded-md bg-[#F5A623] hover:bg-[#e09410] text-white font-outfit font-semibold uppercase tracking-widest text-xs sm:text-sm px-4 transition-colors"
+          />
+        )}
         <CourseEnquiryForm
           ref={enquiryFormRef}
           courseName={title}

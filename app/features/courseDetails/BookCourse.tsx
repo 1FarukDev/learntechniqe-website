@@ -19,8 +19,11 @@ function BookCourse({ data }: BookCourseProps) {
     course.completionRewards ?? defaultBookCourseData.completionRewards ?? [];
   const qualifications =
     course.qualifications ?? defaultBookCourseData.qualifications ?? [];
-  const cademyEmbedUrl =
-    course.cademyEmbedUrl ?? defaultBookCourseData.cademyEmbedUrl;
+  const cademyEmbedUrl = course.cademyEmbedUrl;
+
+  if (typeof cademyEmbedUrl !== "string" || !cademyEmbedUrl.trim()) {
+    return null;
+  }
 
   return (
     <div className="bg-white" id="bookSection">
@@ -81,18 +84,12 @@ function BookCourse({ data }: BookCourseProps) {
           )}
         </div>
 
-        <div className="max-w-3xl mx-auto  overflow-hidden">
-          {cademyEmbedUrl ? (
-            <CademyBookingIframe
-              key={cademyEmbedUrl}
-              src={cademyEmbedUrl}
-              title="Course booking dates"
-            />
-          ) : (
-            <p className="text-center text-gray-500 py-10">
-              No dates currently available. Please check back soon.
-            </p>
-          )}
+        <div className="max-w-3xl mx-auto overflow-hidden">
+          <CademyBookingIframe
+            key={cademyEmbedUrl}
+            src={cademyEmbedUrl}
+            title="Course booking dates"
+          />
         </div>
       </section>
     </div>
