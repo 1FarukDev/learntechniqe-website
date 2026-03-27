@@ -88,23 +88,29 @@ function CourseDetails({ data }: CourseDetailsProps) {
   const entryRequirements = course.entryRequirements ?? []
   const syllabus = course.syllabus ?? []
 
-  const tabContent: Record<Tab, { title: string; points: string[] }[]> = {
-    goals: courseGoals,
-    entry: entryRequirements,
-    syllabus: syllabus,
-  };
+  const allTabs: { key: Tab; label: string; content: { title: string; points: string[] }[] }[] = [
+    { key: 'goals', label: 'Course Goals', content: courseGoals },
+    { key: 'entry', label: 'Entry Requirements', content: entryRequirements },
+    { key: 'syllabus', label: 'Detailed Course Syllabus', content: syllabus },
+  ]
 
-  const [activeTab, setActiveTab] = useState<Tab>("syllabus");
-  const [animating, setAnimating] = useState(false);
-  const [displayedTab, setDisplayedTab] = useState<Tab>("syllabus");
-  const tabScrollRef = useRef<HTMLDivElement>(null);
+  const tabs = allTabs.filter((t) => t.content.length > 0)
+
+  const defaultTab = tabs[0]?.key ?? 'goals'
+
+  const tabContent: Record<string, { title: string; points: string[] }[]> = {}
+  tabs.forEach((t) => { tabContent[t.key] = t.content })
+
+  const [activeTab, setActiveTab] = useState<Tab>(defaultTab)
+  const [animating, setAnimating] = useState(false)
+  const [displayedTab, setDisplayedTab] = useState<Tab>(defaultTab)
+  const tabScrollRef = useRef<HTMLDivElement>(null)
 
   const scrollTabIntoView = useCallback((el: HTMLButtonElement | null) => {
     if (!el || !tabScrollRef.current) return;
     const container = tabScrollRef.current;
     const offsetLeft = el.offsetLeft - container.offsetLeft;
-    const scrollTarget =
-      offsetLeft - (container.clientWidth / 2 - el.clientWidth / 2);
+    const scrollTarget = offsetLeft - (container.clientWidth / 2 - el.clientWidth / 2);
     container.scrollTo({ left: scrollTarget, behavior: "smooth" });
   }, []);
 
@@ -119,17 +125,16 @@ function CourseDetails({ data }: CourseDetailsProps) {
     }, 200);
   };
 
-  const tabs: { key: Tab; label: string }[] = [
-    { key: "goals", label: "Course Goals" },
-    { key: "entry", label: "Entry Requirements" },
-    { key: "syllabus", label: "Detailed Course Syllabus" },
-  ];
+  if (tabs.length === 0) return null
 
   return (
     <div className="bg-white">
       <section className="py-12 max-w-7xl mx-auto px-6">
         {/* Desktop: grid tabs */}
-        <div className="hidden sm:grid grid-cols-3 border border-gray-200 rounded-sm overflow-hidden mb-10">
+        <div
+          className={`hidden sm:grid border border-gray-200 rounded-sm overflow-hidden mb-10`}
+          style={{ gridTemplateColumns: `repeat(${tabs.length}, minmax(0, 1fr))` }}
+        >
           {tabs.map((tab) => (
             <button
               key={tab.key}
@@ -173,7 +178,7 @@ function CourseDetails({ data }: CourseDetailsProps) {
         >
           <AccordionList
             key={displayedTab}
-            topics={tabContent[displayedTab]}
+            topics={tabContent[displayedTab] ?? []}
           />
         </div>
       </section>
