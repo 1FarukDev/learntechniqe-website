@@ -13,6 +13,10 @@ import {
   defaultCourseHeroData,
   defaultPricingBannerData,
 } from "@/lib/constants/course";
+import {
+  AM2_COURSE_SLUG,
+  getAm2SanityFallback,
+} from "@/lib/constants/am2-course";
 import { getCademyDates } from "@/lib/cademy";
 import { fetchCoursecheckReviews } from "@/lib/coursecheck/fetchers";
 import { notFound } from "next/navigation";
@@ -25,12 +29,20 @@ interface CoursePageProps {
 
 export async function generateStaticParams() {
   const courses = await client.fetch(coursesQuery);
-  return courses.map((course: any) => ({ slug: course.slug }));
+  const slugs = courses.map((course: { slug: string }) => ({ slug: course.slug }));
+  if (!slugs.some((s: { slug: string }) => s.slug === AM2_COURSE_SLUG)) {
+    slugs.push({ slug: AM2_COURSE_SLUG });
+  }
+  return slugs;
 }
 
 async function CourseDetail({ params }: CoursePageProps) {
   const { slug } = await params;
-  const rawCourse = await client.fetch(courseBySlugQuery, { slug });
+  let rawCourse = await client.fetch(courseBySlugQuery, { slug });
+
+  if (!rawCourse && slug === AM2_COURSE_SLUG) {
+    rawCourse = getAm2SanityFallback();
+  }
 
   if (!rawCourse) return notFound();
 
