@@ -30,9 +30,19 @@ function toCardData(p: Pathway): CourseCardData {
     extractText(p.description) ??
     null;
 
+  /** Full app path e.g. courses/am2-assessment — used with empty hrefPrefix on CourseCard */
+  const coursePath =
+    typeof p.href === "string" && p.href.startsWith("/courses/")
+      ? p.href.slice(1)
+      : null;
+
   return {
     title: pw?.title ?? p.title ?? "Pathway",
-    slug: pw?.slug ?? p.href?.replace(/^\/pathways\//, "") ?? "#",
+    slug:
+      coursePath ??
+      pw?.slug ??
+      p.href?.replace(/^\/pathways\//, "") ??
+      "#",
     price,
     duration: pw?.duration ?? null,
     description: desc,
@@ -48,6 +58,14 @@ export function PathwayCardsGrid({ pathways }: PathwayCardsGridProps) {
         <div className="flex gap-5 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-2">
           {pathways.map((pathway) => {
             const card = toCardData(pathway);
+            const isCourseHref =
+              typeof pathway.href === "string" &&
+              pathway.href.startsWith("/courses/");
+            const hrefPrefix = pathway.external
+              ? ""
+              : isCourseHref
+                ? ""
+                : "/pathways";
             return (
               <div
                 key={card.slug}
@@ -55,7 +73,7 @@ export function PathwayCardsGrid({ pathways }: PathwayCardsGridProps) {
               >
                 <CourseCard
                   course={card}
-                  hrefPrefix={pathway.external ? "" : "/pathways"}
+                  hrefPrefix={hrefPrefix}
                 />
               </div>
             );

@@ -161,8 +161,7 @@
       "title": "AM2 Assessment",
       "badge": "Assessment",
       "description": "Achievement Measurement 2 practical assessment for electricians completing their qualification.",
-      "href": "https://learntechnique.com/electrician-courses/am2-assessment/",
-      "external": true,
+      "href": "/courses/am2-assessment",
       "eligibility": [
         "Completed NVQ or equivalent",
         "Ready for final assessment"

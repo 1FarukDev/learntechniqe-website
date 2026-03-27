@@ -99,13 +99,7 @@ function TradeCourses() {
                 variant={"secondary"}
                 className="uppercase bg-[#ECF0F0] text-black w-full h-12 sm:h-16 text-sm sm:text-base"
               >
-                <a
-                  href="https://learntechnique.com/electrician-courses/am2-assessment/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  More Information
-                </a>
+                <Link href="/courses/am2-assessment">More Information</Link>
               </Button>
             </div>
             <Image

@@ -51,6 +51,7 @@ export const courseBySlugQuery = groq`
     completionRewards,
     cademyEmbedUrl,
     cademyDirectUrl,
+    coursecheckCourseId,
     dates,
   }
 `;

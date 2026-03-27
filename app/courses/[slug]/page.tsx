@@ -2,8 +2,8 @@ import PricingBanner from "@/app/features/courseDetails/Banner";
 import BookCourse from "@/app/features/courseDetails/BookCourse";
 import CourseDetails from "@/app/features/courseDetails/CourseDetails";
 import CourseHero from "@/app/features/courseDetails/heroSection";
+import CourseReviews from "@/app/features/courseDetails/CourseReviews";
 import Contact from "@/app/features/homepage/contact";
-import Ratings from "@/app/features/homepage/ratings";
 import { AnimatedSection } from "@/components/animated-section";
 import { client } from "@/lib/sanity/client";
 import { courseBySlugQuery, coursesQuery } from "@/lib/queries/courses";
@@ -14,6 +14,7 @@ import {
   defaultPricingBannerData,
 } from "@/lib/constants/course";
 import { getCademyDates } from "@/lib/cademy";
+import { fetchCoursecheckReviews } from "@/lib/coursecheck/fetchers";
 import { notFound } from "next/navigation";
 import React from "react";
 import Session from "../sections/session";
@@ -41,10 +42,17 @@ async function CourseDetail({ params }: CoursePageProps) {
   const cademyDates =
     bookingAvailable && rawCourse?.cademyDirectUrl
       ? await getCademyDates(
-          cademyEmbedFromCms,
-          rawCourse.cademyDirectUrl,
-        )
+        cademyEmbedFromCms,
+        rawCourse.cademyDirectUrl,
+      )
       : [];
+
+  const coursecheckCourseId = rawCourse?.coursecheckCourseId || 4368;
+  const companyId = 188;
+  const { reviews: coursecheckReviews } = await fetchCoursecheckReviews({
+    companyId,
+    courseId: coursecheckCourseId,
+  });
 
   const heroData = {
     ...defaultCourseHeroData,
@@ -103,7 +111,11 @@ async function CourseDetail({ params }: CoursePageProps) {
         </AnimatedSection>
       )}
       <AnimatedSection variant="fade-up">
-        <Ratings />
+        <CourseReviews
+          reviews={coursecheckReviews}
+          companyId={companyId}
+          courseId={coursecheckCourseId}
+        />
       </AnimatedSection>
       {/* <AnimatedSection variant="fade-up">
         <Session />

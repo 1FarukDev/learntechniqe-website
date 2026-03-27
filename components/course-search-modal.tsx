@@ -16,7 +16,7 @@ import Link from "next/link";
 const POPULAR_COURSES = [
   { name: "Total Electrical 20", href: "#", category: "Electrical" },
   { name: "Air-con and Refrigeration", href: "#", category: "HVAC" },
-  { name: "AM2 Assessment", href: "#", category: "Assessment" },
+  { name: "AM2 Assessment", href: "/courses/am2-assessment", category: "Assessment" },
   { name: "PLC Training", href: "#", category: "Industrial" },
   { name: "Electrical Installation", href: "#", category: "Electrical" },
 ];
