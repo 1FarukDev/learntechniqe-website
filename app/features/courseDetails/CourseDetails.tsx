@@ -46,13 +46,13 @@ function AccordionList({ topics }: AccordionListProps) {
                     const isFirst = j === 0;
                     const isLast = j === topic.points.length - 1;
                     return (
-                      <li key={j} className="flex items-stretch gap-4">
+                      <li key={j} className="flex items-start gap-4">
                         <div className="flex w-4 shrink-0 flex-col items-center self-stretch">
                           {!isFirst && (
-                            <div className="h-5 w-px shrink-0 bg-gray-200" aria-hidden />
+                            <div className="h-[3px] w-px shrink-0 bg-gray-200" aria-hidden />
                           )}
                           <span
-                            className="z-[1] mt-1.5 size-2.5 shrink-0 rounded-full bg-[#016068] ring-2 ring-white"
+                            className="z-[1] mt-[3px] size-2.5 shrink-0 rounded-full bg-[#016068] ring-2 ring-white"
                             aria-hidden
                           />
                           {!isLast && (
@@ -87,27 +87,26 @@ interface CourseDetailsProps {
 function CourseDetails({ data }: CourseDetailsProps) {
   const course = data ?? defaultCourseDetailsData;
 
-  const courseGoals = course.courseGoals ?? []
-  const entryRequirements = course.entryRequirements ?? []
-  const syllabus = course.syllabus ?? []
+  const courseGoals = course.courseGoals ?? [];
+  const entryRequirements = course.entryRequirements ?? [];
+  const syllabus = course.syllabus ?? [];
 
   const allTabs: { key: Tab; label: string; content: { title: string; points: string[] }[] }[] = [
-    { key: 'goals', label: 'Course Goals', content: courseGoals },
-    { key: 'entry', label: 'Entry Requirements', content: entryRequirements },
-    { key: 'syllabus', label: 'Detailed Course Syllabus', content: syllabus },
-  ]
+    { key: "goals", label: "Course Goals", content: courseGoals },
+    { key: "entry", label: "Entry Requirements", content: entryRequirements },
+    { key: "syllabus", label: "Detailed Course Syllabus", content: syllabus },
+  ];
 
-  const tabs = allTabs.filter((t) => t.content.length > 0)
+  const tabs = allTabs.filter((t) => t.content.length > 0);
+  const defaultTab = tabs[0]?.key ?? "goals";
 
-  const defaultTab = tabs[0]?.key ?? 'goals'
+  const tabContent: Record<string, { title: string; points: string[] }[]> = {};
+  tabs.forEach((t) => { tabContent[t.key] = t.content; });
 
-  const tabContent: Record<string, { title: string; points: string[] }[]> = {}
-  tabs.forEach((t) => { tabContent[t.key] = t.content })
-
-  const [activeTab, setActiveTab] = useState<Tab>(defaultTab)
-  const [animating, setAnimating] = useState(false)
-  const [displayedTab, setDisplayedTab] = useState<Tab>(defaultTab)
-  const tabScrollRef = useRef<HTMLDivElement>(null)
+  const [activeTab, setActiveTab] = useState<Tab>(defaultTab);
+  const [animating, setAnimating] = useState(false);
+  const [displayedTab, setDisplayedTab] = useState<Tab>(defaultTab);
+  const tabScrollRef = useRef<HTMLDivElement>(null);
 
   const scrollTabIntoView = useCallback((el: HTMLButtonElement | null) => {
     if (!el || !tabScrollRef.current) return;
@@ -128,14 +127,14 @@ function CourseDetails({ data }: CourseDetailsProps) {
     }, 200);
   };
 
-  if (tabs.length === 0) return null
+  if (tabs.length === 0) return null;
 
   return (
     <div className="bg-white">
       <section className="py-12 max-w-7xl mx-auto px-6">
         {/* Desktop: grid tabs */}
         <div
-          className={`hidden sm:grid border border-gray-200 rounded-sm overflow-hidden mb-10`}
+          className="hidden sm:grid border border-gray-200 rounded-sm overflow-hidden mb-10"
           style={{ gridTemplateColumns: `repeat(${tabs.length}, minmax(0, 1fr))` }}
         >
           {tabs.map((tab) => (
