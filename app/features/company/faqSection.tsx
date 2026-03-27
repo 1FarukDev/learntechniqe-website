@@ -318,20 +318,17 @@ function FAQRow({
                 const isFirst = i === 0;
                 const isLast = i === arr.length - 1;
                 return (
-                  <li key={i} className="flex items-stretch gap-4">
-                    <div className="flex w-4 shrink-0 flex-col items-center self-stretch">
-                      {!isFirst && (
-                        <div className="h-5 w-px shrink-0 bg-gray-200" aria-hidden />
-                      )}
+                  <li key={i} className="flex gap-4">
+                    <div className="relative flex w-4 shrink-0 self-stretch items-start justify-center">
                       <span
-                        className="z-[1] mt-1.5 size-2.5 shrink-0 rounded-full bg-[#016068] ring-2 ring-white"
+                        className="mt-[7px] size-2.5 shrink-0 rounded-full bg-[#016068] ring-2 ring-white z-[1]"
                         aria-hidden
                       />
+                      {!isFirst && (
+                        <div className="absolute left-1/2 top-0 h-[7px] w-px -translate-x-1/2 bg-gray-200" aria-hidden />
+                      )}
                       {!isLast && (
-                        <div
-                          className="min-h-2 w-px flex-1 bg-gray-200"
-                          aria-hidden
-                        />
+                        <div className="absolute left-1/2 top-[17px] bottom-0 w-px -translate-x-1/2 bg-gray-200" aria-hidden />
                       )}
                     </div>
                     <p
