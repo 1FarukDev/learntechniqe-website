@@ -64,7 +64,7 @@ function MegaMenu({
         transition: "opacity 400ms ease, transform 400ms ease",
         display: "flex",
         flexDirection: "column",
-      }}
+      }} 
     >
       <div
         className={`mx-auto px-4 md:px-8 py-8 w-full flex flex-col flex-1 min-h-0 transition-all duration-500 ease-in-out ${scrolled ? "max-w-7xl" : "max-w-screen-2xl"
