@@ -63,7 +63,7 @@ function MegaMenu({
         transform: visible ? "translateY(0)" : "translateY(-12px)",
         transition: "opacity 400ms ease, transform 400ms ease",
         display: "flex",
-        flexDirection: "column",  
+        flexDirection: "column",     
       }} 
     >
       <div
