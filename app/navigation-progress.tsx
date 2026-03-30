@@ -5,7 +5,7 @@ import NextTopLoader from "nextjs-toploader";
 export function NavigationProgress() {
   return (
     <NextTopLoader
-      color="#00636B"
+      color="#E99D21"
       height={2}
       showSpinner={false}
       shadow="none"

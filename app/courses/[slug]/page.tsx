@@ -117,11 +117,9 @@ async function CourseDetail({ params }: CoursePageProps) {
       <AnimatedSection variant="fade-up">
         <CourseDetails data={detailsData} />
       </AnimatedSection>
-      {bookingAvailable && (
-        <AnimatedSection variant="fade-up">
-          <BookCourse data={bookData} />
-        </AnimatedSection>
-      )}
+      <AnimatedSection variant="fade-up">
+        <BookCourse data={bookData} courseUrl={`/courses/${slug}`} />
+      </AnimatedSection>
       <AnimatedSection variant="fade-up">
         <CourseReviews
           reviews={coursecheckReviews}

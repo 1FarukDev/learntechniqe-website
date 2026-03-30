@@ -11,31 +11,16 @@ import Contact from "./features/homepage/contact";
 import { AnimatedSection } from "@/components/animated-section";
 import { client } from "@/lib/sanity/client";
 import { courseCardsQuery } from "@/lib/queries/courses";
-import { headerQuery } from "@/lib/queries/navigation";
-import { categoriseFromHeader } from "@/lib/course-categories";
 import type { CourseCardData } from "@/lib/course-categories";
-import type { HeaderData } from "@/types/header";
+import { pickPopularCourses } from "@/lib/constants/popular-courses";
 
 export default async function Home() {
-  const [allCourses, headerData] = await Promise.all([
-    client.fetch<CourseCardData[]>(courseCardsQuery),
-    client.fetch<HeaderData>(headerQuery),
-  ]);
-
-  const electricalGroups = categoriseFromHeader(
-    headerData.megaMenuColumns,
-    allCourses,
-    "electrical",
-  );
-
-  const coursePackages =
-    electricalGroups.find((g) =>
-      g.label.toLowerCase().includes("course package"),
-    )?.courses ?? [];
+  const allCourses = await client.fetch<CourseCardData[]>(courseCardsQuery);
+  const popularCourses = pickPopularCourses(allCourses);
   return (
     <div className="overflow-hidden ">
       <AnimatedSection variant="fade-in" visibleOnLoad>
-        <Hero />
+        <Hero courses={allCourses} />
       </AnimatedSection>
       <AnimatedSection variant="fade-up">
         <Stages />
@@ -44,7 +29,7 @@ export default async function Home() {
         <TradeCourses />
       </AnimatedSection>
       <AnimatedSection variant="fade-up">
-        <Courses courses={coursePackages} />
+        <Courses courses={popularCourses} />
       </AnimatedSection>
       <AnimatedSection variant="fade-up">
         <Location />

@@ -1,15 +1,153 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { BookCourseData } from "@/lib/types/course";
 import { defaultBookCourseData } from "@/lib/constants/course";
 import { CademyBookingIframe } from "./CademyBookingIframe";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 interface BookCourseProps {
   data?: BookCourseData | null;
+  courseUrl?: string;
 }
 
-function BookCourse({ data }: BookCourseProps) {
+const emptyForm = {
+  first_name: "",
+  last_name: "",
+  number: "",
+  email: "",
+};
+
+function RequestOverviewInlineForm({
+  courseName,
+  courseUrl,
+}: {
+  courseName: string;
+  courseUrl: string;
+}) {
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [formData, setFormData] = useState(emptyForm);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/zapier/course-overview", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          first_name: formData.first_name,
+          last_name: formData.last_name,
+          number: formData.number,
+          email: formData.email,
+          course_name: courseName,
+          course_url: courseUrl,
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || "Failed");
+      setStatus("success");
+      setFormData(emptyForm);
+    } catch {
+      setStatus("error");
+    }
+  };
+
+  return (
+    <div className="max-w-xl mx-auto bg-gray-50 border border-gray-200 rounded-2xl p-6 sm:p-8">
+      <h3 className="font-outfit font-bold text-xl sm:text-2xl text-black mb-2">
+        Request Course Overview
+      </h3>
+      <p className="text-gray-500 text-sm mb-6">
+        Enter your details and we&apos;ll send you a full overview of{" "}
+        <span className="font-semibold text-gray-700">{courseName}</span>.
+      </p>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label htmlFor="inline-overview-first" className="block text-sm font-semibold text-gray-700 mb-1">
+              First Name <span className="text-red-500">*</span>
+            </label>
+            <Input
+              id="inline-overview-first"
+              type="text"
+              placeholder="Enter your first name"
+              value={formData.first_name}
+              onChange={(e) => setFormData((p) => ({ ...p, first_name: e.target.value }))}
+              required
+              className="bg-white h-12"
+            />
+          </div>
+          <div>
+            <label htmlFor="inline-overview-last" className="block text-sm font-semibold text-gray-700 mb-1">
+              Last Name <span className="text-red-500">*</span>
+            </label>
+            <Input
+              id="inline-overview-last"
+              type="text"
+              placeholder="Enter your last name"
+              value={formData.last_name}
+              onChange={(e) => setFormData((p) => ({ ...p, last_name: e.target.value }))}
+              required
+              className="bg-white h-12"
+            />
+          </div>
+        </div>
+        <div>
+          <label htmlFor="inline-overview-phone" className="block text-sm font-semibold text-gray-700 mb-1">
+            Phone Number <span className="text-red-500">*</span>
+          </label>
+          <Input
+            id="inline-overview-phone"
+            type="tel"
+            placeholder="Enter your phone number"
+            value={formData.number}
+            onChange={(e) => setFormData((p) => ({ ...p, number: e.target.value }))}
+            required
+            className="bg-white h-12"
+          />
+        </div>
+        <div>
+          <label htmlFor="inline-overview-email" className="block text-sm font-semibold text-gray-700 mb-1">
+            Email Address <span className="text-red-500">*</span>
+          </label>
+          <Input
+            id="inline-overview-email"
+            type="email"
+            placeholder="Enter your email"
+            value={formData.email}
+            onChange={(e) => setFormData((p) => ({ ...p, email: e.target.value }))}
+            required
+            className="bg-white h-12"
+          />
+        </div>
+
+        {status === "success" && (
+          <p className="text-sm text-green-600 font-medium">
+            Thank you! We&apos;ll send the overview to your email soon.
+          </p>
+        )}
+        {status === "error" && (
+          <p className="text-sm text-red-600 font-medium">
+            Something went wrong. Please try again.
+          </p>
+        )}
+
+        <Button
+          type="submit"
+          disabled={status === "loading"}
+          className="w-full h-12 uppercase bg-[#016068] hover:bg-[#014d54] text-white font-semibold"
+        >
+          {status === "loading" ? "Sending..." : "Request Overview"}
+        </Button>
+      </form>
+    </div>
+  );
+}
+
+function BookCourse({ data, courseUrl = "" }: BookCourseProps) {
   const course = data ?? defaultBookCourseData;
 
   const title = course.title ?? defaultBookCourseData.title;
@@ -21,15 +159,14 @@ function BookCourse({ data }: BookCourseProps) {
     course.qualifications ?? defaultBookCourseData.qualifications ?? [];
   const cademyEmbedUrl = course.cademyEmbedUrl;
 
-  if (typeof cademyEmbedUrl !== "string" || !cademyEmbedUrl.trim()) {
-    return null;
-  }
+  const hasBooking =
+    typeof cademyEmbedUrl === "string" && cademyEmbedUrl.trim().length > 0;
 
   return (
     <div className="bg-white" id="bookSection">
       <section className="py-8 sm:py-12 max-w-7xl mx-auto px-4 sm:px-6">
         <h2 className="font-outfit font-bold text-3xl sm:text-4xl text-black mb-6 sm:mb-8">
-          Book Course
+          {hasBooking ? "Book Course" : "Get Course Details"}
         </h2>
 
         <div className="flex flex-col md:flex-row gap-6 md:gap-15 mb-8 sm:mb-10">
@@ -84,13 +221,20 @@ function BookCourse({ data }: BookCourseProps) {
           )}
         </div>
 
-        <div className="max-w-3xl mx-auto overflow-hidden">
-          <CademyBookingIframe
-            key={cademyEmbedUrl}
-            src={cademyEmbedUrl}
-            title="Course booking dates"
+        {hasBooking ? (
+          <div className="max-w-3xl mx-auto overflow-hidden">
+            <CademyBookingIframe
+              key={cademyEmbedUrl}
+              src={cademyEmbedUrl!}
+              title="Course booking dates"
+            />
+          </div>
+        ) : (
+          <RequestOverviewInlineForm
+            courseName={title}
+            courseUrl={courseUrl}
           />
-        </div>
+        )}
       </section>
     </div>
   );

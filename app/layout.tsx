@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import { Outfit, Lato } from "next/font/google";
 import localFont from "next/font/local";
+import Script from "next/script";
 import "./globals.css";
 import Footer from "./shared/footer";
 import HeaderWrapper from "./shared/headerWrapper";
 import { NavigationProgress } from "./navigation-progress";
+
+const ZOHO_SALESIQ_WIDGET_SRC =
+  "https://salesiq.zohopublic.com/widget?wc=siq96d6ea5797968c1914bee7c1f951d031af7aceac7e0c1795b0fc07b69ef5655a";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -48,6 +52,14 @@ export default function RootLayout({
         <HeaderWrapper />
         {children}
         <Footer />
+        <Script id="zoho-salesiq-init" strategy="afterInteractive">
+          {`window.$zoho=window.$zoho || {};$zoho.salesiq=$zoho.salesiq||{ready:function(){}}`}
+        </Script>
+        <Script
+          id="zsiqscript"
+          src={ZOHO_SALESIQ_WIDGET_SRC}
+          strategy="lazyOnload"
+        />
       </body>
     </html>
   );

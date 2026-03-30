@@ -9,7 +9,7 @@ import ArrowBack from "@/app/assets/svg/arrow-back.svg";
 import type { CoursecheckReview } from "@/lib/coursecheck/types";
 import { Star } from "lucide-react";
 
-const CARDS_PER_VIEW = 4;
+const CARDS_PER_VIEW = 3;
 
 function formatDate(iso: string): string {
   try {
@@ -28,11 +28,10 @@ function StarRating({ rating }: { rating: number }) {
       {Array.from({ length: 5 }).map((_, i) => (
         <Star
           key={i}
-          className={`w-4 h-4 ${
-            i < rating
-              ? "fill-yellow-400 text-yellow-400"
-              : "fill-gray-300 text-gray-300"
-          }`}
+          className={`w-4 h-4 ${i < rating
+            ? "fill-yellow-400 text-yellow-400"
+            : "fill-gray-300 text-gray-300"
+            }`}
         />
       ))}
     </div>
@@ -49,7 +48,7 @@ function ReviewCard({ review }: { review: CoursecheckReview }) {
     .slice(0, 2);
 
   return (
-    <div className="bg-[#2E364B] p-5 md:p-6 rounded-lg flex flex-col text-white h-full min-h-[200px]">
+    <div className="bg-[#2E364B] p-5 md:p-6 rounded-lg flex flex-col text-white h-full w-full min-h-[200px] min-w-0">
       <div className="flex items-center gap-3 mb-4">
         <div className="w-10 h-10 rounded-full bg-[#016068] flex items-center justify-center text-sm font-semibold shrink-0">
           {initials}
@@ -124,22 +123,20 @@ export default function CourseReviews({
           <div className="flex items-center gap-3 sm:gap-5">
             <div
               onClick={totalPages > 1 ? goPrev : undefined}
-              className={`h-9 w-9 sm:h-10 sm:w-10 flex items-center justify-center rounded-full shrink-0 transition-colors ${
-                totalPages > 1
-                  ? "bg-[#9A9A9A] hover:bg-[#016068] active:bg-[#0E7377] cursor-pointer"
-                  : "bg-[#9A9A9A] opacity-50 cursor-not-allowed"
-              }`}
+              className={`h-9 w-9 sm:h-10 sm:w-10 flex items-center justify-center rounded-full shrink-0 transition-colors ${totalPages > 1
+                ? "bg-[#9A9A9A] hover:bg-[#016068] active:bg-[#0E7377] cursor-pointer"
+                : "bg-[#9A9A9A] opacity-50 cursor-not-allowed"
+                }`}
               aria-label="Previous reviews"
             >
               <Image src={ArrowBack} alt="Previous" />
             </div>
             <div
               onClick={totalPages > 1 ? goNext : undefined}
-              className={`h-9 w-9 sm:h-10 sm:w-10 flex items-center justify-center rounded-full shrink-0 transition-colors ${
-                totalPages > 1
-                  ? "bg-[#9A9A9A] hover:bg-[#016068] active:bg-[#0E7377] cursor-pointer"
-                  : "bg-[#9A9A9A] opacity-50 cursor-not-allowed"
-              }`}
+              className={`h-9 w-9 sm:h-10 sm:w-10 flex items-center justify-center rounded-full shrink-0 transition-colors ${totalPages > 1
+                ? "bg-[#9A9A9A] hover:bg-[#016068] active:bg-[#0E7377] cursor-pointer"
+                : "bg-[#9A9A9A] opacity-50 cursor-not-allowed"
+                }`}
               aria-label="Next reviews"
             >
               <Image src={ArrowRight} alt="Next" />
@@ -157,19 +154,17 @@ export default function CourseReviews({
       </div>
 
       <div
-        className={`grid md:grid-cols-5 gap-4 sm:gap-6 px-0 mt-6 sm:mt-10 transition-opacity duration-300 ease-in-out ${
-          isTransitioning ? "opacity-0" : "opacity-100"
-        }`}
+        className={`grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 px-0 mt-6 sm:mt-10 transition-opacity duration-300 ease-in-out ${isTransitioning ? "opacity-0" : "opacity-100"
+          }`}
       >
-        {visibleReviews.map((review, i) => {
-          const span =
-            i === 0 || i === 3 ? "md:col-span-3" : "md:col-span-2";
-          return (
-            <div key={`${review.name}-${review.date}-${i}`} className={span}>
-              <ReviewCard review={review} />
-            </div>
-          );
-        })}
+        {visibleReviews.map((review, i) => (
+          <div
+            key={`${startIndex}-${i}-${review.name}-${review.date}`}
+            className="min-w-0 flex h-full"
+          >
+            <ReviewCard review={review} />
+          </div>
+        ))}
       </div>
 
       {totalPages > 1 && (

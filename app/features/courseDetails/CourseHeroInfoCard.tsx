@@ -9,7 +9,6 @@ import {
   CourseEnquiryForm,
   type CourseEnquiryFormHandle,
 } from "./CourseEnquiryForm";
-import { RequestCourseOverview } from "./RequestCourseOverview";
 import type { CourseQualification } from "@/lib/types/course";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
@@ -205,21 +204,13 @@ function CourseHeroInfoCard({
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-5 shrink-0">
-        {bookingAvailable ? (
-          <Button
-            type="button"
-            onClick={onBookNow}
-            className="bg-[#F5A623] hover:bg-[#e09410] text-white font-outfit font-semibold uppercase tracking-widest text-xs sm:text-sm h-12 sm:h-14"
-          >
-            Book Now
-          </Button>
-        ) : (
-          <RequestCourseOverview
-            courseName={title}
-            courseUrl={`/courses/${slug}`}
-            triggerClassName="w-full h-12 sm:h-14 rounded-md bg-[#F5A623] hover:bg-[#e09410] text-white font-outfit font-semibold uppercase tracking-widest text-xs sm:text-sm px-4 transition-colors"
-          />
-        )}
+        <Button
+          type="button"
+          onClick={onBookNow}
+          className="bg-[#F5A623] hover:bg-[#e09410] text-white font-outfit font-semibold uppercase tracking-widest text-xs sm:text-sm h-12 sm:h-14"
+        >
+          {bookingAvailable ? "Book Now" : "Request Course Overview"}
+        </Button>
         <CourseEnquiryForm
           ref={enquiryFormRef}
           courseName={title}
