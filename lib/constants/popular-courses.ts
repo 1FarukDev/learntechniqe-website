@@ -5,11 +5,10 @@ import { am2HeroData } from "@/content/am2-assessment-course";
  * Homepage "Most popular" order. Each slot matches the first Sanity course
  * whose slug contains one of the patterns (case-insensitive), in pattern order.
  *
- * Codes: 2391-52, TACR10, PLC10, 2365, AM2 — with slug fallbacks where CMS
- * slugs use full names (e.g. total-air-conditioning, plc-total-industrial).
+ * Slot 1: City & Guilds 2391-52 (exact CMS slug). Then TACR10, PLC10, 2365, AM2.
  */
 const POPULAR_SLOTS: (string | string[])[] = [
-  "2391-52",
+  "initial-periodic-inspection-testing-of-electrical-installation-city-guilds-2391-52",
   ["tacr10", "total-air-conditioning"],
   ["plc10", "plc-total-industrial"],
   "2365",
