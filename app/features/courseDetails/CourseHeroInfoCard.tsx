@@ -141,8 +141,8 @@ function CourseHeroInfoCard({
                           q.accreditedBy ||
                           "Accreditation"
                         }
-                        width={60}
-                        height={40}
+                        width={(q.accreditationLogoAlt === 'EAL logo') ? 150 : 60}
+                        height={(q.accreditationLogoAlt === 'EAL logo') ? 80 : 40}
                       />
                     </div>
                   )}
