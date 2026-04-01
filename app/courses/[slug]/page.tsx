@@ -29,7 +29,9 @@ interface CoursePageProps {
 
 export async function generateStaticParams() {
   const courses = await client.fetch(coursesQuery);
-  const slugs = courses.map((course: { slug: string }) => ({ slug: course.slug }));
+  const slugs = courses.map((course: { slug: string }) => ({
+    slug: course.slug,
+  }));
   if (!slugs.some((s: { slug: string }) => s.slug === AM2_COURSE_SLUG)) {
     slugs.push({ slug: AM2_COURSE_SLUG });
   }
@@ -39,7 +41,7 @@ export async function generateStaticParams() {
 async function CourseDetail({ params }: CoursePageProps) {
   const { slug } = await params;
   let rawCourse = await client.fetch(courseBySlugQuery, { slug });
-
+  console.log("Fetched course data:", rawCourse);
   if (!rawCourse && slug === AM2_COURSE_SLUG) {
     rawCourse = getAm2SanityFallback();
   }
@@ -53,13 +55,10 @@ async function CourseDetail({ params }: CoursePageProps) {
 
   const cademyDates =
     bookingAvailable && rawCourse?.cademyDirectUrl
-      ? await getCademyDates(
-        cademyEmbedFromCms,
-        rawCourse.cademyDirectUrl,
-      )
+      ? await getCademyDates(cademyEmbedFromCms, rawCourse.cademyDirectUrl)
       : [];
 
-  const coursecheckCourseId = rawCourse?.coursecheckCourseId || 4368;
+  const coursecheckCourseId = rawCourse?.courseReviewId || 4368;
   const companyId = 188;
   const { reviews: coursecheckReviews } = await fetchCoursecheckReviews({
     companyId,
