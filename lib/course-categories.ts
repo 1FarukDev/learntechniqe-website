@@ -243,6 +243,24 @@ export function categoriseAirconCourses(
   return categoriseBySlugs(courses, AIRCON_SLUG_MARKERS, AIRCON_RULES);
 }
 
+/**
+ * Returns a category badge for any course slug, using the same slug-matching
+ * rules the rest of the categorisation logic uses. The colors are saturated
+ * versions of the mega-menu `cardColor` values so they work as tag backgrounds
+ * with white text.
+ */
+export function getCategoryTag(slug: string): { label: string; color: string } {
+  if (NON_ELECTRICAL_SLUGS.some((s) => slug.includes(s))) {
+    if (PLC_SLUG_MARKERS.some((s) => slug.includes(s))) {
+      return { label: "PLC & Automation", color: "#3B6BC7" };
+    }
+    if (AIRCON_SLUG_MARKERS.some((s) => slug.includes(s))) {
+      return { label: "Aircon & Refrigeration", color: "#E99E20" };
+    }
+  }
+  return { label: "Electrical", color: "#016068" };
+}
+
 const COLUMN_KEYWORDS: Record<string, string[]> = {
   electrical: ["electrical"],
   plc: ["plc", "programmable"],

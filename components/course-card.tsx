@@ -5,6 +5,7 @@ import CardImage from "@/app/assets/png/cardimage.png";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import type { CourseCardData } from "@/lib/course-categories";
+import { getCategoryTag } from "@/lib/course-categories";
 
 interface CourseCardProps {
   course?: CourseCardData;
@@ -20,6 +21,7 @@ function CourseCard({ course, hrefPrefix = "/courses" }: CourseCardProps) {
   const heroImage = course?.heroImage;
   const tags = course?.tags ?? [];
 
+  const categoryTag = getCategoryTag(slug);
   const firstTag = tags[0];
 
   return (
@@ -36,14 +38,19 @@ function CourseCard({ course, hrefPrefix = "/courses" }: CourseCardProps) {
           sizes="300px"
           {...(heroImage ? { unoptimized: true } : {})}
         />
-        {firstTag && (
+        <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
           <span
-            className="absolute top-3 left-3 text-white text-[10px] font-semibold px-2.5 py-1 rounded-sm"
-            style={{ backgroundColor: firstTag.color }}
+            className="text-white text-[10px] font-semibold px-2.5 py-1 rounded-sm"
+            style={{ backgroundColor: categoryTag.color }}
           >
-            {firstTag.label}
+            {categoryTag.label}
           </span>
-        )}
+          {firstTag && (
+            <span className="text-[10px] font-semibold px-2.5 py-1 rounded-sm bg-white/85 backdrop-blur-sm text-gray-800 border border-white/50">
+              {firstTag.label}
+            </span>
+          )}
+        </div>
       </div>
 
       <div className="flex flex-col flex-1 px-3 sm:px-4 pb-3 sm:pb-4 pt-2">
