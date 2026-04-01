@@ -18,7 +18,7 @@ function Certification() {
   ];
 
   return (
-    <section className="bg-[#ECF0F0] overflow-x-auto -mx-5 md:px-0 px-4">
+    <section className="bg-[#FFFFFF] overflow-x-auto -mx-5 md:px-0 px-4">
       <div className="flex flex-wrap justify-center sm:justify-between items-center gap-6 sm:gap-4 max-w-7xl mx-auto py-8 sm:py-13 px-4 sm:px-6">
         {certifications.map((item, index) => (
           <div

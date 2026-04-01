@@ -335,6 +335,22 @@ body {
   animation: modal-panel-slide-bottom 0.35s cubic-bezier(0.4, 0, 1, 1) forwards;
 }
 
+/* Centered modal / video — fade + scale pop */
+@keyframes modal-panel-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-modal-panel-pop {
+  animation: modal-panel-pop 0.42s cubic-bezier(0.34, 1.35, 0.64, 1) forwards;
+}
+
 /* Sheet/Modal - slide in from bottom (mobile) or right (web) */
 [data-slot="sheet-content"][data-state="open"][data-side="bottom"] {
   animation: modal-panel-slide-bottom 0.35s cubic-bezier(0.4, 0, 1, 1) forwards;

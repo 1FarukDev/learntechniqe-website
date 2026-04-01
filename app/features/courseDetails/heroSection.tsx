@@ -78,21 +78,11 @@ function CourseHero({ data }: CourseHeroProps) {
             </div>
           )}
 
-          {bookingAvailable ? (
+          {bookingAvailable && (
             <RequestCourseOverview
               courseName={title}
               courseUrl={`/courses/${slug}`}
             />
-          ) : (
-            <button
-              type="button"
-              onClick={() => {
-                document.getElementById("bookSection")?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="inline-block mt-6 sm:mt-8 text-[#4DD9AC] font-semibold text-sm underline underline-offset-4 hover:text-white transition-colors text-left"
-            >
-              Request Course Overview
-            </button>
           )}
         </div>
 

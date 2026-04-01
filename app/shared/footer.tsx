@@ -1,5 +1,6 @@
 import React from "react";
 import FooterLogo from "@/app/assets/png/logo-white.png";
+import PaymentMethodsImg from "@/app/assets/png/payment-methods.png";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -105,22 +106,26 @@ function Footer() {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 md:px-10 py-4 sm:py-6 flex flex-col md:flex-row items-center font-semibold justify-center md:justify-start gap-4">
-          <p className="text-white text-xs sm:text-sm text-center md:text-left">
-            2026 Technique Learning Solutions | All Rights Reserved |{" "}
-            <Link
-              href="/terms-and-conditions"
-              className="underline hover:text-white transition-colors"
-            >
-              Terms and Conditions
-            </Link>{" "}
-            |{" "}
-            <Link
-              href="#"
-              className="underline hover:text-white transition-colors"
-            >
-              Sitemap
-            </Link>
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 md:px-10 py-4 sm:py-6">
+          <p className="flex flex-wrap items-center justify-center gap-x-1.5 gap-y-1 text-white text-[11px] sm:text-xs text-center leading-relaxed max-w-4xl mx-auto text-white/90">
+            <span className="shrink-0">Copyright ©</span>
+            <Image
+              src={PaymentMethodsImg}
+              alt="Accepted payment methods: Visa, Mastercard, Apple Pay, Google Pay, Klarna, American Express"
+              width={681}
+              height={60}
+              className="h-3 w-auto max-w-[88px] sm:h-3.5 sm:max-w-[100px] object-contain object-center opacity-95 shrink-0"
+              sizes="100px"
+            />
+            <span>
+              2026 Technique Learning Solutions | All Rights Reserved |{" "}
+              <Link
+                href="/terms-and-conditions"
+                className="underline underline-offset-2 hover:text-white transition-colors font-semibold text-white"
+              >
+                Terms and Conditions
+              </Link>
+            </span>
           </p>
         </div>
       </div>

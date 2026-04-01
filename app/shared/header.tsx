@@ -262,13 +262,9 @@ function MobileDrawer({
                 {data.megaMenuColumns.map((col, colIdx) => (
                   <div key={colIdx}>
                     <div className="flex items-stretch gap-1">
-                      <Link
-                        href={categoryHrefFromMegaMenuTitle(col.title)}
-                        onClick={onClose}
-                        className="flex-1 min-w-0 px-3 py-2.5 text-sm font-semibold text-gray-800 hover:text-teal-700 rounded-lg transition"
-                      >
+                      <span className="flex-1 min-w-0 px-3 py-2.5 text-sm font-semibold text-gray-800 rounded-lg">
                         {col.title}
-                      </Link>
+                      </span>
                       <button
                         type="button"
                         aria-expanded={openColumn === colIdx}
