@@ -22,7 +22,7 @@ const FALLBACK_REVIEWS: CoursecheckReview[] = [
   },
   {
     name: "Brandon C",
-    date: "2026-03-27",
+    date: "2026-03-27", 
     rating: "5",
     comment:
       "Chris was absolutely brilliant. Explained everything clearly and made the course enjoyable from start to finish.",
