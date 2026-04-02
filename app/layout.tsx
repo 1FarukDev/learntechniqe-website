@@ -7,8 +7,6 @@ import Footer from "./shared/footer";
 import HeaderWrapper from "./shared/headerWrapper";
 import { NavigationProgress } from "./navigation-progress";
 
-const INTERCOM_APP_ID = "h5ef2sie";
-
 const outfit = Outfit({
   variable: "--font-outfit",
   subsets: ["latin"],
@@ -51,16 +49,11 @@ export default function RootLayout({
         <HeaderWrapper />
         {children}
         <Footer />
-        {/* <Script id="intercom" strategy="afterInteractive">
-          {`
-window.intercomSettings = {
-  api_base: "https://api-iam.intercom.io",
-  app_id: "${INTERCOM_APP_ID}",
-};
-(function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',w.intercomSettings);}else{var d=document;var i=function(){i.c(arguments);};i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;var l=function(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/${INTERCOM_APP_ID}';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);};if(document.readyState==='complete'){l();}else if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
-          `.trim()}
-        </Script> */}
-        <Script src="//code.tidio.co/xfa1nuadygc0qsxfrhtjddlktnyppeeu.js" async></Script>
+        <Script
+          src="https://app.fastbots.ai/embed.js"
+          strategy="afterInteractive"
+          data-bot-id="cmngr6lld06s4pa1pd85pyg8m"
+        />
       </body>
     </html>
   );

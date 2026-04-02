@@ -10,8 +10,45 @@ import type { CoursecheckReview } from "@/lib/coursecheck/types";
 import { Star } from "lucide-react";
 
 const CARDS_PER_VIEW = 5;
-/** Reviews longer than this show “Show more” + scroll when expanded. */
 const REVIEW_TRUNCATE_CHARS = 220;
+
+const FALLBACK_REVIEWS: CoursecheckReview[] = [
+  {
+    name: "Michael B",
+    date: "2026-03-27",
+    rating: "5",
+    comment:
+      "The course tutor is a consummate Gentleman and is a good tutor. Highly recommended experience overall.",
+  },
+  {
+    name: "Brandon C",
+    date: "2026-03-27",
+    rating: "5",
+    comment:
+      "Chris was absolutely brilliant. Explained everything clearly and made the course enjoyable from start to finish.",
+  },
+  {
+    name: "Will D",
+    date: "2026-03-20",
+    rating: "5",
+    comment:
+      "Kingsley was a great tutor. Very knowledgeable and good at explaining points that seemed confusing in the handouts.",
+  },
+  {
+    name: "Arnoldas M",
+    date: "2026-03-13",
+    rating: "5",
+    comment:
+      "Great course that will help me in my field of work. The practical sessions were hands-on and really valuable.",
+  },
+  {
+    name: "Jamie T",
+    date: "2026-02-28",
+    rating: "5",
+    comment:
+      "Fantastic training centre with state-of-the-art equipment. The instructors genuinely care about your progress and make sure you leave confident.",
+  },
+];
 
 function formatDate(iso: string): string {
   try {
@@ -102,8 +139,6 @@ interface CourseReviewsProps {
 }
 
 function getBentoClass(i: number): string {
-  // Row 1: cards 0,1,2 → equal thirds (col-span-2 on 6-col grid)
-  // Row 2: cards 3,4 → half each (col-span-3 on 6-col grid)
   if (i < 3) return "col-span-1 sm:col-span-2";
   return "col-span-1 sm:col-span-3";
 }
@@ -113,7 +148,10 @@ export default function CourseReviews({
   companyId = 188,
   courseId,
 }: CourseReviewsProps) {
-  const totalPages = Math.max(1, Math.ceil(reviews.length / CARDS_PER_VIEW));
+  const hasCourseReviews = reviews.length > 0;
+  const displayedReviews = hasCourseReviews ? reviews : FALLBACK_REVIEWS;
+
+  const totalPages = Math.max(1, Math.ceil(displayedReviews.length / CARDS_PER_VIEW));
   const [startIndex, setStartIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
@@ -137,20 +175,20 @@ export default function CourseReviews({
     goToPage(nextPage);
   };
 
-  const visibleReviews = reviews.slice(startIndex, startIndex + CARDS_PER_VIEW);
+  const visibleReviews = displayedReviews.slice(startIndex, startIndex + CARDS_PER_VIEW);
   const currentPage = Math.floor(startIndex / CARDS_PER_VIEW);
 
-  const coursecheckUrl = courseId
+  const coursecheckUrl = hasCourseReviews && courseId
     ? `https://www.coursecheck.com/reviews/course/${courseId}?utm_source=website`
     : `https://www.coursecheck.com/reviews/provider/${companyId}?utm_source=website`;
-
-  if (reviews.length === 0) return null;
 
   return (
     <section className="max-w-7xl mx-auto py-15 sm:py-30 md:px-0 px-4">
       <div className="mx-auto max-w-7xl flex flex-col sm:flex-row justify-between md:items-start items-center gap-4 mb-6 px-0">
         <h2 className="text-black font-semibold text-[26px] sm:text-[30px] md:text-[34px]">
-          What Our Students Say About This Course
+          {hasCourseReviews
+            ? "What Our Students Say About This Course"
+            : "What Our Students Say About Us"}
         </h2>
         <div className="flex items-center gap-3 sm:gap-6">
           <div className="flex items-center gap-3 sm:gap-5">
