@@ -36,16 +36,33 @@ function ReviewCard({
   flexClass: string;
   order: "image-first" | "text-first";
 }) {
+  const initials = review.name
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+
+  const hasImage = typeof review.image === "string" ? review.image.length > 0 : !!review.image;
+
   const imageEl = (
     <div className="relative shrink-0 w-40 sm:w-55 h-[200px] sm:h-[220px]">
-      <div className="relative w-full h-full">
-        <Image
-          src={review.image}
-          alt={review.name}
-          fill
-          className="rounded-lg object-cover"
-        />
-      </div>
+      {hasImage ? (
+        <div className="relative w-full h-full">
+          <Image
+            src={review.image!}
+            alt={review.name}
+            fill
+            className="rounded-lg object-cover"
+          />
+        </div>
+      ) : (
+        <div className="w-full h-full rounded-lg bg-gradient-to-br from-[#016068] to-[#01444a] flex items-center justify-center">
+          <span className="text-white text-4xl sm:text-5xl font-bold select-none">
+            {initials}
+          </span>
+        </div>
+      )}
       <div className="absolute bottom-4 left-0 bg-white px-4 py-2 text-black text-sm">
         <h4 className="font-semibold leading-none">{review.name}</h4>
         <p className="text-xs opacity-80">{review.age ?? ""}</p>

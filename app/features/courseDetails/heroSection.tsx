@@ -8,6 +8,7 @@ import CourseHeroInfoCard from "./CourseHeroInfoCard";
 import { CourseHeroData } from "@/lib/types/course";
 import { defaultCourseHeroData } from "@/lib/constants/course";
 import { urlFor } from "@/lib/sanity/image";
+import { getCategoryTag } from "@/lib/course-categories";
 
 interface CourseHeroProps {
   data?: CourseHeroData | null;
@@ -29,6 +30,10 @@ function CourseHero({ data }: CourseHeroProps) {
   } = course;
 
   const tags = course.tags ?? [];
+  const categoryTag = getCategoryTag(slug);
+  const expertiseTags = tags.filter(
+    (t) => !/popular/i.test((t.label ?? "").trim()),
+  );
   const description = course.description ?? [];
   const qualifications = course.qualifications ?? [];
 
@@ -52,19 +57,22 @@ function CourseHero({ data }: CourseHeroProps) {
 
       <div className="relative z-20 max-w-7xl mx-auto md:px-0 px-4 sm:px-6 py-20 sm:py-28 lg:py-35 flex flex-col lg:justify-between lg:flex-row items-start gap-8 lg:gap-12">
         <div className="w-full lg:w-[50%]  text-white">
-          {tags.length > 0 && (
-            <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-5 sm:mb-6">
-              {tags.map((tag, i) => (
-                <span
-                  key={i}
-                  className="text-white text-xs font-semibold px-4 py-1.5 rounded-sm"
-                  style={{ backgroundColor: tag.color }}
-                >
-                  {tag.label}
-                </span>
-              ))}
-            </div>
-          )}
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-5 sm:mb-6">
+            <span
+              className="text-white text-xs font-semibold px-4 py-1.5 rounded-sm"
+              style={{ backgroundColor: categoryTag.color }}
+            >
+              {categoryTag.label}
+            </span>
+            {expertiseTags.map((tag, i) => (
+              <span
+                key={i}
+                className="text-xs font-semibold px-4 py-1.5 rounded-sm bg-white/85 backdrop-blur-sm text-gray-900 border border-white/50"
+              >
+                {tag.label}
+              </span>
+            ))}
+          </div>
 
           <h1 className="font-outfit font-semibold text-3xl sm:text-4xl md:text-5xl leading-tight mb-5 sm:mb-6">
             {title}

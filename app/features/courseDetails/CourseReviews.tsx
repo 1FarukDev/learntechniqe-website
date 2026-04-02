@@ -10,6 +10,8 @@ import type { CoursecheckReview } from "@/lib/coursecheck/types";
 import { Star } from "lucide-react";
 
 const CARDS_PER_VIEW = 5;
+/** Reviews longer than this show “Show more” + scroll when expanded. */
+const REVIEW_TRUNCATE_CHARS = 220;
 
 function formatDate(iso: string): string {
   try {
@@ -28,11 +30,10 @@ function StarRating({ rating }: { rating: number }) {
       {Array.from({ length: 5 }).map((_, i) => (
         <Star
           key={i}
-          className={`w-4 h-4 ${
-            i < rating
-              ? "fill-yellow-400 text-yellow-400"
-              : "fill-gray-300 text-gray-300"
-          }`}
+          className={`w-4 h-4 ${i < rating
+            ? "fill-yellow-400 text-yellow-400"
+            : "fill-gray-300 text-gray-300"
+            }`}
         />
       ))}
     </div>
@@ -40,6 +41,7 @@ function StarRating({ rating }: { rating: number }) {
 }
 
 function ReviewCard({ review }: { review: CoursecheckReview }) {
+  const [expanded, setExpanded] = useState(false);
   const rating = parseInt(review.rating, 10) || 5;
   const initials = review.name
     .split(" ")
@@ -47,6 +49,9 @@ function ReviewCard({ review }: { review: CoursecheckReview }) {
     .join("")
     .toUpperCase()
     .slice(0, 2);
+
+  const body = review.comment.replace(/\n+/g, " ").trim();
+  const isLong = body.length > REVIEW_TRUNCATE_CHARS;
 
   return (
     <div className="bg-[#2E364B] p-5 md:p-6 rounded-lg flex flex-col text-white h-full w-full min-h-[200px] min-w-0">
@@ -63,9 +68,29 @@ function ReviewCard({ review }: { review: CoursecheckReview }) {
       </div>
       <StarRating rating={rating} />
       <hr className="border-gray-600 my-3" />
-      <p className="text-sm text-gray-300  flex-1">
-        &quot;{review.comment.replace(/\n+/g, " ").trim()}&quot;
-      </p>
+      <div className="flex flex-col flex-1 min-h-0">
+        <p
+          className={`text-sm text-gray-300 leading-relaxed ${
+            !expanded && isLong
+              ? "line-clamp-5"
+              : expanded && isLong
+                ? "max-h-48 sm:max-h-56 overflow-y-auto overscroll-y-contain pr-1 [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.35)_transparent]"
+                : ""
+          }`}
+        >
+          &quot;{body}&quot;
+        </p>
+        {isLong && (
+          <button
+            type="button"
+            onClick={() => setExpanded((v) => !v)}
+            aria-expanded={expanded}
+            className="mt-2 text-left text-xs font-semibold text-[#4DD9AC] hover:text-[#6EE4BC] underline underline-offset-2 shrink-0"
+          >
+            {expanded ? "Show less" : "Show more"}
+          </button>
+        )}
+      </div>
     </div>
   );
 }
@@ -131,22 +156,20 @@ export default function CourseReviews({
           <div className="flex items-center gap-3 sm:gap-5">
             <div
               onClick={totalPages > 1 ? goPrev : undefined}
-              className={`h-9 w-9 sm:h-10 sm:w-10 flex items-center justify-center rounded-full shrink-0 transition-colors ${
-                totalPages > 1
-                  ? "bg-[#9A9A9A] hover:bg-[#016068] active:bg-[#0E7377] cursor-pointer"
-                  : "bg-[#9A9A9A] opacity-50 cursor-not-allowed"
-              }`}
+              className={`h-9 w-9 sm:h-10 sm:w-10 flex items-center justify-center rounded-full shrink-0 transition-colors ${totalPages > 1
+                ? "bg-[#9A9A9A] hover:bg-[#016068] active:bg-[#0E7377] cursor-pointer"
+                : "bg-[#9A9A9A] opacity-50 cursor-not-allowed"
+                }`}
               aria-label="Previous reviews"
             >
               <Image src={ArrowBack} alt="Previous" />
             </div>
             <div
               onClick={totalPages > 1 ? goNext : undefined}
-              className={`h-9 w-9 sm:h-10 sm:w-10 flex items-center justify-center rounded-full shrink-0 transition-colors ${
-                totalPages > 1
-                  ? "bg-[#9A9A9A] hover:bg-[#016068] active:bg-[#0E7377] cursor-pointer"
-                  : "bg-[#9A9A9A] opacity-50 cursor-not-allowed"
-              }`}
+              className={`h-9 w-9 sm:h-10 sm:w-10 flex items-center justify-center rounded-full shrink-0 transition-colors ${totalPages > 1
+                ? "bg-[#9A9A9A] hover:bg-[#016068] active:bg-[#0E7377] cursor-pointer"
+                : "bg-[#9A9A9A] opacity-50 cursor-not-allowed"
+                }`}
               aria-label="Next reviews"
             >
               <Image src={ArrowRight} alt="Next" />
@@ -168,9 +191,8 @@ export default function CourseReviews({
       </div>
 
       <div
-        className={`grid grid-cols-1 sm:grid-cols-6 gap-4 sm:gap-6 mt-6 sm:mt-10 transition-opacity duration-300 ease-in-out ${
-          isTransitioning ? "opacity-0" : "opacity-100"
-        }`}
+        className={`grid grid-cols-1 sm:grid-cols-6 gap-4 sm:gap-6 mt-6 sm:mt-10 transition-opacity duration-300 ease-in-out ${isTransitioning ? "opacity-0" : "opacity-100"
+          }`}
       >
         {visibleReviews.map((review, i) => (
           <div

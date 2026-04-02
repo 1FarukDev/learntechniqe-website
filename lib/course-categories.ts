@@ -177,9 +177,7 @@ export function categoriseElectricalCourses(
     }
   }
 
-  const uncategorised = electricalCourses.filter(
-    (c) => !assigned.has(c.slug),
-  );
+  const uncategorised = electricalCourses.filter((c) => !assigned.has(c.slug));
   if (uncategorised.length > 0) {
     if (!grouped["extra-experience"]) grouped["extra-experience"] = [];
     grouped["extra-experience"].push(...uncategorised);

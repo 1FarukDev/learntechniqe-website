@@ -12,10 +12,7 @@ import {
 export const defaultCourseHeroData: CourseHeroData = {
   title: 'Total Industrial Electrical Maintenance 10',
   slug: 'total-industrial-electrical-maintenance-10-10-day-industrial-total-package',
-  tags: [
-    { label: 'Existing Electrician', color: '#016068' },
-    { label: 'Popular Course', color: '#F5A623' },
-  ],
+  tags: [{ label: 'Existing Electrician', color: '#016068' }],
   price: '£1,450',
   description: [
     'The Total Industrial Electrical Maintenance 10-day course (TIEM10) is a hands-on, intensive training programme offered by Technique Learning Solutions. It is designed for participants with some basic electrical understanding who wish to acquire a recognised qualification and gain the practical skills needed to work as an industrial electrician.',
