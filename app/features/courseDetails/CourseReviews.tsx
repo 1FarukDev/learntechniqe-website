@@ -19,7 +19,7 @@ function formatDate(iso: string): string {
       month: "short",
       year: "numeric",
     });
-  } catch {
+  } catch { 
     return "";
   }
 }
