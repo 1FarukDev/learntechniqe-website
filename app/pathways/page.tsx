@@ -105,8 +105,6 @@ async function getPathwaysData(): Promise<PathwaysPageData> {
 export default async function PathwaysPage() {
   const pageData: PathwaysPageData = await getPathwaysData();
 
-  console.log(pageData);
-
   const hero: Hero = pageData.hero;
   const comparison: Comparison = pageData.comparison;
   const process: Process = pageData.process;
