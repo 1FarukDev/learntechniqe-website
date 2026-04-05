@@ -157,7 +157,7 @@ export function PathwaysComparisonTable({
                   </td>
                 ))}
               </tr>
-              {pathways.some((p) => p.pathway?.paymentPlan === "Yes") && (
+              {/* {pathways.some((p) => p.pathway?.paymentPlan === "Yes") && (
                 <tr className="border-b border-gray-200 bg-gray-50">
                   <td className="p-3 md:p-4 font-semibold text-gray-700">
                     Deposit / Monthly
@@ -170,7 +170,7 @@ export function PathwaysComparisonTable({
                     </td>
                   ))}
                 </tr>
-              )}
+              )} */}
               <tr className="bg-[#016068]/5">
                 <td className="p-3 md:p-4"></td>
                 {pathways.map((p, i) => (
