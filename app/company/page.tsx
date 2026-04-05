@@ -21,7 +21,7 @@ function page() {
       <AnimatedSection variant="fade-in">
         <TutorsSection />
       </AnimatedSection>
-      <AnimatedSection variant="fade-in">
+      <AnimatedSection variant="fade-in"> 
         <StudentAccommodation />
       </AnimatedSection>
       <AnimatedSection variant="fade-in">
