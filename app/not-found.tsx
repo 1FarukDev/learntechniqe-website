@@ -28,7 +28,7 @@ export default function NotFound() {
             className="px-12 py-7 rounded-md uppercase border-2 border-[#01636B] text-[#01636B] hover:bg-[#01636B]/5"
           >
             <Link href="/courses">Browse courses</Link>
-          </Button>
+          </Button> 
         </div>
       </div>
     </div>
