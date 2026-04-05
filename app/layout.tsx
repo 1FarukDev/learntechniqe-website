@@ -7,9 +7,6 @@ import Footer from "./shared/footer";
 import HeaderWrapper from "./shared/headerWrapper";
 import { NavigationProgress } from "./navigation-progress";
 
-/** Docuyond widget loader — defers https://docuyond.com/embed.js until window load. */
-const DOCUYOND_INIT = `(function(){if(!window.docuyond || !window.__docuyond_loaded){window.docuyond=(...args)=>{if(!window.docuyond.q){window.docuyond.q=[];}window.docuyond.q.push(args);};window.docuyond=new Proxy(window.docuyond,{get(target,prop){if(prop==='q'){return target.q;}return(...args)=> target(prop,...args);},});}const config={"widgetId":"4e647207-eccd-498f-b6cd-d238d90e2a3b","logo":null};const onLoad=function(){window.__docuyond_config=config;const embedScript=document.createElement('script');embedScript.src='https://docuyond.com/embed.js';embedScript.onerror=()=>{console.error('Docuyond:Failed to load embed script');};document.body.appendChild(embedScript);};if(document.readyState==='complete'){onLoad();}else{window.addEventListener('load',onLoad);}})();`;
-
 const outfit = Outfit({
   variable: "--font-outfit",
   subsets: ["latin"],
@@ -52,9 +49,11 @@ export default function RootLayout({
         <HeaderWrapper />
         {children}
         <Footer />
-        <Script id="docuyond-init" strategy="afterInteractive">
-          {DOCUYOND_INIT}
-        </Script>
+        <Script
+          src="https://app.fastbots.ai/embed.js"
+          strategy="afterInteractive"
+          data-bot-id="cmngr6lld06s4pa1pd85pyg8m"
+        />
       </body>
     </html>
   );
