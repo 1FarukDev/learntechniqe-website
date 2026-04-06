@@ -49,11 +49,11 @@ export default function RootLayout({
         <HeaderWrapper />
         {children}
         <Footer />
-        <Script
+        {/* <Script
           src="https://app.fastbots.ai/embed.js"
           strategy="afterInteractive"
           data-bot-id="cmngr6lld06s4pa1pd85pyg8m"
-        />
+        /> */}
         {/* <Script
   id="chtl-config"
   strategy="afterInteractive"
