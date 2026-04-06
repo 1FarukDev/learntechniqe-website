@@ -8,6 +8,7 @@ import FourthImage from "@/app/assets/png/91724f879c93c0ea71a0732a9edf9f8fd2673d
 import FifthImage from "@/app/assets/png/c32f5d071246d318f77f18e8eb2891dfc0c3db1d.jpg";
 import Image from "next/image";
 import { CourseSearchModal } from "@/components/course-search-modal";
+import type { PathwayModalItem } from "@/components/course-search-modal";
 import type { CourseCardData } from "@/lib/course-categories";
 
 const allImages = [
@@ -36,9 +37,10 @@ const transforms = [
 
 interface HeroProps {
   courses?: CourseCardData[];
+  pathways?: PathwayModalItem[];
 }
 
-function Hero({ courses = [] }: HeroProps) {
+function Hero({ courses = [], pathways = [] }: HeroProps) {
   const [offset, setOffset] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
 
@@ -178,7 +180,7 @@ function Hero({ courses = [] }: HeroProps) {
         </div>
       </section>
 
-      <CourseSearchModal open={searchOpen} onOpenChange={setSearchOpen} courses={courses} />
+      <CourseSearchModal open={searchOpen} onOpenChange={setSearchOpen} courses={courses} pathways={pathways} />
     </div>
   );
 }

@@ -71,7 +71,7 @@ function ReviewCard({
   );
 
   const contentEl = (
-    <div className="bg-[#2E364B] p-3 md:p-6 rounded-lg flex flex-col justify-between text-white w-full min-h-[200px] sm:min-h-[220px]">
+    <div className="bg-[#2E364B] p-3 md:p-6 rounded-lg flex flex-col justify-between text-white flex-1 min-w-0 min-h-[200px] sm:min-h-[220px]">
       <div className="flex flex-col min-h-0">
         <div className="flex gap-2 mb-4 justify-start shrink-0">
           {Array.from({ length: review.rating }).map((_, i) => (
@@ -86,6 +86,11 @@ function ReviewCard({
         <hr className="shrink-0" />
         <h3 className="font-semibold text-base sm:text-lg my-2 shrink-0 line-clamp-1">{review.title}</h3>
         <p className="text-sm text-gray-300 line-clamp-4 flex-1 min-h-0">&quot;{review.text}&quot;</p>
+        {review.course && (
+          <p className="text-[11px] text-white/40 mt-2 shrink-0 truncate">
+            {review.course} · via CourseCheck
+          </p>
+        )}
       </div>
     </div>
   );

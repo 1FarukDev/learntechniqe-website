@@ -11,16 +11,34 @@ import Contact from "./features/homepage/contact";
 import { AnimatedSection } from "@/components/animated-section";
 import { client } from "@/lib/sanity/client";
 import { courseCardsQuery } from "@/lib/queries/courses";
+import { PATHWAYS_PAGE_QUERY } from "@/lib/queries/pathway";
 import type { CourseCardData } from "@/lib/course-categories";
 import { pickPopularCourses } from "@/lib/constants/popular-courses";
+import type { PathwayModalItem } from "@/components/course-search-modal";
 
 export default async function Home() {
-  const allCourses = await client.fetch<CourseCardData[]>(courseCardsQuery);
+  const [allCourses, pathwaysPage] = await Promise.all([
+    client.fetch<CourseCardData[]>(courseCardsQuery),
+    client.fetch(PATHWAYS_PAGE_QUERY).catch(() => null),
+  ]);
   const popularCourses = pickPopularCourses(allCourses);
+
+  const pathwayItems: PathwayModalItem[] = (pathwaysPage?.pathways ?? [])
+    .filter((p: any) => p.pathway?.slug && p.pathway?.title)
+    .map((p: any) => ({
+      title: p.pathway.title,
+      slug: p.pathway.slug,
+      heroImage: p.pathway.heroImage ?? null,
+      priceIncVat: p.pathway.priceIncVat ?? null,
+      duration: p.pathway.duration ?? null,
+      badge: p.badge ?? "",
+      href: p.href ?? `/pathways/${p.pathway.slug}`,
+    }));
+
   return (
     <div className="overflow-hidden ">
       <AnimatedSection variant="fade-in" visibleOnLoad>
-        <Hero courses={allCourses} />
+        <Hero courses={allCourses} pathways={pathwayItems} />
       </AnimatedSection>
       <AnimatedSection variant="fade-up">
         <Stages />
