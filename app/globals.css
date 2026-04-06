@@ -58,10 +58,16 @@
 }
 */
 
+html {
+  overflow-x: hidden;
+  touch-action: pan-y;
+}
+
 body {
   background: #fafafa;
-  /* color: ; */
   font-family: outfit, sans-serif;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
 }
 
 /* 

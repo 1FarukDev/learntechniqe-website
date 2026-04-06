@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import {
   Sheet,
   SheetContent,
@@ -10,14 +10,26 @@ import {
 } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, ChevronRight } from "lucide-react";
+import { Search, ChevronRight, Clock, ChevronLeft } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import type { CourseCardData } from "@/lib/course-categories";
+
+export interface PathwayModalItem {
+  title: string;
+  slug: string;
+  heroImage?: string | null;
+  priceIncVat?: string | number | null;
+  duration?: string | null;
+  badge?: string;
+  href: string;
+}
 
 interface CourseSearchModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   courses?: CourseCardData[];
+  pathways?: PathwayModalItem[];
 }
 
 function useIsMobile() {
@@ -32,10 +44,126 @@ function useIsMobile() {
   return isMobile;
 }
 
+const parsePrice = (val: string | number | undefined | null): number => {
+  if (!val) return 0;
+  if (typeof val === "number") return val;
+  return parseFloat(val.replace(/[^0-9.]/g, "")) || 0;
+};
+
+const formatPrice = (n: number) =>
+  new Intl.NumberFormat("en-GB", {
+    style: "currency",
+    currency: "GBP",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(n);
+
+function PathwayCarousel({
+  pathways,
+  onClose,
+}: {
+  pathways: PathwayModalItem[];
+  onClose: () => void;
+}) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (dir: "left" | "right") => {
+    if (!scrollRef.current) return;
+    const { scrollLeft, clientWidth } = scrollRef.current;
+    scrollRef.current.scrollTo({
+      left:
+        dir === "left"
+          ? scrollLeft - clientWidth * 0.8
+          : scrollLeft + clientWidth * 0.8,
+      behavior: "smooth",
+    });
+  };
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="font-semibold text-sm text-muted-foreground">
+          Career Pathways
+        </h3>
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => scroll("left")}
+            className="p-1 rounded-md hover:bg-gray-100 transition"
+          >
+            <ChevronLeft size={16} className="text-gray-500" />
+          </button>
+          <button
+            type="button"
+            onClick={() => scroll("right")}
+            className="p-1 rounded-md hover:bg-gray-100 transition"
+          >
+            <ChevronRight size={16} className="text-gray-500" />
+          </button>
+        </div>
+      </div>
+      <div
+        ref={scrollRef}
+        className="flex gap-3 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-1"
+      >
+        {pathways.map((p) => {
+          const price = parsePrice(p.priceIncVat);
+          return (
+            <Link
+              key={p.slug}
+              href={p.href}
+              onClick={onClose}
+              className="group shrink-0 w-[200px] snap-start rounded-xl border-2 border-gray-200 overflow-hidden transition-all hover:border-[#016068]/40 hover:shadow-md"
+            >
+              {p.heroImage && (
+                <div className="relative w-full h-24 overflow-hidden">
+                  <Image
+                    src={p.heroImage}
+                    alt={p.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="200px"
+                    unoptimized
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                  {p.badge && (
+                    <span className="absolute top-2 left-2 px-2 py-0.5 bg-[#E99E20] text-white text-[9px] font-bold rounded-sm">
+                      {p.badge}
+                    </span>
+                  )}
+                </div>
+              )}
+              <div className="p-2.5">
+                <h4 className="text-xs font-bold text-gray-900 group-hover:text-[#016068] transition-colors line-clamp-2 leading-snug mb-1.5">
+                  {p.title}
+                </h4>
+                <div className="flex items-center justify-between gap-1">
+                  {price > 0 && (
+                    <span className="text-xs font-bold text-[#016068]">
+                      {formatPrice(price)}
+                    </span>
+                  )}
+                  {p.duration && (
+                    <span className="flex items-center gap-0.5 text-[10px] text-gray-400">
+                      <Clock size={10} />
+                      {p.duration}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export function CourseSearchModal({
   open,
   onOpenChange,
   courses = [],
+  pathways = [],
 }: CourseSearchModalProps) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<string | null>(null);
@@ -76,6 +204,8 @@ export function CourseSearchModal({
   }, [courses, query, category]);
 
   const displayCourses = query.trim() ? filteredCourses : filteredCourses.slice(0, 8);
+
+  const handleClose = () => onOpenChange(false);
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -148,7 +278,7 @@ export function CourseSearchModal({
                   <li key={course.slug}>
                     <Link
                       href={`/courses/${course.slug}`}
-                      onClick={() => onOpenChange(false)}
+                      onClick={handleClose}
                       className="flex items-center justify-between p-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors group"
                     >
                       <div className="min-w-0 flex-1">
@@ -189,6 +319,11 @@ export function CourseSearchModal({
               )}
             </ul>
           </div>
+
+          {/* Pathway cards carousel */}
+          {pathways.length > 0 && (
+            <PathwayCarousel pathways={pathways} onClose={handleClose} />
+          )}
 
           <Link href="/courses" className="block">
             <Button className="w-full bg-[#01636B] h-12 uppercase">

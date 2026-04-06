@@ -4,7 +4,7 @@ import DiscountImage from '@/app/assets/png/discount.jpg'
 
 function CampaignBanner() {
   return (
-    <section className='py-15 sm:py-30 -mx-5 md:px-0 px-4'>
+    <section className='py-15 sm:py-30 px-4 md:px-0'>
       <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6">
         <Image
           src={DiscountImage}

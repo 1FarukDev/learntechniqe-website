@@ -11,7 +11,7 @@ import Link from "next/link";
 
 function TradeCourses() {
   return (
-    <section className="relative mt-10 overflow-hidden md:px-0 px-4 -mx-5 ">
+    <section className="relative mt-10 overflow-hidden px-4 md:px-0">
       <div
         className="absolute inset-0 bg-cover bg-center "
         style={{ backgroundImage: `url(${BackgroundImage.src})` }}
