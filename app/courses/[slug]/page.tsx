@@ -41,7 +41,7 @@ export async function generateStaticParams() {
 async function CourseDetail({ params }: CoursePageProps) {
   const { slug } = await params;
   let rawCourse = await client.fetch(courseBySlugQuery, { slug });
-  console.log("Fetched course data:", rawCourse);
+
   if (!rawCourse && slug === AM2_COURSE_SLUG) {
     rawCourse = getAm2SanityFallback();
   }

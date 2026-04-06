@@ -1,38 +1,32 @@
+// components/AllBlogPosts.tsx
 'use client'
 import React, { useState } from "react";
-import BackgroundImage from "@/app/assets/png/featuredcard.png";
 import { ChevronDown } from "lucide-react";
 import BlogCard from "@/components/blog-card";
-
-interface BlogPost {
-  id: number;
-  title: string;
-  author: string;
-  date: string;
-  category: string;
-  image: string;
-}
-
-const allPosts: BlogPost[] = Array.from({ length: 12 }, (_, i) => ({
-  id: i + 1,
-  title: "PH Origins: Air Conditioning",
-  author: "MANAGER_NEW",
-  date: "18/01/2026",
-  category: "air conditioning and refrigeration",
-  image: BackgroundImage.src ?? (BackgroundImage as unknown as string),
-}));
+import { urlFor } from "@/lib/sanity/image";
+import { BlogPost } from "@/lib/types/blog";
 
 const filterOptions = [
   "All Categories",
-  "Air Conditioning And Refrigeration",
-  "Heating",
-  "Ventilation",
-  "Plumbing",
+  "Air Conditioning",
+  "Refrigeration",
+  "Industry News",
+  "PLC",
+  "Uncategorized",
 ];
 
-function AllBlogPosts() {
+interface Props {
+  posts: BlogPost[];
+}
+
+function AllBlogPosts({ posts }: Props) {
   const [selectedFilter, setSelectedFilter] = useState("Filter by");
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const filteredPosts =
+    selectedFilter === "Filter by" || selectedFilter === "All Categories"
+      ? posts
+      : posts.filter((post) => post.category === selectedFilter);
 
   return (
     <main className="bg-white min-h-screen">
@@ -73,10 +67,22 @@ function AllBlogPosts() {
           </div>
         </div>
 
-       
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {allPosts.map((post) => (
-            <BlogCard key={post.id} post={post} fluid />
+          {filteredPosts.map((post) => (
+            <BlogCard
+              key={post._id}
+              post={{
+                id: post._id,
+                title: post.title,
+                author: post.author,
+                date: new Date(post.date).toLocaleDateString("en-GB"),
+                category: post.category,
+                image: urlFor(post.coverImage).url(),
+                slug: post.slug,
+              }}
+              fluid
+              highlighted={post.highlighted}
+            />
           ))}
         </div>
       </div>

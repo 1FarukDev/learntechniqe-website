@@ -87,7 +87,6 @@ export async function getCademyDates(
     // The HTML structure from Cademy looks like:
     // * Mar23\n  From: ...\n  To: ...\n  N spaces left\n  Delivered In-Person in LocationLocation\n  £XXX+ VAT\n  Book
     const blocks = html.split(/\n\*\s+/).slice(1); // remove first empty element
-    console.log("blocks found:", blocks.length);
 
     for (const block of blocks) {
       const lines = block

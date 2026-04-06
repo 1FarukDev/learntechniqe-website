@@ -3,12 +3,13 @@ import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 
 interface BlogPost {
-  id: number;
+  id: number | string;
   title: string;
   author: string;
   date: string;
   category: string;
   image: string;
+  slug?: { current: string };
 }
 
 interface BlogCardProps {
@@ -66,7 +67,8 @@ function BlogCard({
               variant === "large" ? "bg-[#14AE5C]" : "bg-[#016068]"
             }`}
             onClick={() => {
-              router.push(`/blog/${post.id}`);
+              const href = post.slug ? `/blog/${post.slug.current}` : `/blog/${post.id}`;
+              router.push(href);
             }}
           >
             READ BLOG
