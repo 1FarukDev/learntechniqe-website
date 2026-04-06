@@ -8,7 +8,7 @@ Every course in Sanity currently has `coursecheckCourseId: null`. The app falls 
 
 ---
 
-## Matched courses (Sanity → CourseCheck ID)
+## Matched courses (Sanity → CourseCheck ID) 
 
 ### Air conditioning & refrigeration
 
