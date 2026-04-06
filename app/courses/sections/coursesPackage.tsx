@@ -46,11 +46,14 @@ function CourseCarousel({
   count,
   courses,
   allCoursesHref = "/courses",
+  showAllCoursesLink = true,
 }: {
   title: string;
   count: string;
   courses: CourseCardData[];
   allCoursesHref?: string;
+  /** Hide on `/courses` where the full listing is already shown */
+  showAllCoursesLink?: boolean;
 }) {
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
@@ -106,9 +109,11 @@ function CourseCarousel({
                 <Image src={ArrowRight} alt="Scroll right" />
               </button>
             </div>
-            <Button asChild className="uppercase bg-[#016068] px-6 sm:px-10 h-10 sm:h-11 text-xs sm:text-sm flex-1 sm:flex-initial">
-              <Link href={allCoursesHref}>All Courses</Link>
-            </Button>
+            {showAllCoursesLink && (
+              <Button asChild className="uppercase bg-[#016068] px-6 sm:px-10 h-10 sm:h-11 text-xs sm:text-sm flex-1 sm:flex-initial">
+                <Link href={allCoursesHref}>All Courses</Link>
+              </Button>
+            )}
           </div>
         )}
       </div>
@@ -364,6 +369,7 @@ function CoursesPackage({
                   count={`${group.courses.length} course${group.courses.length === 1 ? "" : "s"}`}
                   courses={group.courses}
                   allCoursesHref="/courses"
+                  showAllCoursesLink={category !== "all"}
                 />
               </div>
             ))

@@ -1,132 +1,278 @@
 import React from "react";
-import FooterLogo from "@/app/assets/png/logo-white.png";
-import PaymentMethodsImg from "@/app/assets/png/payment-methods.png";
 import Image from "next/image";
 import Link from "next/link";
+import FooterLogo from "@/app/assets/png/logo-white.png";
+import PaymentMethodsImg from "@/app/assets/png/payment-methods.png";
+import { client } from "@/lib/sanity/client";
+import { headerQuery } from "@/lib/queries/navigation";
+import { PATHWAYS_QUERY } from "@/lib/queries/pathway";
+import type { HeaderData } from "@/types/header";
+import { FooterSocialIcons } from "./FooterSocialIcons";
 
-function Footer() {
+interface CourseLink {
+  label: string;
+  href: string;
+}
+
+interface PathwayLink {
+  title: string;
+  slug: string;
+}
+
+async function getFooterData() {
+  const [headerData, pathways] = await Promise.all([
+    client.fetch<HeaderData>(headerQuery),
+    client.fetch<PathwayLink[]>(PATHWAYS_QUERY),
+  ]);
+  return { headerData, pathways };
+}
+
+function FooterLinkRow({
+  title,
+  links,
+}: {
+  title: string;
+  links: CourseLink[];
+}) {
+  if (!links.length) return null;
+  return (
+    <div>
+      <h4 className="text-white font-semibold text-sm mb-3">{title}</h4>
+      <p className="flex flex-wrap gap-x-1 gap-y-1 leading-relaxed">
+        {links.map((link, i) => (
+          <React.Fragment key={link.href + i}>
+            {i > 0 && (
+              <span className="text-white/30 text-xs select-none">|</span>
+            )}
+            <Link
+              href={link.href}
+              className="text-white/70 text-xs hover:text-[#4DD9AC] transition-colors whitespace-nowrap"
+            >
+              {link.label}
+            </Link>
+          </React.Fragment>
+        ))}
+      </p>
+    </div>
+  );
+}
+
+async function Footer() {
+  const { headerData, pathways } = await getFooterData();
+
+  const socialLinks = headerData?.megaMenuFooter?.socialLinks ?? [];
+  const megaMenuColumns = headerData?.megaMenuColumns ?? [];
+
+  const coursesByCategory: { title: string; links: CourseLink[] }[] =
+    megaMenuColumns.map((col) => ({
+      title: col.title,
+      links: col.subcategories
+        .flatMap((sub) => sub.items)
+        .filter((item) => item.href && item.href !== "#"),
+    }));
+
+  const pathwayLinks: CourseLink[] = (pathways ?? [])
+    .filter((p) => p.slug)
+    .map((p) => ({
+      label: p.title,
+      href: `/pathways/${p.slug}`,
+    }));
+
   return (
     <footer className="bg-[#001431]">
-      <div className="max-w-7xl mx-auto pt-10 sm:pt-16 pb-16 sm:pb-24 px-6 sm:px-8 md:px-10">
-        <div className="grid grid-cols-1 md:grid-cols-[3fr_1fr_1fr_1fr] gap-8 sm:gap-12">
-          <div className="max-w-md">
+      <div className="max-w-7xl mx-auto pt-12 sm:pt-16 pb-10 px-6 sm:px-8 md:px-10">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr_1fr_1fr] gap-10 lg:gap-8">
+          <div className="max-w-sm">
             <Image
               src={FooterLogo}
-              alt="Technique Logo"
-              className="mb-6 sm:mb-8 w-40 sm:w-50"
+              alt="Technique Learning Solutions"
+              className="mb-5 w-40 sm:w-48"
             />
-            <p className="text-white text-xs sm:text-sm leading-relaxed">
-              Elm Training Services is the Chesterfield approved AM2 Test <br />{" "}
-              Centre providing the Achievement Measurement 2 practical <br />{" "}
-              skills test.
+            <p className="text-white/70 text-xs leading-relaxed mb-5">
+              Industry-recognised electrical and trade training courses with
+              world-class facilities. Helping you advance your career with
+              accredited programmes and expert instructors.
             </p>
+
+            <FooterSocialIcons links={socialLinks} />
+
+            <div className="mt-5 space-y-2">
+              <a
+                href="tel:08001123310"
+                className="flex items-center gap-2 text-white/80 text-sm hover:text-[#4DD9AC] transition-colors"
+              >
+                <svg
+                  className="w-4 h-4 shrink-0"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                  />
+                </svg>
+                0800 112 3310
+              </a>
+              <a
+                href="mailto:info@learntechnique.com"
+                className="flex items-center gap-2 text-white/80 text-sm hover:text-[#4DD9AC] transition-colors"
+              >
+                <svg
+                  className="w-4 h-4 shrink-0"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  />
+                </svg>
+                info@learntechnique.com
+              </a>
+            </div>
           </div>
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3">
+            <h4 className="text-white font-semibold text-sm mb-1">Training</h4>
             <Link
-              href="#"
-              className="text-white text-sm hover:text-white/80 transition-colors"
+              href="/courses"
+              className="text-white/70 text-sm hover:text-[#4DD9AC] transition-colors"
             >
-              General Faq&apos;s
+              All Courses
             </Link>
             <Link
-              href="#"
-              className="text-white text-sm hover:text-white/80 transition-colors"
+              href="/courses/electrical"
+              className="text-white/70 text-sm hover:text-[#4DD9AC] transition-colors"
             >
-              Accreditation
+              Electrical Courses
             </Link>
             <Link
-              href="#"
-              className="text-white text-sm hover:text-white/80 transition-colors"
+              href="/courses/plc"
+              className="text-white/70 text-sm hover:text-[#4DD9AC] transition-colors"
             >
-              Careers Vacancies
+              PLC & Industrial
             </Link>
-          </div>
-
-          <div className="flex flex-col gap-4">
+            <Link
+              href="/courses/aircon-refrigeration"
+              className="text-white/70 text-sm hover:text-[#4DD9AC] transition-colors"
+            >
+              Air Con & Refrigeration
+            </Link>
             <Link
               href="/pathways"
-              className="text-white text-sm hover:text-white/80 transition-colors"
+              className="text-white/70 text-sm hover:text-[#4DD9AC] transition-colors"
             >
               Career Pathways
             </Link>
             <Link
-              href="#"
-              className="text-white text-sm hover:text-white/80 transition-colors"
+              href="/courses/am2-assessment"
+              className="text-white/70 text-sm hover:text-[#4DD9AC] transition-colors"
             >
-              Qualifications
-            </Link>
-            <Link
-              href="/terms-and-conditions"
-              className="text-white text-sm hover:text-white/80 transition-colors"
-            >
-              Terms &amp; Conditions
-            </Link>
-            <Link
-              href="#"
-              className="text-white text-sm hover:text-white/80 transition-colors"
-            >
-              Newsletter Sign Up
-            </Link>
-            <Link
-              href="#"
-              className="text-white text-sm hover:text-white/80 transition-colors"
-            >
-              Cookies on our Website
+              AM2 Assessment
             </Link>
           </div>
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3">
+            <h4 className="text-white font-semibold text-sm mb-1">Company</h4>
             <Link
-              href="#"
-              className="text-white text-sm hover:text-white/80 transition-colors"
+              href="/company"
+              className="text-white/70 text-sm hover:text-[#4DD9AC] transition-colors"
             >
-              Our Policies
+              About Us
+            </Link>
+            <Link
+              href="/blog"
+              className="text-white/70 text-sm hover:text-[#4DD9AC] transition-colors"
+            >
+              Blog
+            </Link>
+            <Link
+              href="/contact"
+              className="text-white/70 text-sm hover:text-[#4DD9AC] transition-colors"
+            >
+              Contact Us
+            </Link>
+          </div>
+
+          <div className="flex flex-col gap-3">
+            <h4 className="text-white font-semibold text-sm mb-1">Support</h4>
+            <Link
+              href="/terms-and-conditions"
+              className="text-white/70 text-sm hover:text-[#4DD9AC] transition-colors"
+            >
+              Terms & Conditions
             </Link>
             <Link
               href="/privacy-policy"
-              className="text-white text-sm hover:text-white/80 transition-colors"
+              className="text-white/70 text-sm hover:text-[#4DD9AC] transition-colors"
             >
               Privacy Policy
             </Link>
             <Link
-              href="#"
-              className="text-white text-sm hover:text-white/80 transition-colors"
+              href="/contact"
+              className="text-white/70 text-sm hover:text-[#4DD9AC] transition-colors"
             >
-              Maximum Training
-            </Link>
-            <Link
-              href="#"
-              className="text-white text-sm hover:text-white/80 transition-colors"
-            >
-              Electrician Qualification
+              Help & Support
             </Link>
           </div>
         </div>
       </div>
 
       <div className="border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 md:px-10 py-4 sm:py-6">
-          <p className="flex flex-wrap items-center justify-center gap-x-1.5 gap-y-1 text-white text-[11px] sm:text-xs text-center leading-relaxed max-w-4xl mx-auto text-white/90">
-            <span className="shrink-0">Copyright ©</span>
-            <Image
-              src={PaymentMethodsImg}
-              alt="Accepted payment methods: Visa, Mastercard, Apple Pay, Google Pay, Klarna, American Express"
-              width={681}
-              height={60}
-              className="h-3 w-auto max-w-[88px] sm:h-3.5 sm:max-w-[100px] object-contain object-center opacity-95 shrink-0"
-              sizes="100px"
-            />
-            <span>
-              2026 Technique Learning Solutions | All Rights Reserved |{" "}
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 md:px-10 py-8 space-y-5">
+          {coursesByCategory.map(
+            (category) =>
+              category.links.length > 0 && (
+                <FooterLinkRow
+                  key={category.title}
+                  title={category.title}
+                  links={category.links}
+                />
+              ),
+          )}
+
+          {pathwayLinks.length > 0 && (
+            <FooterLinkRow title="Career Pathways" links={pathwayLinks} />
+          )}
+        </div>
+      </div>
+
+      <div className="border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 md:px-10 py-4 sm:py-5">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p className="text-white/60 text-[11px] sm:text-xs text-center sm:text-left">
+              Copyright &copy; 2026 Technique Learning Solutions | All Rights
+              Reserved
+            </p>
+            <div className="flex items-center gap-4">
+              <Image
+                src={PaymentMethodsImg}
+                alt="Accepted payment methods: Visa, Mastercard, Apple Pay, Google Pay, Klarna, American Express"
+                width={681}
+                height={60}
+                className="h-3.5 w-auto max-w-[110px] object-contain opacity-80"
+                sizes="110px"
+              />
               <Link
                 href="/terms-and-conditions"
-                className="underline underline-offset-2 hover:text-white transition-colors font-semibold text-white"
+                className="text-white/60 text-[11px] sm:text-xs underline underline-offset-2 hover:text-white transition-colors"
               >
-                Terms and Conditions
+                Terms & Conditions
               </Link>
-            </span>
-          </p>
+              <Link
+                href="/privacy-policy"
+                className="text-white/60 text-[11px] sm:text-xs underline underline-offset-2 hover:text-white transition-colors"
+              >
+                Privacy Policy
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

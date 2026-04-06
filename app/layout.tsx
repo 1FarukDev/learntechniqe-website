@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Outfit, Lato } from "next/font/google";
 import localFont from "next/font/local";
 import Script from "next/script";
@@ -28,6 +28,12 @@ const nohemi = localFont({
   variable: "--font-nohemi",
   display: "swap",
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
 
 export const metadata: Metadata = {
   title: "Learn Technique | Expert-Led Electrical & Trade Training",

@@ -1,28 +1,29 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
-import { X, ChevronUp } from "lucide-react";
+import { X, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import Link from "next/link";
 
-export interface CalculatorCourse {
-  id: string;
-  name: string;
-  priceIncVat: number;
-  paymentPlanAvailable: boolean;
-}
-
-export interface PlatinumUpgrade {
-  name: string;
-  priceIncVat: number;
-  description: string;
+export interface PathwayCalcData {
+  title: string;
+  slug: string;
+  priceIncVat: number | string;
+  deposit: number | string;
+  paymentPlan: string;
+  monthlyInstalment: number | string;
+  instalments: number | string;
 }
 
 interface PathwaysCalculatorStickyProps {
-  courses: CalculatorCourse[];
-  platinumUpgrade: PlatinumUpgrade;
+  pathways: PathwayCalcData[];
+  initialSlug?: string;
 }
+
+const parsePrice = (val: string | number | undefined): number => {
+  if (!val) return 0;
+  if (typeof val === "number") return val;
+  return parseFloat(val.replace(/[^0-9.]/g, "")) || 0;
+};
 
 const formatPrice = (n: number) =>
   new Intl.NumberFormat("en-GB", {
@@ -31,9 +32,16 @@ const formatPrice = (n: number) =>
     minimumFractionDigits: 2,
   }).format(n);
 
+function scrollToPageEnquiryForm() {
+  const target =
+    document.getElementById("enquirySection") ??
+    document.getElementById("contact-section");
+  target?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 export function PathwaysCalculatorSticky({
-  courses,
-  platinumUpgrade,
+  pathways,
+  initialSlug,
 }: PathwaysCalculatorStickyProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [showStickyBar, setShowStickyBar] = useState(false);
@@ -45,69 +53,56 @@ export function PathwaysCalculatorSticky({
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-  const [selectedCourseIds, setSelectedCourseIds] = useState<Set<string>>(new Set());
-  const [includePlatinum, setIncludePlatinum] = useState(false);
-  const [months, setMonths] = useState(10);
-  const [showEnquireForm, setShowEnquireForm] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    terms: false,
-  });
-  const [formStatus, setFormStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
-  const toggleCourse = (id: string) => {
-    setSelectedCourseIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  };
+  const resolvedInitial =
+    initialSlug && pathways.some((p) => p.slug === initialSlug)
+      ? initialSlug
+      : pathways[0]?.slug ?? "";
+  const [selectedSlug, setSelectedSlug] = useState<string>(resolvedInitial);
+  const [customMonths, setCustomMonths] = useState<number>(10);
 
-  const selectedCourses = useMemo(
-    () => courses.filter((c) => selectedCourseIds.has(c.id)),
-    [courses, selectedCourseIds]
+  const selectedPathway = useMemo(
+    () => pathways.find((p) => p.slug === selectedSlug),
+    [pathways, selectedSlug],
   );
 
-  const hasPaymentPlanCourse = selectedCourses.some((c) => c.paymentPlanAvailable);
-  const coursesTotal = selectedCourses.reduce((sum, c) => sum + c.priceIncVat, 0);
-  const platinumTotal = includePlatinum ? platinumUpgrade.priceIncVat : 0;
-  const subtotal = coursesTotal + platinumTotal;
+  const totalPrice = parsePrice(selectedPathway?.priceIncVat);
+  const depositAmount = parsePrice(selectedPathway?.deposit);
+  const paymentPlanRaw = (selectedPathway?.paymentPlan ?? "").toString().trim();
+  const hasPaymentPlan =
+    totalPrice > 0 &&
+    paymentPlanRaw.length > 0 &&
+    paymentPlanRaw.toLowerCase() !== "no";
+  const paymentPlanLabel = paymentPlanRaw === "Yes" ? null : paymentPlanRaw;
 
-  const instalmentPrice =
-    hasPaymentPlanCourse && months > 1 ? subtotal / months : subtotal;
+  const calculation = useMemo(() => {
+    if (!hasPaymentPlan || totalPrice <= 0) return null;
+    const remaining = totalPrice - depositAmount;
+    const monthly = remaining / customMonths;
+    return {
+      deposit: depositAmount,
+      monthly,
+      months: customMonths,
+      total: totalPrice,
+      remaining,
+    };
+  }, [hasPaymentPlan, totalPrice, depositAmount, customMonths]);
 
-  const handleEnquireSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.terms) return;
-    setFormStatus("loading");
-    try {
-      const [first, ...rest] = formData.name.trim().split(" ");
-      const res = await fetch("/api/zapier/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          first_name: first || formData.name,
-          last_name: rest.join(" ") || "",
-          email: formData.email,
-          number: formData.phone,
-          message: `Pathway Calculator Enquiry - Courses: ${selectedCourses.map((c) => c.name).join(", ")} | Months: ${months} | Total: ${formatPrice(subtotal)}`,
-        }),
-      });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || "Failed");
-      setFormStatus("success");
-      setFormData({ name: "", email: "", phone: "", terms: false });
-    } catch {
-      setFormStatus("error");
+  useEffect(() => {
+    const p = pathways.find((x) => x.slug === selectedSlug);
+    if (p) {
+      const def = parsePrice(p.instalments) || 10;
+      setCustomMonths(def);
     }
+  }, [selectedSlug, pathways]);
+
+  const handleEnquireNow = () => {
+    setIsOpen(false);
+    window.setTimeout(() => scrollToPageEnquiryForm(), 280);
   };
 
   return (
     <>
-      {/* Sticky Bottom Bar - only visible after scrolling */}
       <div
         className={`fixed bottom-0 left-0 right-0 z-40 bg-[#016068] text-white shadow-lg md:px-0 px-4 transition-transform duration-300 ease-out ${
           showStickyBar ? "translate-y-0" : "translate-y-full"
@@ -115,7 +110,7 @@ export function PathwaysCalculatorSticky({
       >
         <div className="max-w-7xl mx-auto py-3 sm:py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-sm sm:text-base font-medium text-center sm:text-left">
-            Calculate Technique Pathway Monthly Repayments - 0% interest
+            Calculate Technique Pathway Monthly Repayments – 0% Interest
           </p>
           <Button
             onClick={() => setIsOpen(true)}
@@ -126,7 +121,6 @@ export function PathwaysCalculatorSticky({
         </div>
       </div>
 
-      {/* Overlay */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-50"
@@ -135,14 +129,13 @@ export function PathwaysCalculatorSticky({
         />
       )}
 
-      {/* Sidebar - slides in from right on all screen sizes */}
       <div
-        className={`fixed top-0 right-0 z-50 w-full max-w-[420px] h-full bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-out ${
+        className={`fixed top-0 right-0 z-50 w-full max-w-[440px] h-full bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-out ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="flex items-center justify-between p-4 border-b shrink-0">
-          <h3 className="font-semibold text-lg">Pathway Calculator</h3>
+          <h3 className="font-semibold text-lg">Pathway Payment Calculator</h3>
           <button
             onClick={() => setIsOpen(false)}
             className="p-2 rounded-lg hover:bg-gray-100"
@@ -152,255 +145,162 @@ export function PathwaysCalculatorSticky({
           </button>
         </div>
         <div className="flex-1 overflow-y-auto p-4">
-          <CalculatorContent
-            courses={courses}
-            platinumUpgrade={platinumUpgrade}
-            selectedCourseIds={selectedCourseIds}
-            toggleCourse={toggleCourse}
-            includePlatinum={includePlatinum}
-            setIncludePlatinum={setIncludePlatinum}
-            months={months}
-            setMonths={setMonths}
-            hasPaymentPlanCourse={hasPaymentPlanCourse}
-            selectedCourses={selectedCourses}
-            coursesTotal={coursesTotal}
-            subtotal={subtotal}
-            instalmentPrice={instalmentPrice}
-            showEnquireForm={showEnquireForm}
-            setShowEnquireForm={setShowEnquireForm}
-            formData={formData}
-            setFormData={setFormData}
-            formStatus={formStatus}
-            handleEnquireSubmit={handleEnquireSubmit}
-          />
+          <div className="space-y-6">
+            <div>
+              <h4 className="font-semibold text-[#016068] mb-1">
+                Calculate Your Pathway Cost
+              </h4>
+              <p className="text-sm text-gray-600">
+                Choose a pathway below to see your payment breakdown
+              </p>
+            </div>
+
+            <div>
+              <p className="text-sm font-semibold text-gray-700 mb-3">
+                Pathway
+              </p>
+              <div className="flex flex-col gap-2" role="listbox" aria-label="Select pathway">
+                {pathways.map((p) => {
+                  const selected = p.slug === selectedSlug;
+                  const pTotal = parsePrice(p.priceIncVat);
+                  return (
+                    <button
+                      key={p.slug}
+                      type="button"
+                      role="option"
+                      aria-selected={selected}
+                      onClick={() => setSelectedSlug(p.slug)}
+                      className={`w-full text-left rounded-xl border-2 px-4 py-3.5 transition-all ${
+                        selected
+                          ? "border-[#016068] bg-[#016068]/5 shadow-sm ring-1 ring-[#016068]/20"
+                          : "border-gray-200 bg-white hover:border-[#016068]/40 hover:bg-gray-50/80"
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <span
+                          className={`text-sm font-semibold leading-snug ${
+                            selected ? "text-[#016068]" : "text-gray-900"
+                          }`}
+                        >
+                          {p.title}
+                        </span>
+                        {selected && (
+                          <span className="shrink-0 flex h-6 w-6 items-center justify-center rounded-full bg-[#016068] text-white">
+                            <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                          </span>
+                        )}
+                      </div>
+                      <p className="mt-1.5 text-sm font-bold text-[#016068]">
+                        {formatPrice(pTotal)}
+                        <span className="font-normal text-gray-500"> inc VAT</span>
+                      </p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {selectedPathway && totalPrice > 0 && (
+              <>
+                <div className="bg-[#F5F5F5] rounded-lg p-4 space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Total Price (Inc VAT)</span>
+                    <span className="font-semibold text-[#016068]">
+                      {formatPrice(totalPrice)}
+                    </span>
+                  </div>
+                </div>
+
+                {hasPaymentPlan ? (
+                  <>
+                    {paymentPlanLabel && (
+                      <div className="flex items-center gap-2 bg-[#016068]/5 border border-[#016068]/15 rounded-lg px-4 py-2.5">
+                        <span className="text-xs font-semibold text-[#016068]">
+                          Payment via {paymentPlanLabel}
+                        </span>
+                      </div>
+                    )}
+
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Number of Monthly Instalments
+                      </label>
+                      <p className="text-xs text-gray-500 mb-3">
+                        Adjust the slider to see different payment options
+                      </p>
+                      <div className="flex items-center gap-4">
+                        <input
+                          type="range"
+                          min="3"
+                          max="24"
+                          value={customMonths}
+                          onChange={(e) =>
+                            setCustomMonths(parseInt(e.target.value) || 3)
+                          }
+                          className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#016068]"
+                        />
+                        <span className="text-sm font-semibold w-20 text-right">
+                          {customMonths} month{customMonths !== 1 ? "s" : ""}
+                        </span>
+                      </div>
+                    </div>
+
+                    {calculation && (
+                      <div className="bg-[#F5F5F5] rounded-lg p-4 space-y-3">
+                        <h5 className="font-semibold text-gray-800">
+                          Payment Plan Summary
+                        </h5>
+                        {calculation.deposit > 0 && (
+                          <div className="flex justify-between text-sm">
+                            <span className="text-gray-600">Deposit</span>
+                            <span className="font-semibold">
+                              {formatPrice(calculation.deposit)}
+                            </span>
+                          </div>
+                        )}
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-600">
+                            {calculation.months} × Monthly Instalment
+                          </span>
+                          <span className="font-semibold">
+                            {formatPrice(calculation.monthly)}/mo
+                          </span>
+                        </div>
+                        <div className="flex justify-between text-sm font-semibold pt-2 border-t">
+                          <span>Total</span>
+                          <span className="text-[#016068]">
+                            {formatPrice(calculation.total)}
+                          </span>
+                        </div>
+                        <p className="text-xs text-[#016068] font-medium">
+                          0% Interest
+                          {paymentPlanLabel ? ` via ${paymentPlanLabel}` : ""}{" "}
+                          – No hidden fees
+                        </p>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="bg-amber-50 p-3 rounded-lg">
+                    <p className="text-sm text-amber-700">
+                      Payment plans are not available for this pathway. Full
+                      payment is required at booking.
+                    </p>
+                  </div>
+                )}
+              </>
+            )}
+
+            <Button
+              onClick={handleEnquireNow}
+              disabled={!selectedPathway || totalPrice <= 0}
+              className="text-white rounded text-sm px-8 font-bold h-11 w-full bg-[#016068] hover:bg-[#014d54]"
+            >
+              Enquire Now
+            </Button>
+          </div>
         </div>
       </div>
     </>
-  );
-}
-
-function CalculatorContent({
-  courses,
-  platinumUpgrade,
-  selectedCourseIds,
-  toggleCourse,
-  includePlatinum,
-  setIncludePlatinum,
-  months,
-  setMonths,
-  hasPaymentPlanCourse,
-  selectedCourses,
-  coursesTotal,
-  subtotal,
-  instalmentPrice,
-  showEnquireForm,
-  setShowEnquireForm,
-  formData,
-  setFormData,
-  formStatus,
-  handleEnquireSubmit,
-}: {
-  courses: CalculatorCourse[];
-  platinumUpgrade: PlatinumUpgrade;
-  selectedCourseIds: Set<string>;
-  toggleCourse: (id: string) => void;
-  includePlatinum: boolean;
-  setIncludePlatinum: (v: boolean) => void;
-  months: number;
-  setMonths: (v: number) => void;
-  hasPaymentPlanCourse: boolean;
-  selectedCourses: CalculatorCourse[];
-  coursesTotal: number;
-  subtotal: number;
-  instalmentPrice: number;
-  showEnquireForm: boolean;
-  setShowEnquireForm: (v: boolean) => void;
-  formData: { name: string; email: string; phone: string; terms: boolean };
-  setFormData: React.Dispatch<
-    React.SetStateAction<{ name: string; email: string; phone: string; terms: boolean }>
-  >;
-  formStatus: string;
-  handleEnquireSubmit: (e: React.FormEvent) => void;
-}) {
-  return (
-    <div className="space-y-6">
-      <div>
-        <h4 className="font-semibold text-[#016068] mb-1">Calculate Your Pathway Cost</h4>
-        <p className="text-sm text-gray-600">Build your Pathway package to get your cost estimate</p>
-      </div>
-
-      <p className="text-xs text-amber-700 bg-amber-50 p-3 rounded-lg">
-        Payment options NOT available for the City & Guilds BS:7671 18th Edition and/or the City
-        & Guilds 2391-52 Inspection and Testing as stand alone courses
-      </p>
-
-      <div>
-        <label className="block text-sm font-semibold text-gray-700 mb-2">
-          Courses *
-        </label>
-        <p className="text-xs text-gray-500 mb-2">Select the courses to add to your package</p>
-        <div className="space-y-2 max-h-72 overflow-y-auto border rounded-lg p-2">
-          {courses.map((c) => (
-            <label
-              key={c.id}
-              className="flex items-center gap-3 p-2 rounded hover:bg-gray-50 cursor-pointer"
-            >
-              <input
-                type="checkbox"
-                checked={selectedCourseIds.has(c.id)}
-                onChange={() => toggleCourse(c.id)}
-                className="rounded border-gray-300"
-              />
-              <span className="text-sm flex-1">{c.name}</span>
-              <span className="text-sm font-semibold text-[#016068]">
-                {formatPrice(c.priceIncVat)}
-              </span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      <label className="flex items-center gap-3 cursor-pointer">
-        <input
-          type="checkbox"
-          checked={includePlatinum}
-          onChange={(e) => setIncludePlatinum(e.target.checked)}
-          className="rounded border-gray-300"
-        />
-        <span className="text-sm">
-          {platinumUpgrade.name} – {formatPrice(platinumUpgrade.priceIncVat)}
-        </span>
-      </label>
-
-      {hasPaymentPlanCourse && (
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Payment Option
-          </label>
-          <p className="text-xs text-gray-500 mb-2">
-            Select the number of installments/months you want to make payment
-          </p>
-          <div className="flex items-center gap-4">
-            <input
-              type="range"
-              min="1"
-              max="24"
-              value={months}
-              onChange={(e) => setMonths(parseInt(e.target.value) || 1)}
-              className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#016068]"
-            />
-            <span className="text-sm font-semibold w-12">{months} month{months !== 1 ? "s" : ""}</span>
-          </div>
-        </div>
-      )}
-
-      <div className="bg-[#F5F5F5] rounded-lg p-4 space-y-2">
-        <h5 className="font-semibold text-gray-800">Payment Plan Summary</h5>
-        <div className="flex justify-between text-sm">
-          <span>Courses</span>
-          <span>{formatPrice(coursesTotal)}</span>
-        </div>
-        {includePlatinum && (
-          <div className="flex justify-between text-sm">
-            <span>{platinumUpgrade.name}</span>
-            <span>{formatPrice(platinumUpgrade.priceIncVat)}</span>
-          </div>
-        )}
-        <div className="flex justify-between text-sm">
-          <span>Payment Option</span>
-          <span>
-            {hasPaymentPlanCourse && months > 1
-              ? `${months} month${months !== 1 ? "s" : ""}`
-              : "Pay in full"}
-          </span>
-        </div>
-        <div className="flex justify-between text-sm font-semibold pt-2 border-t">
-          <span>{hasPaymentPlanCourse && months > 1 ? "Instalment Price + VAT" : "Total + VAT"}</span>
-          <span className="text-[#016068]">{formatPrice(instalmentPrice)}</span>
-        </div>
-        <div className="flex justify-between text-sm pt-1">
-          <span>Total</span>
-          <span className="font-bold">{formatPrice(subtotal)}</span>
-        </div>
-      </div>
-
-      {!showEnquireForm ? (
-        <Button
-          onClick={() => setShowEnquireForm(true)}
-          className="text-white rounded text-sm px-8 font-bold h-10 w-full max-w-[200px] bg-[#016068]"
-        >
-          Enquire Now
-        </Button>
-      ) : (
-        <div className="border rounded-lg p-4 space-y-4">
-          <button
-            onClick={() => setShowEnquireForm(false)}
-            className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-800"
-          >
-            <ChevronUp size={16} />
-            Collapse form
-          </button>
-          <form onSubmit={handleEnquireSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-semibold mb-1">Name and Surname *</label>
-              <Input
-                placeholder="Type your name"
-                value={formData.name}
-                onChange={(e) => setFormData((p) => ({ ...p, name: e.target.value }))}
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold mb-1">Email Address *</label>
-              <Input
-                type="email"
-                placeholder="Type your email"
-                value={formData.email}
-                onChange={(e) => setFormData((p) => ({ ...p, email: e.target.value }))}
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold mb-1">Phone Number *</label>
-              <Input
-                type="tel"
-                placeholder="Type your phone"
-                value={formData.phone}
-                onChange={(e) => setFormData((p) => ({ ...p, phone: e.target.value }))}
-                required
-              />
-            </div>
-            <label className="flex items-start gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={formData.terms}
-                onChange={(e) => setFormData((p) => ({ ...p, terms: e.target.checked }))}
-                required
-                className="mt-1 rounded border-gray-300"
-              />
-              <span className="text-sm">
-                By clicking this box, I agree to your{" "}
-                <Link href="/terms-and-conditions" className="text-[#016068] underline">
-                  Terms & Conditions
-                </Link>
-              </span>
-            </label>
-            {formStatus === "success" && (
-              <p className="text-sm text-green-600">Thank you! We&apos;ll be in touch soon.</p>
-            )}
-            {formStatus === "error" && (
-              <p className="text-sm text-red-600">Something went wrong. Please try again.</p>
-            )}
-            <Button
-              type="submit"
-              disabled={formStatus === "loading" || !formData.terms}
-              className="text-white rounded text-sm px-8 font-bold h-10 w-full max-w-[200px] bg-[#016068]"
-            >
-              {formStatus === "loading" ? "Sending..." : "Submit Enquiry"}
-            </Button>
-          </form>
-        </div>
-      )}
-    </div>
   );
 }

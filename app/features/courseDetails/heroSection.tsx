@@ -12,9 +12,10 @@ import { getCategoryTag } from "@/lib/course-categories";
 
 interface CourseHeroProps {
   data?: CourseHeroData | null;
+  isPathway?: boolean;
 }
 
-function CourseHero({ data }: CourseHeroProps) {
+function CourseHero({ data, isPathway = false }: CourseHeroProps) {
   const course = data ?? defaultCourseHeroData;
 
   const {
@@ -38,9 +39,23 @@ function CourseHero({ data }: CourseHeroProps) {
   const qualifications = course.qualifications ?? [];
 
   const handleBookNow = () => {
+    if (isPathway) {
+      const enquirySection = document.getElementById("enquirySection");
+      if (enquirySection) {
+        enquirySection.scrollIntoView({ behavior: "smooth" });
+      }
+      return;
+    }
     const bookSection = document.getElementById("bookSection");
     if (bookSection) {
       bookSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const handleEnquireClick = () => {
+    const enquirySection = document.getElementById("enquirySection");
+    if (enquirySection) {
+      enquirySection.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -86,11 +101,21 @@ function CourseHero({ data }: CourseHeroProps) {
             </div>
           )}
 
-          {bookingAvailable && (
-            <RequestCourseOverview
-              courseName={title}
-              courseUrl={`/courses/${slug}`}
-            />
+          {isPathway ? (
+            <button
+              type="button"
+              onClick={handleEnquireClick}
+              className="inline-block mt-6 sm:mt-8 text-[#4DD9AC] font-semibold text-sm underline underline-offset-4 hover:text-white transition-colors text-left"
+            >
+              Enquire Now
+            </button>
+          ) : (
+            bookingAvailable && (
+              <RequestCourseOverview
+                courseName={title}
+                courseUrl={`/courses/${slug}`}
+              />
+            )
           )}
         </div>
 
@@ -105,6 +130,7 @@ function CourseHero({ data }: CourseHeroProps) {
           requestOverviewLink={requestOverviewLink}
           onBookNow={handleBookNow}
           bookingAvailable={bookingAvailable}
+          isPathway={isPathway}
         />
       </div>
     </section>

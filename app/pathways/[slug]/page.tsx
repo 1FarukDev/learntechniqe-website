@@ -1,21 +1,23 @@
 // app/pathways/[slug]/page.tsx
 
-import PricingBanner from "@/app/features/courseDetails/Banner";
-import BookCourse from "@/app/features/courseDetails/BookCourse";
 import CourseDetails from "@/app/features/courseDetails/CourseDetails";
 import CourseHero from "@/app/features/courseDetails/heroSection";
+import { PathwayEnquiryForm } from "@/app/features/pathways/PathwayEnquiryForm";
+import { PathwaysCalculatorSticky } from "@/app/features/pathways/PathwaysCalculatorSticky";
+import type { PathwayCalcData } from "@/app/features/pathways/PathwaysCalculatorSticky";
 import Contact from "@/app/features/homepage/contact";
 import Ratings from "@/app/features/homepage/ratings";
 import { AnimatedSection } from "@/components/animated-section";
 import { client } from "@/lib/sanity/client";
-import { PATHWAY_DETAIL_QUERY, PATHWAYS_QUERY } from "@/lib/queries/pathway";
 import {
-  defaultBookCourseData,
+  PATHWAY_DETAIL_QUERY,
+  PATHWAYS_QUERY,
+  PATHWAYS_CALC_QUERY,
+} from "@/lib/queries/pathway";
+import {
   defaultCourseDetailsData,
   defaultCourseHeroData,
-  defaultPricingBannerData,
 } from "@/lib/constants/course";
-import { getCademyDates } from "@/lib/cademy";
 import { notFound } from "next/navigation";
 
 interface PathwayPageProps {
@@ -29,22 +31,13 @@ export async function generateStaticParams() {
 
 async function PathwayDetail({ params }: PathwayPageProps) {
   const { slug } = await params;
-  const rawCourse = await client.fetch(PATHWAY_DETAIL_QUERY, { slug });
+
+  const [rawCourse, allPathways] = await Promise.all([
+    client.fetch(PATHWAY_DETAIL_QUERY, { slug }),
+    client.fetch<PathwayCalcData[]>(PATHWAYS_CALC_QUERY),
+  ]);
 
   if (!rawCourse) return notFound();
-
-  const cademyEmbedRaw = rawCourse?.cademyEmbedUrl;
-  const cademyEmbedFromCms =
-    typeof cademyEmbedRaw === "string" ? cademyEmbedRaw.trim() : "";
-  const bookingAvailable = cademyEmbedFromCms.length > 0;
-
-  const cademyDates =
-    bookingAvailable && rawCourse?.cademyDirectUrl
-      ? await getCademyDates(
-          cademyEmbedFromCms,
-          rawCourse.cademyDirectUrl,
-        )
-      : [];
 
   const heroData = {
     ...defaultCourseHeroData,
@@ -52,7 +45,7 @@ async function PathwayDetail({ params }: PathwayPageProps) {
     tags: rawCourse?.tags ?? defaultCourseHeroData.tags,
     description: rawCourse?.description ?? defaultCourseHeroData.description,
     qualifications: rawCourse?.qualifications ?? defaultCourseHeroData.qualifications,
-    bookingAvailable,
+    bookingAvailable: true,
   };
 
   const detailsData = {
@@ -62,43 +55,43 @@ async function PathwayDetail({ params }: PathwayPageProps) {
     syllabus: rawCourse?.syllabus ?? defaultCourseDetailsData.syllabus,
   };
 
-  const pricingData = {
-    ...defaultPricingBannerData,
-    price: rawCourse?.price ?? defaultPricingBannerData.price,
-    originalPrice: rawCourse?.originalPrice ?? defaultPricingBannerData.originalPrice,
-    pricingTagline: rawCourse?.pricingTagline ?? defaultPricingBannerData.pricingTagline,
-  };
-
-  const bookData = {
-    ...defaultBookCourseData,
-    title: rawCourse?.title ?? defaultBookCourseData.title,
-    prerequisites: rawCourse?.prerequisites ?? defaultBookCourseData.prerequisites,
-    completionRewards: rawCourse?.completionRewards ?? defaultBookCourseData.completionRewards,
-    qualifications: rawCourse?.qualifications ?? defaultBookCourseData.qualifications,
-    cademyEmbedUrl: bookingAvailable ? cademyEmbedFromCms : undefined,
-    cademyDirectUrl: rawCourse?.cademyDirectUrl ?? defaultBookCourseData.cademyDirectUrl,
-    dates: cademyDates.length > 0 ? cademyDates : defaultBookCourseData.dates,
-  };
+  const calculatorPathways: PathwayCalcData[] = (allPathways ?? []).filter(
+    (p) => p.slug && p.priceIncVat,
+  );
 
   return (
     <main>
       <AnimatedSection variant="fade-in" visibleOnLoad>
-        <CourseHero data={heroData} />
+        <CourseHero data={heroData} isPathway />
       </AnimatedSection>
       <AnimatedSection variant="fade-up">
         <CourseDetails data={detailsData} />
       </AnimatedSection>
-      {bookingAvailable && (
-        <AnimatedSection variant="fade-up">
-          <BookCourse data={bookData} />
-        </AnimatedSection>
-      )}
+      <AnimatedSection variant="fade-up">
+        <PathwayEnquiryForm
+          pathwayName={rawCourse?.title ?? ""}
+          pathwaySlug={slug}
+          price={rawCourse?.price}
+          priceIncVat={rawCourse?.priceIncVat}
+          deposit={rawCourse?.deposit}
+          paymentPlan={rawCourse?.paymentPlan}
+          monthlyInstalment={rawCourse?.monthlyInstalment}
+          instalments={rawCourse?.instalments}
+        />
+      </AnimatedSection>
       <AnimatedSection variant="fade-up">
         <Ratings />
       </AnimatedSection>
       <AnimatedSection variant="fade-up">
         <Contact />
       </AnimatedSection>
+
+      {calculatorPathways.length > 0 && (
+        <PathwaysCalculatorSticky
+          pathways={calculatorPathways}
+          initialSlug={slug}
+        />
+      )}
     </main>
   );
 }

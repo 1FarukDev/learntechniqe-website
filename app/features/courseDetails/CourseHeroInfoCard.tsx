@@ -25,6 +25,7 @@ interface CourseHeroInfoCardProps {
   requestOverviewLink?: string;
   onBookNow?: () => void;
   bookingAvailable?: boolean;
+  isPathway?: boolean;
 }
 
 function CourseHeroInfoCard({
@@ -38,6 +39,7 @@ function CourseHeroInfoCard({
   requestOverviewLink: _requestOverviewLink = "#",
   onBookNow,
   bookingAvailable = true,
+  isPathway = false,
 }: CourseHeroInfoCardProps) {
   const scrollableRef = useRef<HTMLDivElement>(null);
   const enquiryFormRef = useRef<CourseEnquiryFormHandle>(null);
@@ -203,19 +205,21 @@ function CourseHeroInfoCard({
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-5 shrink-0">
+      <div className={`grid ${isPathway ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2"} gap-3 sm:gap-5 shrink-0`}>
         <Button
           type="button"
           onClick={onBookNow}
           className="bg-[#F5A623] hover:bg-[#e09410] text-white font-outfit font-semibold uppercase tracking-widest text-xs sm:text-sm h-12 sm:h-14"
         >
-          {bookingAvailable ? "Book Now" : "Request Course Overview"}
+          {isPathway ? "Enquire Now" : bookingAvailable ? "Book Now" : "Request Course Overview"}
         </Button>
-        <CourseEnquiryForm
-          ref={enquiryFormRef}
-          courseName={title}
-          courseUrl={`/courses/${slug}`}
-        />
+        {!isPathway && (
+          <CourseEnquiryForm
+            ref={enquiryFormRef}
+            courseName={title}
+            courseUrl={`/courses/${slug}`}
+          />
+        )}
       </div>
     </div>
   );
