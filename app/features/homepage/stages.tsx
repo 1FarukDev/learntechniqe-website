@@ -44,7 +44,7 @@ function Stages() {
           </div>
 
           <Button asChild className="bg-[#01636B] h-14 sm:h-17.25 uppercase mt-auto text-sm sm:text-base">
-            <Link href="/courses">Find courses</Link>
+            <Link href="/courses?level=beginner">Find courses</Link>
           </Button>
         </div>
 
@@ -76,7 +76,7 @@ function Stages() {
           </div>
 
           <Button asChild className="bg-[#E99E20] h-14 sm:h-17.25 uppercase mt-auto text-sm sm:text-base relative z-10">
-            <Link href="/courses">Find courses</Link>
+            <Link href="/courses?level=existing-electrician">Find courses</Link>
           </Button>
         </div>
       </section>

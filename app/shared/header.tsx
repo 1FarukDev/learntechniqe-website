@@ -12,6 +12,7 @@ import {
   Menu,
   Clock,
   ArrowRight,
+  ArrowUpRight,
 } from "lucide-react";
 import { Icon } from "@iconify/react";
 import type { HeaderData, MegaMenuFooter } from "@/types/header";
@@ -453,7 +454,13 @@ function MobileDrawer({
   }, []);
 
   const otherNavLinks = data.navLinks.filter(
-    (link) => link.label.toLowerCase() !== "career pathways",
+    (link) =>
+      link.label.toLowerCase() !== "career pathways" &&
+      link.label.toLowerCase() !== "contact",
+  );
+
+  const contactLink = data.navLinks.find(
+    (link) => link.label.toLowerCase() === "contact",
   );
 
   return (
@@ -678,7 +685,7 @@ function MobileDrawer({
             </div>
           )}
 
-          {/* Other nav links (excluding Career Pathways since it has its own section) */}
+          {/* Other nav links (excluding Career Pathways & Contact) */}
           {otherNavLinks.map((link) => (
             <Link
               key={link.label}
@@ -689,6 +696,17 @@ function MobileDrawer({
               {toTitleCase(link.label)}
             </Link>
           ))}
+
+          {contactLink && (
+            <Link
+              href={contactLink.href}
+              onClick={onClose}
+              className="mx-3 mt-2 flex items-center justify-center gap-2 rounded-xl bg-[#E99E20] px-4 py-3 text-sm font-bold text-white hover:bg-[#d48e1a] active:bg-[#c07f15] transition-colors"
+            >
+              Contact Us
+              <ArrowUpRight size={16} strokeWidth={2.5} />
+            </Link>
+          )}
         </nav>
 
         {/* Drawer Footer */}
@@ -779,7 +797,13 @@ function Header({
   };
 
   const navLinksWithoutPathways = data.navLinks.filter(
-    (link) => link.label.toLowerCase() !== "career pathways",
+    (link) =>
+      link.label.toLowerCase() !== "career pathways" &&
+      link.label.toLowerCase() !== "contact",
+  );
+
+  const contactLink = data.navLinks.find(
+    (link) => link.label.toLowerCase() === "contact",
   );
 
   return (
@@ -885,7 +909,7 @@ function Header({
               </div>
             )}
 
-            {/* Other nav links (excluding Career Pathways) */}
+            {/* Other nav links (excluding Career Pathways & Contact) */}
             {navLinksWithoutPathways.map((link) => (
               <Link
                 key={link.label}
@@ -896,6 +920,17 @@ function Header({
                 <p>{toTitleCase(link.label)}</p>
               </Link>
             ))}
+
+            {contactLink && (
+              <Link
+                href={contactLink.href}
+                onClick={closeAll}
+                className="flex items-center gap-1.5 text-sm font-semibold text-[#E99E20] hover:text-[#c9861a] active:text-[#b07816] transition-colors"
+              >
+                <p>Contact</p>
+                <ArrowUpRight size={15} strokeWidth={2.5} />
+              </Link>
+            )}
           </nav>
 
           {/* Mobile hamburger */}

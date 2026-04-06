@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { AnimatedSection } from "@/components/animated-section";
 import HeroSection from "../shared/heroBackground";
 import Session from "./sections/session";
@@ -43,11 +43,13 @@ export default async function CoursesPage() {
         />
       </AnimatedSection>
 
-      <CoursesPackage
-        category="all"
-        grouped={allGrouped}
-        courseTypes={courseTypes}
-      />
+      <Suspense>
+        <CoursesPackage
+          category="all"
+          grouped={allGrouped}
+          courseTypes={courseTypes}
+        />
+      </Suspense>
 
 
       <Session />

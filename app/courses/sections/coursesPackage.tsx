@@ -4,6 +4,7 @@ import { FormInput } from "@/components/Input";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useForm, FormProvider } from "react-hook-form";
+import { useSearchParams } from "next/navigation";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import ArrowRight from "@/app/assets/svg/arrow-front.svg";
 import ArrowBack from "@/app/assets/svg/arrow-back.svg";
@@ -155,6 +156,14 @@ function CoursesPackage({
 }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const config = CATEGORY_CONFIG[category] ?? CATEGORY_CONFIG.all;
+  const searchParams = useSearchParams();
+
+  const initialLevel = (() => {
+    const param = searchParams.get("level");
+    if (param === "beginner") return "beginner";
+    if (param === "existing-electrician") return "existing-electrician";
+    return "";
+  })();
 
   useEffect(() => {
     document.body.style.overflow = drawerOpen ? "hidden" : "";
@@ -164,7 +173,7 @@ function CoursesPackage({
   const methods = useForm({
     defaultValues: {
       search: "",
-      expertiseLevel: "",
+      expertiseLevel: initialLevel,
       category: "",
       courseType: "",
       location: "",

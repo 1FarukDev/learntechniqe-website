@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import CoursesPackage from "../sections/coursesPackage";
 import Session from "../sections/session";
 import Contact from "@/app/features/homepage/contact";
@@ -30,7 +30,9 @@ export default async function AirconRefrigerationCoursesPage() {
           description="Comprehensive HVAC and refrigeration training from F-Gas certification to total air conditioning packages. Learn from industry experts with hands-on practical experience."
         />
       </AnimatedSection>
-      <CoursesPackage category="aircon-refrigeration" grouped={grouped} />
+      <Suspense>
+        <CoursesPackage category="aircon-refrigeration" grouped={grouped} />
+      </Suspense>
       <Session />
       <AnimatedSection variant="fade-up">
         <Contact />
