@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import CoursesPackage from "../sections/coursesPackage";
 import Session from "../sections/session";
 import Contact from "@/app/features/homepage/contact";
@@ -30,7 +30,9 @@ export default async function ElectricalCoursesPage() {
           description="Carefully put-together data-backed courses taught by seasoned experts. Our processes and facilities are word-class with multiple credible accreditations."
         />
       </AnimatedSection>
-      <CoursesPackage category="electrical" grouped={grouped} />
+      <Suspense>
+        <CoursesPackage category="electrical" grouped={grouped} />
+      </Suspense>
       <Session />
       <AnimatedSection variant="fade-up">
         <Contact />

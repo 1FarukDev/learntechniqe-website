@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import CoursesPackage from "../sections/coursesPackage";
 import Session from "../sections/session";
 import Contact from "@/app/features/homepage/contact";
@@ -30,7 +30,9 @@ export default async function PLCCoursesPage() {
           description="Programmable Logic Controller training from beginner to advanced. City & Guilds and EAL accredited courses including SCADA, industrial networking, and manufacturer-specific training."
         />
       </AnimatedSection>
-      <CoursesPackage category="plc" grouped={grouped} />
+      <Suspense>
+        <CoursesPackage category="plc" grouped={grouped} />
+      </Suspense>
       <Session />
       <Contact />
     </main>
