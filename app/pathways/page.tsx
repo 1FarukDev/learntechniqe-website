@@ -5,6 +5,7 @@ import { PathwaysComparisonTable } from "../features/pathways/PathwaysComparison
 import { PathwayCardsGrid } from "../features/pathways/PathwayCardsGrid";
 import { PathwaysProcess } from "../features/pathways/PathwaysProcess";
 import { PathwaysCalculatorSticky } from "../features/pathways/PathwaysCalculatorSticky";
+import type { PathwayCalcData } from "../features/pathways/PathwaysCalculatorSticky";
 import Location from "../features/homepage/location";
 import Contact from "../features/homepage/contact";
 import { client } from "@/lib/sanity/client";
@@ -24,6 +25,16 @@ type Pathway = {
   description: string;
   href: string;
   external?: boolean;
+  pathway?: {
+    title: string;
+    slug: string;
+    priceIncVat: number | string;
+    deposit: number | string;
+    paymentPlan: string;
+    monthlyInstalment: number | string;
+    instalments: number | string;
+    [key: string]: any;
+  };
   eligibility: string[];
   attendance: string;
   exams: string;
@@ -58,31 +69,12 @@ type Process = {
   items: string[];
 };
 
-type Course = {
-  id: string;
-  name: string;
-  priceIncVat: number;
-  paymentPlanAvailable: boolean;
-};
-
-type PlatinumUpgrade = {
-  name: string;
-  priceIncVat: number;
-  description: string;
-};
-
-type Calculator = {
-  courses: Course[];
-  platinumUpgrade: PlatinumUpgrade;
-};
-
 type PathwaysPageData = {
   _id: string;
   title: string;
   hero: Hero;
   comparison: Comparison;
   process: Process;
-  calculator: Calculator;
   pathways: Pathway[];
 };
 
@@ -108,8 +100,19 @@ export default async function PathwaysPage() {
   const hero: Hero = pageData.hero;
   const comparison: Comparison = pageData.comparison;
   const process: Process = pageData.process;
-  const calculator: Calculator = pageData.calculator;
   const pathways: Pathway[] = pageData.pathways;
+
+  const calculatorPathways: PathwayCalcData[] = pathways
+    .filter((p) => p.pathway?.slug && p.pathway?.priceIncVat)
+    .map((p) => ({
+      title: p.pathway!.title,
+      slug: p.pathway!.slug,
+      priceIncVat: p.pathway!.priceIncVat,
+      deposit: p.pathway!.deposit,
+      paymentPlan: p.pathway!.paymentPlan,
+      monthlyInstalment: p.pathway!.monthlyInstalment,
+      instalments: p.pathway!.instalments,
+    }));
 
   return (
     <main>
@@ -121,10 +124,9 @@ export default async function PathwaysPage() {
         <PathwaysComparisonTable pathways={pathways} {...comparison} />
       </AnimatedSection>
 
-      <PathwaysCalculatorSticky
-        courses={calculator.courses}
-        platinumUpgrade={calculator.platinumUpgrade}
-      />
+      {calculatorPathways.length > 0 && (
+        <PathwaysCalculatorSticky pathways={calculatorPathways} />
+      )}
 
       <AnimatedSection variant="fade-up">
         <PathwayCardsGrid pathways={pathways} />
@@ -141,7 +143,6 @@ export default async function PathwaysPage() {
       <AnimatedSection variant="fade-in">
         <Contact />
       </AnimatedSection>
-
     </main>
   );
 }

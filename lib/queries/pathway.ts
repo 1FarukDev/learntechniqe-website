@@ -83,6 +83,18 @@ export const PATHWAYS_QUERY = groq`
   }
 `;
 
+export const PATHWAYS_CALC_QUERY = groq`
+  *[_type == "pathwayDetail" && defined(priceIncVat)] | order(title asc) {
+    title,
+    "slug": slug.current,
+    priceIncVat,
+    deposit,
+    paymentPlan,
+    monthlyInstalment,
+    instalments,
+  }
+`;
+
 export const PATHWAY_DETAIL_QUERY = groq`
    *[_type == "pathwayDetail" && slug.current == $slug][0] {
      title,
@@ -111,5 +123,12 @@ export const PATHWAY_DETAIL_QUERY = groq`
      cademyEmbedUrl,
      cademyDirectUrl,
      dates,
+     deposit,
+     paymentPlan,
+     priceIncVat,
+     priceExVat,
+     monthlyPayment,
+     monthlyInstalment,
+     instalments,
    }
  `;

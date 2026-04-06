@@ -376,7 +376,10 @@ export default function FAQSection() {
   };
 
   return (
-    <section className="w-full bg-white px-4 sm:px-8 md:px-12 py-12 md:py-16">
+    <section
+      id="general-faqs"
+      className="w-full scroll-mt-28 bg-white px-4 sm:px-8 md:px-12 py-12 md:py-16"
+    >
       <div className="text-center mb-10 md:mb-14">
         <h2 className="text-black text-3xl sm:text-4xl md:text-5xl font-semibold mb-3">
           F.A.Qs
