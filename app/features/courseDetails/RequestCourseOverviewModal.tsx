@@ -83,9 +83,9 @@ export function RequestCourseOverviewModal({
         className={isMobile ? "h-[85vh] rounded-t-2xl border-t max-h-[90vh]" : "sm:max-w-md w-full"}
       >
         <SheetHeader className="text-left">
-          <SheetTitle className="font-heading text-xl">Request Course Overview</SheetTitle>
+          <SheetTitle className="font-heading text-xl">Request a call back</SheetTitle>
           <SheetDescription>
-            Enter your details and we&apos;ll send you a full overview of {courseName}.
+            Enter your details and we&apos;ll call you back about {courseName}.
           </SheetDescription>
         </SheetHeader>
 
@@ -150,7 +150,7 @@ export function RequestCourseOverviewModal({
               />
             </div>
             {status === "success" && (
-              <p className="text-sm text-green-600 font-medium">Thank you! We&apos;ll send the overview to your email soon.</p>
+              <p className="text-sm text-green-600 font-medium">Thank you! We&apos;ll be in touch shortly.</p>
             )}
             {status === "error" && (
               <p className="text-sm text-red-600 font-medium">Something went wrong. Please try again.</p>
@@ -161,7 +161,7 @@ export function RequestCourseOverviewModal({
               disabled={status === "loading"}
               className="w-full h-12 uppercase bg-[#016068] hover:bg-[#014d54] text-white font-semibold"
             >
-              {status === "loading" ? "Sending..." : "Request Overview"}
+              {status === "loading" ? "Sending..." : "Request a call back"}
             </Button>
           </form>
         </div>

@@ -54,7 +54,7 @@ function Brochure() {
 
       <div className="absolute inset-0 bg-[#242A3A80]" />
 
-      <div className="relative z-10 max-w-3xl w-full px-4 sm:px-6 md:px-10 text-white text-center">
+      <div className="relative z-10 max-w-3xl w-full px-4 sm:px-6 md:px-10 text-white text-center py-6 md:py-6">
         <h2 className="text-[28px] sm:text-4xl md:text-5xl font-semibold">
           Subscribe To Download <br /> Our Brochure
         </h2>

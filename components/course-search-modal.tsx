@@ -28,7 +28,10 @@ export interface PathwayModalItem {
 interface CourseSearchModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  /** Full catalogue for search / filters */
   courses?: CourseCardData[];
+  /** When set, empty search shows this list (same order as homepage popular strip) */
+  popularCourses?: CourseCardData[];
   pathways?: PathwayModalItem[];
 }
 
@@ -163,6 +166,7 @@ export function CourseSearchModal({
   open,
   onOpenChange,
   courses = [],
+  popularCourses = [],
   pathways = [],
 }: CourseSearchModalProps) {
   const [query, setQuery] = useState("");
@@ -203,7 +207,16 @@ export function CourseSearchModal({
     });
   }, [courses, query, category]);
 
-  const displayCourses = query.trim() ? filteredCourses : filteredCourses.slice(0, 8);
+  const popularOrDefault = useMemo(() => {
+    const base =
+      popularCourses.length > 0 ? popularCourses : courses.slice(0, 8);
+    if (!category) return base;
+    return base.filter((c) =>
+      (c.tags ?? []).some((t) => t.label === category),
+    );
+  }, [popularCourses, courses, category]);
+
+  const displayCourses = query.trim() ? filteredCourses : popularOrDefault;
 
   const handleClose = () => onOpenChange(false);
 

@@ -211,7 +211,7 @@ function CourseHeroInfoCard({
           onClick={onBookNow}
           className="bg-[#F5A623] hover:bg-[#e09410] text-white font-outfit font-semibold uppercase tracking-widest text-xs sm:text-sm h-12 sm:h-14"
         >
-          {isPathway ? "Enquire Now" : bookingAvailable ? "Book Now" : "Request Course Overview"}
+          {isPathway ? "Enquire Now" : bookingAvailable ? "Book Now" : "Request a call back"}
         </Button>
         {!isPathway && (
           <CourseEnquiryForm
