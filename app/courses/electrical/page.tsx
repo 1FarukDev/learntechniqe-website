@@ -1,4 +1,5 @@
 import React, { Suspense } from "react";
+import type { Metadata } from "next";
 import CoursesPackage from "../sections/coursesPackage";
 import Session from "../sections/session";
 import Contact from "@/app/features/homepage/contact";
@@ -10,6 +11,19 @@ import { headerQuery } from "@/lib/queries/navigation";
 import { categoriseFromHeader } from "@/lib/course-categories";
 import type { CourseCardData } from "@/lib/course-categories";
 import type { HeaderData } from "@/types/header";
+
+export const metadata: Metadata = {
+  title: "Electrical Courses",
+  description:
+    "Accredited electrical courses including 18th Edition, Inspection & Testing, AM2 Assessment, and complete electrician pathways. City & Guilds and EAL certified training at world-class facilities.",
+  alternates: { canonical: "https://www.learntechnique.com/courses/electrical" },
+  openGraph: {
+    title: "Electrical Courses | Technique Learning Solutions",
+    description:
+      "City & Guilds and EAL accredited electrical training from beginner to advanced.",
+    url: "https://www.learntechnique.com/courses/electrical",
+  },
+};
 
 export default async function ElectricalCoursesPage() {
   const [allCourses, headerData] = await Promise.all([
@@ -27,7 +41,7 @@ export default async function ElectricalCoursesPage() {
       <AnimatedSection variant="fade-in" visibleOnLoad className="relative z-0">
         <HeroSection
           title="Electrical Courses"
-          description="Carefully put-together data-backed courses taught by seasoned experts. Our processes and facilities are word-class with multiple credible accreditations."
+          description="Carefully put-together data-backed courses taught by seasoned experts. Our processes and facilities are world-class with multiple credible accreditations."
         />
       </AnimatedSection>
       <Suspense>

@@ -1,4 +1,5 @@
 import React, { Suspense } from "react";
+import type { Metadata } from "next";
 import { AnimatedSection } from "@/components/animated-section";
 import HeroSection from "../shared/heroBackground";
 import Session from "./sections/session";
@@ -10,6 +11,19 @@ import { categoriseFromHeader } from "@/lib/course-categories";
 import type { CourseCardData } from "@/lib/course-categories";
 import type { HeaderData } from "@/types/header";
 import CoursesPackage from "./sections/coursesPackage";
+
+export const metadata: Metadata = {
+  title: "All Courses",
+  description:
+    "Browse our full range of accredited electrical, HVAC, and PLC courses. From beginner packages to specialist qualifications — City & Guilds and EAL accredited training at world-class facilities.",
+  alternates: { canonical: "https://www.learntechnique.com/courses" },
+  openGraph: {
+    title: "All Courses | Technique Learning Solutions",
+    description:
+      "Browse accredited electrical, HVAC, and PLC courses. Beginner to specialist qualifications.",
+    url: "https://www.learntechnique.com/courses",
+  },
+};
 
 export default async function CoursesPage() {
   const [allCourses, headerData] = await Promise.all([

@@ -8,10 +8,10 @@ import Link from "next/link";
 
 function Stages() {
   return (
-    <main className="flex md:px-0 px-4 flex-col items-center justify-center gap-6 w-full mt-20 sm:mt-16 md:mt-35 text-center max-w-7xl mx-auto ">
-      <h1 className="font-semibold text-[32px] sm:text-[44px] md:text-[56px] lg:text-[68px] leading-tight text-black px-2">
+    <section className="flex md:px-0 px-4 flex-col items-center justify-center gap-6 w-full mt-20 sm:mt-16 md:mt-35 text-center max-w-7xl mx-auto ">
+      <h2 className="font-semibold text-[32px] sm:text-[44px] md:text-[56px] lg:text-[68px] leading-tight text-black px-2">
         There’s a Course For Everyone
-      </h1>
+      </h2>
       <p className="font-normal text-sm sm:text-base text-black px-2">
         Whether you're beginning your journey in the electrical, HVAC, or
         automation industry, or you're an experienced professional ready to
@@ -23,9 +23,9 @@ function Stages() {
         <div className="bg-[#D4D8DB] w-full lg:w-1/2 pt-10 sm:pt-15 pb-5 px-6 sm:px-10 rounded-2xl border border-[#bcbdbd] flex flex-col">
           <div>
             <div className="flex items-center justify-between gap-3 sm:gap-0 mb-4 sm:mb-8 h-20 sm:h-25">
-              <h1 className="text-black font-semibold text-[26px] sm:text-[36px] leading-tight shrink-0">
+              <h3 className="text-black font-semibold text-[26px] sm:text-[36px] leading-tight shrink-0">
                 Beginner
-              </h1>
+              </h3>
               <Image
                 src={FirstStar}
                 alt="1 Star"
@@ -56,9 +56,9 @@ function Stages() {
           />
           <div className="relative z-10">
             <div className="flex items-center justify-between gap-3 sm:gap-0 mb-4 sm:mb-8 h-20 sm:h-25">
-              <h1 className="text-white text-[26px] sm:text-[36px] font-semibold text-start leading-tight shrink-0">
+              <h3 className="text-white text-[26px] sm:text-[36px] font-semibold text-start leading-tight shrink-0">
                 Existing <br /> Professional
-              </h1>
+              </h3>
               <Image
                 src={ThirdStar}
                 alt="3 Stars"
@@ -67,7 +67,7 @@ function Stages() {
             </div>
 
             <p className="text-start text-white mb-4 sm:mb-8 text-sm sm:text-base leading-relaxed">
-              An experienced professional looking <br /> to expand and refine your expertise. 
+              An experienced professional looking <br /> to expand and refine your expertise.
             </p>
 
             <h5 className="text-start font-semibold uppercase text-sm sm:text-base text-white mb-4 sm:mb-10">
@@ -80,7 +80,7 @@ function Stages() {
           </Button>
         </div>
       </section>
-    </main>
+    </section>
   );
 }
 

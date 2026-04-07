@@ -3,9 +3,10 @@ import { AnimatedSection } from "@/components/animated-section";
 import HeroSection from "@/app/shared/heroBackground";
 
 export const metadata = {
-  title: "Privacy Policy | Technique Learning Solutions",
+  title: "Privacy Policy",
   description:
-    "Privacy policy for Technique Learning Solutions. Learn how we collect, use, and protect your personal information.",
+    "Privacy policy for Technique Learning Solutions. Learn how we collect, use, and protect your personal information, including cookies and GDPR compliance.",
+  alternates: { canonical: "https://www.learntechnique.com/privacy-policy" },
 };
 
 export default function PrivacyPolicyPage() {

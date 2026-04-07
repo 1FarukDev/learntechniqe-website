@@ -1,6 +1,6 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "./ui/button";
-import { useRouter } from "next/navigation";
 
 interface BlogPost {
   id: number | string;
@@ -17,6 +17,8 @@ interface BlogCardProps {
   variant?: "large" | "small";
   highlighted?: boolean;
   fluid?: boolean;
+  /** No outline border — uses shadow only (e.g. dense grids where adjacent borders double up) */
+  noBorder?: boolean;
 }
 
 function BlogCard({
@@ -24,14 +26,24 @@ function BlogCard({
   variant = "small",
   highlighted = false,
   fluid = false,
+  noBorder = false,
 }: BlogCardProps) {
   const fixedWidth = variant === "large" ? "w-100" : "w-75";
-  const router = useRouter();
+  const borderClasses = highlighted
+    ? "border-2 border-[#1AABBA] shadow-sm"
+    : noBorder
+      ? "border-0 shadow-md"
+      : "border border-gray-100 shadow-sm";
+
+  const href = post.slug?.current
+    ? `/blog/${post.slug.current}`
+    : `/blog/${post.id}`;
+
   return (
     <div
-      className={`bg-white rounded-md overflow-hidden shadow-sm border shrink-0 flex flex-col ${
-        highlighted ? "border-[#1AABBA] border-2" : "border-gray-100"
-      } ${fluid ? "w-full" : fixedWidth}`}
+      className={`bg-white rounded-md overflow-hidden shrink-0 flex flex-col ${borderClasses} ${
+        fluid ? "w-full" : fixedWidth
+      }`}
     >
       <div
         className={`relative overflow-hidden ${
@@ -46,7 +58,9 @@ function BlogCard({
         />
       </div>
 
-      <div className="p-5 flex flex-col gap-2 flex-1">
+      <div
+        className={`p-5 flex flex-col gap-2 ${noBorder ? "" : "flex-1"}`}
+      >
         <h3
           className={`font-bold leading-snug text-black ${
             variant === "large" ? "text-lg" : "text-base"
@@ -63,15 +77,12 @@ function BlogCard({
 
         <div className="mt-auto pt-3">
           <Button
+            asChild
             className={`hover:bg-[#0a5f63] text-white text-xs font-semibold tracking-widest px-8 rounded-md h-10.75 ${
               variant === "large" ? "bg-[#14AE5C]" : "bg-[#016068]"
             }`}
-            onClick={() => {
-              const href = post.slug ? `/blog/${post.slug.current}` : `/blog/${post.id}`;
-              router.push(href);
-            }}
           >
-            READ BLOG
+            <Link href={href}>READ BLOG</Link>
           </Button>
         </div>
       </div>

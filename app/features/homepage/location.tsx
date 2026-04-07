@@ -85,7 +85,8 @@ const Location: React.FC = () => {
   return (
     <section className="py-15 sm:py-30 max-w-7xl mx-auto md:px-0 px-4">
       <div className="flex flex-row justify-center sm:justify-end gap-2">
-        <div
+        <button
+          type="button"
           onClick={() => switchTab("clay")}
           className={`${baseClasses} ${activeTab === "clay"
               ? "bg-[#0088FF] text-white"
@@ -93,10 +94,11 @@ const Location: React.FC = () => {
             }`}
         >
           <MapPin />
-          <p className="uppercase">Clay Cross</p>
-        </div>
+          <span className="uppercase">Clay Cross</span>
+        </button>
 
-        <div
+        <button
+          type="button"
           onClick={() => switchTab("stirling")}
           className={`${baseClasses} ${activeTab === "stirling"
               ? "bg-[#0088FF] text-white"
@@ -104,8 +106,8 @@ const Location: React.FC = () => {
             }`}
         >
           <MapPin />
-          <p className="uppercase">Stirling</p>
-        </div>
+          <span className="uppercase">Stirling</span>
+        </button>
       </div>
 
       <div className="flex flex-col md:flex-row mt-6 sm:mt-10 justify-between items-center gap-6">
@@ -116,9 +118,9 @@ const Location: React.FC = () => {
           <h3 className="text-[#01656B] font-bold text-sm sm:text-base">
             {current.subtitle}
           </h3>
-          <h1 className="text-black font-semibold text-[32px] sm:text-[40px] md:text-5xl whitespace-pre-line">
+          <h2 className="text-black font-semibold text-[32px] sm:text-[40px] md:text-5xl whitespace-pre-line">
             {current.title}
-          </h1>
+          </h2>
           <p className="text-black font-normal text-sm sm:text-base whitespace-pre-line">
             {current.address}
           </p>
@@ -254,18 +256,22 @@ const Location: React.FC = () => {
             fill
           />
           <div className="flex justify-between absolute w-full top-1/2 transform -translate-y-1/2">
-            <div
+            <button
+              type="button"
               onClick={handlePrev}
+              aria-label="Previous location"
               className="bg-[#E99E20] p-2 px-2.75 rounded-full -ml-3 cursor-pointer hover:opacity-80 transition"
             >
-              <Image src={ArrowBack} alt="Arrow back" />
-            </div>
-            <div
+              <Image src={ArrowBack} alt="" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
               onClick={handleNext}
+              aria-label="Next location"
               className="bg-[#E99E20] p-2 px-2.75 rounded-full -mr-3 cursor-pointer hover:opacity-80 transition"
             >
-              <Image src={ArrowRight} alt="Arrow right" />
-            </div>
+              <Image src={ArrowRight} alt="" aria-hidden="true" />
+            </button>
           </div>
         </div>
       </div>

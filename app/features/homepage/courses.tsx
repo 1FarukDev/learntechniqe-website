@@ -46,23 +46,27 @@ const Courses: React.FC<CoursesProps> = ({ courses = [] }) => {
   return (
     <section className="bg-[#D4D8DB99] py-10 sm:py-20 px-4 md:px-0">
       <div className="mx-auto max-w-7xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 px-4 sm:px-6">
-        <h1 className="text-black font-semibold text-[26px] sm:text-[30px] md:text-[34px] text-center sm:text-left w-full sm:w-auto">
+        <h2 className="text-black font-semibold text-[26px] sm:text-[30px] md:text-[34px] text-center sm:text-left w-full sm:w-auto">
           Our Most Popular Courses
-        </h1>
+        </h2>
         <div className="flex items-center gap-4 sm:gap-8 w-full sm:w-auto">
           <div className="flex items-center gap-3 sm:gap-5">
-            <div
+            <button
+              type="button"
               onClick={() => scroll("left")}
+              aria-label="Scroll courses left"
               className="h-9 w-9 sm:h-10 sm:w-10 bg-[#9A9A9A] flex items-center justify-center rounded-full hover:bg-[#016068] active:bg-[#0E7377] cursor-pointer shrink-0 transition-colors"
             >
-              <Image src={ArrowBack} alt="Arrow Back" />
-            </div>
-            <div
+              <Image src={ArrowBack} alt="" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
               onClick={() => scroll("right")}
+              aria-label="Scroll courses right"
               className="h-9 w-9 sm:h-10 sm:w-10 bg-[#9A9A9A] flex items-center justify-center rounded-full hover:bg-[#016068] active:bg-[#0E7377] cursor-pointer shrink-0 transition-colors"
             >
-              <Image src={ArrowRight} alt="Arrow Right" />
-            </div>
+              <Image src={ArrowRight} alt="" aria-hidden="true" />
+            </button>
           </div>
           <Button asChild className="uppercase bg-[#016068] h-12 sm:h-17.25 px-8 sm:px-15 text-sm sm:text-base flex-1 sm:flex-initial">
             <Link href="/courses">See All Courses</Link>

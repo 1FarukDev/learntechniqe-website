@@ -130,7 +130,7 @@ function PostOfTheDay() {
   const router = useRouter();
 
   return (
-    <main className="bg-white">
+    <section className="bg-white">
       {/* Header */}
       <div className="max-w-7xl mx-auto py-8 sm:py-12 px-4 sm:px-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
@@ -214,7 +214,7 @@ function PostOfTheDay() {
         posts={latestPosts}
         variant="small"
       />
-    </main>
+    </section>
   );
 }
 

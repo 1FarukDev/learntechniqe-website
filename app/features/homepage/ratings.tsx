@@ -149,35 +149,39 @@ function Ratings() {
     <section className="max-w-7xl mx-auto py-15 sm:py-30 md:px-0 px-4">
       <div className="mx-auto max-w-7xl flex flex-col sm:flex-row justify-between md:items-start items-center gap-4 mb-6 px-0">
         <div className="text-center sm:text-left w-full sm:w-auto max-w-2xl">
-          <h1 className="text-black font-semibold text-[26px] sm:text-[30px] md:text-[34px]">
+          <h2 className="text-black font-semibold text-[26px] sm:text-[30px] md:text-[34px]">
             What Our Students Say About Us
-          </h1>
+          </h2>
           <p className="mt-2 text-sm sm:text-base text-black/65 leading-relaxed">
             Learners reflect on our instructors, training centre, and the experience of studying with us.
           </p>
         </div>
         <div className="flex items-center gap-3 sm:gap-6">
           <div className="flex items-center gap-3 sm:gap-5">
-            <div
+            <button
+              type="button"
               onClick={TOTAL_PAGES > 1 ? goPrev : undefined}
+              disabled={TOTAL_PAGES <= 1}
               className={`h-9 w-9 sm:h-10 sm:w-10 flex items-center justify-center rounded-full shrink-0 transition-colors ${TOTAL_PAGES > 1
                 ? "bg-[#9A9A9A] hover:bg-[#016068] active:bg-[#0E7377] cursor-pointer"
                 : "bg-[#9A9A9A] opacity-50 cursor-not-allowed"
                 }`}
               aria-label="Previous reviews"
             >
-              <Image src={ArrowBack} alt="Previous" />
-            </div>
-            <div
+              <Image src={ArrowBack} alt="" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
               onClick={TOTAL_PAGES > 1 ? goNext : undefined}
+              disabled={TOTAL_PAGES <= 1}
               className={`h-9 w-9 sm:h-10 sm:w-10 flex items-center justify-center rounded-full shrink-0 transition-colors ${TOTAL_PAGES > 1
                 ? "bg-[#9A9A9A] hover:bg-[#016068] active:bg-[#0E7377] cursor-pointer"
                 : "bg-[#9A9A9A] opacity-50 cursor-not-allowed"
                 }`}
               aria-label="Next reviews"
             >
-              <Image src={ArrowRight} alt="Next" />
-            </div>
+              <Image src={ArrowRight} alt="" aria-hidden="true" />
+            </button>
           </div>
           <Button asChild className="uppercase bg-[#016068] h-12 sm:h-17.25 px-8 sm:px-15 text-sm sm:text-base">
             <Link

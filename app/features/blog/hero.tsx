@@ -1,6 +1,7 @@
-// app/shared/heroBackground.tsx
 import React from "react";
+import Image from "next/image";
 import { urlFor } from "@/lib/sanity/image";
+import BackgroundImage from "@/app/assets/png/courses.jpg";
 
 interface SanityImage {
   asset: { _ref: string; _type: string };
@@ -18,12 +19,24 @@ function HeroSection({ title, image }: Props) {
 
   return (
     <section className="relative w-full h-80 sm:h-96 md:h-120 overflow-hidden">
-      {imageSrc && (
+      {imageSrc ? (
         <img
           src={imageSrc}
           alt=""
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover object-top z-0"
+        />
+      ) : (
+        <Image
+          src={BackgroundImage}
+          alt=""
+          aria-hidden="true"
+          fill
+          className="absolute inset-0 object-cover object-top z-0"
+          sizes="100vw"
+          quality={80}
+          priority
+          placeholder="blur"
         />
       )}
 

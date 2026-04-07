@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Hero from "./features/homepage/hero";
 import Stages from "./features/homepage/stages";
 import TradeCourses from "./features/homepage/tradeCourses";
@@ -15,6 +16,19 @@ import { PATHWAYS_PAGE_QUERY } from "@/lib/queries/pathway";
 import type { CourseCardData } from "@/lib/course-categories";
 import { pickPopularCourses } from "@/lib/constants/popular-courses";
 import type { PathwayModalItem } from "@/components/course-search-modal";
+
+export const metadata: Metadata = {
+  title: "Learn Technique | Expert-Led Electrical & Trade Training",
+  description:
+    "Industry-recognised electrical, HVAC, and PLC trade courses at world-class facilities. City & Guilds and EAL accredited programmes with training centres in Chesterfield and Stirling. Career-changing courses for beginners and experienced professionals.",
+  alternates: { canonical: "https://www.learntechnique.com" },
+  openGraph: {
+    title: "Learn Technique | Expert-Led Electrical & Trade Training",
+    description:
+      "Industry-recognised electrical, HVAC, and PLC trade courses at world-class facilities. Accredited programmes to advance your career.",
+    url: "https://www.learntechnique.com",
+  },
+};
 
 export default async function Home() {
   const [allCourses, pathwaysPage] = await Promise.all([
@@ -36,7 +50,7 @@ export default async function Home() {
     }));
 
   return (
-    <div className="overflow-hidden ">
+    <main className="overflow-hidden">
       <AnimatedSection variant="fade-in" visibleOnLoad>
         <Hero courses={allCourses} pathways={pathwayItems} />
       </AnimatedSection>
@@ -67,6 +81,6 @@ export default async function Home() {
         <Ratings />
       </AnimatedSection>
    
-    </div>
+    </main>
   );
 }

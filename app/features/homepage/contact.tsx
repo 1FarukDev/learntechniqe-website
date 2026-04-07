@@ -50,9 +50,9 @@ function Contact() {
     <section id="contact-section" className="bg-[#E0ECED] md:px-0 px-4 scroll-mt-24">
       <div className="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto py-10 sm:py-19 px-0 sm:px-6 gap-8 sm:gap-10">
         <div className="w-full md:w-[40%] flex flex-col gap-3 sm:gap-4">
-          <h1 className="text-black font-semibold text-[32px] sm:text-[42px] md:text-[52px] leading-tight">
+          <h2 className="text-black font-semibold text-[32px] sm:text-[42px] md:text-[52px] leading-tight">
             Got Questions? <br className="hidden md:block" /> Get In Touch
-          </h1>
+          </h2>
           <h6 className="text-black font-bold text-base sm:text-xl">
             Technique Learning Solutions
           </h6>

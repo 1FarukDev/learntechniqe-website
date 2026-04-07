@@ -1,4 +1,5 @@
 import React from "react";
+import type { Metadata } from "next";
 import { AnimatedSection } from "@/components/animated-section";
 import { PathwaysHero } from "../features/pathways/PathwaysHero";
 import { PathwaysComparisonTable } from "../features/pathways/PathwaysComparisonTable";
@@ -11,10 +12,17 @@ import Contact from "../features/homepage/contact";
 import { client } from "@/lib/sanity/client";
 import { PATHWAYS_PAGE_QUERY } from "@/lib/queries/pathway";
 
-export const metadata = {
-  title: "Electrical Career Pathways | Technique Learning Solutions",
+export const metadata: Metadata = {
+  title: "Electrical Career Pathways",
   description:
-    "Explore our electrical career pathways. Whether you're new to the industry or an experienced professional, we have a pathway to suit your requirements.",
+    "Explore structured electrical career pathways from beginner to professional. Compare packages, calculate costs, and find the perfect route to becoming a qualified electrician with Technique Learning Solutions.",
+  alternates: { canonical: "https://www.learntechnique.com/pathways" },
+  openGraph: {
+    title: "Electrical Career Pathways | Technique Learning Solutions",
+    description:
+      "Structured pathways to becoming a qualified electrician. Compare packages and find your route.",
+    url: "https://www.learntechnique.com/pathways",
+  },
 };
 
 type Pathway = {

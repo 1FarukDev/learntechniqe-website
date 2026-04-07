@@ -22,7 +22,7 @@ const FALLBACK_REVIEWS: CoursecheckReview[] = [
   },
   {
     name: "Brandon C",
-    date: "2026-03-27", 
+    date: "2026-03-27",
     rating: "5",
     comment:
       "Chris was absolutely brilliant. Explained everything clearly and made the course enjoyable from start to finish.",
@@ -56,7 +56,7 @@ function formatDate(iso: string): string {
       month: "short",
       year: "numeric",
     });
-  } catch { 
+  } catch {
     return "";
   }
 }
@@ -107,13 +107,12 @@ function ReviewCard({ review }: { review: CoursecheckReview }) {
       <hr className="border-gray-600 my-3" />
       <div className="flex flex-col flex-1 min-h-0">
         <p
-          className={`text-sm text-gray-300 leading-relaxed ${
-            !expanded && isLong
-              ? "line-clamp-5"
-              : expanded && isLong
-                ? "max-h-48 sm:max-h-56 overflow-y-auto overscroll-y-contain pr-1 [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.35)_transparent]"
-                : ""
-          }`}
+          className={`text-sm text-gray-300 leading-relaxed ${!expanded && isLong
+            ? "line-clamp-5"
+            : expanded && isLong
+              ? "max-h-48 sm:max-h-56 overflow-y-auto overscroll-y-contain pr-1 [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.35)_transparent]"
+              : ""
+            }`}
         >
           &quot;{body}&quot;
         </p>

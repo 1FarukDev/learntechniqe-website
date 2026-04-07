@@ -1,14 +1,20 @@
 import React from "react";
+import Image from "next/image";
 import BackgroundImage from "@/app/assets/png/courses.jpg";
 
 function HeroSection() {
   return (
     <section className="relative w-full h-80 sm:h-96 md:h-120 overflow-hidden">
-      <img
-        src={BackgroundImage.src ?? BackgroundImage}
+      <Image
+        src={BackgroundImage}
         alt=""
         aria-hidden="true"
-        className="absolute inset-0 w-full h-full object-cover object-top z-0"
+        fill
+        className="absolute inset-0 object-cover object-top z-0"
+        sizes="100vw"
+        quality={80}
+        priority
+        placeholder="blur"
       />
 
       <div className="absolute inset-0 z-10 bg-linear-to-b from-[#00000061] to-[#016068]" />

@@ -96,9 +96,8 @@ function CoursesMegaMenu({
 
   return (
     <div
-      className={`hidden md:flex fixed left-0 right-0 z-50 flex-col overflow-hidden bg-white shadow-2xl border-t border-gray-100 max-h-[87vh] ${
-        scrolled ? "top-[4.5rem]" : "top-[4.25rem]"
-      }`}
+      className={`hidden md:flex fixed left-0 right-0 z-50 flex-col overflow-hidden bg-white shadow-2xl border-t border-gray-100 max-h-[87vh] ${scrolled ? "top-[4.5rem]" : "top-[4.25rem]"
+        }`}
       style={{
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(-12px)",
@@ -148,9 +147,8 @@ function CoursesMegaMenu({
                         {toTitleCase(sub.label)}
                         <ChevronDown
                           size={16}
-                          className={`transition-transform duration-200 text-gray-500 ${
-                            isOpen ? "rotate-180" : ""
-                          }`}
+                          className={`transition-transform duration-200 text-gray-500 ${isOpen ? "rotate-180" : ""
+                            }`}
                         />
                       </button>
                       <div
@@ -266,9 +264,8 @@ function PathwaysMegaMenu({
 
   return (
     <div
-      className={`hidden md:flex fixed left-0 right-0 z-50 flex-col overflow-hidden bg-white shadow-2xl border-t border-gray-100 ${
-        scrolled ? "top-[4.5rem]" : "top-[4.25rem]"
-      }`}
+      className={`hidden md:flex fixed left-0 right-0 z-50 flex-col overflow-hidden bg-white shadow-2xl border-t border-gray-100 ${scrolled ? "top-[4.5rem]" : "top-[4.25rem]"
+        }`}
       style={{
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(-12px)",
@@ -504,16 +501,14 @@ function MobileDrawer({
               Courses
               <ChevronDown
                 size={16}
-                className={`transition-transform duration-200 ease-out text-gray-500 ${
-                  coursesOpen ? "rotate-180" : ""
-                }`}
+                className={`transition-transform duration-200 ease-out text-gray-500 ${coursesOpen ? "rotate-180" : ""
+                  }`}
               />
             </button>
 
             <div
-              className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${
-                coursesOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-              }`}
+              className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${coursesOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                }`}
             >
               <div className="ml-2 mt-1 flex flex-col gap-0.5 min-h-0 overflow-hidden">
                 {data.megaMenuColumns.map((col, colIdx) => (
@@ -534,19 +529,17 @@ function MobileDrawer({
                       </span>
                       <ChevronDown
                         size={16}
-                        className={`shrink-0 text-gray-500 transition-transform duration-200 ease-out ${
-                          openColumn === colIdx ? "rotate-180" : ""
-                        }`}
+                        className={`shrink-0 text-gray-500 transition-transform duration-200 ease-out ${openColumn === colIdx ? "rotate-180" : ""
+                          }`}
                         aria-hidden
                       />
                     </button>
 
                     <div
-                      className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${
-                        openColumn === colIdx
+                      className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${openColumn === colIdx
                           ? "grid-rows-[1fr]"
                           : "grid-rows-[0fr]"
-                      }`}
+                        }`}
                     >
                       <div className="ml-2 flex flex-col gap-0.5 mb-1 min-h-0 overflow-hidden">
                         {col.subcategories.map((sub, subIdx) => {
@@ -565,17 +558,15 @@ function MobileDrawer({
                                 {toTitleCase(sub.label)}
                                 <ChevronDown
                                   size={16}
-                                  className={`transition-transform duration-200 ease-out text-gray-400 ${
-                                    isOpen ? "rotate-180" : ""
-                                  }`}
+                                  className={`transition-transform duration-200 ease-out text-gray-400 ${isOpen ? "rotate-180" : ""
+                                    }`}
                                 />
                               </button>
                               <div
-                                className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${
-                                  isOpen
+                                className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${isOpen
                                     ? "grid-rows-[1fr]"
                                     : "grid-rows-[0fr]"
-                                }`}
+                                  }`}
                               >
                                 <div
                                   className="ml-2 flex flex-col gap-0.5 mb-1 min-h-0 overflow-hidden rounded-lg px-3"
@@ -619,16 +610,14 @@ function MobileDrawer({
                 Career Pathways
                 <ChevronDown
                   size={16}
-                  className={`transition-transform duration-200 ease-out text-gray-500 ${
-                    pathwaysOpen ? "rotate-180" : ""
-                  }`}
+                  className={`transition-transform duration-200 ease-out text-gray-500 ${pathwaysOpen ? "rotate-180" : ""
+                    }`}
                 />
               </button>
 
               <div
-                className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${
-                  pathwaysOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-                }`}
+                className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${pathwaysOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                  }`}
               >
                 <div className="ml-2 mt-1 flex flex-col gap-1 min-h-0 overflow-hidden">
                   {pathwayNavItems.map((p) => {
@@ -809,27 +798,24 @@ function Header({
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 flex justify-center ${
-        showMegaMenu ? "bg-white" : ""
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 flex justify-center ${showMegaMenu ? "bg-white" : ""
+        }`}
     >
       <div
-        className={`w-full transition-[max-width,margin,padding,box-shadow,border-radius] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          scrolled && !showMegaMenu
+        className={`w-full transition-[max-width,margin,padding,box-shadow,border-radius] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${scrolled && !showMegaMenu
             ? "max-w-7xl mt-2 md:mt-3 mx-3 md:mx-auto rounded-2xl bg-white/80 backdrop-blur-md shadow-lg px-3 md:px-6 py-px md:py-1"
             : scrolled && showMegaMenu
               ? "max-w-7xl mt-2 md:mt-3 mx-3 md:mx-auto rounded-none px-3 md:px-6 py-1 md:py-1 shadow-none"
               : showMegaMenu
                 ? "max-w-7xl mt-0 mx-auto rounded-none px-3 md:px-0 py-0 shadow-none"
                 : "max-w-7xl mt-0 mx-auto rounded-none shadow-none px-3 md:px-0 py-0"
-        }`}
+          }`}
       >
         <section className="flex justify-between items-center">
           <Link
             href="/"
-            className={`flex items-center transition-[padding] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-              scrolled ? "py-2 md:py-2.5" : "py-3 md:py-4"
-            }`}
+            className={`flex items-center transition-[padding] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${scrolled ? "py-2 md:py-2.5" : "py-3 md:py-4"
+              }`}
             onClick={closeAll}
           >
             <Image
@@ -837,9 +823,8 @@ function Header({
               alt="Learn Technique Logo"
               width={160}
               height={40}
-              className={`transition-[width] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] h-auto w-24 ${
-                scrolled ? "md:w-28" : "md:w-38"
-              }`}
+              className={`transition-[width] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] h-auto w-24 ${scrolled ? "md:w-28" : "md:w-38"
+                }`}
             />
 
             <Image
@@ -847,17 +832,15 @@ function Header({
               alt="Elm Logo"
               width={160}
               height={40}
-              className={`transition-[width] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] h-auto w-24 ml-2 ${
-                scrolled ? "md:w-28" : "md:w-38"
-              }`}
+              className={`transition-[width] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] h-auto w-24 ml-2 ${scrolled ? "md:w-28" : "md:w-38"
+                }`}
             />
           </Link>
 
           {/* Desktop nav */}
           <nav
-            className={`hidden md:flex items-center gap-8 transition-[padding] duration-300 ${
-              scrolled ? "py-2" : "py-4"
-            } ${useWhiteStyle ? "text-white" : "text-black"}`}
+            className={`hidden md:flex items-center gap-8 transition-[padding] duration-300 ${scrolled ? "py-2" : "py-4"
+              } ${useWhiteStyle ? "text-white" : "text-black"}`}
           >
             {/* Courses dropdown */}
             <div
@@ -869,9 +852,8 @@ function Header({
                 <p>Courses</p>
                 <ChevronDown
                   size={16}
-                  className={`transition-transform duration-150 ease-out ${
-                    showCoursesMega ? "rotate-180" : ""
-                  }`}
+                  className={`transition-transform duration-150 ease-out ${showCoursesMega ? "rotate-180" : ""
+                    }`}
                 />
               </button>
               {showCoursesMega && (
@@ -894,9 +876,8 @@ function Header({
                   <p>Career Pathways</p>
                   <ChevronDown
                     size={16}
-                    className={`transition-transform duration-150 ease-out ${
-                      showPathwaysMega ? "rotate-180" : ""
-                    }`}
+                    className={`transition-transform duration-150 ease-out ${showPathwaysMega ? "rotate-180" : ""
+                      }`}
                   />
                 </button>
                 {showPathwaysMega && (

@@ -1,4 +1,3 @@
-// app/blog/[slug]/page.tsx
 import BlogDetailPage from "@/app/features/blog/BlogDetails";
 import HeroSection from "@/app/features/blog/hero";
 import Contact from "@/app/features/homepage/contact";
@@ -10,6 +9,7 @@ import {
   RELATED_BLOGS_QUERY,
 } from "@/lib/queries/blog";
 import { BlogPost } from "@/lib/types/blog";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import React from "react";
 
@@ -17,7 +17,30 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
-async function page({ params }: Props) {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await client.fetch<BlogPost | null>(BLOG_BY_SLUG_QUERY, {
+    slug,
+  });
+
+  if (!post || !post.isPublished) {
+    return {
+      title: "Blog Post",
+      description:
+        "Expert insights on electrical training, HVAC careers, and the trade industry from Technique Learning Solutions.",
+    };
+  }
+
+  return {
+    title: post.heroTitle || post.title,
+    description: `${post.category} — ${post.title}`,
+    alternates: {
+      canonical: `https://www.learntechnique.com/blog/${post.slug.current}`,
+    },
+  };
+}
+
+export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
 
   const post = await client.fetch<BlogPost>(BLOG_BY_SLUG_QUERY, {
@@ -43,7 +66,7 @@ async function page({ params }: Props) {
   ]);
 
   return (
-    <>
+    <main>
       <AnimatedSection variant="fade-in" visibleOnLoad>
         <HeroSection title={post.heroTitle} image={post.heroImage} />
       </AnimatedSection>
@@ -57,8 +80,6 @@ async function page({ params }: Props) {
       <AnimatedSection variant="fade-up">
         <Contact />
       </AnimatedSection>
-    </>
+    </main>
   );
 }
-
-export default page;

@@ -36,23 +36,28 @@ function FooterLinkRow({
 }) {
   if (!links.length) return null;
   return (
-    <div>
+    <div className="min-w-0 w-full max-w-full">
       <h4 className="text-white font-semibold text-sm mb-3">{title}</h4>
-      <p className="flex flex-wrap gap-x-1 gap-y-1 leading-relaxed">
+      <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-2 leading-relaxed min-w-0" >
         {links.map((link, i) => (
           <React.Fragment key={link.href + i}>
             {i > 0 && (
-              <span className="text-white/30 text-xs select-none">|</span>
+              <span
+                className="text-white/30 text-xs select-none shrink-0"
+                aria-hidden
+              >
+                |
+              </span>
             )}
             <Link
               href={link.href}
-              className="text-white/70 text-xs hover:text-[#4DD9AC] transition-colors whitespace-nowrap"
+              className="text-white/70 text-xs hover:text-[#4DD9AC] transition-colors min-w-0 max-w-full break-words [overflow-wrap:anywhere]"
             >
               {link.label}
             </Link>
           </React.Fragment>
         ))}
-      </p>
+      </div>
     </div>
   );
 }
@@ -94,9 +99,8 @@ async function Footer() {
               accredited programmes and expert instructors.
             </p>
 
-            <FooterSocialIcons links={socialLinks} />
 
-            <div className="mt-5 space-y-2">
+            <div className="mt-5 space-y-2 mb-6">
               <a
                 href="tel:08001123310"
                 className="flex items-center gap-2 text-white/80 text-sm hover:text-[#4DD9AC] transition-colors"
@@ -136,87 +140,155 @@ async function Footer() {
                 info@learntechnique.com
               </a>
             </div>
+
+            <FooterSocialIcons links={socialLinks} />
+
+            <div className="mb-6 grid grid-cols-2 gap-x-6 gap-y-3 lg:hidden mt-5">
+              <div className="flex flex-col gap-2">
+                <h4 className="text-white font-semibold text-sm">Training</h4>
+                <Link
+                  href="/courses"
+                  className="text-white/70 text-xs leading-relaxed hover:text-[#4DD9AC] transition-colors"
+                >
+                  All Courses
+                </Link>
+                <Link
+                  href="/courses/electrical"
+                  className="text-white/70 text-xs leading-relaxed hover:text-[#4DD9AC] transition-colors"
+                >
+                  Electrical Courses
+                </Link>
+                <Link
+                  href="/courses/plc"
+                  className="text-white/70 text-xs leading-relaxed hover:text-[#4DD9AC] transition-colors"
+                >
+                  PLC & Industrial
+                </Link>
+                <Link
+                  href="/courses/aircon-refrigeration"
+                  className="text-white/70 text-xs leading-relaxed hover:text-[#4DD9AC] transition-colors"
+                >
+                  Air Con & Refrigeration
+                </Link>
+                <Link
+                  href="/pathways"
+                  className="text-white/70 text-xs leading-relaxed hover:text-[#4DD9AC] transition-colors"
+                >
+                  Career Pathways
+                </Link>
+                <Link
+                  href="/courses/am2-assessment"
+                  className="text-white/70 text-xs leading-relaxed hover:text-[#4DD9AC] transition-colors"
+                >
+                  AM2 Assessment
+                </Link>
+              </div>
+              <div className="flex flex-col gap-2">
+                <h4 className="text-white font-semibold text-sm">Company</h4>
+                <Link
+                  href="/company"
+                  className="text-white/70 text-xs leading-relaxed hover:text-[#4DD9AC] transition-colors"
+                >
+                  About Us
+                </Link>
+                <Link
+                  href="/blog"
+                  className="text-white/70 text-xs leading-relaxed hover:text-[#4DD9AC] transition-colors"
+                >
+                  Blog
+                </Link>
+                <Link
+                  href="/contact"
+                  className="text-white/70 text-xs leading-relaxed hover:text-[#4DD9AC] transition-colors"
+                >
+                  Contact Us
+                </Link>
+              </div>
+            </div>
+
+
+
           </div>
 
-          <div className="flex flex-col gap-3">
+          <div className="hidden lg:flex flex-col gap-3">
             <h4 className="text-white font-semibold text-sm mb-1">Training</h4>
             <Link
               href="/courses"
-              className="text-white/70 text-sm hover:text-[#4DD9AC] transition-colors"
+              className="text-white/70 text-xs leading-relaxed hover:text-[#4DD9AC] transition-colors"
             >
               All Courses
             </Link>
             <Link
               href="/courses/electrical"
-              className="text-white/70 text-sm hover:text-[#4DD9AC] transition-colors"
+              className="text-white/70 text-xs leading-relaxed hover:text-[#4DD9AC] transition-colors"
             >
               Electrical Courses
             </Link>
             <Link
               href="/courses/plc"
-              className="text-white/70 text-sm hover:text-[#4DD9AC] transition-colors"
+              className="text-white/70 text-xs leading-relaxed hover:text-[#4DD9AC] transition-colors"
             >
               PLC & Industrial
             </Link>
             <Link
               href="/courses/aircon-refrigeration"
-              className="text-white/70 text-sm hover:text-[#4DD9AC] transition-colors"
+              className="text-white/70 text-xs leading-relaxed hover:text-[#4DD9AC] transition-colors"
             >
               Air Con & Refrigeration
             </Link>
             <Link
               href="/pathways"
-              className="text-white/70 text-sm hover:text-[#4DD9AC] transition-colors"
+              className="text-white/70 text-xs leading-relaxed hover:text-[#4DD9AC] transition-colors"
             >
               Career Pathways
             </Link>
             <Link
               href="/courses/am2-assessment"
-              className="text-white/70 text-sm hover:text-[#4DD9AC] transition-colors"
+              className="text-white/70 text-xs leading-relaxed hover:text-[#4DD9AC] transition-colors"
             >
               AM2 Assessment
             </Link>
           </div>
 
-          <div className="flex flex-col gap-3">
+          <div className="hidden lg:flex flex-col gap-3">
             <h4 className="text-white font-semibold text-sm mb-1">Company</h4>
             <Link
               href="/company"
-              className="text-white/70 text-sm hover:text-[#4DD9AC] transition-colors"
+              className="text-white/70 text-xs leading-relaxed hover:text-[#4DD9AC] transition-colors"
             >
               About Us
             </Link>
             <Link
               href="/blog"
-              className="text-white/70 text-sm hover:text-[#4DD9AC] transition-colors"
+              className="text-white/70 text-xs leading-relaxed hover:text-[#4DD9AC] transition-colors"
             >
               Blog
             </Link>
             <Link
               href="/contact"
-              className="text-white/70 text-sm hover:text-[#4DD9AC] transition-colors"
+              className="text-white/70 text-xs leading-relaxed hover:text-[#4DD9AC] transition-colors"
             >
               Contact Us
             </Link>
           </div>
 
-          <div className="flex flex-col gap-3">
+          <div className="hidden lg:flex flex-col gap-3">
             <h4 className="text-white font-semibold text-sm mb-1">Support</h4>
             <Link
               href="/terms-and-conditions"
-              className="text-white/70 text-sm hover:text-[#4DD9AC] transition-colors"
+              className="text-white/70 text-xs leading-relaxed hover:text-[#4DD9AC] transition-colors"
             >
               Terms & Conditions
             </Link>
             <Link
               href="/privacy-policy"
-              className="text-white/70 text-sm hover:text-[#4DD9AC] transition-colors"
+              className="text-white/70 text-xs leading-relaxed hover:text-[#4DD9AC] transition-colors"
             >
               Privacy Policy
             </Link>
             <Link
               href="/contact"
-              className="text-white/70 text-sm hover:text-[#4DD9AC] transition-colors"
+              className="text-white/70 text-xs leading-relaxed hover:text-[#4DD9AC] transition-colors"
             >
               Help & Support
             </Link>
@@ -224,8 +296,8 @@ async function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 md:px-10 py-8 space-y-5">
+      <div className="border-t border-white/10 min-w-0">
+        <div className="max-w-7xl mx-auto min-w-0 px-6 sm:px-8 md:px-10 py-8 space-y-5">
           {coursesByCategory.map(
             (category) =>
               category.links.length > 0 && (

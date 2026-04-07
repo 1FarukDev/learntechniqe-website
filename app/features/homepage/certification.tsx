@@ -1,9 +1,18 @@
 import React from "react";
 import Image from "next/image";
 import { client } from "@/lib/sanity/client";
-import { CertificationType } from "@/lib/types/certification";
+import type { CertificationItem, CertificationType } from "@/lib/types/certification";
 import { CERTIFICATION_QUERY } from "@/lib/queries/certification";
 import { urlFor } from "@/lib/sanity/image";
+
+/** Apply fixed widths from Sanity only at md+ so mobile can use flex-1 and stay on one row */
+const WIDTH_MD: Record<CertificationItem["width"], string> = {
+  "w-20": "md:w-20",
+  "w-30": "md:w-30",
+  "w-32": "md:w-32",
+  "w-40": "md:w-40",
+  "w-44": "md:w-44",
+};
 
 async function Certification() {
   const data = await client.fetch<CertificationType>(CERTIFICATION_QUERY);
@@ -12,20 +21,22 @@ async function Certification() {
 
   return (
     <section className="bg-[#FFFFFF] overflow-hidden px-4 md:px-0">
-      <div className="flex flex-wrap justify-center sm:justify-between items-center gap-6 sm:gap-4 max-w-7xl mx-auto py-8 sm:py-13 px-4 sm:px-6">
-        {data.certifications.map((item) => (
-          <div
-            key={item._key}
-            className={`relative ${item.width} h-12 sm:h-16 md:h-40 shrink-0`}
-          >
-            <Image
-              src={urlFor(item.image).url()}
-              alt={item.alt}
-              fill
-              className="object-contain"
-            />
-          </div>
-        ))}
+      <div className="max-w-7xl mx-auto py-8 sm:py-13 px-4 sm:px-6 my-6">
+        <div className="flex flex-nowrap items-center justify-between gap-1.5 sm:gap-3 md:gap-4 w-full">
+          {data.certifications.map((item) => (
+            <div
+              key={item._key}
+              className={`relative h-8 sm:h-12 md:h-40 min-w-0 flex-1 basis-0 shrink md:flex-none ${WIDTH_MD[item.width]}`}
+            >
+              <Image
+                src={urlFor(item.image).url()}
+                alt={item.alt}
+                fill
+                className="object-contain"
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import PricingBanner from "@/app/features/courseDetails/Banner";
 import BookCourse from "@/app/features/courseDetails/BookCourse";
 import CourseDetails from "@/app/features/courseDetails/CourseDetails";
@@ -25,6 +26,39 @@ import Session from "../sections/session";
 
 interface CoursePageProps {
   params: { slug: string };
+}
+
+export async function generateMetadata({ params }: CoursePageProps): Promise<Metadata> {
+  const { slug } = await params;
+  let course = await client.fetch(courseBySlugQuery, { slug });
+  if (!course && slug === AM2_COURSE_SLUG) course = getAm2SanityFallback();
+  if (!course) return {};
+
+  const title = course.title ?? "Course Details";
+  const description =
+    Array.isArray(course.description) && course.description.length > 0
+      ? typeof course.description[0] === "string"
+        ? course.description[0]
+        : course.description[0]?.children?.[0]?.text ?? ""
+      : typeof course.description === "string"
+        ? course.description
+        : `${title} — accredited training course at Technique Learning Solutions. Expert-led, hands-on training at world-class facilities.`;
+
+  const metaDescription = description.length > 155
+    ? `${description.slice(0, 152)}...`
+    : description || `${title} — accredited training course at Technique Learning Solutions.`;
+
+  return {
+    title,
+    description: metaDescription,
+    alternates: { canonical: `https://www.learntechnique.com/courses/${slug}` },
+    openGraph: {
+      title: `${title} | Technique Learning Solutions`,
+      description: metaDescription,
+      url: `https://www.learntechnique.com/courses/${slug}`,
+      type: "website",
+    },
+  };
 }
 
 export async function generateStaticParams() {
@@ -108,8 +142,41 @@ async function CourseDetail({ params }: CoursePageProps) {
     dates: cademyDates.length > 0 ? cademyDates : defaultBookCourseData.dates,
   };
 
+  const courseJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: rawCourse?.title ?? "Course",
+    description:
+      Array.isArray(rawCourse?.description) && rawCourse.description.length > 0
+        ? typeof rawCourse.description[0] === "string"
+          ? rawCourse.description[0]
+          : rawCourse.description[0]?.children?.[0]?.text ?? ""
+        : typeof rawCourse?.description === "string"
+          ? rawCourse.description
+          : "",
+    provider: {
+      "@type": "EducationalOrganization",
+      name: "Technique Learning Solutions",
+      url: "https://www.learntechnique.com",
+    },
+    url: `https://www.learntechnique.com/courses/${slug}`,
+    ...(rawCourse?.duration && { timeRequired: rawCourse.duration }),
+    ...(rawCourse?.price && {
+      offers: {
+        "@type": "Offer",
+        price: rawCourse.price,
+        priceCurrency: "GBP",
+        availability: "https://schema.org/InStock",
+      },
+    }),
+  };
+
   return (
     <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(courseJsonLd) }}
+      />
       <AnimatedSection variant="fade-in" visibleOnLoad>
         <CourseHero data={heroData} />
       </AnimatedSection>

@@ -29,11 +29,11 @@ function AllBlogPosts({ posts }: Props) {
       : posts.filter((post) => post.category === selectedFilter);
 
   return (
-    <main className="bg-white min-h-screen">
-      <div className="max-w-7xl mx-auto px-6 py-12">
+    <section className="bg-white">
+      <div className="max-w-7xl mx-auto px-6 pt-12 pb-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-10">
-          <h1 className="text-2xl md:text-4xl font-bold text-black">All Blog Posts</h1>
+          <h2 className="text-2xl md:text-4xl font-bold text-black">All Blog Posts</h2>
 
           {/* Filter Dropdown */}
           <div className="relative">
@@ -67,7 +67,7 @@ function AllBlogPosts({ posts }: Props) {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
           {filteredPosts.map((post) => (
             <BlogCard
               key={post._id}
@@ -81,12 +81,13 @@ function AllBlogPosts({ posts }: Props) {
                 slug: post.slug,
               }}
               fluid
+              noBorder
               highlighted={post.highlighted}
             />
           ))}
         </div>
       </div>
-    </main>
+    </section>
   );
 }
 

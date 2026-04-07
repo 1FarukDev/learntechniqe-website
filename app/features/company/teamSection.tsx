@@ -15,14 +15,12 @@ interface TeamCardProps {
   member: TeamMember;
 }
 
-const CARD_H_MOBILE = 340;
+const CARD_H_MOBILE = 428;
 const CARD_H_DESKTOP = 420;
 
 export function TeamCard({ member }: TeamCardProps) {
   const [hovered, setHovered] = useState(false);
-  const [bioExpanded, setBioExpanded] = useState(false);
   const bio = member.bio ?? "";
-  const isLongBio = bio.length > 200;
 
   return (
     <div
@@ -32,10 +30,7 @@ export function TeamCard({ member }: TeamCardProps) {
         height: `${CARD_H_MOBILE}px`,
       }}
       onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => {
-        setHovered(false);
-        setBioExpanded(false);
-      }}
+      onMouseLeave={() => setHovered(false)}
     >
       <style>{`@media(min-width:768px){[data-team-card]{height:${CARD_H_DESKTOP}px!important}}`}</style>
       <div
@@ -58,8 +53,8 @@ export function TeamCard({ member }: TeamCardProps) {
             border: "1px solid rgba(255,255,255,0.15)",
           }}
         >
-          <div className="shrink-0 flex flex-col items-center text-center px-3 md:px-5 pt-5 md:pt-7 pb-2 md:pb-4">
-            <h3 className="text-white text-lg md:text-2xl font-semibold leading-tight mb-0.5">
+          <div className="shrink-0 flex flex-col items-center text-center px-3 md:px-5 pt-6 pb-4 md:pt-7 md:pb-4 gap-2 md:gap-0">
+            <h3 className="text-white text-lg md:text-2xl font-semibold leading-tight mb-0 md:mb-0.5">
               {member.name}
             </h3>
             <p className="text-white/75 text-xs md:text-sm">
@@ -67,7 +62,7 @@ export function TeamCard({ member }: TeamCardProps) {
             </p>
           </div>
 
-          <div className="relative flex-1 mx-3 md:mx-4 mb-3 md:mb-4 rounded-xl overflow-hidden">
+          <div className="relative flex-1 min-h-[200px] md:min-h-0 mx-3 md:mx-4 mt-1 mb-4 md:mt-0 md:mb-4 rounded-xl overflow-hidden">
             {member.image ? (
               <Image
                 src={member.image}
@@ -94,7 +89,7 @@ export function TeamCard({ member }: TeamCardProps) {
             )}
           </div>
 
-          <div className="shrink-0 flex items-center justify-center pb-4 md:hidden">
+          <div className="shrink-0 flex items-center justify-center pt-2 pb-5 md:hidden">
             <span
               className="inline-flex items-center justify-center px-4 py-1.5 rounded-full text-white text-xs font-semibold"
               style={{ backgroundColor: "#22c55e" }}
@@ -106,7 +101,7 @@ export function TeamCard({ member }: TeamCardProps) {
 
         {/* ── BACK ── */}
         <div
-          className="absolute inset-0 flex flex-col items-center justify-start rounded-2xl overflow-hidden p-4 md:p-8 gap-2 md:gap-4"
+          className="absolute inset-0 rounded-2xl overflow-y-auto overscroll-y-contain md:overflow-hidden"
           style={{
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
@@ -115,49 +110,33 @@ export function TeamCard({ member }: TeamCardProps) {
             border: "1px solid rgba(255,255,255,0.15)",
           }}
         >
-          <h3 className="text-white text-lg md:text-2xl font-black leading-tight text-center shrink-0 pt-2">
-            {member.name}
-          </h3>
-          <p
-            className="text-white text-xs font-semibold tracking-wider uppercase text-center shrink-0"
-            style={{ opacity: 0.6 }}
-          >
-            {member.role}
-          </p>
+          <div className="min-h-full flex flex-col items-center justify-center text-center gap-4 md:justify-start p-5 md:p-8">
+            <h3 className="text-white text-lg md:text-2xl font-black leading-tight shrink-0 pt-1 md:pt-2">
+              {member.name}
+            </h3>
+            <p
+              className="text-white text-xs font-semibold tracking-wider uppercase shrink-0 mt-1 md:mt-0"
+              style={{ opacity: 0.6 }}
+            >
+              {member.role}
+            </p>
 
-          {member.bio ? (
-            <div className="flex flex-col items-center w-full flex-1 min-h-0 overflow-hidden">
+            {member.bio ? (
               <p
-                className={`text-white text-xs md:text-sm text-center leading-relaxed w-full ${
-                  !bioExpanded && isLongBio
-                    ? "line-clamp-6 md:line-clamp-[8]"
-                    : "overflow-y-auto"
-                }`}
+                className="text-white text-xs md:text-sm leading-relaxed w-full max-w-none"
                 style={{ opacity: 0.9 }}
               >
                 {member.bio}
               </p>
-              {isLongBio && (
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setBioExpanded(!bioExpanded);
-                  }}
-                  className="mt-2 text-xs font-semibold text-[#22c55e] hover:text-[#16a34a] transition-colors shrink-0"
-                >
-                  {bioExpanded ? "Show less" : "Read more"}
-                </button>
-              )}
-            </div>
-          ) : (
-            <p
-              className="text-white text-sm text-center leading-relaxed"
-              style={{ opacity: 0.5, fontStyle: "italic" }}
-            >
-              Bio coming soon.
-            </p>
-          )}
+            ) : (
+              <p
+                className="text-white text-sm leading-relaxed"
+                style={{ opacity: 0.5, fontStyle: "italic" }}
+              >
+                Bio coming soon.
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -220,11 +199,11 @@ export default function LeadershipSection() {
         </p>
       </div>
 
-      <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-x-2 sm:gap-x-3 md:gap-x-4 gap-y-16 md:gap-y-20 lg:gap-y-24 pb-8 md:pb-12">
+      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-x-2 sm:gap-x-3 md:gap-x-4 gap-y-0 md:gap-y-20 lg:gap-y-24 pb-6 md:pb-12">
         {team.map((member) => (
           <div
             key={member.name}
-            className="min-w-0 py-2 md:py-3"
+            className="min-w-0 py-0 mb-8 last:mb-0 md:mb-0 md:py-3"
             style={{ isolation: "isolate" }}
           >
             <TeamCard member={member} />

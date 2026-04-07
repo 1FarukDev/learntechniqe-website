@@ -1,8 +1,9 @@
 import React from "react";
+import NextImage from "next/image";
 import BackgroundImage from "@/app/assets/png/courses.jpg";
 
 interface HeroSectionProps {
-  backgroundImage?: { src?: string } | string;
+  backgroundImage?: { src?: string; blurDataURL?: string; width?: number; height?: number } | string;
   title?: React.ReactNode;
   description?: React.ReactNode;
   height?: string;
@@ -25,18 +26,20 @@ function HeroSection({
   gradientTo = "#016068",
   waveColor = "#ffffff",
 }: HeroSectionProps) {
-  const imageSrc =
-    typeof backgroundImage === "string"
-      ? backgroundImage
-      : backgroundImage.src ?? "";
+  const isStaticImport = typeof backgroundImage !== "string" && "src" in backgroundImage;
 
   return (
     <section className={`relative z-0 w-full ${height} overflow-hidden`}>
-      <img
-        src={imageSrc}
+      <NextImage
+        src={isStaticImport ? backgroundImage as typeof BackgroundImage : (typeof backgroundImage === "string" ? backgroundImage : backgroundImage.src ?? "")}
         alt=""
         aria-hidden="true"
-        className="absolute inset-0 w-full h-full object-cover object-top z-0"
+        fill
+        className="absolute inset-0 object-cover object-top z-0"
+        sizes="100vw"
+        quality={80}
+        priority
+        {...(isStaticImport ? { placeholder: "blur" } : {})}
       />
 
       <div

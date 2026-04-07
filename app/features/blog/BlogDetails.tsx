@@ -132,7 +132,7 @@ function BlogDetailPage({ post, recentPosts, relatedPosts }: Props) {
   );
 
   return (
-    <main className="bg-white min-h-screen">
+    <section className="bg-white min-h-screen">
       {drawerOpen &&
         createPortal(
           <>
@@ -267,7 +267,7 @@ function BlogDetailPage({ post, recentPosts, relatedPosts }: Props) {
           </section>
         )}
       </div>
-    </main>
+    </section>
   );
 }
 

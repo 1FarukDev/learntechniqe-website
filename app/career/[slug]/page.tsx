@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import JobDetail from "@/app/features/career/jobdetails";
 import Brochure from "@/app/features/homepage/brochure";
 import Contact from "@/app/features/homepage/contact";
@@ -5,9 +6,16 @@ import HeroSection from "@/app/shared/heroBackground";
 import { AnimatedSection } from "@/components/animated-section";
 import React from "react";
 
-function page() {
+export const metadata: Metadata = {
+  title: "Careers",
+  description:
+    "Join the Technique Learning Solutions team. View current job openings and career opportunities in electrical and trade training.",
+  alternates: { canonical: "https://www.learntechnique.com/career" },
+};
+
+function CareerPage() {
   return (
-    <section>
+    <main>
       <AnimatedSection variant="fade-in" visibleOnLoad>
         <HeroSection
           title="Careers"
@@ -17,8 +25,8 @@ function page() {
       <JobDetail />
       <Contact />
       <Brochure />
-    </section>
+    </main>
   );
 }
 
-export default page;
+export default CareerPage;

@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Outfit, Lato } from "next/font/google";
 import localFont from "next/font/local";
-import Script from "next/script";
 import "./globals.css";
 import Footer from "./shared/footer";
 import HeaderWrapper from "./shared/headerWrapper";
@@ -32,14 +31,70 @@ const nohemi = localFont({
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
 };
 
+const SITE_URL = "https://www.learntechnique.com";
+
 export const metadata: Metadata = {
-  title: "Learn Technique | Expert-Led Electrical & Trade Training",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Learn Technique | Expert-Led Electrical & Trade Training",
+    template: "%s | Technique Learning Solutions",
+  },
   description:
-    "Industry-recognised electrical and trade courses. World-class facilities and accredited programmes to advance your career.",
+    "Industry-recognised electrical, HVAC, and PLC trade courses at world-class facilities. City & Guilds and EAL accredited programmes to advance your career. Training centres in Chesterfield and Stirling.",
+  keywords: [
+    "electrical courses",
+    "electrician training",
+    "HVAC training",
+    "PLC courses",
+    "trade courses UK",
+    "City and Guilds electrical",
+    "EAL accredited courses",
+    "18th Edition course",
+    "AM2 assessment",
+    "electrical career change",
+    "air conditioning training",
+    "refrigeration courses",
+    "F-Gas certification",
+    "Technique Learning Solutions",
+  ],
+  authors: [{ name: "Technique Learning Solutions" }],
+  creator: "Technique Learning Solutions",
+  publisher: "Technique Learning Solutions",
+  formatDetection: {
+    telephone: true,
+    email: true,
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_GB",
+    url: SITE_URL,
+    siteName: "Technique Learning Solutions",
+    title: "Learn Technique | Expert-Led Electrical & Trade Training",
+    description:
+      "Industry-recognised electrical, HVAC, and PLC trade courses at world-class facilities. City & Guilds and EAL accredited programmes to advance your career.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Learn Technique | Expert-Led Electrical & Trade Training",
+    description:
+      "Industry-recognised electrical, HVAC, and PLC trade courses at world-class facilities. Accredited programmes to advance your career.",
+  },
+  alternates: {
+    canonical: SITE_URL,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({
@@ -47,11 +102,55 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const organizationJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    name: "Technique Learning Solutions",
+    url: SITE_URL,
+    logo: `${SITE_URL}/logo.png`,
+    description:
+      "Industry-recognised electrical, HVAC, and PLC trade courses at world-class facilities with City & Guilds and EAL accreditation.",
+    telephone: "08001123310",
+    email: "info@learntechnique.com",
+    address: [
+      {
+        "@type": "PostalAddress",
+        streetAddress: "Technique Tower Business Park, High Street, Clay Cross",
+        addressLocality: "Chesterfield",
+        addressRegion: "Derbyshire",
+        postalCode: "S45 9EA",
+        addressCountry: "GB",
+      },
+      {
+        "@type": "PostalAddress",
+        streetAddress: "Stirling Business Centre, Wellgreen Road",
+        addressLocality: "Stirling",
+        addressRegion: "Scotland",
+        postalCode: "FK8 2DZ",
+        addressCountry: "GB",
+      },
+    ],
+    sameAs: [
+      "https://www.facebook.com/learntechnique",
+      "https://www.instagram.com/learntechnique",
+      "https://www.linkedin.com/company/learntechnique",
+      "https://www.youtube.com/@learntechnique",
+    ],
+    areaServed: {
+      "@type": "Country",
+      name: "United Kingdom",
+    },
+  };
+
   return (
     <html lang="en">
       <body
         className={`${outfit.variable} ${lato.variable} ${nohemi.variable} antialiased`}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
         <NavigationProgress />
         <HeaderWrapper />
         {children}

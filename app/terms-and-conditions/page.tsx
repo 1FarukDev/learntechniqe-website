@@ -3,9 +3,10 @@ import { AnimatedSection } from "@/components/animated-section";
 import HeroSection from "@/app/shared/heroBackground";
 
 export const metadata = {
-  title: "Terms and Conditions | Technique Learning Solutions",
+  title: "Terms and Conditions",
   description:
-    "Terms and conditions for using Technique Learning Solutions training services and website.",
+    "Terms and conditions for Technique Learning Solutions training services, bookings, payments, cancellations, and website usage.",
+  alternates: { canonical: "https://www.learntechnique.com/terms-and-conditions" },
 };
 
 export default function TermsAndConditionsPage() {

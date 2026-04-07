@@ -1,4 +1,5 @@
 import React, { Suspense } from "react";
+import type { Metadata } from "next";
 import CoursesPackage from "../sections/coursesPackage";
 import Session from "../sections/session";
 import Contact from "@/app/features/homepage/contact";
@@ -10,6 +11,19 @@ import { headerQuery } from "@/lib/queries/navigation";
 import { categoriseFromHeader } from "@/lib/course-categories";
 import type { CourseCardData } from "@/lib/course-categories";
 import type { HeaderData } from "@/types/header";
+
+export const metadata: Metadata = {
+  title: "Air Conditioning & Refrigeration Courses",
+  description:
+    "Comprehensive HVAC and refrigeration training from F-Gas certification to total air conditioning packages. Learn from industry experts with hands-on practical experience at accredited facilities.",
+  alternates: { canonical: "https://www.learntechnique.com/courses/aircon-refrigeration" },
+  openGraph: {
+    title: "Air Conditioning & Refrigeration Courses | Technique Learning Solutions",
+    description:
+      "F-Gas certification and HVAC training with hands-on practical experience.",
+    url: "https://www.learntechnique.com/courses/aircon-refrigeration",
+  },
+};
 
 export default async function AirconRefrigerationCoursesPage() {
   const [allCourses, headerData] = await Promise.all([
