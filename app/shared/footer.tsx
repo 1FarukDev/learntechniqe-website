@@ -295,7 +295,7 @@ async function Footer() {
           </div>
         </div>
       </div>
-
+{/* 
       <div className="border-t border-white/10 min-w-0">
         <div className="max-w-7xl mx-auto min-w-0 px-6 sm:px-8 md:px-10 py-8 space-y-5">
           {coursesByCategory.map(
@@ -313,7 +313,7 @@ async function Footer() {
             <FooterLinkRow title="Career Pathways" links={pathwayLinks} />
           )}
         </div>
-      </div>
+      </div> */}
 
       <div className="border-t border-white/10">
         <div className="max-w-7xl mx-auto px-6 sm:px-8 md:px-10 py-4 sm:py-5">
