@@ -222,6 +222,7 @@ function CoursesMegaMenu({
                 key={social.platform}
                 href={social.href}
                 onClick={onClose}
+                target="_blank"
                 className="w-8 h-8 rounded-full bg-[#F5A623] flex items-center justify-center hover:opacity-80 transition-opacity"
               >
                 <span className="sr-only">{social.platform}</span>

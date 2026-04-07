@@ -4,6 +4,7 @@ import { FormInput } from "@/components/Input";
 import { FormTextarea } from "@/components/textarea";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/react";
+import Link from "next/link";
 import React, { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
@@ -43,6 +44,8 @@ function Contact() {
       setStatus("error");
     }
   };
+
+  
   return (
     <section id="contact-section" className="bg-[#E0ECED] md:px-0 px-4 scroll-mt-24">
       <div className="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto py-10 sm:py-19 px-0 sm:px-6 gap-8 sm:gap-10">
@@ -68,30 +71,38 @@ function Contact() {
           </div>
 
           <div className="flex gap-4">
-            <Icon
-              icon="ic:baseline-facebook"
-              width="40"
-              height="40"
-              className="text-[#333C54]"
-            />
-            <Icon
-              icon="mage:instagram-circle"
-              width="40"
-              height="40"
-              className="text-[#333C54]"
-            />
-            <Icon
-              icon="lineicons:youtube-music"
-              width="40"
-              height="40"
-              className="text-[#333C54]"
-            />
-            <Icon
-              icon="entypo-social:linkedin-with-circle"
-              width="40"
-              height="40"
-              className="text-[#333C54]"
-            />
+            <Link href="https://www.facebook.com/LearnTechnique/" target="_blank" rel="noopener noreferrer">
+              <Icon
+                icon="ic:baseline-facebook"
+                width="40"
+                height="40"
+                className="text-[#333C54]"
+              />
+            </Link>
+            <Link href="https://www.instagram.com/learntechnique/" target="_blank" rel="noopener noreferrer">
+              <Icon
+                icon="mage:instagram-circle"
+                width="40"
+                height="40"
+                className="text-[#333C54]"
+              />
+            </Link>
+            <Link href="https://www.youtube.com/@LearnTechnique" target="_blank" rel="noopener noreferrer">
+              <Icon
+                icon="lineicons:youtube-music"
+                width="40"
+                height="40"
+                className="text-[#333C54]"
+              />
+            </Link>
+            <Link href="https://uk.linkedin.com/company/technique-learning-solutions" target="_blank" rel="noopener noreferrer">
+              <Icon
+                icon="entypo-social:linkedin-with-circle"
+                width="40"
+                height="40"
+                className="text-[#333C54]"
+              />
+            </Link>
           </div>
         </div>
         <div className="w-full md:w-[60%]">
