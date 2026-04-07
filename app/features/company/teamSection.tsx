@@ -159,7 +159,7 @@ const team: TeamMember[] = [
   {
     name: "Oliver Crook",
     role: "Commercial Manager",
-    bio: "Oliver is our Commercial Manager, and forms part of the senior management team. He is responsible for identifying and pursuing new business opportunities, building strategic partnerships, and overseeing contracts. He leads the company’s sales and marketing strategy with a strong focus on growth and profitability. Oliver’s excellent interpersonal and communication skills enable him to develop and maintain effective relationships with clients and partners. He works closely with our Operations Manager to ensure that all employees adhere to company policies and procedures, monitors compliance with regulations, and works continuously to enhance operational processes, systems, and management practices across the organisation.  ",
+    bio: "Oliver is our Commercial Manager, and forms part of the senior management team. He is responsible for identifying and pursuing new business opportunities, building strategic partnerships, and overseeing contracts. He leads the company’s sales and marketing strategy with a strong focus on growth and profitability. He works closely with our Operations Manager to ensure that all employees adhere to company policies and procedures, monitors compliance with regulations, and works continuously to enhance operational processes, systems, and management practices across the organisation.  ",
   },
   {
     name: "Mic Barber",
