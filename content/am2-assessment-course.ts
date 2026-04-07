@@ -34,6 +34,7 @@ export const am2HeroData: CourseHeroData = {
     'Technique Learning Solutions are now offering AM2 assessments at our approved training centre. The AM2 is the industry-standard end-point assessment for apprenticeships with qualifications such as C&G 2357 Level 3 or NVQ 3 (Diploma in Electrotechnical Technology). It is purely an assessment — there is no training element.',
     'The AM2 is also increasingly used by those wishing to gain their JIB card as an electrician — whether holding older qualifications that predate the NVQ or qualified electricians from outside the UK looking to work in the industry.',
     'It is today undeniably the industry-recognised trade test, designed to evidence that candidates have gained all relevant technical and safety-critical competencies during their training. It provides a single standard agreed upon by employers within the electrical industry, giving a reliable and trusted guarantee of safe, high-quality skills for the electrotechnical sector.',
+    'Ring us on 0800 112 3310 to book. We will confirm the correct fee for your assessment version (AM2, AM2S/AM2E v1.0, or v1.1) when you book.',
   ],
   qualifications: [
     {
@@ -41,9 +42,9 @@ export const am2HeroData: CourseHeroData = {
       accreditedBy: 'NET (National Electrotechnical Training)',
     },
   ],
-  duration: '2.5 – 3 Days',
+  duration: '2½ – 3 days',
   durationNote:
-    'AM2 is 2.5 days. AM2S and AM2E are 3 days. The assessment is carried out in strict exam conditions.',
+    'AM2 runs over two and a half days. AM2S and AM2E each run over three days. The assessment is carried out in strict exam conditions.',
   bookingAvailable: true,
 }
 
@@ -52,6 +53,15 @@ export const am2HeroData: CourseHeroData = {
 // ---------------------------------------------------------------------------
 export const am2DetailsData: CourseDetailsData = {
   courseGoals: [
+    {
+      title: 'Please note — AM2 section names & pricing',
+      points: [
+        'AM2 section C1 is now Section C.',
+        'AM2 section C2 is now Section D.',
+        'AM2 section D is now Section E.',
+        'Fees differ by assessment type and apprenticeship version (for example AM2S/AM2E v1.0 vs v1.1 for apprentices registered after 4 September 2023). We confirm the price that applies to you when you book.',
+      ],
+    },
     {
       title: 'Who Is the AM2 For?',
       points: [
@@ -169,7 +179,7 @@ export const am2DetailsData: CourseDetailsData = {
 export const am2PricingData: PricingBannerData = {
   price: '£860',
   pricingTagline:
-    'AM2 from £860 | AM2S / AM2E v1.0 from £935 | AM2S v1.1 from £1,375 | AM2E v1.1 from £1,200. First exam fee included. Essential guides supplied throughout the assessment.',
+    'AM2 £860 | AM2S / AM2E v1.0 £935 | AM2S v1.1 (apprenticeships registered after 4 September 2023) £1,375 | AM2E v1.1 (apprentices registered after 4 September 2023) £1,200. Confirm the fee for your apprenticeship version when booking. First exam fee included where applicable. Essential guides supplied. Ring 0800 112 3310 to book.',
 }
 
 // ---------------------------------------------------------------------------
@@ -192,8 +202,31 @@ export const am2BookData: BookCourseData = {
 }
 
 // ---------------------------------------------------------------------------
-// Resit pricing reference (for internal / admin use — not a Sanity field)
+// Resit pricing — shown on /courses/am2-assessment (Am2ResitSection)
 // ---------------------------------------------------------------------------
+export const am2ResitSectionsHeading = 'AM2 / AM2S / AM2E – Resit Sections'
+
+export const am2ResitSections = [
+  'Lighting Circuit & Ring Final Circuit (2.25 hours)',
+  'SWA & Motor Circuit (2.25 hours)',
+  'Central Heating (2 hours)',
+  'Bonding, Data & Safety Circuit FP200 (2 hours)',
+  'Containment AM2S/E only (1.5 hours)',
+] as const
+
+export const am2MainAssessmentPricing = [
+  { label: 'AM2', fee: '£860' },
+  { label: 'AM2S / AM2E v1.0', fee: '£935' },
+  {
+    label: 'AM2S v1.1 (apprenticeships registered after 4 September 2023)',
+    fee: '£1,375.00',
+  },
+  {
+    label: 'AM2E v1.1 (apprentices registered after 4 September 2023)',
+    fee: '£1,200.00',
+  },
+] as const
+
 export const am2ResitPricing = {
   composite: {
     'AM2 / AM2SV1.0 / AM2EV1.0': {
@@ -211,23 +244,19 @@ export const am2ResitPricing = {
       '5 Sections': '£710.00',
     },
   },
-  individual: {
-    'AM2 / AM2SV1.0 / AM2EV1.0': {
-      'A1, C, E': '£185.00',
-      'B, D': '£260.00',
-    },
-    'AM2SV1.1 / AM2EV1.1': {
-      'A1, C, E': '£230.00',
-      'B, D': '£310.00',
-      E: '£275.00',
-      F: '£275.00',
-    },
-  },
-  resitSections: [
-    'Lighting Circuit & Ring Final Circuit (2.25 hours)',
-    'SWA & Motor Circuit (2.25 hours)',
-    'Central Heating (2 hours)',
-    'Bonding, Data & Safety Circuit FP200 (2 hours)',
-    'Containment — AM2S / AM2E only (1.5 hours)',
-  ],
+  individualRows: {
+    'AM2 / AM2SV1.0 / AM2EV1.0': [
+      { label: 'A1, C, E', fee: '£185.00' },
+      { label: 'B, D', fee: '£260.00' },
+      { label: 'E', fee: '£185.00' },
+      { label: 'F', fee: 'N/A' },
+    ],
+    'AM2SV1.1 / AM2EV1.1': [
+      { label: 'A1, C, E', fee: '£230.00' },
+      { label: 'B, D', fee: '£310.00' },
+      { label: 'E', fee: '£275.00' },
+      { label: 'F', fee: '£275.00' },
+    ],
+  } as const,
+  resitSections: [...am2ResitSections],
 }

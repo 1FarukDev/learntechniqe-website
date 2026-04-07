@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import PricingBanner from "@/app/features/courseDetails/Banner";
 import BookCourse from "@/app/features/courseDetails/BookCourse";
+import Am2ResitSection from "@/app/features/courseDetails/Am2ResitSection";
 import CourseDetails from "@/app/features/courseDetails/CourseDetails";
 import CourseHero from "@/app/features/courseDetails/heroSection";
 import CourseReviews from "@/app/features/courseDetails/CourseReviews";
@@ -183,6 +184,11 @@ async function CourseDetail({ params }: CoursePageProps) {
       <AnimatedSection variant="fade-up">
         <CourseDetails data={detailsData} />
       </AnimatedSection>
+      {slug === AM2_COURSE_SLUG && (
+        <AnimatedSection variant="fade-up">
+          <Am2ResitSection />
+        </AnimatedSection>
+      )}
       <AnimatedSection variant="fade-up">
         <BookCourse data={bookData} courseUrl={`/courses/${slug}`} />
       </AnimatedSection>
