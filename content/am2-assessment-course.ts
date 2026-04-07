@@ -29,12 +29,12 @@ export const am2HeroData: CourseHeroData = {
     { label: 'Assessment', color: '#016068' },
     { label: 'Electrician', color: '#F5A623' },
   ],
-  price: '£860',
+  price: '£885',
   description: [
     'Technique Learning Solutions are now offering AM2 assessments at our approved training centre. The AM2 is the industry-standard end-point assessment for apprenticeships with qualifications such as C&G 2357 Level 3 or NVQ 3 (Diploma in Electrotechnical Technology). It is purely an assessment — there is no training element.',
     'The AM2 is also increasingly used by those wishing to gain their JIB card as an electrician — whether holding older qualifications that predate the NVQ or qualified electricians from outside the UK looking to work in the industry.',
     'It is today undeniably the industry-recognised trade test, designed to evidence that candidates have gained all relevant technical and safety-critical competencies during their training. It provides a single standard agreed upon by employers within the electrical industry, giving a reliable and trusted guarantee of safe, high-quality skills for the electrotechnical sector.',
-    'Ring us on 0800 112 3310 to book. We will confirm the correct fee for your assessment version (AM2, AM2S/AM2E v1.0, or v1.1) when you book.',
+    'Recommended assessment and resit fees from 01 April 2026 are shown below. The fee you pay depends on the standard or version you are registered under — we confirm the correct price when you book. Ring us on 0800 112 3310 to book.',
   ],
   qualifications: [
     {
@@ -59,7 +59,7 @@ export const am2DetailsData: CourseDetailsData = {
         'AM2 section C1 is now Section C.',
         'AM2 section C2 is now Section D.',
         'AM2 section D is now Section E.',
-        'Fees differ by assessment type and apprenticeship version (for example AM2S/AM2E v1.0 vs v1.1 for apprentices registered after 4 September 2023). We confirm the price that applies to you when you book.',
+        'Recommended prices from 01 April 2026 depend on the specific standard or version you are registered under (including AM2, AM2S, AM2E, AM2D, AM2ED, and v1.0 vs v1.1 registration dates). We confirm the fee that applies to you when you book.',
       ],
     },
     {
@@ -177,9 +177,9 @@ export const am2DetailsData: CourseDetailsData = {
 // Pricing
 // ---------------------------------------------------------------------------
 export const am2PricingData: PricingBannerData = {
-  price: '£860',
+  price: '£885',
   pricingTagline:
-    'AM2 £860 | AM2S / AM2E v1.0 £935 | AM2S v1.1 (apprenticeships registered after 4 September 2023) £1,375 | AM2E v1.1 (apprentices registered after 4 September 2023) £1,200. Confirm the fee for your apprenticeship version when booking. First exam fee included where applicable. Essential guides supplied. Ring 0800 112 3310 to book.',
+    'Recommended fees from 01 April 2026: AM2 £885 | AM2S (registered up to 03 Sep 2023, V1.0) £965 | AM2S v1 (from 04 Sep 2023, V1.1) £1,340 | AM2E (to 03 Sep 2023) £965 | AM2E v1 (from 04 Sep 2023) £1,235 | AM2D £1,535 | AM2ED £1,340. We confirm your fee when you book. Ring 0800 112 3310.',
 }
 
 // ---------------------------------------------------------------------------
@@ -202,61 +202,127 @@ export const am2BookData: BookCourseData = {
 }
 
 // ---------------------------------------------------------------------------
-// Resit pricing — shown on /courses/am2-assessment (Am2ResitSection)
+// Pricing & resits — shown on /courses/am2-assessment (Am2ResitSection)
+// Recommended prices: fee from 01 April 2026
 // ---------------------------------------------------------------------------
-export const am2ResitSectionsHeading = 'AM2 / AM2S / AM2E – Resit Sections'
+export const am2PricingEffectiveDate = '01 April 2026'
 
-export const am2ResitSections = [
-  'Lighting Circuit & Ring Final Circuit (2.25 hours)',
-  'SWA & Motor Circuit (2.25 hours)',
-  'Central Heating (2 hours)',
-  'Bonding, Data & Safety Circuit FP200 (2 hours)',
-  'Containment AM2S/E only (1.5 hours)',
-] as const
-
-export const am2MainAssessmentPricing = [
-  { label: 'AM2', fee: '£860' },
-  { label: 'AM2S / AM2E v1.0', fee: '£935' },
+export const am2RecommendedAssessments = [
   {
-    label: 'AM2S v1.1 (apprenticeships registered after 4 September 2023)',
-    fee: '£1,375.00',
+    item: 'AM2',
+    info: 'Learners taking the Level 3 NVQ (City & Guilds 2357/EAL 1605)',
+    fee: '£885',
   },
   {
-    label: 'AM2E v1.1 (apprentices registered after 4 September 2023)',
-    fee: '£1,200.00',
+    item: 'AM2S',
+    info: 'Apprentices registered up to 03 September 2023 on V1.0',
+    fee: '£965',
+  },
+  {
+    item: 'AM2S v1',
+    info: 'Apprentices registered from 04 September 2023 on V1.1; reflects additional content of the revised standard',
+    fee: '£1,340',
+  },
+  {
+    item: 'AM2E',
+    info: 'Experienced Worker Assessment registrations up to 03 September 2023',
+    fee: '£965',
+  },
+  {
+    item: 'AM2E v1',
+    info: 'Experienced Worker Assessment registrations from 04 September 2023; includes 17-hour practical and 90-minute Knowledge Test',
+    fee: '£1,235',
+  },
+  {
+    item: 'AM2D',
+    info: 'Domestic Electrician standard; includes 19-hour practical and 90-minute Knowledge Test',
+    fee: '£1,535',
+  },
+  {
+    item: 'AM2ED',
+    info: 'Domestic Electrician Experienced Worker Assessment; includes 19-hour practical and 90-minute Knowledge Test',
+    fee: '£1,340',
   },
 ] as const
 
-export const am2ResitPricing = {
-  composite: {
-    'AM2 / AM2SV1.0 / AM2EV1.0': {
-      '1 Section': '£240.00',
-      '2 Sections': '£375.00',
-      '3 Sections': '£445.00',
-      '4 Sections': '£540.00',
-      '5 Sections': '£590.00',
-    },
-    'AM2SV1.1 / AM2EV1.1': {
-      '1 Section': '£310.00',
-      '2 Sections': '£375.00',
-      '3 Sections': '£545.00',
-      '4 Sections': '£645.00',
-      '5 Sections': '£710.00',
-    },
+export const am2ResitIntro =
+  'Resit charges account for the additional resource required to schedule ad hoc activities rather than full assessments. If multiple sections are resat, the total charge must not exceed the maximum recommended price for a full assessment.'
+
+export const am2ResitColumnLegacy = 'AM2 / AM2E / AM2S'
+export const am2ResitColumnV1 = 'AM2E v1 / AM2S v1'
+
+/** Sections A1, B, C, D, E */
+export const am2ResitIndividualSections = [
+  { section: 'A1, C', legacy: '£190', v1: '£235' },
+  { section: 'B, D', legacy: '£265', v1: '£315' },
+  { section: 'E', legacy: '£190', v1: '£280' },
+] as const
+
+/** Sections A2–A6 (composite resit bundles) */
+export const am2ResitCompositeSections = [
+  {
+    section: '1 section (Lighting/Ring Final)',
+    legacy: '£250',
+    v1: '£320',
   },
-  individualRows: {
-    'AM2 / AM2SV1.0 / AM2EV1.0': [
-      { label: 'A1, C, E', fee: '£185.00' },
-      { label: 'B, D', fee: '£260.00' },
-      { label: 'E', fee: '£185.00' },
-      { label: 'F', fee: 'N/A' },
-    ],
-    'AM2SV1.1 / AM2EV1.1': [
-      { label: 'A1, C, E', fee: '£230.00' },
-      { label: 'B, D', fee: '£310.00' },
-      { label: 'E', fee: '£275.00' },
-      { label: 'F', fee: '£275.00' },
-    ],
-  } as const,
-  resitSections: [...am2ResitSections],
-}
+  {
+    section: '2 sections (SWA and Motor circuit)',
+    legacy: '£385',
+    v1: '£475',
+  },
+  {
+    section: '3 sections (Central Heating)',
+    legacy: '£455',
+    v1: '£555',
+  },
+  {
+    section: '4 sections (Bonding, Data, Safety circuit)',
+    legacy: '£550',
+    v1: '£655',
+  },
+  {
+    section: '5 sections (Containment - AM2S/E only)',
+    legacy: '£610',
+    v1: '£720',
+  },
+] as const
+
+export const am2ResitDomesticNote =
+  'Resit fees for AM2D and AM2ED will be advised separately.'
+
+export const am2SupplementaryUnitsHeading =
+  'AM2E Supplementary Units'
+
+export const am2SupplementaryUnitsIntro =
+  'Initial sittings for these units include higher processing fees due to administration and certification costs.'
+
+export const am2SupplementaryUnits = [
+  {
+    item: 'AM2EU1 (Containment & Safe Isolation)',
+    totalFee: '£355',
+    netFee: '£160',
+  },
+  {
+    item: 'AM2EU2 (Testing & Safe Isolation)',
+    totalFee: '£355',
+    netFee: '£160',
+  },
+  {
+    item: 'Resit: Safe Isolation (EU1 or EU2)',
+    totalFee: '£195',
+    netFee: '£140',
+  },
+  {
+    item: 'Resit: EU1 Containment',
+    totalFee: '£250',
+    netFee: '—',
+  },
+  {
+    item: 'Resit: EU2 Testing',
+    totalFee: '£270',
+    netFee: '—',
+  },
+] as const
+
+export const am2PaymentInformation =
+  'All payments should be made via BACS or Direct Debit.'
