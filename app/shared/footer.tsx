@@ -162,7 +162,7 @@ async function Footer() {
                   href="/courses/plc"
                   className="text-white/70 text-xs leading-relaxed hover:text-[#4DD9AC] transition-colors"
                 >
-                  PLC & Industrial
+                  PLC & Automation
                 </Link>
                 <Link
                   href="/courses/aircon-refrigeration"
