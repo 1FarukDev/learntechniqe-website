@@ -236,7 +236,7 @@ function BookCourse({ data, courseUrl = "" }: BookCourseProps) {
                       </p>
                     </div>
                   ) : null,
-                )}
+                )} 
           </div>
 
           {completionRewards.length > 0 && (
