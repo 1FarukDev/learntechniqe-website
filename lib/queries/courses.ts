@@ -26,7 +26,10 @@ export const courseCardsQuery = groq`
   }
 `;
 
-/** Sanity `course` document: optional text field `detailsSummary` (see types/course CourseDetailsData). */
+/**
+ * Sanity course document by slug. Includes optional detailsSummary (see CourseDetailsData)
+ * and bookASession (boolean) for the on-site “Book a session” banner on course pages.
+ */
 export const courseBySlugQuery = groq`
   *[_type == "course" && slug.current == $slug][0] {
     title,
@@ -59,5 +62,6 @@ export const courseBySlugQuery = groq`
     cademyDirectUrl,
     courseReviewId,
     dates,
+    bookASession,
   }
 `;

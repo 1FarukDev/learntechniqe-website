@@ -9,6 +9,7 @@ interface HeroSectionProps {
   height?: string;
   gradientFrom?: string;
   gradientTo?: string;
+  /** Bottom curve fill — match the next section’s background to avoid a white “slice” above grey blocks */
   waveColor?: string;
 }
 

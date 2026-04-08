@@ -147,10 +147,10 @@ All of the above keys are listed in `.env.example`.
 | | |
 |-|-|
 | **File** | `app/courses/sections/session.tsx` |
-| **Purpose** | Book / enquire about a training session — collects name, email, phone, company, message |
+| **Purpose** | Book training at your premises — name, email, phone, course (dropdown or fixed), `course_url` / `course_path` to Zapier |
 | **Posts to** | `/api/zapier/book-session` |
 | **Env** | `ZAPIER_BOOK_SESSION_WEBHOOK_URL` |
-| **Pages** | `/courses` · `/courses/electrical` · `/courses/plc` · `/courses/aircon-refrigeration` · `/courses/[slug]` |
+| **Pages** | `/courses` · `/courses/electrical` · `/courses/plc` · `/courses/aircon-refrigeration` (full-width CTA + course list). `/courses/[slug]` only when Sanity **`bookASession`** is true (compact banner + fixed course). |
 
 ---
 

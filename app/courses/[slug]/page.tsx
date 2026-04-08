@@ -51,7 +51,7 @@ export async function generateMetadata({
     description.length > 155
       ? `${description.slice(0, 152)}...`
       : description ||
-        `${title} — accredited training course at Technique Learning Solutions.`;
+      `${title} — accredited training course at Technique Learning Solutions.`;
 
   return {
     title,
@@ -212,9 +212,20 @@ async function CourseDetail({ params }: CoursePageProps) {
           courseId={coursecheckCourseId}
         />
       </AnimatedSection>
-      {/* <AnimatedSection variant="fade-up">
-        <Session />
-      </AnimatedSection> */}
+      {Boolean(rawCourse?.bookASession) && (
+        <AnimatedSection variant="fade-up">
+          <Session
+            variant="banner"
+            lockedCourse={{
+              title:
+                typeof rawCourse?.title === "string"
+                  ? rawCourse.title
+                  : "Course",
+              url: `/courses/${slug}`,
+            }}
+          />
+        </AnimatedSection>
+      )}
       <AnimatedSection variant="fade-up">
         <Contact />
       </AnimatedSection>

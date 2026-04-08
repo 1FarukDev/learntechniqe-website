@@ -1,16 +1,19 @@
 import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import CoursesPackage from "../sections/coursesPackage";
+import { CategorySpotlightVideo } from "../sections/category-spotlight-video";
 import Session from "../sections/session";
 import Contact from "@/app/features/homepage/contact";
 import { AnimatedSection } from "@/components/animated-section";
 import HeroSection from "@/app/shared/heroBackground";
+import { CATEGORY_PAGE_CURVE_SURFACE } from "@/lib/constants/category-page-surface";
 import { client } from "@/lib/sanity/client";
 import { courseCardsQuery } from "@/lib/queries/courses";
 import { headerQuery } from "@/lib/queries/navigation";
 import { categoriseFromHeader } from "@/lib/course-categories";
 import type { CourseCardData } from "@/lib/course-categories";
 import type { HeaderData } from "@/types/header";
+import { courseOptionsForSessionBook } from "@/lib/course-session-options";
 
 export const metadata: Metadata = {
   title: "Air Conditioning & Refrigeration Courses",
@@ -35,6 +38,9 @@ export default async function AirconRefrigerationCoursesPage() {
     allCourses,
     "aircon-refrigeration",
   );
+  const sessionCourseOptions = courseOptionsForSessionBook(
+    grouped.flatMap((g) => g.courses),
+  );
 
   return (
     <main>
@@ -42,12 +48,16 @@ export default async function AirconRefrigerationCoursesPage() {
         <HeroSection
           title="Air Conditioning & Refrigeration Courses"
           description="Comprehensive HVAC and refrigeration training from F-Gas certification to total air conditioning packages. Learn from industry experts with hands-on practical experience."
+          waveColor={CATEGORY_PAGE_CURVE_SURFACE}
         />
+      </AnimatedSection>
+      <AnimatedSection variant="fade-up">
+        <CategorySpotlightVideo category="aircon-refrigeration" />
       </AnimatedSection>
       <Suspense>
         <CoursesPackage category="aircon-refrigeration" grouped={grouped} />
       </Suspense>
-      <Session />
+      <Session courseOptions={sessionCourseOptions} />
       <AnimatedSection variant="fade-up">
         <Contact />
       </AnimatedSection>

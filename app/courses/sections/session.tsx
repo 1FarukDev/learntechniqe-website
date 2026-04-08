@@ -1,25 +1,69 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import SessionImage from "@/app/assets/png/session.jpg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { X } from "lucide-react";
 
-function Session() {
+/** Radix Select requires a non-empty value for the placeholder row */
+const COURSE_SELECT_NONE = "__book_session_no_course__";
+import type { SessionCourseOption } from "@/lib/course-session-options";
+
+type SessionVariant = "full" | "banner";
+
+export type SessionProps = {
+  variant?: SessionVariant;
+  /** Course listing pages: dropdown of courses */
+  courseOptions?: SessionCourseOption[];
+  /** Course detail page: fixed course + URL sent to Zapier */
+  lockedCourse?: SessionCourseOption;
+};
+
+function Session({
+  variant = "full",
+  courseOptions = [],
+  lockedCourse,
+}: SessionProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
+
+  const sortedOptions = useMemo(
+    () =>
+      [...courseOptions].sort((a, b) =>
+        a.title.localeCompare(b.title, undefined, { sensitivity: "base" }),
+      ),
+    [courseOptions],
+  );
+
   const [form, setForm] = useState({
     name: "",
     email: "",
     phone: "",
-    company: "",
-    message: "",
+    course: lockedCourse?.title ?? "",
+    coursePath: lockedCourse?.url ?? "",
   });
+
+  useEffect(() => {
+    if (lockedCourse) {
+      setForm((p) => ({
+        ...p,
+        course: lockedCourse.title,
+        coursePath: lockedCourse.url,
+      }));
+    }
+  }, [lockedCourse?.title, lockedCourse?.url]);
 
   useEffect(() => {
     document.body.style.overflow = drawerOpen ? "hidden" : "";
@@ -28,11 +72,18 @@ function Session() {
     };
   }, [drawerOpen]);
 
+  const coursePageFullUrl = () => {
+    if (typeof window === "undefined" || !form.coursePath) return "";
+    return `${window.location.origin}${form.coursePath}`;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!lockedCourse && !form.coursePath.trim()) return;
     setStatus("loading");
     try {
       const [first, ...rest] = form.name.trim().split(" ");
+      const fullUrl = coursePageFullUrl();
       const res = await fetch("/api/zapier/book-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -41,66 +92,103 @@ function Session() {
           last_name: rest.join(" ") || "",
           email: form.email,
           number: form.phone,
-          company: form.company,
-          message: form.message,
+          course: form.course,
+          course_url: fullUrl || form.coursePath,
+          course_path: form.coursePath,
         }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Failed");
       setStatus("success");
-      setForm({ name: "", email: "", phone: "", company: "", message: "" });
+      setForm((p) => ({
+        name: "",
+        email: "",
+        phone: "",
+        course: lockedCourse?.title ?? "",
+        coursePath: lockedCourse?.url ?? "",
+      }));
     } catch {
       setStatus("error");
     }
   };
 
+  const openDrawer = () => setDrawerOpen(true);
+
+  const bannerSection = (
+    <section className="relative w-full overflow-hidden border-y border-white/10 bg-gradient-to-r from-[#015a60] via-[#016068] to-[#014850]">
+      <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-4 py-10 sm:px-6 md:flex-row md:items-center lg:px-8">
+        <div className="text-left">
+          <h2 className="font-outfit text-xl font-semibold tracking-tight text-white sm:text-2xl">
+            Training at your premises?
+          </h2>
+          <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/85">
+            Book a session for this course at your location — we&apos;ll follow
+            up with dates and logistics.
+          </p>
+        </div>
+        <Button
+          type="button"
+          onClick={openDrawer}
+          className="h-12 shrink-0 bg-[#F5A623] px-8 font-outfit text-sm font-semibold uppercase tracking-widest text-white hover:bg-[#e09410]"
+        >
+          Book a session
+        </Button>
+      </div>
+    </section>
+  );
+
+  const fullSection = (
+    <section className="relative flex min-h-170 w-full items-center justify-center overflow-hidden">
+      <Image
+        src={SessionImage}
+        alt="Training session background"
+        fill
+        className="z-0 object-cover object-center"
+      />
+
+      <div className="absolute inset-0 z-10 bg-linear-to-br from-[rgba(0,140,140,0.55)] via-[rgba(0,100,110,0.70)] to-[rgba(0,60,80,0.88)]" />
+
+      <div className="relative z-20 mx-auto flex max-w-2xl flex-col items-center gap-6 px-6 text-center text-white">
+        <h2 className="font-outfit text-4xl leading-tight font-semibold md:text-5xl">
+          Want To Do The Training <br className="hidden md:block" />
+          At Your Premises?
+        </h2>
+
+        <p className="font-outfit text-sm leading-7 font-normal text-white/85 md:text-base">
+          We bring the full training experience to your location, saving you
+          time while{" "}
+          <br className="hidden md:block" /> delivering hands-on,
+          results-driven sessions built around your environment and{" "}
+          <br className="hidden md:block" /> goals, and available for direct
+          staff training when needed.
+        </p>
+
+        <div className="mx-4 w-full">
+          <Button
+            type="button"
+            onClick={openDrawer}
+            className="mt-4 h-17.25 w-full rounded-md bg-[#F5A623] px-16 py-6 font-outfit text-sm font-semibold tracking-widest text-white uppercase hover:bg-[#e09410]"
+          >
+            Book Session
+          </Button>
+        </div>
+      </div>
+    </section>
+  );
+
   return (
     <>
-      <section className="relative w-full min-h-170 flex items-center justify-center overflow-hidden">
-        <Image
-          src={SessionImage}
-          alt="Training session background"
-          fill
-          className="object-cover object-center z-0"
-        />
-
-        <div className="absolute inset-0 z-10 bg-linear-to-br from-[rgba(0,140,140,0.55)] via-[rgba(0,100,110,0.70)] to-[rgba(0,60,80,0.88)]" />
-
-        <div className="relative z-20 flex flex-col items-center text-center text-white px-6 max-w-2xl mx-auto gap-6">
-          <h2 className="font-outfit font-semibold text-4xl md:text-5xl leading-tight">
-            Want To Do The Training <br className="hidden md:block" />
-            At Your Premises?
-          </h2>
-
-          <p className="text-white/85 font-outfit text-sm md:text-base leading-7 font-normal">
-            We bring the full training experience to your location, saving you
-            time while{" "}
-            <br className="hidden md:block" /> delivering hands-on,
-            results-driven sessions built around your environment and{" "}
-            <br className="hidden md:block" /> goals, and available for direct
-            staff training when needed.
-          </p>
-
-          <div className="mx-4 w-full">
-            <Button
-              onClick={() => setDrawerOpen(true)}
-              className="mt-4 h-17.25 w-full bg-[#F5A623] hover:bg-[#e09410] text-white font-outfit font-semibold uppercase tracking-widest text-sm px-16 py-6 rounded-md"
-            >
-              Book Session
-            </Button>
-          </div>
-        </div>
-      </section>
+      {variant === "banner" ? bannerSection : fullSection}
 
       {drawerOpen &&
         createPortal(
           <>
             <div
-              className="fixed inset-0 bg-black/50 z-[60]"
+              className="fixed inset-0 z-[60] bg-black/50"
               onClick={() => setDrawerOpen(false)}
             />
             <div
-              className="fixed top-0 right-0 z-[70] w-full max-w-md h-full bg-white shadow-2xl flex flex-col"
+              className="fixed top-0 right-0 z-[70] flex h-full w-full max-w-md flex-col bg-white shadow-2xl"
               style={{ animation: "slideInRight 250ms ease forwards" }}
             >
               <style>{`
@@ -110,29 +198,31 @@ function Session() {
                 }
               `}</style>
 
-              <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100 shrink-0">
-                <h3 className="font-semibold text-lg text-gray-900">
+              <div className="flex shrink-0 items-center justify-between border-b border-gray-100 px-6 py-5">
+                <h3 className="text-lg font-semibold text-gray-900">
                   Book a Session
                 </h3>
                 <button
+                  type="button"
                   onClick={() => setDrawerOpen(false)}
-                  className="p-2 rounded-lg hover:bg-gray-100 transition"
+                  className="rounded-lg p-2 transition hover:bg-gray-100"
                 >
                   <X size={20} className="text-gray-600" />
                 </button>
               </div>
 
               <div className="flex-1 overflow-y-auto px-6 py-6">
-                <p className="text-sm text-gray-500 mb-6">
-                  Fill in your details and we&apos;ll get back to you to arrange
-                  training at your premises.
+                <p className="mb-6 text-sm text-gray-500">
+                  {lockedCourse
+                    ? "We’ll use this course from the page you’re on. Add your contact details and we’ll be in touch."
+                    : "Choose the course you’re interested in and your contact details — we’ll arrange training at your premises."}
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <label
                       htmlFor="session-name"
-                      className="block text-sm font-semibold text-gray-700 mb-1"
+                      className="mb-1 block text-sm font-semibold text-gray-700"
                     >
                       Your Name <span className="text-red-500">*</span>
                     </label>
@@ -152,7 +242,7 @@ function Session() {
                   <div>
                     <label
                       htmlFor="session-email"
-                      className="block text-sm font-semibold text-gray-700 mb-1"
+                      className="mb-1 block text-sm font-semibold text-gray-700"
                     >
                       Email <span className="text-red-500">*</span>
                     </label>
@@ -172,7 +262,7 @@ function Session() {
                   <div>
                     <label
                       htmlFor="session-phone"
-                      className="block text-sm font-semibold text-gray-700 mb-1"
+                      className="mb-1 block text-sm font-semibold text-gray-700"
                     >
                       Phone <span className="text-red-500">*</span>
                     </label>
@@ -190,59 +280,93 @@ function Session() {
                   </div>
 
                   <div>
-                    <label
-                      htmlFor="session-company"
-                      className="block text-sm font-semibold text-gray-700 mb-1"
-                    >
-                      Company / Organisation
-                    </label>
-                    <Input
-                      id="session-company"
-                      type="text"
-                      placeholder="Enter your company name"
-                      value={form.company}
-                      onChange={(e) =>
-                        setForm((p) => ({ ...p, company: e.target.value }))
-                      }
-                      className="bg-gray-50"
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="session-message"
-                      className="block text-sm font-semibold text-gray-700 mb-1"
-                    >
-                      Message
-                    </label>
-                    <textarea
-                      id="session-message"
-                      rows={3}
-                      placeholder="Tell us about your training needs..."
-                      value={form.message}
-                      onChange={(e) =>
-                        setForm((p) => ({ ...p, message: e.target.value }))
-                      }
-                      className="w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#016068] resize-none"
-                    />
+                    <span className="mb-1 block text-sm font-semibold text-gray-700">
+                      Course <span className="text-red-500">*</span>
+                    </span>
+                    {lockedCourse ? (
+                      <>
+                        <p className="rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-900">
+                          {form.course}
+                        </p>
+                        <p className="mt-1 text-xs text-gray-500">
+                          Page: {form.coursePath}
+                        </p>
+                      </>
+                    ) : (
+                      <Select
+                        value={
+                          form.coursePath.trim()
+                            ? form.coursePath
+                            : COURSE_SELECT_NONE
+                        }
+                        onValueChange={(path) => {
+                          if (path === COURSE_SELECT_NONE) {
+                            setForm((p) => ({
+                              ...p,
+                              coursePath: "",
+                              course: "",
+                            }));
+                            return;
+                          }
+                          const opt = sortedOptions.find((o) => o.url === path);
+                          setForm((p) => ({
+                            ...p,
+                            coursePath: path,
+                            course: opt?.title ?? "",
+                          }));
+                        }}
+                      >
+                        <SelectTrigger
+                          id="session-course"
+                          aria-label="Course"
+                          className="h-11 w-full min-w-0 border-gray-200 bg-gray-50 text-left text-sm text-gray-900 shadow-sm hover:bg-gray-100/80 focus-visible:border-[#016068] focus-visible:ring-[3px] focus-visible:ring-[#016068]/25 data-[size=default]:h-11"
+                        >
+                          <SelectValue placeholder="Select a course…" />
+                        </SelectTrigger>
+                        <SelectContent
+                          position="popper"
+                          sideOffset={6}
+                          className="z-[100] max-h-[min(300px,var(--radix-select-content-available-height))] w-[var(--radix-select-trigger-width)] rounded-lg border border-gray-200 bg-white p-1 shadow-lg"
+                        >
+                          <SelectItem
+                            value={COURSE_SELECT_NONE}
+                            className="cursor-pointer py-2.5 text-gray-500 focus:bg-gray-50 focus:text-gray-700"
+                          >
+                            Select a course…
+                          </SelectItem>
+                          {sortedOptions.map((o) => (
+                            <SelectItem
+                              key={o.url}
+                              value={o.url}
+                              className="cursor-pointer py-2.5 pr-9 focus:bg-[#016068]/10 focus:text-gray-900"
+                            >
+                              {o.title}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
                   </div>
 
                   {status === "success" && (
-                    <p className="text-sm text-green-600 font-medium">
+                    <p className="text-sm font-medium text-green-600">
                       Thank you! We&apos;ll be in touch soon to arrange your
                       session.
                     </p>
                   )}
                   {status === "error" && (
-                    <p className="text-sm text-red-600 font-medium">
+                    <p className="text-sm font-medium text-red-600">
                       Something went wrong. Please try again.
                     </p>
                   )}
 
                   <Button
                     type="submit"
-                    disabled={status === "loading"}
-                    className="w-full h-12 uppercase bg-[#016068] hover:bg-[#014d54] text-white font-semibold"
+                    disabled={
+                      status === "loading" ||
+                      (!lockedCourse && !form.coursePath.trim())
+                    }
+                    className="h-12 w-full bg-[#016068] font-semibold text-white uppercase hover:bg-[#014d54]"
                   >
                     {status === "loading" ? "Sending..." : "Book Now"}
                   </Button>

@@ -11,6 +11,7 @@ import { categoriseFromHeader } from "@/lib/course-categories";
 import type { CourseCardData } from "@/lib/course-categories";
 import type { HeaderData } from "@/types/header";
 import CoursesPackage from "./sections/coursesPackage";
+import { courseOptionsForSessionBook } from "@/lib/course-session-options";
 
 export const metadata: Metadata = {
   title: "All Courses",
@@ -48,6 +49,8 @@ export default async function CoursesPage() {
     courseTypes.push({ label: col.title, value: col.title });
   }
 
+  const sessionCourseOptions = courseOptionsForSessionBook(allCourses);
+
   return (
     <main>
       <AnimatedSection variant="fade-in" visibleOnLoad className="relative z-0">
@@ -66,7 +69,7 @@ export default async function CoursesPage() {
       </Suspense>
 
 
-      <Session />
+      <Session courseOptions={sessionCourseOptions} />
 
       <AnimatedSection variant="fade-up">
         <Contact />
