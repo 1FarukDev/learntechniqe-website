@@ -18,9 +18,15 @@ interface TeamCardProps {
 const CARD_H_MOBILE = 428;
 const CARD_H_DESKTOP = 420;
 
+/** Desktop-only: bio longer than this gets Show more / Show less */
+const BIO_COLLAPSE_THRESHOLD = 220;
+
 export function TeamCard({ member }: TeamCardProps) {
   const [hovered, setHovered] = useState(false);
+  const [bioExpanded, setBioExpanded] = useState(false);
   const bio = member.bio ?? "";
+  const needsBioToggle =
+    bio.length > BIO_COLLAPSE_THRESHOLD;
 
   return (
     <div
@@ -30,7 +36,10 @@ export function TeamCard({ member }: TeamCardProps) {
         height: `${CARD_H_MOBILE}px`,
       }}
       onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseLeave={() => {
+        setHovered(false);
+        setBioExpanded(false);
+      }}
     >
       <style>{`@media(min-width:768px){[data-team-card]{height:${CARD_H_DESKTOP}px!important}}`}</style>
       <div
@@ -101,7 +110,7 @@ export function TeamCard({ member }: TeamCardProps) {
 
         {/* ── BACK ── */}
         <div
-          className="absolute inset-0 rounded-2xl overflow-y-auto overscroll-y-contain md:overflow-hidden"
+          className="absolute inset-0 rounded-2xl overflow-y-auto overscroll-y-contain"
           style={{
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
@@ -122,12 +131,31 @@ export function TeamCard({ member }: TeamCardProps) {
             </p>
 
             {member.bio ? (
-              <p
-                className="text-white text-xs md:text-sm leading-relaxed w-full max-w-none"
-                style={{ opacity: 0.9 }}
-              >
-                {member.bio}
-              </p>
+              <>
+                <p
+                  className={`text-white text-xs md:text-sm leading-relaxed w-full max-w-none ${
+                    needsBioToggle && !bioExpanded ? "md:line-clamp-5" : ""
+                  }`}
+                  style={{ opacity: 0.9 }}
+                >
+                  {member.bio}
+                </p>
+                {needsBioToggle ? (
+                  <div className="hidden md:block w-full shrink-0 text-center">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setBioExpanded((v) => !v);
+                      }}
+                      className="mt-3 inline-flex text-sm font-semibold rounded-full px-4 py-1.5 bg-[#e8edf2] text-[#016068] hover:bg-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                      aria-expanded={bioExpanded}
+                    >
+                      {bioExpanded ? "Show less" : "Show more"}
+                    </button>
+                  </div>
+                ) : null}
+              </>
             ) : (
               <p
                 className="text-white text-sm leading-relaxed"

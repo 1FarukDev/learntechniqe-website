@@ -61,6 +61,8 @@ export interface CourseHeroData {
 }
 
 export interface CourseDetailsData {
+  /** Optional intro from Sanity, shown above the goals/entry/syllabus accordions when set */
+  detailsSummary?: string | null;
   courseGoals?: CourseTopic[];
   entryRequirements?: CourseTopic[];
   syllabus?: CourseTopic[];

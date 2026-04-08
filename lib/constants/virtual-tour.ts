@@ -1,11 +1,10 @@
 /**
- * Virtual tour video shown from the homepage “Our training centres” section.
+ * Virtual tour iframe URL for the homepage “Our training centres” section (EyeSpy360).
  * Override in `.env.local` if needed:
- *   NEXT_PUBLIC_VIRTUAL_TOUR_EMBED_URL="https://www.youtube.com/embed/YOUR_VIDEO_ID"
- * (Vimeo / other iframe embed URLs work the same way.)
+ *   NEXT_PUBLIC_VIRTUAL_TOUR_EMBED_URL="https://..."
  */
 const DEFAULT_VIRTUAL_TOUR_EMBED_URL =
-  "https://www.youtube.com/embed/WUdt1QqlI7Q";
+  "https://eyespy360.vr-360-tour.com/e/Hq8BnWySkP8/e";
 
 export function getVirtualTourEmbedUrl(): string {
   const fromEnv = process.env.NEXT_PUBLIC_VIRTUAL_TOUR_EMBED_URL?.trim();
