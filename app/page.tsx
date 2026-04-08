@@ -52,7 +52,11 @@ export default async function Home() {
   return (
     <main className="overflow-hidden">
       <AnimatedSection variant="fade-in" visibleOnLoad>
-        <Hero courses={allCourses} pathways={pathwayItems} />
+        <Hero
+          courses={allCourses}
+          popularCourses={popularCourses}
+          pathways={pathwayItems}
+        />
       </AnimatedSection>
       <AnimatedSection variant="fade-up">
         <Stages />
@@ -68,6 +72,7 @@ export default async function Home() {
       </AnimatedSection>
       <AnimatedSection variant="scale">
         <Brochure />
+      </AnimatedSection>
       <AnimatedSection variant="fade-left">
         <Certification />
       </AnimatedSection>
@@ -76,7 +81,7 @@ export default async function Home() {
       </AnimatedSection>
       <AnimatedSection variant="fade-up">
         <Contact />
-      </AnimatedSection>   </AnimatedSection>
+      </AnimatedSection>
       <AnimatedSection variant="fade-up">
         <Ratings />
       </AnimatedSection>

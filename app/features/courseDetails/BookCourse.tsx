@@ -60,10 +60,10 @@ function RequestOverviewInlineForm({
   return (
     <div className="max-w-xl mx-auto bg-gray-50 border border-gray-200 rounded-2xl p-6 sm:p-8">
       <h3 className="font-outfit font-bold text-xl sm:text-2xl text-black mb-2">
-        Request Course Overview
+        Request a call back
       </h3>
       <p className="text-gray-500 text-sm mb-6">
-        Enter your details and we&apos;ll send you a full overview of{" "}
+        Enter your details and we&apos;ll call you back about{" "}
         <span className="font-semibold text-gray-700">{courseName}</span>.
       </p>
 
@@ -149,7 +149,7 @@ function RequestOverviewInlineForm({
 
         {status === "success" && (
           <p className="text-sm text-green-600 font-medium">
-            Thank you! We&apos;ll send the overview to your email soon.
+            Thank you! We&apos;ll be in touch shortly.
           </p>
         )}
         {status === "error" && (
@@ -163,7 +163,7 @@ function RequestOverviewInlineForm({
           disabled={status === "loading"}
           className="w-full h-12 uppercase bg-[#016068] hover:bg-[#014d54] text-white font-semibold"
         >
-          {status === "loading" ? "Sending..." : "Request Overview"}
+          {status === "loading" ? "Sending..." : "Request a call back"}
         </Button>
       </form>
     </div>

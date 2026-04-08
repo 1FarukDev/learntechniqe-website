@@ -29,7 +29,7 @@ export const am2HeroData: CourseHeroData = {
     { label: 'Assessment', color: '#016068' },
     { label: 'Electrician', color: '#F5A623' },
   ],
-  price: '£885',
+  price: '£885 - £1,340',
   description: [
     'Technique Learning Solutions are now offering AM2 assessments at our approved training centre. The AM2 is the industry-standard end-point assessment for apprenticeships with qualifications such as C&G 2357 Level 3 or NVQ 3 (Diploma in Electrotechnical Technology). It is purely an assessment — there is no training element.',
     'The AM2 is also increasingly used by those wishing to gain their JIB card as an electrician — whether holding older qualifications that predate the NVQ or qualified electricians from outside the UK looking to work in the industry.',
@@ -177,7 +177,7 @@ export const am2DetailsData: CourseDetailsData = {
 // Pricing
 // ---------------------------------------------------------------------------
 export const am2PricingData: PricingBannerData = {
-  price: '£885',
+  price: '£885 - £1,340',
   pricingTagline:
     'Recommended fees from 01 April 2026: AM2 £885 | AM2S (registered up to 03 Sep 2023, V1.0) £965 | AM2S v1 (from 04 Sep 2023, V1.1) £1,340 | AM2E (to 03 Sep 2023) £965 | AM2E v1 (from 04 Sep 2023) £1,235 | AM2D £1,535 | AM2ED £1,340. We confirm your fee when you book. Ring 0800 112 3310.',
 }

@@ -37,10 +37,16 @@ const transforms = [
 
 interface HeroProps {
   courses?: CourseCardData[];
+  /** Same list as homepage “Our Most Popular Courses”; shown in Find a course when search is empty */
+  popularCourses?: CourseCardData[];
   pathways?: PathwayModalItem[];
 }
 
-function Hero({ courses = [], pathways = [] }: HeroProps) {
+function Hero({
+  courses = [],
+  popularCourses = [],
+  pathways = [],
+}: HeroProps) {
   const [offset, setOffset] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
 
@@ -180,7 +186,13 @@ function Hero({ courses = [], pathways = [] }: HeroProps) {
         </div>
       </section>
 
-      <CourseSearchModal open={searchOpen} onOpenChange={setSearchOpen} courses={courses} pathways={pathways} />
+      <CourseSearchModal
+        open={searchOpen}
+        onOpenChange={setSearchOpen}
+        courses={courses}
+        popularCourses={popularCourses}
+        pathways={pathways}
+      />
     </div>
   );
 }
