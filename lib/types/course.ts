@@ -58,6 +58,7 @@ export interface CourseHeroData {
   durationNoteLink?: string;
   summary?: string;
   bookingAvailable?: boolean;
+  bookASession?: boolean;
 }
 
 export interface CourseDetailsData {
