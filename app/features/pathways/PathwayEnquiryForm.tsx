@@ -29,6 +29,9 @@ const formatPrice = (n: number) =>
     minimumFractionDigits: 2,
   }).format(n);
 
+/** Temporary: re-enable to show grey price block under “Enquire About This Pathway”. */
+const SHOW_ENQUIRY_PRICE_SUMMARY = false;
+
 export function PathwayEnquiryForm({
   pathwayName,
   pathwaySlug,
@@ -117,7 +120,7 @@ export function PathwayEnquiryForm({
             Fill in your details and our team will be in touch.
           </p>
 
-          {totalPrice > 0 && (
+          {SHOW_ENQUIRY_PRICE_SUMMARY && totalPrice > 0 && (
             <div className="bg-[#F5F5F5] rounded-xl p-5 sm:p-6 mb-8 space-y-3">
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">Pathway Price (Inc VAT)</span>

@@ -34,6 +34,12 @@ const formatPrice = (n: number) =>
     minimumFractionDigits: 2,
   }).format(n);
 
+/** Temporary: sticky bar (“Calculate Technique Pathway… / Open Calculator”). */
+const SHOW_CALCULATOR_STICKY_HEADER = false;
+
+/** Temporary: price summary inside drawer when “Enquire About This Pathway” is open. */
+const SHOW_CALCULATOR_DRAWER_ENQUIRY_SUMMARY = false;
+
 export function PathwaysCalculatorSticky({
   pathways,
   initialSlug,
@@ -153,23 +159,25 @@ export function PathwaysCalculatorSticky({
 
   return (
     <>
-      <div
-        className={`fixed bottom-0 left-0 right-0 z-40 bg-[#016068] text-white shadow-lg md:px-0 px-4 transition-transform duration-300 ease-out ${
-          showStickyBar ? "translate-y-0" : "translate-y-full"
-        }`}
-      >
-        <div className="max-w-7xl mx-auto py-3 sm:py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-sm sm:text-base font-medium text-center sm:text-left">
-            Calculate Technique Pathway Monthly Repayments – 0% Interest
-          </p>
-          <Button
-            onClick={() => setIsOpen(true)}
-            className="text-white rounded text-sm px-8 font-bold h-10 w-full max-w-[200px] bg-[#E99E20] hover:bg-[#d88e10]"
-          >
-            Open Calculator
-          </Button>
+      {SHOW_CALCULATOR_STICKY_HEADER && (
+        <div
+          className={`fixed bottom-0 left-0 right-0 z-40 bg-[#016068] text-white shadow-lg md:px-0 px-4 transition-transform duration-300 ease-out ${
+            showStickyBar ? "translate-y-0" : "translate-y-full"
+          }`}
+        >
+          <div className="max-w-7xl mx-auto py-3 sm:py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p className="text-sm sm:text-base font-medium text-center sm:text-left">
+              Calculate Technique Pathway Monthly Repayments – 0% Interest
+            </p>
+            <Button
+              onClick={() => setIsOpen(true)}
+              className="text-white rounded text-sm px-8 font-bold h-10 w-full max-w-[200px] bg-[#E99E20] hover:bg-[#d88e10]"
+            >
+              Open Calculator
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
 
       {isOpen && (
         <div
@@ -211,7 +219,7 @@ export function PathwaysCalculatorSticky({
           {showEnquiryForm ? (
             /* ── Enquiry form inside the drawer ── */
             <div className="space-y-5">
-              {selectedPathway && (
+              {SHOW_CALCULATOR_DRAWER_ENQUIRY_SUMMARY && selectedPathway && (
                 <div className="bg-[#016068]/5 border border-[#016068]/15 rounded-xl p-4 space-y-2">
                   <p className="text-sm font-bold text-[#016068]">
                     {selectedPathway.title}

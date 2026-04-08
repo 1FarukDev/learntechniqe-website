@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import FooterLogo from "@/app/assets/png/logo-white.png";
-import PaymentMethodsImg from "@/app/assets/png/payment-methods.png";
+import { PaymentMethodLogos } from "@/components/payment-method-logos";
 import { client } from "@/lib/sanity/client";
 import { headerQuery } from "@/lib/queries/navigation";
 import { PATHWAYS_QUERY } from "@/lib/queries/pathway";
@@ -322,15 +322,8 @@ async function Footer() {
               Copyright &copy; 2026 Technique Learning Solutions | All Rights
               Reserved
             </p>
-            <div className="flex items-center gap-4">
-              <Image
-                src={PaymentMethodsImg}
-                alt="Accepted payment methods: Visa, Mastercard, Apple Pay, Google Pay, Klarna, American Express"
-                width={681}
-                height={60}
-                className="h-3.5 w-auto max-w-[110px] object-contain opacity-80"
-                sizes="110px"
-              />
+            <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
+              <PaymentMethodLogos />
               <Link
                 href="/terms-and-conditions"
                 className="text-white/60 text-[11px] sm:text-xs underline underline-offset-2 hover:text-white transition-colors"
