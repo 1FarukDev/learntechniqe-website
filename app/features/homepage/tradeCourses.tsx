@@ -46,8 +46,8 @@ function TradeCourses() {
               <h3 className="text-white text-[24px] sm:text-[30px] md:text-[28px] leading-tight font-normal">
                 Electrical <br /> Courses
               </h3>
-              <Button asChild className="normal-case bg-[#01636B] w-full h-12 sm:h-16 text-xs sm:text-base  px-2">
-                <Link href="/courses/electrical">All Electrical Courses</Link>
+              <Button asChild className="normal-case bg-[#01636B] w-full h-12 sm:h-16 text-sm sm:text-base  px-2">
+                <Link href="/courses/electrical">BROWSE COURSES</Link>
               </Button>
             </div>
             <Image
@@ -65,10 +65,10 @@ function TradeCourses() {
               <Button
                 asChild
                 variant={"secondary"}
-                className="normal-case bg-[#ECF0F0] w-full h-12 sm:h-16 text-black text-xs sm:text-base px-2"
+                className="normal-case bg-[#ECF0F0] w-full h-12 sm:h-16 text-black text-sm sm:text-base px-2"
               >
                 <Link href="/courses/aircon-refrigeration">
-                  All Air Con &amp; Refrigeration Courses
+                  BROWSE COURSES
                 </Link>
               </Button>
             </div>
@@ -86,9 +86,9 @@ function TradeCourses() {
               <Button
                 asChild
                 variant={"secondary"}
-                className="normal-case bg-[#ECF0F0] text-black w-full h-12 sm:h-16 text-xs sm:text-base px-2"
+                className="normal-case bg-[#ECF0F0] text-black w-full h-12 sm:h-16 text-sm sm:text-base px-2"
               >
-                <Link href="/courses/plc">All PLC Training Courses</Link>
+                <Link href="/courses/plc">BROWSE COURSES</Link>
               </Button>
             </div>
             <Image
@@ -105,9 +105,9 @@ function TradeCourses() {
               <Button
                 asChild
                 variant={"secondary"}
-                className="normal-case bg-[#ECF0F0] text-black w-full h-12 sm:h-16 text-xs sm:text-base px-2"
+                className="normal-case bg-[#ECF0F0] text-black w-full h-12 sm:h-16 text-sm sm:text-base px-2"
               >
-                <Link href="/courses/am2-assessment">AM2 Assessment Course</Link>
+                <Link href="/courses/am2-assessment">BROWSE COURSES</Link>
               </Button>
             </div>
             <Image

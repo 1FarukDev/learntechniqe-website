@@ -13,11 +13,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { X } from "lucide-react";
+import { Building2, X } from "lucide-react";
+import type { SessionCourseOption } from "@/lib/course-session-options";
 
 /** Radix Select requires a non-empty value for the placeholder row */
 const COURSE_SELECT_NONE = "__book_session_no_course__";
-import type { SessionCourseOption } from "@/lib/course-session-options";
 
 type SessionVariant = "full" | "banner";
 
@@ -115,24 +115,60 @@ function Session({
   const openDrawer = () => setDrawerOpen(true);
 
   const bannerSection = (
-    <section className="relative w-full overflow-hidden border-y border-white/10 bg-gradient-to-r from-[#015a60] via-[#016068] to-[#014850]">
-      <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-4 py-10 sm:px-6 md:flex-row md:items-center lg:px-8">
-        <div className="text-left">
-          <h2 className="font-outfit text-xl font-semibold tracking-tight text-white sm:text-2xl">
-            Training at your premises?
-          </h2>
-          <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/85">
-            Book a session for this course at your location — we&apos;ll follow
-            up with dates and logistics.
-          </p>
+    <section
+      className="w-full bg-white py-10 sm:py-12 md:py-14"
+      aria-labelledby="book-session-banner-heading"
+    >
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="relative isolate overflow-hidden rounded-2xl shadow-[0_24px_60px_-20px_rgba(0,0,0,0.35)]">
+          <Image
+            src={SessionImage}
+            alt="Training session background"
+            fill
+            className="z-0 object-cover object-center"
+            sizes="(min-width: 1280px) 1216px, (min-width: 1024px) 960px, 100vw"
+          />
+          <div
+            className="absolute inset-0 z-10 bg-linear-to-br from-[rgba(0,140,140,0.55)] via-[rgba(0,100,110,0.70)] to-[rgba(0,60,80,0.88)]"
+            aria-hidden
+          />
+          <div className="relative z-20 p-6 sm:p-8 md:flex md:items-center md:justify-between md:gap-10 md:p-10 lg:p-12">
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
+              <div className="min-w-0 flex-1 text-left">
+                <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#F5A623] sm:text-xs">
+                  On-site training
+                </p>
+                <h2
+                  id="book-session-banner-heading"
+                  className="mt-2 font-outfit text-2xl font-semibold leading-tight tracking-tight text-white sm:text-3xl md:text-[1.85rem] md:leading-snug"
+                >
+                  Training at your premises?
+                </h2>
+                <p className="mt-3 max-w-2xl text-base leading-relaxed text-white/90 sm:text-[1.05rem]">
+                  This course can be delivered at{" "}
+                  <strong className="font-semibold text-white">your location</strong>
+                  {", "}
+                  same syllabus, hands-on where facilities allow. Tell us you&apos;re
+                  interested and we&apos;ll follow up with availability, group sizes,
+                  and logistics.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-8 flex shrink-0 flex-col gap-3 sm:mt-0 md:ml-4 md:max-w-[min(100%,280px)]">
+              <Button
+                type="button"
+                onClick={openDrawer}
+                className="h-14 w-full bg-[#F5A623] px-8 font-outfit text-base font-semibold uppercase tracking-[0.12em] text-white shadow-lg transition hover:bg-[#e09410] hover:shadow-md md:min-w-[240px]"
+              >
+                Book a session
+              </Button>
+              <p className="text-center text-xs text-white/60 sm:text-left md:text-center">
+                No obligation, we&apos;ll reply with next steps.
+              </p>
+            </div>
+          </div>
         </div>
-        <Button
-          type="button"
-          onClick={openDrawer}
-          className="h-12 shrink-0 bg-[#F5A623] px-8 font-outfit text-sm font-semibold uppercase tracking-widest text-white hover:bg-[#e09410]"
-        >
-          Book a session
-        </Button>
       </div>
     </section>
   );

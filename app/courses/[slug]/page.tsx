@@ -205,13 +205,6 @@ async function CourseDetail({ params }: CoursePageProps) {
       <AnimatedSection variant="fade-up">
         <BookCourse data={bookData} courseUrl={`/courses/${slug}`} />
       </AnimatedSection>
-      <AnimatedSection variant="fade-up">
-        <CourseReviews
-          reviews={coursecheckReviews}
-          companyId={companyId}
-          courseId={coursecheckCourseId}
-        />
-      </AnimatedSection>
       {Boolean(rawCourse?.bookASession) && (
         <AnimatedSection variant="fade-up">
           <Session
@@ -226,6 +219,14 @@ async function CourseDetail({ params }: CoursePageProps) {
           />
         </AnimatedSection>
       )}
+      <AnimatedSection variant="fade-up">
+        <CourseReviews
+          reviews={coursecheckReviews}
+          companyId={companyId}
+          courseId={coursecheckCourseId}
+        />
+      </AnimatedSection>
+
       <AnimatedSection variant="fade-up">
         <Contact />
       </AnimatedSection>
