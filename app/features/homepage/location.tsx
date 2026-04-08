@@ -130,7 +130,7 @@ const Location: React.FC = () => {
               asChild
               className="uppercase bg-[#01656B] text-white h-12 sm:h-17.25 px-8 sm:px-10 text-sm sm:text-base"
             >
-              <Link href="/contact">More Info</Link>
+              <Link href="/contact">Training centre contact</Link>
             </Button>
             <Button
               onClick={() => setMapOpen(true)}

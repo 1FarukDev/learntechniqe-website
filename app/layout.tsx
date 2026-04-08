@@ -155,25 +155,7 @@ export default function RootLayout({
         <HeaderWrapper />
         {children}
         <Footer />
-        {/* <Script
-          src="https://app.fastbots.ai/embed.js"
-          strategy="afterInteractive"
-          data-bot-id="cmngr6lld06s4pa1pd85pyg8m"
-        /> */}
-        {/* <Script
-  id="chtl-config"
-  strategy="afterInteractive"
-  dangerouslySetInnerHTML={{
-    __html: `window.chtlConfig = { chatbotId: "1597339393" }`,
-  }}
-/>
-<Script
-  async
-  data-id="1597339393"
-  id="chtl-script"
-  strategy="afterInteractive"
-  src="https://chatling.ai/js/embed.js"
-/> */}
+        <script src="//code.tidio.co/xfa1nuadygc0qsxfrhtjddlktnyppeeu.js" async></script>
       </body>
     </html>
   );
