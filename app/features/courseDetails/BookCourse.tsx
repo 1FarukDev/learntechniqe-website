@@ -173,8 +173,6 @@ function RequestOverviewInlineForm({
 function BookCourse({ data, courseUrl = "" }: BookCourseProps) {
   const course = data ?? defaultBookCourseData;
 
-
-
   const title = course.title ?? defaultBookCourseData.title;
   const prerequisites =
     course.prerequisites ?? defaultBookCourseData.prerequisites;
@@ -208,29 +206,37 @@ function BookCourse({ data, courseUrl = "" }: BookCourseProps) {
             )}
 
             {showAccreditation &&
-              qualifications.slice(0, 2).map((q, i) =>
-                q.accreditationLogo ? (
-                  <div
-                    key={i}
-                    className="border border-gray-200 rounded-xl p-4 w-36 flex flex-col items-center justify-between bg-gray-50"
-                  >
-                    <Image
-                      src={q.accreditationLogo}
-                      alt={
-                        q.accreditationLogoAlt ||
-                        q.accreditedBy ||
-                        "Accreditation"
-                      }
-                      width={q.accreditationLogoAlt === "EAL logo" ? 250 : 90}
-                      height={100}
-                      className="object-contain"
-                    />
-                    <p className="text-[#14AE5C] bg-[#DCF2E9] p-2 py-1 rounded-full text-xs font-normal mt-4">
-                      Accredited
-                    </p>
-                  </div>
-                ) : null,
-              )}
+              qualifications
+                .slice(0, 2)
+                .filter(
+                  (q, i, arr) =>
+                    arr.findIndex(
+                      (x) => x.accreditationLogoAlt === q.accreditationLogoAlt,
+                    ) === i,
+                )
+                .map((q, i) =>
+                  q.accreditationLogo ? (
+                    <div
+                      key={i}
+                      className="border border-gray-200 rounded-xl p-4 w-36 flex flex-col items-center justify-between bg-gray-50"
+                    >
+                      <Image
+                        src={q.accreditationLogo}
+                        alt={
+                          q.accreditationLogoAlt ||
+                          q.accreditedBy ||
+                          "Accreditation"
+                        }
+                        width={q.accreditationLogoAlt === "EAL logo" ? 250 : 90}
+                        height={100}
+                        className="object-contain"
+                      />
+                      <p className="text-[#14AE5C] bg-[#DCF2E9] p-2 py-1 rounded-full text-xs font-normal mt-4">
+                        Accredited
+                      </p>
+                    </div>
+                  ) : null,
+                )}
           </div>
 
           {completionRewards.length > 0 && (
@@ -247,7 +253,7 @@ function BookCourse({ data, courseUrl = "" }: BookCourseProps) {
           )}
         </div>
 
-        {hasBooking  ? (
+        {hasBooking ? (
           <div className="max-w-3xl mx-auto overflow-hidden">
             <CademyBookingIframe
               key={cademyEmbedUrl}
