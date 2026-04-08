@@ -8,6 +8,7 @@ export const coursesQuery = groq`
     heroImage,
     tags,
     description,
+    summary,
     duration,
   }
 `;
@@ -18,6 +19,7 @@ export const courseCardsQuery = groq`
     "slug": slug.current,
     price,
     duration,
+    summary,
     "description": description[0],
     "heroImage": heroImage.asset->url,
     tags[]{ label, color },
@@ -34,6 +36,7 @@ export const courseBySlugQuery = groq`
     originalPrice,
     pricingTagline,
     description,
+    summary,
     requestOverviewLink,
     qualifications[] {
       title,

@@ -100,6 +100,11 @@ function CourseHero({ data, isPathway = false }: CourseHeroProps) {
               ))}
             </div>
           )}
+          {course.summary && (
+            <p className="mt-4 text-white/70 text-sm sm:text-base leading-7 italic">
+              {course.summary}
+            </p>
+          )}
 
           {isPathway ? (
             <button

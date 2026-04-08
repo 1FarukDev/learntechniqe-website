@@ -83,7 +83,7 @@ function CourseCard({ course, hrefPrefix = "/courses" }: CourseCardProps) {
 
         <div className="mt-auto pt-4">
           <Button className="bg-[#14AE5C] w-full h-auto min-h-10 sm:min-h-11 normal-case text-xs sm:text-sm pointer-events-none px-2 py-2 leading-snug line-clamp-2">
-            View {title}
+            View More
           </Button>
         </div>
       </div>

@@ -111,6 +111,7 @@ async function CourseDetail({ params }: CoursePageProps) {
     description: rawCourse?.description ?? defaultCourseHeroData.description,
     qualifications:
       rawCourse?.qualifications ?? defaultCourseHeroData.qualifications,
+    summary: rawCourse?.summary ?? defaultCourseHeroData.summary,
     bookingAvailable,
   };
 

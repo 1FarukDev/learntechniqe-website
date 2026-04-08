@@ -47,7 +47,7 @@ function TradeCourses() {
                 Electrical <br /> Courses
               </h3>
               <Button asChild className="normal-case bg-[#01636B] w-full h-12 sm:h-16 text-sm sm:text-base px-2">
-                <Link href="/courses/electrical">Browse electrical training courses</Link>
+                <Link href="/courses/electrical"> More Information</Link>
               </Button>
             </div>
             <Image
@@ -68,7 +68,7 @@ function TradeCourses() {
                 className="normal-case bg-[#ECF0F0] w-full h-12 sm:h-16 text-black text-sm sm:text-base px-2"
               >
                 <Link href="/courses/aircon-refrigeration">
-                  Browse air conditioning and refrigeration courses
+                  More Information
                 </Link>
               </Button>
             </div>
@@ -88,7 +88,7 @@ function TradeCourses() {
                 variant={"secondary"}
                 className="normal-case bg-[#ECF0F0] text-black w-full h-12 sm:h-16 text-sm sm:text-base px-2"
               >
-                <Link href="/courses/plc">Browse PLC training courses</Link>
+                <Link href="/courses/plc"> More Information</Link>
               </Button>
             </div>
             <Image
@@ -107,7 +107,7 @@ function TradeCourses() {
                 variant={"secondary"}
                 className="normal-case bg-[#ECF0F0] text-black w-full h-12 sm:h-16 text-sm sm:text-base px-2"
               >
-                <Link href="/courses/am2-assessment">Learn about the AM2 assessment</Link>
+                <Link href="/courses/am2-assessment"> More Information</Link>
               </Button>
             </div>
             <Image
