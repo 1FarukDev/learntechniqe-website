@@ -207,13 +207,13 @@ function BookCourse({ data, courseUrl = "" }: BookCourseProps) {
 
             {showAccreditation &&
               qualifications
-                .slice(0, 2)
                 .filter(
                   (q, i, arr) =>
                     arr.findIndex(
                       (x) => x.accreditationLogoAlt === q.accreditationLogoAlt,
                     ) === i,
                 )
+                .slice(0, 2)
                 .map((q, i) =>
                   q.accreditationLogo ? (
                     <div
