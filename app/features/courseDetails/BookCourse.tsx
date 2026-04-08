@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 interface BookCourseProps {
   data?: BookCourseData | null;
   courseUrl?: string;
+  showAccreditation?: boolean;
 }
 
 const emptyForm = {
@@ -26,7 +27,9 @@ function RequestOverviewInlineForm({
   courseName: string;
   courseUrl: string;
 }) {
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
   const [formData, setFormData] = useState(emptyForm);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -67,7 +70,10 @@ function RequestOverviewInlineForm({
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="inline-overview-first" className="block text-sm font-semibold text-gray-700 mb-1">
+            <label
+              htmlFor="inline-overview-first"
+              className="block text-sm font-semibold text-gray-700 mb-1"
+            >
               First Name <span className="text-red-500">*</span>
             </label>
             <Input
@@ -75,13 +81,18 @@ function RequestOverviewInlineForm({
               type="text"
               placeholder="Enter your first name"
               value={formData.first_name}
-              onChange={(e) => setFormData((p) => ({ ...p, first_name: e.target.value }))}
+              onChange={(e) =>
+                setFormData((p) => ({ ...p, first_name: e.target.value }))
+              }
               required
               className="bg-white h-12"
             />
           </div>
           <div>
-            <label htmlFor="inline-overview-last" className="block text-sm font-semibold text-gray-700 mb-1">
+            <label
+              htmlFor="inline-overview-last"
+              className="block text-sm font-semibold text-gray-700 mb-1"
+            >
               Last Name <span className="text-red-500">*</span>
             </label>
             <Input
@@ -89,14 +100,19 @@ function RequestOverviewInlineForm({
               type="text"
               placeholder="Enter your last name"
               value={formData.last_name}
-              onChange={(e) => setFormData((p) => ({ ...p, last_name: e.target.value }))}
+              onChange={(e) =>
+                setFormData((p) => ({ ...p, last_name: e.target.value }))
+              }
               required
               className="bg-white h-12"
             />
           </div>
         </div>
         <div>
-          <label htmlFor="inline-overview-phone" className="block text-sm font-semibold text-gray-700 mb-1">
+          <label
+            htmlFor="inline-overview-phone"
+            className="block text-sm font-semibold text-gray-700 mb-1"
+          >
             Phone Number <span className="text-red-500">*</span>
           </label>
           <Input
@@ -104,13 +120,18 @@ function RequestOverviewInlineForm({
             type="tel"
             placeholder="Enter your phone number"
             value={formData.number}
-            onChange={(e) => setFormData((p) => ({ ...p, number: e.target.value }))}
+            onChange={(e) =>
+              setFormData((p) => ({ ...p, number: e.target.value }))
+            }
             required
             className="bg-white h-12"
           />
         </div>
         <div>
-          <label htmlFor="inline-overview-email" className="block text-sm font-semibold text-gray-700 mb-1">
+          <label
+            htmlFor="inline-overview-email"
+            className="block text-sm font-semibold text-gray-700 mb-1"
+          >
             Email Address <span className="text-red-500">*</span>
           </label>
           <Input
@@ -118,7 +139,9 @@ function RequestOverviewInlineForm({
             type="email"
             placeholder="Enter your email"
             value={formData.email}
-            onChange={(e) => setFormData((p) => ({ ...p, email: e.target.value }))}
+            onChange={(e) =>
+              setFormData((p) => ({ ...p, email: e.target.value }))
+            }
             required
             className="bg-white h-12"
           />
@@ -150,6 +173,8 @@ function RequestOverviewInlineForm({
 function BookCourse({ data, courseUrl = "" }: BookCourseProps) {
   const course = data ?? defaultBookCourseData;
 
+
+
   const title = course.title ?? defaultBookCourseData.title;
   const prerequisites =
     course.prerequisites ?? defaultBookCourseData.prerequisites;
@@ -158,7 +183,7 @@ function BookCourse({ data, courseUrl = "" }: BookCourseProps) {
   const qualifications =
     course.qualifications ?? defaultBookCourseData.qualifications ?? [];
   const cademyEmbedUrl = course.cademyEmbedUrl;
-
+  const showAccreditation = course.showAccreditation ?? true;
   const hasBooking =
     typeof cademyEmbedUrl === "string" && cademyEmbedUrl.trim().length > 0;
 
@@ -182,29 +207,30 @@ function BookCourse({ data, courseUrl = "" }: BookCourseProps) {
               </div>
             )}
 
-            {qualifications.slice(0, 1).map((q, i) =>
-              q.accreditationLogo ? (
-                <div
-                  key={i}
-                  className="border border-gray-200 rounded-xl p-4 w-36 flex flex-col items-center justify-between bg-gray-50"
-                >
-                  <Image
-                    src={q.accreditationLogo}
-                    alt={
-                      q.accreditationLogoAlt ||
-                      q.accreditedBy ||
-                      "Accreditation"
-                    }
-                    width={90}
-                    height={50}
-                    className="object-contain"
-                  />
-                  <p className="text-[#14AE5C] bg-[#DCF2E9] p-2 py-1 rounded-full text-xs font-normal mt-4">
-                    Accredited
-                  </p>
-                </div>
-              ) : null,
-            )}
+            {showAccreditation &&
+              qualifications.slice(0, 2).map((q, i) =>
+                q.accreditationLogo ? (
+                  <div
+                    key={i}
+                    className="border border-gray-200 rounded-xl p-4 w-36 flex flex-col items-center justify-between bg-gray-50"
+                  >
+                    <Image
+                      src={q.accreditationLogo}
+                      alt={
+                        q.accreditationLogoAlt ||
+                        q.accreditedBy ||
+                        "Accreditation"
+                      }
+                      width={q.accreditationLogoAlt === "EAL logo" ? 250 : 90}
+                      height={100}
+                      className="object-contain"
+                    />
+                    <p className="text-[#14AE5C] bg-[#DCF2E9] p-2 py-1 rounded-full text-xs font-normal mt-4">
+                      Accredited
+                    </p>
+                  </div>
+                ) : null,
+              )}
           </div>
 
           {completionRewards.length > 0 && (
@@ -221,7 +247,7 @@ function BookCourse({ data, courseUrl = "" }: BookCourseProps) {
           )}
         </div>
 
-        {hasBooking ? (
+        {hasBooking  ? (
           <div className="max-w-3xl mx-auto overflow-hidden">
             <CademyBookingIframe
               key={cademyEmbedUrl}
@@ -230,10 +256,7 @@ function BookCourse({ data, courseUrl = "" }: BookCourseProps) {
             />
           </div>
         ) : (
-          <RequestOverviewInlineForm
-            courseName={title}
-            courseUrl={courseUrl}
-          />
+          <RequestOverviewInlineForm courseName={title} courseUrl={courseUrl} />
         )}
       </section>
     </div>

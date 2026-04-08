@@ -48,6 +48,7 @@ export const courseBySlugQuery = groq`
     entryRequirements,
     syllabus,
     prerequisites,
+    showAccreditation,
     completionRewards,
     cademyEmbedUrl,
     cademyDirectUrl,

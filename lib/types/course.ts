@@ -75,6 +75,7 @@ export interface PricingBannerData {
 export interface BookCourseData {
   title: string
   prerequisites?: string
+  showAccreditation?: boolean
   completionRewards?: string[]
   qualifications?: CourseQualification[]
   cademyEmbedUrl?: string

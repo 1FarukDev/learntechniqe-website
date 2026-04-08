@@ -29,7 +29,9 @@ interface CoursePageProps {
   params: { slug: string };
 }
 
-export async function generateMetadata({ params }: CoursePageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: CoursePageProps): Promise<Metadata> {
   const { slug } = await params;
   let course = await client.fetch(courseBySlugQuery, { slug });
   if (!course && slug === AM2_COURSE_SLUG) course = getAm2SanityFallback();
@@ -40,14 +42,16 @@ export async function generateMetadata({ params }: CoursePageProps): Promise<Met
     Array.isArray(course.description) && course.description.length > 0
       ? typeof course.description[0] === "string"
         ? course.description[0]
-        : course.description[0]?.children?.[0]?.text ?? ""
+        : (course.description[0]?.children?.[0]?.text ?? "")
       : typeof course.description === "string"
         ? course.description
         : `${title} — accredited training course at Technique Learning Solutions. Expert-led, hands-on training at world-class facilities.`;
 
-  const metaDescription = description.length > 155
-    ? `${description.slice(0, 152)}...`
-    : description || `${title} — accredited training course at Technique Learning Solutions.`;
+  const metaDescription =
+    description.length > 155
+      ? `${description.slice(0, 152)}...`
+      : description ||
+        `${title} — accredited training course at Technique Learning Solutions.`;
 
   return {
     title,
@@ -133,6 +137,7 @@ async function CourseDetail({ params }: CoursePageProps) {
     title: rawCourse?.title ?? defaultBookCourseData.title,
     prerequisites:
       rawCourse?.prerequisites ?? defaultBookCourseData.prerequisites,
+    showAccreditation: rawCourse?.showAccreditation ?? true,
     completionRewards:
       rawCourse?.completionRewards ?? defaultBookCourseData.completionRewards,
     qualifications:
@@ -151,7 +156,7 @@ async function CourseDetail({ params }: CoursePageProps) {
       Array.isArray(rawCourse?.description) && rawCourse.description.length > 0
         ? typeof rawCourse.description[0] === "string"
           ? rawCourse.description[0]
-          : rawCourse.description[0]?.children?.[0]?.text ?? ""
+          : (rawCourse.description[0]?.children?.[0]?.text ?? "")
         : typeof rawCourse?.description === "string"
           ? rawCourse.description
           : "",

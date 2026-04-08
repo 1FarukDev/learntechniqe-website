@@ -87,9 +87,7 @@ export function CademyBookingIframe({ src, title }: CademyBookingIframeProps) {
         doc.documentElement?.offsetHeight ?? 0,
       );
       if (h > HEIGHT_MIN) applyHeight(h);
-    } catch {
-      /* cross-origin: keep HEIGHT_INITIAL until postMessage */
-    }
+    } catch {}
   };
 
   return (
