@@ -46,8 +46,8 @@ function TradeCourses() {
               <h3 className="text-white text-[24px] sm:text-[30px] md:text-[36px] leading-tight font-normal">
                 Electrical <br /> Courses
               </h3>
-              <Button asChild className="uppercase bg-[#01636B] w-full h-12 sm:h-16 text-sm sm:text-base">
-                <Link href="/courses/electrical">More Information</Link>
+              <Button asChild className="normal-case bg-[#01636B] w-full h-12 sm:h-16 text-sm sm:text-base px-2">
+                <Link href="/courses/electrical">Browse electrical training courses</Link>
               </Button>
             </div>
             <Image
@@ -65,9 +65,11 @@ function TradeCourses() {
               <Button
                 asChild
                 variant={"secondary"}
-                className="uppercase bg-[#ECF0F0] w-full h-12 sm:h-16 text-black text-sm sm:text-base"
+                className="normal-case bg-[#ECF0F0] w-full h-12 sm:h-16 text-black text-sm sm:text-base px-2"
               >
-                <Link href="/courses/aircon-refrigeration">More Information</Link>
+                <Link href="/courses/aircon-refrigeration">
+                  Browse air conditioning and refrigeration courses
+                </Link>
               </Button>
             </div>
             <Image
@@ -84,9 +86,9 @@ function TradeCourses() {
               <Button
                 asChild
                 variant={"secondary"}
-                className="uppercase bg-[#ECF0F0] text-black w-full h-12 sm:h-16 text-sm sm:text-base"
+                className="normal-case bg-[#ECF0F0] text-black w-full h-12 sm:h-16 text-sm sm:text-base px-2"
               >
-                <Link href="/courses/plc">More Information</Link>
+                <Link href="/courses/plc">Browse PLC training courses</Link>
               </Button>
             </div>
             <Image
@@ -103,9 +105,9 @@ function TradeCourses() {
               <Button
                 asChild
                 variant={"secondary"}
-                className="uppercase bg-[#ECF0F0] text-black w-full h-12 sm:h-16 text-sm sm:text-base"
+                className="normal-case bg-[#ECF0F0] text-black w-full h-12 sm:h-16 text-sm sm:text-base px-2"
               >
-                <Link href="/courses/am2-assessment">More Information</Link>
+                <Link href="/courses/am2-assessment">Learn about the AM2 assessment</Link>
               </Button>
             </div>
             <Image

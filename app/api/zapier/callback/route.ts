@@ -2,11 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
-    const webhookUrl = process.env.ZAPIER_COURSE_OVERVIEW_WEBHOOK_URL;
+    const webhookUrl =
+      process.env.ZAPIER_CALLBACK_WEBHOOK_URL ||
+      process.env.ZAPIER_COURSE_OVERVIEW_WEBHOOK_URL;
     if (!webhookUrl) {
-      console.error("ZAPIER_COURSE_OVERVIEW_WEBHOOK_URL is not configured");
+      console.error(
+        "ZAPIER_CALLBACK_WEBHOOK_URL is not configured (optional legacy: ZAPIER_COURSE_OVERVIEW_WEBHOOK_URL)"
+      );
       return NextResponse.json(
-        { error: "Course overview request is not configured" },
+        { error: "Callback request is not configured" },
         { status: 500 }
       );
     }
@@ -14,7 +18,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const payload = {
       ...body,
-      source: "course_overview_request",
+      source: "request_callback",
       timestamp: new Date().toISOString(),
     };
 
@@ -30,7 +34,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Course overview Zapier submission error:", error);
+    console.error("Callback Zapier submission error:", error);
     return NextResponse.json(
       { error: "Failed to submit. Please try again." },
       { status: 500 }

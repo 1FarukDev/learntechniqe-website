@@ -12,11 +12,11 @@ Add all of these to your `.env` file:
 ZAPIER_CONTACT_WEBHOOK_URL=
 ZAPIER_NEWSLETTER_WEBHOOK_URL=
 ZAPIER_BROCHURE_WEBHOOK_URL=
-ZAPIER_COURSE_OVERVIEW_WEBHOOK_URL=
+ZAPIER_CALLBACK_WEBHOOK_URL=
 ZAPIER_BOOK_SESSION_WEBHOOK_URL=
 ```
 
-> **Note:** `.env.example` is currently missing `ZAPIER_BROCHURE_WEBHOOK_URL` and `ZAPIER_BOOK_SESSION_WEBHOOK_URL`. Both are required for those forms to work.
+All of the above keys are listed in `.env.example`.
 
 ---
 
@@ -27,7 +27,7 @@ ZAPIER_BOOK_SESSION_WEBHOOK_URL=
 | `POST /api/zapier/contact`    | `app/api/zapier/contact/route.ts`           | `ZAPIER_CONTACT_WEBHOOK_URL`        |
 | `POST /api/zapier/newsletter` | `app/api/zapier/newsletter/route.ts`        | `ZAPIER_NEWSLETTER_WEBHOOK_URL`     |
 | `POST /api/zapier/brochure`   | `app/api/zapier/brochure/route.ts`          | `ZAPIER_BROCHURE_WEBHOOK_URL`       |
-| `POST /api/zapier/course-overview` | `app/api/zapier/course-overview/route.ts` | `ZAPIER_COURSE_OVERVIEW_WEBHOOK_URL` |
+| `POST /api/zapier/callback` | `app/api/zapier/callback/route.ts` | `ZAPIER_CALLBACK_WEBHOOK_URL` |
 | `POST /api/zapier/book-session` | `app/api/zapier/book-session/route.ts`    | `ZAPIER_BOOK_SESSION_WEBHOOK_URL`   |
 
 ---
@@ -118,26 +118,26 @@ ZAPIER_BOOK_SESSION_WEBHOOK_URL=
 
 ---
 
-### 8. Request Course Overview (Modal)
+### 8. Request a callback (Modal)
 
 | | |
 |-|-|
 | **File** | `app/features/courseDetails/RequestCourseOverviewModal.tsx` |
-| **Purpose** | Request course overview PDF / details |
-| **Posts to** | `/api/zapier/course-overview` |
-| **Env** | `ZAPIER_COURSE_OVERVIEW_WEBHOOK_URL` |
+| **Purpose** | Request a callback from course / pathway page |
+| **Posts to** | `/api/zapier/callback` |
+| **Env** | `ZAPIER_CALLBACK_WEBHOOK_URL` |
 | **Pages** | `/courses/[slug]` · `/pathways/[slug]` |
 
 ---
 
-### 9. Request Overview Inline (BookCourse fallback)
+### 9. Request callback inline (BookCourse fallback)
 
 | | |
 |-|-|
 | **File** | `app/features/courseDetails/BookCourse.tsx` (inner `RequestOverviewInlineForm`) |
 | **Purpose** | Fallback when no Cademy embed URL exists — collects lead and sends course name/URL |
-| **Posts to** | `/api/zapier/course-overview` |
-| **Env** | `ZAPIER_COURSE_OVERVIEW_WEBHOOK_URL` |
+| **Posts to** | `/api/zapier/callback` |
+| **Env** | `ZAPIER_CALLBACK_WEBHOOK_URL` |
 | **Pages** | `/courses/[slug]` (only when course has no `cademyEmbedUrl`) |
 
 ---

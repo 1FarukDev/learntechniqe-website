@@ -55,7 +55,7 @@ export function RequestCourseOverviewModal({
     e.preventDefault();
     setStatus("loading");
     try {
-      const res = await fetch("/api/zapier/course-overview", {
+      const res = await fetch("/api/zapier/callback", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

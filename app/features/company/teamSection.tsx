@@ -94,7 +94,7 @@ export function TeamCard({ member }: TeamCardProps) {
               className="inline-flex items-center justify-center px-4 py-1.5 rounded-full text-white text-xs font-semibold"
               style={{ backgroundColor: "#22c55e" }}
             >
-              More Information
+              Flip card for full profile
             </span>
           </div>
         </div>
