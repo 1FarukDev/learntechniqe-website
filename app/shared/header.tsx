@@ -22,8 +22,8 @@ import type { PathwayNavItem } from "./headerWrapper";
 function toTitleCase(str: string): string {
   if (!str) return str;
   return str
-    // .toLowerCase()
-    // .replace(/\b\w/g, (c) => c.toUpperCase());
+  // .toLowerCase()
+  // .replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
 const socialIconMap: Record<string, string> = {
@@ -31,8 +31,8 @@ const socialIconMap: Record<string, string> = {
   instagram: "mdi:instagram",
   youtube: "mdi:youtube",
   linkedin: "mdi:linkedin",
-  twitter: "mdi:twitter", 
-  tiktok: "ic:baseline-tiktok", 
+  twitter: "mdi:twitter",
+  tiktok: "ic:baseline-tiktok",
 };
 
 function hexToRgba(hex: string, alpha: number) {
@@ -66,6 +66,28 @@ function extractText(val: unknown): string | null {
   return null;
 }
 
+/** Scroll a subcategory block fully into the mega menu scrollport (opening dropdown stays visible). */
+function scrollMegaMenuBlockIntoView(
+  scroller: HTMLElement,
+  block: HTMLElement,
+  padding = 20,
+) {
+  const blockRect = block.getBoundingClientRect();
+  const scrollerRect = scroller.getBoundingClientRect();
+  let delta = 0;
+  if (blockRect.bottom > scrollerRect.bottom - padding) {
+    delta = blockRect.bottom - scrollerRect.bottom + padding;
+  } else if (blockRect.top < scrollerRect.top + padding) {
+    delta = blockRect.top - scrollerRect.top - padding;
+  }
+  if (delta !== 0) {
+    scroller.scrollTo({
+      top: scroller.scrollTop + delta,
+      behavior: "smooth",
+    });
+  }
+}
+
 /* ────────────────────────────────────────────────────────────
    Desktop-only COURSES mega menu
    ──────────────────────────────────────────────────────────── */
@@ -80,6 +102,10 @@ function CoursesMegaMenu({
 }) {
   const [openSubcategory, setOpenSubcategory] = useState<string | null>(null);
   const [visible, setVisible] = useState(false);
+  const megaMenuScrollRef = useRef<HTMLDivElement>(null);
+  const subcategoryBlockRefs = useRef<Map<string, HTMLDivElement | null>>(
+    new Map(),
+  );
 
   useEffect(() => {
     const timer = setTimeout(() => setVisible(true), 10);
@@ -91,7 +117,19 @@ function CoursesMegaMenu({
   }, []);
 
   const toggleSubcategory = (key: string) => {
-    setOpenSubcategory((prev) => (prev === key ? null : key));
+    setOpenSubcategory((prev) => {
+      const next = prev === key ? null : key;
+      if (next !== null) {
+        window.setTimeout(() => {
+          const scroller = megaMenuScrollRef.current;
+          const block = subcategoryBlockRefs.current.get(next);
+          if (scroller && block) {
+            scrollMegaMenuBlockIntoView(scroller, block);
+          }
+        }, 380);
+      }
+      return next;
+    });
   };
 
   return (
@@ -104,8 +142,12 @@ function CoursesMegaMenu({
         transition: "opacity 400ms ease, transform 400ms ease",
       }}
     >
-      <div className="max-w-7xl mx-auto px-4 md:px-0 py-6 md:py-8 w-full flex flex-col flex-1 min-h-0 overflow-hidden">
-        <div className="grid grid-cols-3 gap-6 flex-1 min-h-0 overflow-y-auto overscroll-contain pr-1 -mr-1 [scrollbar-gutter:stable]">
+      <div className="max-w-7xl mx-auto px-4 md:px-0 py-4 md:py-4 w-full flex flex-col flex-1 min-h-0 overflow-hidden">
+        <div
+          ref={megaMenuScrollRef}
+          data-mega-menu-courses-scroll
+          className="grid grid-cols-3 gap-6 flex-1 min-h-0 overflow-y-auto overscroll-contain pr-1 -mr-1 [scrollbar-gutter:stable]"
+        >
           {data.megaMenuColumns.map((col, colIdx) => (
             <div
               key={colIdx}
@@ -129,18 +171,27 @@ function CoursesMegaMenu({
                     {toTitleCase(col.title)}
                   </Link>
                 </h3>
-                <p className="text-sm text-gray-600 leading-relaxed">
+                <p className="text-[12px] text-gray-600 leading-relaxed">
                   {col.description}
                 </p>
               </div>
 
-              <div className="flex flex-col gap-1 overflow-y-auto flex-1 min-h-0 pr-1">
+              <div className="flex flex-col gap-1 min-h-0">
                 {col.subcategories.map((sub, subIdx) => {
                   const key = `${colIdx}-${subIdx}`;
                   const isOpen = openSubcategory === key;
                   return (
-                    <div key={subIdx} className="shrink-0">
+                    <div
+                      key={subIdx}
+                      className="shrink-0"
+                      ref={(el) => {
+                        const m = subcategoryBlockRefs.current;
+                        if (el) m.set(key, el);
+                        else m.delete(key);
+                      }}
+                    >
                       <button
+                        type="button"
                         onClick={() => toggleSubcategory(key)}
                         className="w-full flex items-center justify-between py-1 px-1 text-sm font-semibold text-gray-800 hover:text-teal-700 transition-colors border-gray-100"
                       >
@@ -537,8 +588,8 @@ function MobileDrawer({
 
                     <div
                       className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${openColumn === colIdx
-                          ? "grid-rows-[1fr]"
-                          : "grid-rows-[0fr]"
+                        ? "grid-rows-[1fr]"
+                        : "grid-rows-[0fr]"
                         }`}
                     >
                       <div className="ml-2 flex flex-col gap-0.5 mb-1 min-h-0 overflow-hidden">
@@ -564,8 +615,8 @@ function MobileDrawer({
                               </button>
                               <div
                                 className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${isOpen
-                                    ? "grid-rows-[1fr]"
-                                    : "grid-rows-[0fr]"
+                                  ? "grid-rows-[1fr]"
+                                  : "grid-rows-[0fr]"
                                   }`}
                               >
                                 <div
@@ -803,12 +854,12 @@ function Header({
     >
       <div
         className={`w-full transition-[max-width,margin,padding,box-shadow,border-radius] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${scrolled && !showMegaMenu
-            ? "max-w-7xl mt-2 md:mt-3 mx-3 md:mx-auto rounded-2xl bg-white/80 backdrop-blur-md shadow-lg px-3 md:px-6 py-px md:py-1"
-            : scrolled && showMegaMenu
-              ? "max-w-7xl mt-2 md:mt-3 mx-3 md:mx-auto rounded-none px-3 md:px-6 py-1 md:py-1 shadow-none"
-              : showMegaMenu
-                ? "max-w-7xl mt-0 mx-auto rounded-none px-3 md:px-0 py-0 shadow-none"
-                : "max-w-7xl mt-0 mx-auto rounded-none shadow-none px-3 md:px-0 py-0"
+          ? "max-w-7xl mt-2 md:mt-3 mx-3 md:mx-auto rounded-2xl bg-white/80 backdrop-blur-md shadow-lg px-3 md:px-6 py-px md:py-1"
+          : scrolled && showMegaMenu
+            ? "max-w-7xl mt-2 md:mt-3 mx-3 md:mx-auto rounded-none px-3 md:px-6 py-1 md:py-1 shadow-none"
+            : showMegaMenu
+              ? "max-w-7xl mt-0 mx-auto rounded-none px-3 md:px-0 py-0 shadow-none"
+              : "max-w-7xl mt-0 mx-auto rounded-none shadow-none px-3 md:px-0 py-0"
           }`}
       >
         <section className="flex justify-between items-center">
