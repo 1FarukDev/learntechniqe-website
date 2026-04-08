@@ -210,7 +210,9 @@ function BookCourse({ data, courseUrl = "" }: BookCourseProps) {
                 .filter(
                   (q, i, arr) =>
                     arr.findIndex(
-                      (x) => x.accreditationLogoAlt === q.accreditationLogoAlt,
+                      (x) =>
+                        x.accreditationLogoAlt?.toLowerCase() ===
+                        q.accreditationLogoAlt?.toLowerCase(),
                     ) === i,
                 )
                 .slice(0, 2)
@@ -231,12 +233,14 @@ function BookCourse({ data, courseUrl = "" }: BookCourseProps) {
                         height={100}
                         className="object-contain"
                       />
-                      <p className="text-[#14AE5C] bg-[#DCF2E9] p-2 py-1 rounded-full text-xs font-normal mt-4">
-                        Accredited
-                      </p>
+                      {q.accreditedBy && (
+                        <p className="text-[#14AE5C] bg-[#DCF2E9] p-2 py-1 rounded-full text-xs font-normal mt-4">
+                          Accredited
+                        </p>
+                      )}
                     </div>
                   ) : null,
-                )} 
+                )}
           </div>
 
           {completionRewards.length > 0 && (
