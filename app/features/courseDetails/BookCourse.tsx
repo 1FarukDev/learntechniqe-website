@@ -236,7 +236,7 @@ function BookCourse({ data, courseUrl = "" }: BookCourseProps) {
                       {q.accreditedBy && (
                         <p className="text-[#14AE5C] bg-[#DCF2E9] p-2 py-1 rounded-full text-xs font-normal mt-4">
                           Accredited
-                        </p>
+                        </p> 
                       )}
                     </div>
                   ) : null,
