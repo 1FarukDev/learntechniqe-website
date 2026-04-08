@@ -88,6 +88,9 @@ function CourseDetails({ data }: CourseDetailsProps) {
   const entryRequirements = course.entryRequirements ?? [];
   const syllabus = course.syllabus ?? [];
 
+  const summary =
+    typeof course.detailsSummary === "string" ? course.detailsSummary.trim() : "";
+
   const allTabs: { key: Tab; label: string; content: { title: string; points: string[] }[] }[] = [
     { key: "goals", label: "Course Goals", content: courseGoals },
     { key: "entry", label: "Entry Requirements", content: entryRequirements },
@@ -124,62 +127,83 @@ function CourseDetails({ data }: CourseDetailsProps) {
     }, 200);
   };
 
-  if (tabs.length === 0) return null;
+  const hasAccordion = tabs.length > 0;
+  if (!hasAccordion && !summary) return null;
+
+  const tabBarMbDesktop = hasAccordion ? (summary ? "mb-8" : "mb-10") : "";
+  const tabBarMbMobile = hasAccordion ? (summary ? "mb-6" : "mb-8") : "";
 
   return (
     <div className="bg-white">
       <section className="py-12 max-w-7xl mx-auto px-6">
         {/* Desktop: grid tabs */}
-        <div
-          className="hidden sm:grid border border-gray-200 rounded-sm overflow-hidden mb-10"
-          style={{ gridTemplateColumns: `repeat(${tabs.length}, minmax(0, 1fr))` }}
-        >
-          {tabs.map((tab) => (
-            <button
-              key={tab.key}
-              onClick={(e) => handleTabChange(tab.key, e.currentTarget)}
-              className={`py-5 text-xs font-semibold uppercase tracking-widest transition-all duration-200 border-r last:border-r-0 border-gray-200 ${
-                activeTab === tab.key
-                  ? "bg-[#4a5568] text-white"
-                  : "bg-[#e8edf2] text-gray-500 hover:bg-gray-200"
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
+        {hasAccordion && (
+          <div
+            className={`hidden sm:grid border border-gray-200 rounded-sm overflow-hidden ${tabBarMbDesktop}`}
+            style={{ gridTemplateColumns: `repeat(${tabs.length}, minmax(0, 1fr))` }}
+          >
+            {tabs.map((tab) => (
+              <button
+                key={tab.key}
+                onClick={(e) => handleTabChange(tab.key, e.currentTarget)}
+                className={`py-5 text-xs font-semibold uppercase tracking-widest transition-all duration-200 border-r last:border-r-0 border-gray-200 ${
+                  activeTab === tab.key
+                    ? "bg-[#4a5568] text-white"
+                    : "bg-[#e8edf2] text-gray-500 hover:bg-gray-200"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Mobile: horizontally scrollable pill buttons */}
-        <div
-          ref={tabScrollRef}
-          className="flex sm:hidden gap-2.5 overflow-x-auto pb-1 mb-8 -mx-6 px-6 no-scrollbar"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-        >
-          {tabs.map((tab) => (
-            <button
-              key={tab.key}
-              onClick={(e) => handleTabChange(tab.key, e.currentTarget)}
-              className={`shrink-0 px-5 py-3 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-200 ${
-                activeTab === tab.key
-                  ? "bg-[#4a5568] text-white shadow-md"
-                  : "bg-[#e8edf2] text-gray-500 hover:bg-gray-200"
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
+        {hasAccordion && (
+          <div
+            ref={tabScrollRef}
+            className={`flex sm:hidden gap-2.5 overflow-x-auto pb-1 -mx-6 px-6 no-scrollbar ${tabBarMbMobile}`}
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          >
+            {tabs.map((tab) => (
+              <button
+                key={tab.key}
+                onClick={(e) => handleTabChange(tab.key, e.currentTarget)}
+                className={`shrink-0 px-5 py-3 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-200 ${
+                  activeTab === tab.key
+                    ? "bg-[#4a5568] text-white shadow-md"
+                    : "bg-[#e8edf2] text-gray-500 hover:bg-gray-200"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        )}
 
-        <div
-          className={`transition-all duration-200 ease-in-out ${
-            animating ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"
-          }`}
-        >
-          <AccordionList
-            key={displayedTab}
-            topics={tabContent[displayedTab] ?? []}
-          />
-        </div>
+        {summary && (
+          <div
+            className={`rounded-sm border border-gray-200 border-l-4 border-l-[#016068] bg-[#e8edf2]/40 px-5 py-4 text-sm sm:text-base leading-relaxed text-gray-800 whitespace-pre-line ${
+              hasAccordion ? "mb-8" : ""
+            }`}
+            role="note"
+          >
+            {summary}
+          </div>
+        )}
+
+        {hasAccordion && (
+          <div
+            className={`transition-all duration-200 ease-in-out ${
+              animating ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"
+            }`}
+          >
+            <AccordionList
+              key={displayedTab}
+              topics={tabContent[displayedTab] ?? []}
+            />
+          </div>
+        )}
       </section>
     </div>
   );

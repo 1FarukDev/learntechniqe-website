@@ -115,6 +115,7 @@ export const PATHWAY_DETAIL_QUERY = groq`
      duration,
      durationNote,
      durationNoteLink,
+     detailsSummary,
      courseGoals,
      entryRequirements,
      syllabus,

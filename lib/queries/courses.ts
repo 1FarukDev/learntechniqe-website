@@ -26,6 +26,7 @@ export const courseCardsQuery = groq`
   }
 `;
 
+/** Sanity `course` document: optional text field `detailsSummary` (see types/course CourseDetailsData). */
 export const courseBySlugQuery = groq`
   *[_type == "course" && slug.current == $slug][0] {
     title,
@@ -47,6 +48,7 @@ export const courseBySlugQuery = groq`
     duration,
     durationNote,
     durationNoteLink,
+    detailsSummary,
     courseGoals,
     entryRequirements,
     syllabus,

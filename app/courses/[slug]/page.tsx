@@ -115,8 +115,15 @@ async function CourseDetail({ params }: CoursePageProps) {
     bookingAvailable,
   };
 
+  const detailsSummaryRaw = rawCourse?.detailsSummary;
+  const detailsSummary =
+    typeof detailsSummaryRaw === "string" && detailsSummaryRaw.trim().length > 0
+      ? detailsSummaryRaw.trim()
+      : undefined;
+
   const detailsData = {
     ...defaultCourseDetailsData,
+    ...(detailsSummary ? { detailsSummary } : {}),
     courseGoals: rawCourse?.courseGoals ?? defaultCourseDetailsData.courseGoals,
     entryRequirements:
       rawCourse?.entryRequirements ??

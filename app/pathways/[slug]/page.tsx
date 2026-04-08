@@ -79,8 +79,15 @@ async function PathwayDetail({ params }: PathwayPageProps) {
     bookingAvailable: true,
   };
 
+  const detailsSummaryRaw = rawCourse?.detailsSummary;
+  const detailsSummary =
+    typeof detailsSummaryRaw === "string" && detailsSummaryRaw.trim().length > 0
+      ? detailsSummaryRaw.trim()
+      : undefined;
+
   const detailsData = {
     ...defaultCourseDetailsData,
+    ...(detailsSummary ? { detailsSummary } : {}),
     courseGoals: rawCourse?.courseGoals ?? defaultCourseDetailsData.courseGoals,
     entryRequirements: rawCourse?.entryRequirements ?? defaultCourseDetailsData.entryRequirements,
     syllabus: rawCourse?.syllabus ?? defaultCourseDetailsData.syllabus,
