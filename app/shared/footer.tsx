@@ -170,7 +170,7 @@ async function Footer() {
                 >
                   Air Con & Refrigeration
                 </Link>
-                <Link
+                <Link 
                   href="/pathways"
                   className="text-white/70 text-xs leading-relaxed hover:text-[#4DD9AC] transition-colors"
                 >
