@@ -69,7 +69,7 @@ export function PathwaysCalculatorSticky({
   const resolvedInitial =
     initialSlug && pathways.some((p) => p.slug === initialSlug)
       ? initialSlug
-      : (pathways[0]?.slug ?? "");
+      : pathways[0]?.slug ?? "";
   const [selectedSlug, setSelectedSlug] = useState<string>(resolvedInitial);
   const [customMonths, setCustomMonths] = useState<number>(10);
 
@@ -365,7 +365,9 @@ export function PathwaysCalculatorSticky({
 
                 <Button
                   type="submit"
-                  disabled={enquiryStatus === "loading" || !enquiryData.terms}
+                  disabled={
+                    enquiryStatus === "loading" || !enquiryData.terms
+                  }
                   className="text-white rounded text-sm font-bold h-11 w-full bg-[#016068] hover:bg-[#014d54]"
                 >
                   {enquiryStatus === "loading"
@@ -421,12 +423,19 @@ export function PathwaysCalculatorSticky({
                           </span>
                           {selected && (
                             <span className="shrink-0 flex h-6 w-6 items-center justify-center rounded-full bg-[#016068] text-white">
-                              <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                              <Check
+                                className="h-3.5 w-3.5"
+                                strokeWidth={3}
+                              />
                             </span>
                           )}
                         </div>
                         <p className="mt-1.5 text-sm font-bold text-[#016068]">
                           {formatPrice(pTotal)}
+                          <span className="font-normal text-gray-500">
+                            {" "}
+                            inc VAT
+                          </span>
                         </p>
                       </button>
                     );
@@ -439,7 +448,7 @@ export function PathwaysCalculatorSticky({
                   <div className="bg-[#F5F5F5] rounded-lg p-4 space-y-2">
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">
-                        Total Price (Inc VAT)
+                        Total Price 
                       </span>
                       <span className="font-semibold text-[#016068]">
                         {formatPrice(totalPrice)}
@@ -471,7 +480,9 @@ export function PathwaysCalculatorSticky({
                             max="24"
                             value={customMonths}
                             onChange={(e) =>
-                              setCustomMonths(parseInt(e.target.value) || 3)
+                              setCustomMonths(
+                                parseInt(e.target.value) || 3,
+                              )
                             }
                             className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#016068]"
                           />
@@ -522,8 +533,8 @@ export function PathwaysCalculatorSticky({
                   ) : (
                     <div className="bg-amber-50 p-3 rounded-lg">
                       <p className="text-sm text-amber-700">
-                        Payment plans are not available for this pathway. Full
-                        payment is required at booking.
+                        Payment plans are not available for this pathway.
+                        Full payment is required at booking.
                       </p>
                     </div>
                   )}
