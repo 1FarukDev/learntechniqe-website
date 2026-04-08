@@ -16,12 +16,12 @@ import type { HeaderData } from "@/types/header";
 import { courseOptionsForSessionBook } from "@/lib/course-session-options";
 
 export const metadata: Metadata = {
-  title: "Air Conditioning & Refrigeration Courses",
+  title: "Air Con & Refrigeration Courses",
   description:
     "Comprehensive HVAC and refrigeration training from F-Gas certification to total air conditioning packages. Learn from industry experts with hands-on practical experience at accredited facilities.",
   alternates: { canonical: "https://www.learntechnique.com/courses/aircon-refrigeration" },
   openGraph: {
-    title: "Air Conditioning & Refrigeration Courses | Technique Learning Solutions",
+    title: "Air Con & Refrigeration Courses | Technique Learning Solutions",
     description:
       "F-Gas certification and HVAC training with hands-on practical experience.",
     url: "https://www.learntechnique.com/courses/aircon-refrigeration",
@@ -46,7 +46,7 @@ export default async function AirconRefrigerationCoursesPage() {
     <main>
       <AnimatedSection variant="fade-in" visibleOnLoad className="relative z-0">
         <HeroSection
-          title="Air Conditioning & Refrigeration Courses"
+          title="Air Con & Refrigeration Courses"
           description="Comprehensive HVAC and refrigeration training from F-Gas certification to total air conditioning packages. Learn from industry experts with hands-on practical experience."
           waveColor={CATEGORY_PAGE_CURVE_SURFACE}
         />

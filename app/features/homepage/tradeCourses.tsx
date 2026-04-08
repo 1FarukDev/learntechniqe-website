@@ -43,7 +43,7 @@ function TradeCourses() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 mt-10 sm:mt-15">
           <div className="bg-[#E99E20] flex items-center justify-between rounded-lg p-4 sm:p-5 shadow-xl gap-4">
             <div className="flex flex-col gap-4 sm:gap-10 w-1/2 min-w-0">
-              <h3 className="text-white text-[24px] sm:text-[30px] md:text-[36px] leading-tight font-normal">
+              <h3 className="text-white text-[24px] sm:text-[30px] md:text-[28px] leading-tight font-normal">
                 Electrical <br /> Courses
               </h3>
               <Button asChild className="normal-case bg-[#01636B] w-full h-12 sm:h-16 text-xs sm:text-base  px-2">
@@ -59,8 +59,8 @@ function TradeCourses() {
 
           <div className="bg-[#01636B] flex items-center justify-between rounded-lg p-4 sm:p-5 shadow-xl gap-4">
             <div className="flex flex-col gap-4 sm:gap-10 w-1/2 min-w-0">
-              <h3 className="text-white text-[24px] sm:text-[30px] md:text-[36px] leading-tight font-normal">
-                Air-con and <br /> Refrig Courses
+              <h3 className="text-white text-[24px] sm:text-[30px] md:text-[28px] leading-tight font-normal">
+                Air Con &amp; Refrigeration <br /> Courses
               </h3>
               <Button
                 asChild
@@ -68,7 +68,7 @@ function TradeCourses() {
                 className="normal-case bg-[#ECF0F0] w-full h-12 sm:h-16 text-black text-xs sm:text-base px-2"
               >
                 <Link href="/courses/aircon-refrigeration">
-                  All Air-Con/Refrig Courses
+                  All Air Con &amp; Refrigeration Courses
                 </Link>
               </Button>
             </div>
@@ -80,7 +80,7 @@ function TradeCourses() {
           </div>
           <div className="bg-[#01636B] flex items-center justify-between rounded-lg p-4 sm:p-5 shadow-xl gap-4">
             <div className="flex flex-col gap-4 sm:gap-10 w-1/2 min-w-0">
-              <h3 className="text-white text-[24px] sm:text-[30px] md:text-[36px] leading-tight font-normal">
+              <h3 className="text-white text-[24px] sm:text-[30px] md:text-[28px] leading-tight font-normal">
                 PLC Training <br /> Courses
               </h3>
               <Button
@@ -99,7 +99,7 @@ function TradeCourses() {
           </div>
           <div className="bg-[#01636B] flex items-center justify-between rounded-lg p-4 sm:p-5 shadow-xl gap-4">
             <div className="flex flex-col gap-4 sm:gap-10 w-1/2 min-w-0">
-              <h3 className="text-white text-[24px] sm:text-[30px] md:text-[36px] leading-tight font-normal">
+              <h3 className="text-white text-[24px] sm:text-[30px] md:text-[28px] leading-tight font-normal">
                 AM2 <br /> Assessment
               </h3>
               <Button

@@ -16,6 +16,7 @@ import { PATHWAYS_PAGE_QUERY } from "@/lib/queries/pathway";
 import type { CourseCardData } from "@/lib/course-categories";
 import { pickPopularCourses } from "@/lib/constants/popular-courses";
 import type { PathwayModalItem } from "@/components/course-search-modal";
+import BookASession from "./courses/sections/session";
 
 export const metadata: Metadata = {
   title: "Learn Technique | Expert-Led Electrical & Trade Training",
@@ -80,12 +81,14 @@ export default async function Home() {
         <CampaignBanner />
       </AnimatedSection>
       <AnimatedSection variant="fade-up">
-        <Contact />
-      </AnimatedSection>
-      <AnimatedSection variant="fade-up">
         <Ratings />
       </AnimatedSection>
-   
+      <AnimatedSection variant="fade-up">
+        <BookASession />
+      </AnimatedSection>
+      <AnimatedSection variant="fade-up">
+        <Contact />
+      </AnimatedSection>
     </main>
   );
 }

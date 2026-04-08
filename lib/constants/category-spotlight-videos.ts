@@ -9,7 +9,7 @@ export const CATEGORY_SPOTLIGHT_VIDEOS = {
   },
   "aircon-refrigeration": {
     youtubeId: "pxACbzA5RYo",
-    headline: "Air conditioning & refrigeration",
+    headline: "Air Con & Refrigeration Courses",
   },
   electrical: {
     youtubeId: "xqybvehrt8Q",
