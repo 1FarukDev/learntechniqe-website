@@ -134,7 +134,7 @@ export function PathwaysComparisonTable({
               </tr>
               <tr className="border-b border-gray-200 bg-gray-50">
                 <td className="p-3 md:p-4 font-semibold text-gray-700">
-                  Price (Inc VAT)
+                  Price 
                 </td>
                 {pathways.map((p, i) => (
                   <td
