@@ -14,7 +14,7 @@ import { getVirtualTourEmbedUrl } from "@/lib/constants/virtual-tour";
 import { Video } from "lucide-react";
 
 const GOOGLE_MAPS_EMBED_URL =
-  "https://www.google.com/maps/d/u/0/embed?mid=1nU1ecA3H6TsQO1OTKn53eeOG6iqgvIAS";
+  "https://www.google.com/maps/d/u/0/embed?mid=1em932n3y81l82ryO6QIhmOhDGMtA4J0&ehbc=2E312F";
 const tabs = ["clay", "stirling"] as const;
 type Tab = (typeof tabs)[number];
 

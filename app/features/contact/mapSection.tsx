@@ -6,7 +6,7 @@ function MapSection() {
             <div className="max-w-7xl mx-auto">
                 <div className="w-full h-[350px] sm:h-[450px] md:h-[600px] rounded-2xl overflow-hidden shadow-sm">
                     <iframe
-                        src="https://www.google.com/maps/d/u/0/embed?mid=1nU1ecA3H6TsQO1OTKn53eeOG6iqgvIAS"
+                        src="https://www.google.com/maps/d/u/0/embed?mid=1em932n3y81l82ryO6QIhmOhDGMtA4J0&ehbc=2E312F"
                         width="100%"
                         height="100%"
                         style={{ border: 0 }}

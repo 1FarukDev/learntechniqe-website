@@ -227,7 +227,7 @@ export default function LeadershipSection() {
         </p>
       </div>
 
-      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-x-2 sm:gap-x-3 md:gap-x-4 gap-y-0 md:gap-y-20 lg:gap-y-24 pb-6 md:pb-12">
+      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-x-2 sm:gap-x-3 md:gap-x-4 gap-y-0 md:gap-y-10 lg:gap-y-12 pb-6 md:pb-12">
         {team.map((member) => (
           <div
             key={member.name}

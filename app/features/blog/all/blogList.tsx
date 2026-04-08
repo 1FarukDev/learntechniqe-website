@@ -30,7 +30,7 @@ function AllBlogPosts({ posts }: Props) {
 
   return (
     <section className="bg-white">
-      <div className="max-w-7xl mx-auto px-6 pt-12 pb-8">
+      <div className="max-w-7xl mx-auto px-6 pt-12 pb-16 sm:pb-20 md:pb-24">
         {/* Header */}
         <div className="flex items-center justify-between mb-10">
           <h2 className="text-2xl md:text-4xl font-bold text-black">All Blog Posts</h2>

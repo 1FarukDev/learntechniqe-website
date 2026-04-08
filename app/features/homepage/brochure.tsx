@@ -68,7 +68,7 @@ function Brochure() {
         <FormProvider {...methods}>
           <form
             onSubmit={methods.handleSubmit(onSubmit)}
-            className="mt-8 sm:mt-12 space-y-6 text-left bg-white p-6 sm:p-13 rounded-2xl max-w-lg mx-auto"
+            className="mt-8 sm:mt-12 space-y-6 text-left bg-white text-black p-6 sm:p-13 rounded-2xl max-w-lg mx-auto"
           >
             <FormInput
               name="name"
