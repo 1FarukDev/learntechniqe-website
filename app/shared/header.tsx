@@ -137,7 +137,7 @@ function CoursesMegaMenu({
 
   return (
     <div
-      className={`hidden md:flex fixed left-0 right-0 z-50 flex-col overflow-hidden bg-zinc-50/95 backdrop-blur-sm shadow-[0_12px_40px_-16px_rgba(0,0,0,0.18)] border-t border-zinc-200/90 max-h-[87vh] ${scrolled ? "top-[4.5rem]" : "top-[4.25rem]"
+      className={`hidden md:flex fixed left-0 right-0 z-50 flex-col overflow-hidden bg-white shadow-[0_12px_40px_-16px_rgba(0,0,0,0.18)] border-t border-zinc-200/90 max-h-[87vh] ${scrolled ? "top-[4.5rem]" : "top-[4.25rem]"
         }`}
       style={{
         opacity: visible ? 1 : 0,
@@ -296,7 +296,7 @@ function PathwaysMegaMenu({
 
   return (
     <div
-      className={`hidden md:flex fixed left-0 right-0 z-50 flex-col overflow-hidden bg-zinc-50/95 backdrop-blur-sm shadow-[0_12px_40px_-16px_rgba(0,0,0,0.18)] border-t border-zinc-200/90 ${scrolled ? "top-[4.5rem]" : "top-[4.25rem]"
+      className={`hidden md:flex fixed left-0 right-0 z-50 flex-col overflow-hidden bg-white shadow-[0_12px_40px_-16px_rgba(0,0,0,0.18)] border-t border-zinc-200/90 ${scrolled ? "top-[4.5rem]" : "top-[4.25rem]"
         }`}
       style={{
         opacity: visible ? 1 : 0,

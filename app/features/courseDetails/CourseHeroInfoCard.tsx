@@ -9,7 +9,7 @@ import {
   CourseEnquiryForm,
   type CourseEnquiryFormHandle,
 } from "./CourseEnquiryForm";
-import type { CourseQualification } from "@/lib/types/course";
+import type { CourseQualification, CourseTag } from "@/lib/types/course";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
 const COLLAPSED_MAX_HEIGHT_PX = 380;
@@ -18,6 +18,7 @@ interface CourseHeroInfoCardProps {
   title: string;
   slug: string;
   price: string;
+  expertiseTags?: CourseTag[];
   qualifications: CourseQualification[];
   duration?: string;
   durationNote?: string;
@@ -32,6 +33,7 @@ function CourseHeroInfoCard({
   title,
   slug,
   price,
+  expertiseTags = [],
   qualifications,
   duration,
   durationNote,
@@ -67,36 +69,50 @@ function CourseHeroInfoCard({
 
   return (
     <div className="w-full lg:w-[50%] p-6 sm:p-8 flex flex-col gap-5 bg-white rounded-2xl overflow-hidden min-h-0">
-      <div>
-        <p className="text-[#14AE5C] font-outfit font-bold text-4xl sm:text-5xl">
-          {price.split("+")[0].trim()}
-          {price.includes("+") && (
-            <span className="text-base font-semibold ml-2 text-black/80">
-              +{price.split("+")[1]}
-            </span>
-          )}
-        </p>
-        {price.includes("+") && (
-          <p className="text-black font-semibold text-sm mt-1">
-            (
-            {price
-              .split("+")[0]
-              .trim()
-              .replace(/[^0-9.]/g, "") &&
-              `£${(
-                parseFloat(
-                  price
-                    .split("+")[0]
-                    .trim()
-                    .replace(/[^0-9.,]/g, "")
-                    .replace(",", ""),
-                ) * 1.2
-              ).toLocaleString("en-GB", {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0,
-              })} + VAT`}
-            )
+      <div className="flex flex-row items-start justify-between gap-2 sm:gap-4">
+        <div className="min-w-0 flex-1 pr-2">
+          <p className="text-[#14AE5C] font-outfit font-bold text-4xl sm:text-5xl">
+            {price.split("+")[0].trim()}
+            {price.includes("+") && (
+              <span className="text-base font-semibold ml-2 text-black/80">
+                +{price.split("+")[1]}
+              </span>
+            )}
           </p>
+          {price.includes("+") && (
+            <p className="text-black font-semibold text-sm mt-1">
+              (
+              {price
+                .split("+")[0]
+                .trim()
+                .replace(/[^0-9.]/g, "") &&
+                `£${(
+                  parseFloat(
+                    price
+                      .split("+")[0]
+                      .trim()
+                      .replace(/[^0-9.,]/g, "")
+                      .replace(",", ""),
+                  ) * 1.2
+                ).toLocaleString("en-GB", {
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                })} + VAT`}
+              )
+            </p>
+          )}
+        </div>
+        {expertiseTags.length > 0 && (
+          <div className="flex max-w-[50%] shrink-0 flex-wrap items-start justify-end gap-1.5 pt-0.5 sm:max-w-[55%] sm:gap-2 sm:pt-1">
+            {expertiseTags.map((tag, i) => (
+              <span
+                key={i}
+                className="text-xs font-semibold px-4 py-1.5 rounded-sm bg-[#E9FDFF] text-[#016068] border border-[#016068]/20"
+              >
+                {tag.label}
+              </span>
+            ))}
+          </div>
         )}
       </div>
 
