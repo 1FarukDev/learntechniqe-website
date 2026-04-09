@@ -24,7 +24,7 @@ export const courseCardsQuery = groq`
     "heroImage": heroImage.asset->url,
     tags[]{ label, color },
   }
-`;
+`
 
 /**
  * Sanity course document by slug. Includes optional detailsSummary (see CourseDetailsData)
