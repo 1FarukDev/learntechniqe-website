@@ -406,7 +406,7 @@ function PathwaysMegaMenu({
                       <span className="text-sm font-bold text-[#016068]">
                         {formatPrice(price)}
                         <span className="text-[10px] font-normal text-gray-400 ml-0.5">
-                          inc VAT
+                          + VAT
                         </span>
                       </span>
                     )}
@@ -701,7 +701,7 @@ function MobileDrawer({
                             <p className="text-xs font-bold text-[#016068]">
                               {formatPrice(price)}
                               <span className="font-normal text-gray-400 ml-0.5">
-                                inc VAT
+                                + VAT
                               </span>
                             </p>
                           )}

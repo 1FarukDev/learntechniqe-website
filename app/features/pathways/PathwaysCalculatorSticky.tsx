@@ -434,7 +434,7 @@ export function PathwaysCalculatorSticky({
                           {formatPrice(pTotal)}
                           <span className="font-normal text-gray-500">
                             {" "}
-                            inc VAT
+                            + VAT
                           </span>
                         </p>
                       </button>

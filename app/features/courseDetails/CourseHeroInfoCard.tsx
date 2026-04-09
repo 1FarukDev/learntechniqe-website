@@ -94,7 +94,7 @@ function CourseHeroInfoCard({
               ).toLocaleString("en-GB", {
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
-              })} inc VAT`}
+              })} + VAT`}
             )
           </p>
         )}
