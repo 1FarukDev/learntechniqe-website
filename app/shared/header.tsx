@@ -65,6 +65,34 @@ function extractText(val: unknown): string | null {
   return null;
 }
 
+function MegaMenuLegalFooter({ onClose }: { onClose: () => void }) {
+  const year = new Date().getFullYear();
+  return (
+    <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between shrink-0 text-[11px] sm:text-xs text-zinc-500">
+      <p className="text-center sm:text-left">
+        Copyright &copy; {year} Technique Learning Solutions | All Rights
+        Reserved
+      </p>
+      <div className="flex flex-wrap items-center justify-center sm:justify-end gap-x-4 gap-y-1">
+        <Link
+          href="/terms-and-conditions"
+          onClick={onClose}
+          className="font-medium text-zinc-600 hover:text-[#016068] underline underline-offset-2 transition-colors"
+        >
+          Terms &amp; Conditions
+        </Link>
+        <Link
+          href="/privacy-policy"
+          onClick={onClose}
+          className="font-medium text-zinc-600 hover:text-[#016068] underline underline-offset-2 transition-colors"
+        >
+          Privacy Policy
+        </Link>
+      </div>
+    </div>
+  );
+}
+
 /** Scroll a subcategory block fully into the mega menu scrollport (opening dropdown stays visible). */
 function scrollMegaMenuBlockIntoView(
   scroller: HTMLElement,
@@ -246,26 +274,29 @@ function CoursesMegaMenu({
           ))}
         </div>
 
-        {footerLinks.length > 0 && (
-          <div
-            className="mt-5 pt-5 border-t border-zinc-200/80 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm shrink-0"
-            style={{
-              opacity: visible ? 1 : 0,
-              transition: "opacity 280ms ease 220ms",
-            }}
-          >
-            {footerLinks.map((link, idx) => (
-              <Link
-                key={idx}
-                href={`${link.href}`}
-                onClick={onClose}
-                className="text-zinc-600 hover:text-[#016068] font-medium transition-colors"
-              >
-                {toTitleCase(link.label)}
-              </Link>
-            ))}
-          </div>
-        )}
+        <div
+          className="mt-5 pt-5 border-t border-zinc-200/80 shrink-0 space-y-4"
+          style={{
+            opacity: visible ? 1 : 0,
+            transition: "opacity 280ms ease 220ms",
+          }}
+        >
+          {footerLinks.length > 0 && (
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
+              {footerLinks.map((link, idx) => (
+                <Link
+                  key={idx}
+                  href={`${link.href}`}
+                  onClick={onClose}
+                  className="text-zinc-600 hover:text-[#016068] font-medium transition-colors"
+                >
+                  {toTitleCase(link.label)}
+                </Link>
+              ))}
+            </div>
+          )}
+          <MegaMenuLegalFooter onClose={onClose} />
+        </div>
       </div>
     </div>
   );
@@ -403,6 +434,15 @@ function PathwaysMegaMenu({
           })}
         </div>
 
+        <div
+          className="mt-5 pt-5 border-t border-zinc-200/80 shrink-0"
+          style={{
+            opacity: visible ? 1 : 0,
+            transition: "opacity 280ms ease 220ms",
+          }}
+        >
+          <MegaMenuLegalFooter onClose={onClose} />
+        </div>
       </div>
     </div>
   );

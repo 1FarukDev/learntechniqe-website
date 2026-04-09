@@ -16,7 +16,12 @@ type FormValues = {
   message: string;
 };
 
-function Contact() {
+type ContactProps = {
+  /** When set (e.g. on a course page), included in the Zapier payload as `course_url`. */
+  courseUrl?: string;
+};
+
+function Contact({ courseUrl }: ContactProps) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const methods = useForm<FormValues>({
     defaultValues: {
@@ -34,7 +39,10 @@ function Contact() {
       const res = await fetch("/api/zapier/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          ...(courseUrl ? { course_url: courseUrl } : {}),
+        }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Failed to submit");

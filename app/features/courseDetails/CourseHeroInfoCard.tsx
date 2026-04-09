@@ -18,7 +18,8 @@ interface CourseHeroInfoCardProps {
   title: string;
   slug: string;
   price: string;
-  expertiseTags?: CourseTag[];
+  /** Expertise / skill level tags from CMS (e.g. Beginner, Existing Electrician). Shown beside price, right-aligned. */
+  skillLevelTags?: CourseTag[];
   qualifications: CourseQualification[];
   duration?: string;
   durationNote?: string;
@@ -33,7 +34,7 @@ function CourseHeroInfoCard({
   title,
   slug,
   price,
-  expertiseTags = [],
+  skillLevelTags = [],
   qualifications,
   duration,
   durationNote,
@@ -69,14 +70,31 @@ function CourseHeroInfoCard({
 
   return (
     <div className="w-full lg:w-[50%] p-6 sm:p-8 flex flex-col gap-5 bg-white rounded-2xl overflow-hidden min-h-0">
-      <div className="flex flex-row items-start justify-between gap-2 sm:gap-4">
-        <div className="min-w-0 flex-1 pr-2">
+      <div className="flex w-full flex-row items-start justify-between gap-4">
+        <div className="min-w-0 flex-1">
           <p className="text-[#14AE5C] font-outfit font-bold text-4xl sm:text-5xl">
             {price.split("+")[0].trim()}
             {price.includes("+") && (
-              <span className="text-base font-semibold ml-2 text-black/80">
-                +{price.split("+")[1]}
-              </span>
+              <p className="text-black font-semibold text-sm mt-1">
+                (
+                {price
+                  .split("+")[0]
+                  .trim()
+                  .replace(/[^0-9.]/g, "") &&
+                  `£${(
+                    parseFloat(
+                      price
+                        .split("+")[0]
+                        .trim()
+                        .replace(/[^0-9.,]/g, "")
+                        .replace(",", ""),
+                    ) * 1.2
+                  ).toLocaleString("en-GB", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })} + VAT`}
+                )
+              </p>
             )}
           </p>
           {price.includes("+") && (
@@ -95,19 +113,28 @@ function CourseHeroInfoCard({
                       .replace(",", ""),
                   ) * 1.2
                 ).toLocaleString("en-GB", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
                 })} + VAT`}
               )
             </p>
           )}
         </div>
-        {expertiseTags.length > 0 && (
-          <div className="flex max-w-[50%] shrink-0 flex-wrap items-start justify-end gap-1.5 pt-0.5 sm:max-w-[55%] sm:gap-2 sm:pt-1">
-            {expertiseTags.map((tag, i) => (
+        {skillLevelTags.length > 0 && (
+          <div className="flex shrink-0 flex-col items-end gap-2 sm:flex-row sm:flex-wrap sm:justify-end">
+            {skillLevelTags.map((tag, i) => (
               <span
                 key={i}
-                className="text-xs font-semibold px-4 py-1.5 rounded-sm bg-[#E9FDFF] text-[#016068] border border-[#016068]/20"
+                className="inline-flex text-center text-xs font-semibold px-3 py-1.5 sm:px-4 sm:py-1.5 rounded-sm bg-[#016068]/10 text-[#016068] border border-[#016068]/25"
+                style={
+                  tag.color
+                    ? {
+                      backgroundColor: `${tag.color}18`,
+                      borderColor: `${tag.color}55`,
+                      color: tag.color,
+                    }
+                    : undefined
+                }
               >
                 {tag.label}
               </span>
@@ -227,7 +254,7 @@ function CourseHeroInfoCard({
           onClick={onBookNow}
           className="bg-[#F5A623] hover:bg-[#e09410] text-white font-outfit font-semibold uppercase tracking-widest text-xs sm:text-sm h-12 sm:h-14"
         >
-          {isPathway ? "Enquire Now" : bookingAvailable ? "Book Now" : "Request course overview"}
+          {isPathway ? "Enquire Now" : bookingAvailable ? "Book Now" : "Request a call back"}
         </Button>
         {!isPathway && (
           <CourseEnquiryForm

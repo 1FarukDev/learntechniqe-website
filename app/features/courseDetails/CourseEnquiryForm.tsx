@@ -12,7 +12,6 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { getAbsoluteCourseUrl } from "@/lib/course-detail-form";
 
 export type CourseEnquiryFormHandle = {
   open: () => void;
@@ -67,7 +66,7 @@ export const CourseEnquiryForm = forwardRef<
           email: formData.email,
           message: formData.message,
           course_name: courseName,
-          course_url: getAbsoluteCourseUrl(courseUrl),
+          course_url: courseUrl,
         }),
       });
       const json = await res.json();

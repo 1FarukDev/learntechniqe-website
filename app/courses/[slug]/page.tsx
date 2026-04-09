@@ -5,6 +5,7 @@ import Am2ResitSection from "@/app/features/courseDetails/Am2ResitSection";
 import CourseDetails from "@/app/features/courseDetails/CourseDetails";
 import CourseHero from "@/app/features/courseDetails/heroSection";
 import CourseReviews from "@/app/features/courseDetails/CourseReviews";
+import Brochure from "@/app/features/homepage/brochure";
 import Contact from "@/app/features/homepage/contact";
 import { AnimatedSection } from "@/components/animated-section";
 import { client } from "@/lib/sanity/client";
@@ -156,6 +157,8 @@ async function CourseDetail({ params }: CoursePageProps) {
     dates: cademyDates.length > 0 ? cademyDates : defaultBookCourseData.dates,
   };
 
+  const courseCanonicalUrl = `https://www.learntechnique.com/courses/${slug}`;
+
   const courseJsonLd = {
     "@context": "https://schema.org",
     "@type": "Course",
@@ -173,7 +176,7 @@ async function CourseDetail({ params }: CoursePageProps) {
       name: "Technique Learning Solutions",
       url: "https://www.learntechnique.com",
     },
-    url: `https://www.learntechnique.com/courses/${slug}`,
+    url: courseCanonicalUrl,
     ...(rawCourse?.duration && { timeRequired: rawCourse.duration }),
     ...(rawCourse?.price && {
       offers: {
@@ -220,6 +223,16 @@ async function CourseDetail({ params }: CoursePageProps) {
         </AnimatedSection>
       )}
       <AnimatedSection variant="fade-up">
+        <Brochure
+          courseUrl={courseCanonicalUrl}
+          courseTitle={
+            typeof rawCourse?.title === "string" && rawCourse.title.trim().length > 0
+              ? rawCourse.title.trim()
+              : "This course"
+          }
+        />
+      </AnimatedSection>
+      <AnimatedSection variant="fade-up">
         <CourseReviews
           reviews={coursecheckReviews}
           companyId={companyId}
@@ -228,7 +241,7 @@ async function CourseDetail({ params }: CoursePageProps) {
       </AnimatedSection>
 
       <AnimatedSection variant="fade-up">
-        <Contact />
+        <Contact courseUrl={courseCanonicalUrl} />
       </AnimatedSection>
     </main>
   );

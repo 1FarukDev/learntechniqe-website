@@ -6,10 +6,6 @@ import { defaultBookCourseData } from "@/lib/constants/course";
 import { CademyBookingIframe } from "./CademyBookingIframe";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  getAbsoluteCourseUrl,
-  splitFullName,
-} from "@/lib/course-detail-form";
 
 interface BookCourseProps {
   data?: BookCourseData | null;
@@ -17,7 +13,12 @@ interface BookCourseProps {
   showAccreditation?: boolean;
 }
 
-const emptyForm = { name: "", email: "" };
+const emptyForm = {
+  first_name: "",
+  last_name: "",
+  number: "",
+  email: "",
+};
 
 function RequestOverviewInlineForm({
   courseName,
@@ -34,20 +35,18 @@ function RequestOverviewInlineForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
-    const { first_name, last_name } = splitFullName(formData.name);
-    const absoluteUrl = getAbsoluteCourseUrl(courseUrl);
     try {
       const res = await fetch("/api/zapier/callback", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: formData.name.trim(),
-          first_name,
-          last_name,
-          number: "",
-          email: formData.email.trim(),
+          first_name: formData.first_name,
+          last_name: formData.last_name,
+          number: formData.number,
+          email: formData.email,
+          course: courseName,
           course_name: courseName,
-          course_url: absoluteUrl,
+          course_url: courseUrl,
         }),
       });
       const json = await res.json();
@@ -62,31 +61,70 @@ function RequestOverviewInlineForm({
   return (
     <div className="max-w-xl mx-auto bg-gray-50 border border-gray-200 rounded-2xl p-6 sm:p-8">
       <h3 className="font-outfit font-bold text-xl sm:text-2xl text-black mb-2">
-        Request course overview
+        Request a call back
       </h3>
       <p className="text-gray-500 text-sm mb-6">
-        Enter your details and we&apos;ll send you an overview of{" "}
+        Enter your details and we&apos;ll call you back about{" "}
         <span className="font-semibold text-gray-700">{courseName}</span>.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label
+              htmlFor="inline-overview-first"
+              className="block text-sm font-semibold text-gray-700 mb-1"
+            >
+              First Name <span className="text-red-500">*</span>
+            </label>
+            <Input
+              id="inline-overview-first"
+              type="text"
+              placeholder="Enter your first name"
+              value={formData.first_name}
+              onChange={(e) =>
+                setFormData((p) => ({ ...p, first_name: e.target.value }))
+              }
+              required
+              className="bg-white h-12"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="inline-overview-last"
+              className="block text-sm font-semibold text-gray-700 mb-1"
+            >
+              Last Name <span className="text-red-500">*</span>
+            </label>
+            <Input
+              id="inline-overview-last"
+              type="text"
+              placeholder="Enter your last name"
+              value={formData.last_name}
+              onChange={(e) =>
+                setFormData((p) => ({ ...p, last_name: e.target.value }))
+              }
+              required
+              className="bg-white h-12"
+            />
+          </div>
+        </div>
         <div>
           <label
-            htmlFor="inline-overview-name"
+            htmlFor="inline-overview-phone"
             className="block text-sm font-semibold text-gray-700 mb-1"
           >
-            Name <span className="text-red-500">*</span>
+            Phone Number <span className="text-red-500">*</span>
           </label>
           <Input
-            id="inline-overview-name"
-            type="text"
-            placeholder="Your full name"
-            value={formData.name}
+            id="inline-overview-phone"
+            type="tel"
+            placeholder="Enter your phone number"
+            value={formData.number}
             onChange={(e) =>
-              setFormData((p) => ({ ...p, name: e.target.value }))
+              setFormData((p) => ({ ...p, number: e.target.value }))
             }
             required
-            autoComplete="name"
             className="bg-white h-12"
           />
         </div>
@@ -95,18 +133,17 @@ function RequestOverviewInlineForm({
             htmlFor="inline-overview-email"
             className="block text-sm font-semibold text-gray-700 mb-1"
           >
-            Email <span className="text-red-500">*</span>
+            Email Address <span className="text-red-500">*</span>
           </label>
           <Input
             id="inline-overview-email"
             type="email"
-            placeholder="Your email address"
+            placeholder="Enter your email"
             value={formData.email}
             onChange={(e) =>
               setFormData((p) => ({ ...p, email: e.target.value }))
             }
             required
-            autoComplete="email"
             className="bg-white h-12"
           />
         </div>
@@ -127,7 +164,7 @@ function RequestOverviewInlineForm({
           disabled={status === "loading"}
           className="w-full h-12 uppercase bg-[#016068] hover:bg-[#014d54] text-white font-semibold"
         >
-          {status === "loading" ? "Sending..." : "Request course overview"}
+          {status === "loading" ? "Sending..." : "Request a call back"}
         </Button>
       </form>
     </div>

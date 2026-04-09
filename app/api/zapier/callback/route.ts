@@ -16,8 +16,19 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
+    const courseLabel =
+      typeof body.course === "string" && body.course.trim()
+        ? body.course.trim()
+        : typeof body.course_name === "string" && body.course_name.trim()
+          ? body.course_name.trim()
+          : typeof body.course_title === "string" && body.course_title.trim()
+            ? body.course_title.trim()
+            : undefined;
     const payload = {
       ...body,
+      ...(courseLabel != null
+        ? { course: courseLabel, course_name: body.course_name ?? courseLabel }
+        : {}),
       source: "request_callback",
       timestamp: new Date().toISOString(),
     };

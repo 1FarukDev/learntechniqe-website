@@ -96,10 +96,12 @@ function CourseHero({ data, isPathway = false }: CourseHeroProps) {
               Enquire Now
             </button>
           ) : (
-            <RequestCourseOverview
-              courseName={title}
-              courseUrl={`/courses/${slug}`}
-            />
+            bookingAvailable && (
+              <RequestCourseOverview
+                courseName={title}
+                courseUrl={`/courses/${slug}`}
+              />
+            )
           )}
         </div>
 
@@ -107,7 +109,7 @@ function CourseHero({ data, isPathway = false }: CourseHeroProps) {
           title={title}
           slug={slug}
           price={price}
-          expertiseTags={expertiseTags}
+          skillLevelTags={expertiseTags}
           qualifications={qualifications}
           duration={duration}
           durationNote={durationNote}

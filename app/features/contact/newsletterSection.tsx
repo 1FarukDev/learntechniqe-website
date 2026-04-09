@@ -56,13 +56,12 @@ function NewsletterSection() {
 
       <div className="relative z-10 max-w-3xl w-full px-4 sm:px-6 md:px-10 text-white text-center">
         <h2 className="text-[28px] sm:text-4xl md:text-5xl font-semibold">
-          Subscribe to our Newsletter
+          Join our mailing list
         </h2>
 
         <p className="mt-4 text-xs sm:text-sm md:text-base text-gray-200">
-          Our Brochure will keep you up to date with industry changes, new
-          courses, upcoming dates and promotions. To sign up, simply fill in
-          your details below:
+          Get industry updates, new courses, upcoming dates and promotions.
+          Enter your details below:
         </p>
 
         <FormProvider {...methods}>
@@ -92,14 +91,16 @@ function NewsletterSection() {
             />
 
             {status === "success" && (
-              <p className="text-sm text-green-600 font-medium">Thank you! You&apos;ve been subscribed.</p>
+              <p className="text-sm text-green-600 font-medium">
+                Thank you! You&apos;re on the list.
+              </p>
             )}
             {status === "error" && (
               <p className="text-sm text-red-600 font-medium">Something went wrong. Please try again.</p>
             )}
 
             <Button type="submit" disabled={status === "loading"} className="w-full bg-[#242A3A] h-15 uppercase font-bold text-base hover:bg-[#1a202a] transition-colors">
-              {status === "loading" ? "Subscribing..." : "Subscribe"}
+              {status === "loading" ? "Sending..." : "Sign up"}
             </Button>
           </form>
         </FormProvider>

@@ -71,21 +71,23 @@ export default async function Home() {
       <AnimatedSection variant="fade-up">
         <Location />
       </AnimatedSection>
-      <AnimatedSection variant="scale">
+      {/* <AnimatedSection variant="scale">
         <Brochure />
+      </AnimatedSection> */}
+
+      <AnimatedSection variant="fade-up">
+        <CampaignBanner />
+      </AnimatedSection>
+      <AnimatedSection variant="fade-up">
+        <BookASession />
       </AnimatedSection>
       <AnimatedSection variant="fade-left">
         <Certification />
       </AnimatedSection>
       <AnimatedSection variant="fade-up">
-        <CampaignBanner />
-      </AnimatedSection>
-      <AnimatedSection variant="fade-up">
         <Ratings />
       </AnimatedSection>
-      <AnimatedSection variant="fade-up">
-        <BookASession />
-      </AnimatedSection>
+
       <AnimatedSection variant="fade-up">
         <Contact />
       </AnimatedSection>
