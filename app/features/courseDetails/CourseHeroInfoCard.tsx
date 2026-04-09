@@ -27,7 +27,7 @@ interface CourseHeroInfoCardProps {
   requestOverviewLink?: string;
   onBookNow?: () => void;
   bookingAvailable?: boolean;
-  isPathway?: boolean;
+  isPathway?: boolean; 
 }
  
 function CourseHeroInfoCard({
