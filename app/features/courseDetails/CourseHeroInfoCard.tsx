@@ -45,7 +45,7 @@ function CourseHeroInfoCard({
   const enquiryFormRef = useRef<CourseEnquiryFormHandle>(null);
   const [expanded, setExpanded] = useState(false);
   const [canExpand, setCanExpand] = useState(false);
-
+  console.log(price);
   const measureOverflow = useCallback(() => {
     const el = scrollableRef.current;
     if (!el || expanded || qualifications.length === 0) return;
@@ -92,8 +92,8 @@ function CourseHeroInfoCard({
                     .replace(",", ""),
                 ) * 1.2
               ).toLocaleString("en-GB", {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0,
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
               })} + VAT`}
             )
           </p>
@@ -143,8 +143,8 @@ function CourseHeroInfoCard({
                           q.accreditedBy ||
                           "Accreditation"
                         }
-                        width={(q.accreditationLogoAlt === 'EAL logo') ? 150 : 60}
-                        height={(q.accreditationLogoAlt === 'EAL logo') ? 80 : 40}
+                        width={q.accreditationLogoAlt === "EAL logo" ? 150 : 60}
+                        height={q.accreditationLogoAlt === "EAL logo" ? 80 : 40}
                       />
                     </div>
                   )}
@@ -205,13 +205,19 @@ function CourseHeroInfoCard({
         </div>
       )}
 
-      <div className={`grid ${isPathway ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2"} gap-3 sm:gap-5 shrink-0`}>
+      <div
+        className={`grid ${isPathway ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2"} gap-3 sm:gap-5 shrink-0`}
+      >
         <Button
           type="button"
           onClick={onBookNow}
           className="bg-[#F5A623] hover:bg-[#e09410] text-white font-outfit font-semibold uppercase tracking-widest text-xs sm:text-sm h-12 sm:h-14"
         >
-          {isPathway ? "Enquire Now" : bookingAvailable ? "Book Now" : "Request course overview"}
+          {isPathway
+            ? "Enquire Now"
+            : bookingAvailable
+              ? "Book Now"
+              : "Request course overview"}
         </Button>
         {!isPathway && (
           <CourseEnquiryForm
