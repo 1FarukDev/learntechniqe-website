@@ -164,7 +164,7 @@ function Contact() {
               <Button
                 type="submit"
                 disabled={status === "loading"}
-                className="w-full h-14 sm:h-17.25 bg-[#242A3A] text-white uppercase font-bold text-sm sm:text-base"
+                className="w-full h-14 sm:h-17.25 bg-[#242A3A] text-white uppercase font-bold text-sm sm:text-base hover:bg-[#1a202a] transition-colors"
               >
                 {status === "loading" ? "Sending..." : "Send Message"}
               </Button>

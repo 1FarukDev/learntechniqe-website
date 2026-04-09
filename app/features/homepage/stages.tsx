@@ -75,7 +75,7 @@ function Stages() {
             </h5>
           </div>
 
-          <Button asChild className="bg-[#E99E20] h-14 sm:h-17.25 uppercase mt-auto text-sm sm:text-base relative z-10">
+          <Button asChild className="bg-[#E99E20] h-14 sm:h-17.25 uppercase mt-auto text-sm sm:text-base relative z-10 hover:bg-[#d88e10]">
             <Link href="/courses?level=existing-electrician">Find courses</Link>
           </Button>
         </div>

@@ -98,7 +98,7 @@ function NewsletterSection() {
               <p className="text-sm text-red-600 font-medium">Something went wrong. Please try again.</p>
             )}
 
-            <Button type="submit" disabled={status === "loading"} className="w-full bg-[#242A3A] h-15 uppercase font-bold text-base">
+            <Button type="submit" disabled={status === "loading"} className="w-full bg-[#242A3A] h-15 uppercase font-bold text-base hover:bg-[#1a202a] transition-colors">
               {status === "loading" ? "Subscribing..." : "Subscribe"}
             </Button>
           </form>
