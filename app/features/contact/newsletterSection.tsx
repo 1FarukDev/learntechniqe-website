@@ -6,10 +6,12 @@ import React, { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import Image from "next/image";
 import BackgroundImage from "@/app/assets/png/881da83f746febd0519b1816f0e94e64c9dbca31.jpg";
+import { FormPrivacyConsent, PRIVACY_CONSENT_FIELD } from "@/components/form-privacy-consent";
 
 type FormValues = {
   email: string;
   name: string;
+  [PRIVACY_CONSENT_FIELD]: boolean;
 };
 
 function NewsletterSection() {
@@ -18,16 +20,18 @@ function NewsletterSection() {
     defaultValues: {
       email: "",
       name: "",
+      [PRIVACY_CONSENT_FIELD]: false,
     },
   });
 
   const onSubmit = async (data: FormValues) => {
+    const { [PRIVACY_CONSENT_FIELD]: _consent, ...payload } = data;
     setStatus("loading");
     try {
       const res = await fetch("/api/zapier/newsletter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, source: "newsletter" }),
+        body: JSON.stringify({ ...payload, source: "newsletter" }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Failed to submit");
@@ -89,6 +93,8 @@ function NewsletterSection() {
                 },
               }}
             />
+
+            <FormPrivacyConsent />
 
             {status === "success" && (
               <p className="text-sm text-green-600 font-medium">

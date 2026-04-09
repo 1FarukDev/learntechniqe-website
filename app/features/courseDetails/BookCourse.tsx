@@ -6,6 +6,7 @@ import { defaultBookCourseData } from "@/lib/constants/course";
 import { CademyBookingIframe } from "./CademyBookingIframe";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { StandalonePrivacyConsent } from "@/components/form-privacy-consent";
 
 interface BookCourseProps {
   data?: BookCourseData | null;
@@ -31,9 +32,11 @@ function RequestOverviewInlineForm({
     "idle" | "loading" | "success" | "error"
   >("idle");
   const [formData, setFormData] = useState(emptyForm);
+  const [privacyAgreed, setPrivacyAgreed] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!privacyAgreed) return;
     setStatus("loading");
     try {
       const res = await fetch("/api/zapier/callback", {
@@ -53,6 +56,7 @@ function RequestOverviewInlineForm({
       if (!res.ok) throw new Error(json.error || "Failed");
       setStatus("success");
       setFormData(emptyForm);
+      setPrivacyAgreed(false);
     } catch {
       setStatus("error");
     }
@@ -148,6 +152,12 @@ function RequestOverviewInlineForm({
           />
         </div>
 
+        <StandalonePrivacyConsent
+          id="inline-callback-privacy"
+          checked={privacyAgreed}
+          onChange={setPrivacyAgreed}
+        />
+
         {status === "success" && (
           <p className="text-sm text-green-600 font-medium">
             Thank you! We&apos;ll be in touch shortly.
@@ -161,7 +171,7 @@ function RequestOverviewInlineForm({
 
         <Button
           type="submit"
-          disabled={status === "loading"}
+          disabled={status === "loading" || !privacyAgreed}
           className="w-full h-12 uppercase bg-[#016068] hover:bg-[#014d54] text-white font-semibold"
         >
           {status === "loading" ? "Sending..." : "Request a call back"}

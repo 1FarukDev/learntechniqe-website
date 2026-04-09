@@ -4,14 +4,17 @@ import React, { useState } from "react";
 import { FormInput } from "@/components/Input";
 import { Button } from "@/components/ui/button";
 import { FormProvider, useForm } from "react-hook-form";
+import { FormPrivacyConsent, PRIVACY_CONSENT_FIELD } from "@/components/form-privacy-consent";
 
 type CallFormValues = {
   name: string;
   phone: string;
+  [PRIVACY_CONSENT_FIELD]: boolean;
 };
 
 type BrochureFormValues = {
   email: string;
+  [PRIVACY_CONSENT_FIELD]: boolean;
 };
 
 export function PathwaysContactForm() {
@@ -19,22 +22,23 @@ export function PathwaysContactForm() {
   const [brochureStatus, setBrochureStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
   const callMethods = useForm<CallFormValues>({
-    defaultValues: { name: "", phone: "" },
+    defaultValues: { name: "", phone: "", [PRIVACY_CONSENT_FIELD]: false },
   });
   const brochureMethods = useForm<BrochureFormValues>({
-    defaultValues: { email: "" },
+    defaultValues: { email: "", [PRIVACY_CONSENT_FIELD]: false },
   });
 
   const onCallSubmit = async (data: CallFormValues) => {
+    const { [PRIVACY_CONSENT_FIELD]: _c, ...rest } = data;
     setCallStatus("loading");
     try {
       const res = await fetch("/api/zapier/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          first_name: data.name.split(" ")[0] || data.name,
-          last_name: data.name.split(" ").slice(1).join(" ") || "",
-          number: data.phone,
+          first_name: rest.name.split(" ")[0] || rest.name,
+          last_name: rest.name.split(" ").slice(1).join(" ") || "",
+          number: rest.phone,
           email: "",
           message: "Pathways page - Request callback",
         }),
@@ -49,12 +53,13 @@ export function PathwaysContactForm() {
   };
 
   const onBrochureSubmit = async (data: BrochureFormValues) => {
+    const { [PRIVACY_CONSENT_FIELD]: _c, ...rest } = data;
     setBrochureStatus("loading");
     try {
       const res = await fetch("/api/zapier/newsletter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: "Brochure", email: data.email, source: "pathways-brochure" }),
+        body: JSON.stringify({ name: "Brochure", email: rest.email, source: "pathways-brochure" }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Failed");
@@ -85,6 +90,7 @@ export function PathwaysContactForm() {
                 placeholder="Contact number"
                 rules={{ required: "Phone is required" }}
               />
+              <FormPrivacyConsent />
               {callStatus === "success" && (
                 <p className="text-sm text-green-600">Thank you! We&apos;ll be in touch soon.</p>
               )}
@@ -121,6 +127,7 @@ export function PathwaysContactForm() {
                   },
                 }}
               />
+              <FormPrivacyConsent />
               {brochureStatus === "success" && (
                 <p className="text-sm text-green-600">Thank you! Check your email for the brochure.</p>
               )}

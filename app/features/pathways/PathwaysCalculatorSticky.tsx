@@ -342,12 +342,12 @@ export function PathwaysCalculatorSticky({
                     className="mt-1 rounded border-gray-300"
                   />
                   <span className="text-sm text-gray-600">
-                    I agree to the{" "}
+                    By clicking this box, I agree to your{" "}
                     <Link
-                      href="/terms-and-conditions"
+                      href="/privacy-policy"
                       className="text-[#016068] underline"
                     >
-                      Terms & Conditions
+                      privacy policy
                     </Link>
                   </span>
                 </label>

@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { StandalonePrivacyConsent } from "@/components/form-privacy-consent";
 
 interface RequestCourseOverviewModalProps {
   open: boolean;
@@ -41,17 +42,20 @@ export function RequestCourseOverviewModal({
 }: RequestCourseOverviewModalProps) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [formData, setFormData] = useState(emptyForm);
+  const [privacyAgreed, setPrivacyAgreed] = useState(false);
   const isMobile = useIsMobile();
 
   useEffect(() => {
     if (!open) {
       setStatus("idle");
       setFormData(emptyForm);
+      setPrivacyAgreed(false);
     }
   }, [open]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!privacyAgreed) return;
     setStatus("loading");
     try {
       const res = await fetch("/api/zapier/brochure", {
@@ -123,13 +127,20 @@ export function RequestCourseOverviewModal({
                   className="bg-white h-12"
                 />
               </div>
+
+              <StandalonePrivacyConsent
+                id="request-overview-privacy"
+                checked={privacyAgreed}
+                onChange={setPrivacyAgreed}
+              />
+
               {status === "error" && (
                 <p className="text-sm text-red-600 font-medium">Something went wrong. Please try again.</p>
               )}
 
               <Button
                 type="submit"
-                disabled={status === "loading"}
+                disabled={status === "loading" || !privacyAgreed}
                 className="w-full h-12 uppercase bg-[#016068] hover:bg-[#014d54] text-white font-semibold"
               >
                 {status === "loading" ? "Sending..." : "Request course overview"}

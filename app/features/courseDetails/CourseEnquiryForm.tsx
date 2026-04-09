@@ -12,6 +12,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { StandalonePrivacyConsent } from "@/components/form-privacy-consent";
 
 export type CourseEnquiryFormHandle = {
   open: () => void;
@@ -50,9 +51,11 @@ export const CourseEnquiryForm = forwardRef<
   }, [isOpen]);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [formData, setFormData] = useState(emptyForm);
+  const [privacyAgreed, setPrivacyAgreed] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!privacyAgreed) return;
     setStatus("loading");
     try {
       const res = await fetch("/api/zapier/contact", {
@@ -73,6 +76,7 @@ export const CourseEnquiryForm = forwardRef<
       if (!res.ok) throw new Error(json.error || "Failed");
       setStatus("success");
       setFormData(emptyForm);
+      setPrivacyAgreed(false);
     } catch {
       setStatus("error");
     }
@@ -178,6 +182,12 @@ export const CourseEnquiryForm = forwardRef<
               />
             </div>
 
+            <StandalonePrivacyConsent
+              id="course-enquiry-privacy"
+              checked={privacyAgreed}
+              onChange={setPrivacyAgreed}
+            />
+
             {status === "success" && (
               <p className="text-sm text-green-600 font-medium">Thank you! We&apos;ll be in touch soon.</p>
             )}
@@ -187,7 +197,7 @@ export const CourseEnquiryForm = forwardRef<
 
             <Button
               type="submit"
-              disabled={status === "loading"}
+              disabled={status === "loading" || !privacyAgreed}
               className="w-full h-12 uppercase bg-[#016068] hover:bg-[#014d54] text-white font-semibold"
             >
               {status === "loading" ? "Sending..." : "Send Message"}

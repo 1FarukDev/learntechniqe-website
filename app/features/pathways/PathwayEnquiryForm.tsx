@@ -215,8 +215,8 @@ export function PathwayEnquiryForm({
                 />
                 <span className="text-sm text-gray-600">
                   By clicking this box, I agree to your{" "}
-                  <Link href="/terms-and-conditions" className="text-[#016068] underline">
-                    Terms & Conditions
+                  <Link href="/privacy-policy" className="text-[#016068] underline">
+                    privacy policy
                   </Link>
                 </span>
               </label>

@@ -7,6 +7,7 @@ import { Icon } from "@iconify/react";
 import Link from "next/link";
 import React, { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { FormPrivacyConsent, PRIVACY_CONSENT_FIELD } from "@/components/form-privacy-consent";
 
 type FormValues = {
   first_name: string;
@@ -14,6 +15,7 @@ type FormValues = {
   number: string;
   email: string;
   message: string;
+  [PRIVACY_CONSENT_FIELD]: boolean;
 };
 
 type ContactProps = {
@@ -30,17 +32,19 @@ function Contact({ courseUrl }: ContactProps) {
       number: "",
       email: "",
       message: "",
+      [PRIVACY_CONSENT_FIELD]: false,
     },
   });
 
   const onSubmit = async (data: FormValues) => {
+    const { [PRIVACY_CONSENT_FIELD]: _consent, ...payload } = data;
     setStatus("loading");
     try {
       const res = await fetch("/api/zapier/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ...data,
+          ...payload,
           ...(courseUrl ? { course_url: courseUrl } : {}),
         }),
       });
@@ -161,6 +165,8 @@ function Contact({ courseUrl }: ContactProps) {
                 placeholder="Enter your message"
                 rules={{ required: "Message is required" }}
               />
+
+              <FormPrivacyConsent />
 
               {status === "success" && (
                 <p className="text-sm text-green-600 font-medium">Thank you! Your message has been sent.</p>

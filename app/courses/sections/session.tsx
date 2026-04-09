@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Building2, Loader2, X } from "lucide-react";
 import type { SessionCourseOption } from "@/lib/course-session-options";
+import { StandalonePrivacyConsent } from "@/components/form-privacy-consent";
 
 /** Radix Select requires a non-empty value for the placeholder row */
 const COURSE_SELECT_NONE = "__book_session_no_course__";
@@ -94,6 +95,7 @@ function Session({
     phone: "",
     course: lockedCourse?.title ?? "",
     coursePath: lockedCourse?.url ?? "",
+    privacy_agreed: false,
   });
 
   useEffect(() => {
@@ -120,6 +122,7 @@ function Session({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!form.privacy_agreed) return;
     if (!lockedCourse && !form.coursePath.trim()) return;
     setStatus("loading");
     try {
@@ -147,6 +150,7 @@ function Session({
         phone: "",
         course: lockedCourse?.title ?? "",
         coursePath: lockedCourse?.url ?? "",
+        privacy_agreed: false,
       }));
     } catch {
       setStatus("error");
@@ -444,6 +448,14 @@ function Session({
                     )}
                   </div>
 
+                  <StandalonePrivacyConsent
+                    id="book-session-privacy"
+                    checked={form.privacy_agreed}
+                    onChange={(checked) =>
+                      setForm((p) => ({ ...p, privacy_agreed: checked }))
+                    }
+                  />
+
                   {status === "success" && (
                     <p className="text-sm font-medium text-green-600">
                       Thank you! We&apos;ll be in touch soon to arrange your
@@ -460,6 +472,7 @@ function Session({
                     type="submit"
                     disabled={
                       status === "loading" ||
+                      !form.privacy_agreed ||
                       coursesLoading ||
                       (!lockedCourse &&
                         (!form.coursePath.trim() ||
