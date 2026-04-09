@@ -29,7 +29,7 @@ interface CourseHeroInfoCardProps {
   bookingAvailable?: boolean;
   isPathway?: boolean;
 }
-
+ 
 function CourseHeroInfoCard({
   title,
   slug,
