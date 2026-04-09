@@ -17,7 +17,7 @@ export const courseCardsQuery = groq`
   *[_type == "course"] | order(title asc) { 
     title,
     "slug": slug.current,
-    price,
+    price, 
     duration,
     summary,
     "description": description[0],
