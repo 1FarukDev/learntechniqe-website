@@ -27,7 +27,7 @@ export function RequestCourseOverview({
         onClick={() => setOpen(true)}
         className={triggerClassName ?? defaultTriggerClassName}
       >
-        Request a call back
+        Request course overview
       </button>
       <RequestCourseOverviewModal
         open={open}

@@ -12,6 +12,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { getAbsoluteCourseUrl } from "@/lib/course-detail-form";
 
 export type CourseEnquiryFormHandle = {
   open: () => void;
@@ -66,7 +67,7 @@ export const CourseEnquiryForm = forwardRef<
           email: formData.email,
           message: formData.message,
           course_name: courseName,
-          course_url: courseUrl,
+          course_url: getAbsoluteCourseUrl(courseUrl),
         }),
       });
       const json = await res.json();
@@ -86,16 +87,14 @@ export const CourseEnquiryForm = forwardRef<
         className="relative w-full flex items-center bg-[#016068] hover:bg-[#014d54] text-white font-outfit font-semibold uppercase tracking-widest text-xs sm:text-sm h-12 sm:h-14 px-4 rounded-md overflow-hidden"
       >
         <span
-          className={`absolute top-1/2 -translate-y-1/2 whitespace-nowrap transition-all duration-300 ease-in-out ${
-            isOpen ? "left-4 translate-x-0" : "left-1/2 -translate-x-1/2"
-          }`}
+          className={`absolute top-1/2 -translate-y-1/2 whitespace-nowrap transition-all duration-300 ease-in-out ${isOpen ? "left-4 translate-x-0" : "left-1/2 -translate-x-1/2"
+            }`}
         >
           Contact Us
         </span>
         <span
-          className={`absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center transition-all duration-300 ease-in-out ${
-            isOpen ? "opacity-100 translate-x-0" : "opacity-0 translate-x-2"
-          }`}
+          className={`absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center transition-all duration-300 ease-in-out ${isOpen ? "opacity-100 translate-x-0" : "opacity-0 translate-x-2"
+            }`}
         >
           {isOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
         </span>
@@ -103,9 +102,8 @@ export const CourseEnquiryForm = forwardRef<
 
       <div
         ref={formRef}
-        className={`col-span-1 sm:col-span-2 overflow-hidden transition-all duration-300 ease-in-out scroll-mt-24 w-full ${
-          isOpen ? "max-h-[900px] opacity-100 mt-3" : "max-h-0 opacity-0 mt-0"
-        }`}
+        className={`col-span-1 sm:col-span-2 overflow-hidden transition-all duration-300 ease-in-out scroll-mt-24 w-full ${isOpen ? "max-h-[900px] opacity-100 mt-3" : "max-h-0 opacity-0 mt-0"
+          }`}
       >
         <div className="p-4 border border-gray-200 rounded-lg bg-gray-50/50">
           <form onSubmit={handleSubmit} className="space-y-4">

@@ -14,8 +14,7 @@ import {
   ArrowRight,
   ArrowUpRight,
 } from "lucide-react";
-import { Icon } from "@iconify/react";
-import type { HeaderData, MegaMenuFooter } from "@/types/header";
+import type { HeaderData } from "@/types/header";
 import { categoryHrefFromMegaMenuTitle } from "@/lib/course-categories";
 import type { PathwayNavItem } from "./headerWrapper";
 
@@ -26,14 +25,14 @@ function toTitleCase(str: string): string {
   // .replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
-const socialIconMap: Record<string, string> = {
-  facebook: "mdi:facebook",
-  instagram: "mdi:instagram",
-  youtube: "mdi:youtube",
-  linkedin: "mdi:linkedin",
-  twitter: "mdi:twitter",
-  tiktok: "ic:baseline-tiktok",
-};
+/** Labels hidden from header nav and courses mega menu footer (CMS-driven). */
+function isExcludedHeaderNavLabel(label: string): boolean {
+  const l = label.trim();
+  return (
+    /why choose/i.test(l) ||
+    /help\s*(&|and)\s*support/i.test(l)
+  );
+}
 
 function hexToRgba(hex: string, alpha: number) {
   const r = parseInt(hex.slice(1, 3), 16);
@@ -132,58 +131,60 @@ function CoursesMegaMenu({
     });
   };
 
+  const footerLinks = data.megaMenuFooter.links.filter(
+    (link) => !isExcludedHeaderNavLabel(link.label),
+  );
+
   return (
     <div
-      className={`hidden md:flex fixed left-0 right-0 z-50 flex-col overflow-hidden bg-white shadow-2xl border-t border-gray-100 max-h-[87vh] ${scrolled ? "top-[4.5rem]" : "top-[4.25rem]"
+      className={`hidden md:flex fixed left-0 right-0 z-50 flex-col overflow-hidden bg-zinc-50/95 backdrop-blur-sm shadow-[0_12px_40px_-16px_rgba(0,0,0,0.18)] border-t border-zinc-200/90 max-h-[87vh] ${scrolled ? "top-[4.5rem]" : "top-[4.25rem]"
         }`}
       style={{
         opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(-12px)",
-        transition: "opacity 400ms ease, transform 400ms ease",
+        transform: visible ? "translateY(0)" : "translateY(-8px)",
+        transition: "opacity 280ms ease, transform 280ms ease",
       }}
     >
-      <div className="max-w-7xl mx-auto px-4 md:px-0 py-4 md:py-4 w-full flex flex-col flex-1 min-h-0 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 py-5 w-full flex flex-col flex-1 min-h-0 overflow-hidden">
         <div
           ref={megaMenuScrollRef}
           data-mega-menu-courses-scroll
-          className="grid grid-cols-3 gap-6 flex-1 min-h-0 overflow-y-auto overscroll-contain pr-1 -mr-1 [scrollbar-gutter:stable]"
+          className="grid grid-cols-3 gap-0 flex-1 min-h-0 overflow-y-auto overscroll-contain pr-1 -mr-1 [scrollbar-gutter:stable]"
         >
           {data.megaMenuColumns.map((col, colIdx) => (
             <div
               key={colIdx}
-              className="flex flex-col gap-4 min-h-0"
+              className={`flex flex-col gap-5 min-h-0 px-5 first:pl-0 last:pr-0 md:max-w-none ${colIdx > 0 ? "md:border-l md:border-zinc-200/80" : ""
+                }`}
               style={{
                 opacity: visible ? 1 : 0,
-                transform: visible ? "translateY(0)" : "translateY(-8px)",
-                transition: `opacity 400ms ease ${colIdx * 60}ms, transform 400ms ease ${colIdx * 60}ms`,
+                transform: visible ? "translateY(0)" : "translateY(-6px)",
+                transition: `opacity 280ms ease ${colIdx * 45}ms, transform 280ms ease ${colIdx * 45}ms`,
               }}
             >
-              <div
-                style={{ backgroundColor: col.cardColor }}
-                className="rounded-2xl p-4 shrink-0"
-              >
-                <h3 className="font-bold text-sm text-gray-900 mb-2">
+              <div className="shrink-0 pl-3.5 border-l-[3px]" style={{ borderLeftColor: col.cardColor }}>
+                <h3 className="font-semibold text-[15px] text-zinc-900 tracking-tight">
                   <Link
                     href={categoryHrefFromMegaMenuTitle(col.title)}
                     onClick={onClose}
-                    className="inline-block rounded-sm text-gray-900 underline-offset-2 hover:underline hover:text-teal-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700"
+                    className="rounded-sm text-zinc-900 hover:text-[#016068] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#016068]"
                   >
                     {toTitleCase(col.title)}
                   </Link>
                 </h3>
-                <p className="text-[12px] text-gray-600 leading-relaxed">
+                <p className="text-[13px] text-zinc-500 leading-snug mt-1.5">
                   {col.description}
                 </p>
               </div>
 
-              <div className="flex flex-col gap-1 min-h-0">
+              <div className="flex flex-col min-h-0 divide-y divide-zinc-200/70">
                 {col.subcategories.map((sub, subIdx) => {
                   const key = `${colIdx}-${subIdx}`;
                   const isOpen = openSubcategory === key;
                   return (
                     <div
                       key={subIdx}
-                      className="shrink-0"
+                      className="shrink-0 pt-2 first:pt-0 pb-2 last:pb-0"
                       ref={(el) => {
                         const m = subcategoryBlockRefs.current;
                         if (el) m.set(key, el);
@@ -193,12 +194,13 @@ function CoursesMegaMenu({
                       <button
                         type="button"
                         onClick={() => toggleSubcategory(key)}
-                        className="w-full flex items-center justify-between py-1 px-1 text-sm font-semibold text-gray-800 hover:text-teal-700 transition-colors border-gray-100"
+                        className="w-full flex items-center justify-between gap-2 py-1.5 text-left text-sm font-medium text-zinc-800 hover:text-[#016068] transition-colors"
                       >
                         {toTitleCase(sub.label)}
                         <ChevronDown
-                          size={16}
-                          className={`transition-transform duration-200 text-gray-500 ${isOpen ? "rotate-180" : ""
+                          size={15}
+                          strokeWidth={2}
+                          className={`shrink-0 transition-transform duration-200 text-zinc-400 ${isOpen ? "rotate-180" : ""
                             }`}
                         />
                       </button>
@@ -208,28 +210,26 @@ function CoursesMegaMenu({
                           gridTemplateRows: isOpen ? "1fr" : "0fr",
                           opacity: isOpen ? 1 : 0,
                           transition:
-                            "grid-template-rows 300ms ease, opacity 300ms ease",
+                            "grid-template-rows 280ms ease, opacity 280ms ease",
                         }}
                       >
                         <div className="overflow-hidden">
                           <div
-                            style={{
-                              backgroundColor: hexToRgba(col.cardColor, 0.4),
-                            }}
-                            className="rounded-lg mt-1 mb-1 py-2 px-3 flex flex-col gap-1"
+                            className="mt-1.5 mb-0.5 ml-0.5 pl-3 border-l-2 border-zinc-200 bg-white/70 rounded-r-md py-2 pr-2 flex flex-col gap-0.5"
+                            style={{ borderLeftColor: col.cardColor }}
                           >
                             {sub.items.map((item, itemIdx) => (
                               <Link
                                 key={itemIdx}
                                 href={item.href}
                                 onClick={onClose}
-                                className="text-sm text-gray-600 hover:text-teal-700 py-0.5 transition-colors"
+                                className="text-[13px] text-zinc-600 hover:text-[#016068] py-1 rounded-md px-1 -mx-1 hover:bg-zinc-50/90 transition-colors"
                                 style={{
                                   opacity: isOpen ? 1 : 0,
                                   transform: isOpen
                                     ? "translateY(0)"
-                                    : "translateY(-4px)",
-                                  transition: `opacity 200ms ease ${itemIdx * 40}ms, transform 200ms ease ${itemIdx * 40}ms`,
+                                    : "translateY(-3px)",
+                                  transition: `opacity 180ms ease ${itemIdx * 28}ms, transform 180ms ease ${itemIdx * 28}ms`,
                                 }}
                               >
                                 {toTitleCase(item.label)}
@@ -246,43 +246,26 @@ function CoursesMegaMenu({
           ))}
         </div>
 
-        <div
-          className="mt-6 pt-4 md:mt-8 md:pt-6 border-t border-gray-200 flex items-center justify-between text-sm text-gray-500 shrink-0"
-          style={{
-            opacity: visible ? 1 : 0,
-            transition: "opacity 400ms ease 300ms",
-          }}
-        >
-          <div className="flex items-center gap-8">
-            {data.megaMenuFooter.links.map((link, idx) => (
+        {footerLinks.length > 0 && (
+          <div
+            className="mt-5 pt-5 border-t border-zinc-200/80 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm shrink-0"
+            style={{
+              opacity: visible ? 1 : 0,
+              transition: "opacity 280ms ease 220ms",
+            }}
+          >
+            {footerLinks.map((link, idx) => (
               <Link
                 key={idx}
                 href={`${link.href}`}
                 onClick={onClose}
-                className="hover:text-teal-700 font-medium transition-colors"
+                className="text-zinc-600 hover:text-[#016068] font-medium transition-colors"
               >
                 {toTitleCase(link.label)}
               </Link>
             ))}
           </div>
-          <div className="flex items-center gap-3">
-            {data.megaMenuFooter.socialLinks.map((social) => (
-              <Link
-                key={social.platform}
-                href={social.href}
-                onClick={onClose}
-                target="_blank"
-                className="w-8 h-8 rounded-full bg-[#F5A623] flex items-center justify-center hover:opacity-80 transition-opacity"
-              >
-                <span className="sr-only">{social.platform}</span>
-                <Icon
-                  icon={socialIconMap[social.platform]}
-                  className="w-4 h-4 text-white"
-                />
-              </Link>
-            ))}
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
@@ -294,12 +277,10 @@ function CoursesMegaMenu({
 function PathwaysMegaMenu({
   scrolled,
   pathways,
-  megaMenuFooter,
   onClose,
 }: {
   scrolled: boolean;
   pathways: PathwayNavItem[];
-  megaMenuFooter: MegaMenuFooter;
   onClose: () => void;
 }) {
   const [visible, setVisible] = useState(false);
@@ -315,28 +296,28 @@ function PathwaysMegaMenu({
 
   return (
     <div
-      className={`hidden md:flex fixed left-0 right-0 z-50 flex-col overflow-hidden bg-white shadow-2xl border-t border-gray-100 ${scrolled ? "top-[4.5rem]" : "top-[4.25rem]"
+      className={`hidden md:flex fixed left-0 right-0 z-50 flex-col overflow-hidden bg-zinc-50/95 backdrop-blur-sm shadow-[0_12px_40px_-16px_rgba(0,0,0,0.18)] border-t border-zinc-200/90 ${scrolled ? "top-[4.5rem]" : "top-[4.25rem]"
         }`}
       style={{
         opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(-12px)",
-        transition: "opacity 400ms ease, transform 400ms ease",
+        transform: visible ? "translateY(0)" : "translateY(-8px)",
+        transition: "opacity 280ms ease, transform 280ms ease",
       }}
     >
-      <div className="max-w-7xl mx-auto px-4 md:px-0 py-6 md:py-8 w-full">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 py-5 md:py-6 w-full">
         {/* Top heading row */}
         <div
-          className="flex items-center justify-between mb-6"
+          className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between mb-5 pb-4 border-b border-zinc-200/80"
           style={{
             opacity: visible ? 1 : 0,
-            transition: "opacity 400ms ease 100ms",
+            transition: "opacity 280ms ease 80ms",
           }}
         >
-          <div>
-            <h3 className="text-lg font-bold text-gray-900">
+          <div className="min-w-0">
+            <h3 className="text-base font-semibold text-zinc-900 tracking-tight">
               Career Pathways
             </h3>
-            <p className="text-sm text-gray-500 mt-0.5">
+            <p className="text-sm text-zinc-500 mt-1 max-w-xl leading-relaxed">
               Choose your career journey — from complete beginner to fully
               qualified electrician
             </p>
@@ -344,15 +325,15 @@ function PathwaysMegaMenu({
           <Link
             href="/pathways"
             onClick={onClose}
-            className="flex items-center gap-1.5 text-sm font-semibold text-[#016068] hover:text-[#014d54] transition-colors shrink-0"
+            className="inline-flex items-center gap-1.5 self-start text-sm font-semibold text-[#016068] hover:text-[#014d54] transition-colors shrink-0"
           >
             View All Pathways
-            <ArrowRight size={15} />
+            <ArrowRight size={15} strokeWidth={2.25} />
           </Link>
         </div>
 
-        {/* Pathway cards */}
-        <div className="grid grid-cols-4 gap-4">
+        {/* Pathway cards — compact tiles, flat borders */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
           {pathways.map((p, idx) => {
             const pw = p.pathway;
             const price = parsePrice(pw.priceIncVat);
@@ -364,55 +345,54 @@ function PathwaysMegaMenu({
                 key={pw.slug}
                 href={href}
                 onClick={onClose}
-                className="group text-left rounded-2xl border-2 border-gray-200 overflow-hidden transition-all duration-200 hover:border-[#016068]/40 hover:shadow-md"
+                className="group flex flex-col text-left rounded-lg border border-zinc-200/90 bg-white overflow-hidden transition-colors duration-200 hover:border-zinc-300 hover:bg-zinc-50/40"
                 style={{
                   opacity: visible ? 1 : 0,
-                  transform: visible ? "translateY(0)" : "translateY(10px)",
-                  transition: `opacity 400ms ease ${idx * 70 + 120}ms, transform 400ms ease ${idx * 70 + 120}ms, border-color 200ms, box-shadow 200ms`,
+                  transform: visible ? "translateY(0)" : "translateY(6px)",
+                  transition: `opacity 280ms ease ${idx * 50 + 90}ms, transform 280ms ease ${idx * 50 + 90}ms, border-color 200ms, background-color 200ms`,
                 }}
               >
                 {pw.heroImage && (
-                  <div className="relative w-full h-28 overflow-hidden">
+                  <div className="relative w-full h-[5.25rem] overflow-hidden border-b border-zinc-100">
                     <Image
                       src={pw.heroImage}
                       alt={pw.title}
                       fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      sizes="280px"
+                      className="object-cover"
+                      sizes="(min-width: 1024px) 22vw, 45vw"
                       unoptimized
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                     {p.badge && (
-                      <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 bg-[#E99E20] text-white text-[10px] font-bold rounded-sm tracking-wide">
+                      <span className="absolute top-2 left-2 px-2 py-0.5 bg-zinc-900/85 text-white text-[10px] font-semibold rounded tracking-wide">
                         {p.badge}
                       </span>
                     )}
                   </div>
                 )}
 
-                <div className="p-3.5">
-                  <h4 className="text-sm font-bold leading-snug mb-1 line-clamp-2 text-gray-900 group-hover:text-[#016068] transition-colors">
+                <div className="p-3 flex flex-col flex-1 min-h-0">
+                  <h4 className="text-[13px] font-semibold leading-snug mb-1 line-clamp-2 text-zinc-900 group-hover:text-[#016068] transition-colors">
                     {pw.title}
                   </h4>
 
                   {desc && (
-                    <p className="text-xs text-gray-500 line-clamp-2 leading-relaxed mb-2.5">
+                    <p className="text-[11px] text-zinc-500 line-clamp-2 leading-relaxed mb-2 flex-1">
                       {desc}
                     </p>
                   )}
 
-                  <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-end justify-between gap-2 mt-auto pt-1 border-t border-zinc-100">
                     {price > 0 && (
-                      <span className="text-sm font-bold text-[#016068]">
+                      <span className="text-[13px] font-semibold text-[#016068] tabular-nums">
                         {formatPrice(price)}
-                        <span className="text-[10px] font-normal text-gray-400 ml-0.5">
+                        <span className="text-[10px] font-normal text-zinc-400 ml-0.5">
                           + VAT
                         </span>
                       </span>
                     )}
                     {pw.duration && (
-                      <span className="flex items-center gap-1 text-[11px] text-gray-400">
-                        <Clock size={11} />
+                      <span className="flex items-center gap-1 text-[10px] text-zinc-400 shrink-0">
+                        <Clock size={11} strokeWidth={2} />
                         {pw.duration}
                       </span>
                     )}
@@ -423,56 +403,6 @@ function PathwaysMegaMenu({
           })}
         </div>
 
-        {/* Support links + social (matches site footer intent) */}
-        <div
-          className="mt-6 pt-5 md:mt-8 md:pt-6 border-t border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 shrink-0"
-          style={{
-            opacity: visible ? 1 : 0,
-            transition: "opacity 400ms ease 280ms",
-          }}
-        >
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-600">
-            <Link
-              href="/company"
-              onClick={onClose}
-              className="font-medium hover:text-teal-700 transition-colors"
-            >
-              Why Choose Us?
-            </Link>
-            <Link
-              href="/contact"
-              onClick={onClose}
-              className="font-medium hover:text-teal-700 transition-colors"
-            >
-              Help & Support
-            </Link>
-            <Link
-              href="/company#general-faqs"
-              onClick={onClose}
-              className="font-medium hover:text-teal-700 transition-colors"
-            >
-              General FAQs
-            </Link>
-          </div>
-          <div className="flex items-center gap-3">
-            {megaMenuFooter.socialLinks.map((social) => (
-              <Link
-                key={social.platform}
-                href={social.href}
-                onClick={onClose}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-8 h-8 rounded-full bg-[#F5A623] flex items-center justify-center hover:opacity-80 transition-opacity"
-              >
-                <span className="sr-only">{social.platform}</span>
-                <Icon
-                  icon={socialIconMap[social.platform]}
-                  className="w-4 h-4 text-white"
-                />
-              </Link>
-            ))}
-          </div>
-        </div>
       </div>
     </div>
   );
@@ -505,7 +435,8 @@ function MobileDrawer({
   const otherNavLinks = data.navLinks.filter(
     (link) =>
       link.label.toLowerCase() !== "career pathways" &&
-      link.label.toLowerCase() !== "contact",
+      link.label.toLowerCase() !== "contact" &&
+      !isExcludedHeaderNavLabel(link.label),
   );
 
   const contactLink = data.navLinks.find(
@@ -749,26 +680,6 @@ function MobileDrawer({
             </Link>
           )}
         </nav>
-
-        {/* Drawer Footer */}
-        <div className="px-4 py-3 border-t border-gray-100 shrink-0">
-          <div className="flex items-center gap-3">
-            {data.megaMenuFooter.socialLinks.map((social) => (
-              <Link
-                key={social.platform}
-                href={social.href}
-                onClick={onClose}
-                className="w-8 h-8 rounded-full bg-[#F5A623] flex items-center justify-center hover:opacity-80 transition-opacity"
-              >
-                <span className="sr-only">{social.platform}</span>
-                <Icon
-                  icon={socialIconMap[social.platform]}
-                  className="w-4 h-4 text-white"
-                />
-              </Link>
-            ))}
-          </div>
-        </div>
       </div>
     </>
   );
@@ -840,7 +751,8 @@ function Header({
   const navLinksWithoutPathways = data.navLinks.filter(
     (link) =>
       link.label.toLowerCase() !== "career pathways" &&
-      link.label.toLowerCase() !== "contact",
+      link.label.toLowerCase() !== "contact" &&
+      !isExcludedHeaderNavLabel(link.label),
   );
 
   const contactLink = data.navLinks.find(
@@ -935,7 +847,6 @@ function Header({
                   <PathwaysMegaMenu
                     scrolled={scrolled}
                     pathways={pathwayNavItems}
-                    megaMenuFooter={data.megaMenuFooter}
                     onClose={closeAll}
                   />
                 )}

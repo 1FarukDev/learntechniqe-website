@@ -115,12 +115,10 @@ function CourseHero({ data, isPathway = false }: CourseHeroProps) {
               Enquire Now
             </button>
           ) : (
-            bookingAvailable && (
-              <RequestCourseOverview
-                courseName={title}
-                courseUrl={`/courses/${slug}`}
-              />
-            )
+            <RequestCourseOverview
+              courseName={title}
+              courseUrl={`/courses/${slug}`}
+            />
           )}
         </div>
 

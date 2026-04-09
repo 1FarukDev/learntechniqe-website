@@ -45,7 +45,7 @@ function Contact() {
     }
   };
 
-  
+
   return (
     <section id="contact-section" className="bg-[#E0ECED] md:px-0 px-4 scroll-mt-24">
       <div className="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto py-10 sm:py-19 px-0 sm:px-6 gap-8 sm:gap-10">

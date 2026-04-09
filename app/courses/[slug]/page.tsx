@@ -51,7 +51,7 @@ export async function generateMetadata({
     description.length > 155
       ? `${description.slice(0, 152)}...`
       : description ||
-        `${title} — accredited training course at Technique Learning Solutions.`;
+      `${title} — accredited training course at Technique Learning Solutions.`;
 
   return {
     title,

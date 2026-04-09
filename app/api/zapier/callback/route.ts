@@ -7,11 +7,11 @@ export async function POST(request: NextRequest) {
       process.env.ZAPIER_COURSE_OVERVIEW_WEBHOOK_URL;
     if (!webhookUrl) {
       console.error(
-        "ZAPIER_CALLBACK_WEBHOOK_URL is not configured (optional legacy: ZAPIER_COURSE_OVERVIEW_WEBHOOK_URL)"
+        "ZAPIER_CALLBACK_WEBHOOK_URL is not configured (optional legacy: ZAPIER_COURSE_OVERVIEW_WEBHOOK_URL)",
       );
       return NextResponse.json(
         { error: "Callback request is not configured" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     console.error("Callback Zapier submission error:", error);
     return NextResponse.json(
       { error: "Failed to submit. Please try again." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
