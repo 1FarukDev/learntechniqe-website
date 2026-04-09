@@ -97,7 +97,7 @@ function CourseHeroInfoCard({
               </p>
             )}
           </p>
-          {price.includes("+") && (
+          {/* {price.includes("+") && (
             <p className="text-black font-semibold text-sm mt-1">
               (
               {price
@@ -118,7 +118,7 @@ function CourseHeroInfoCard({
                 })} + VAT`}
               )
             </p>
-          )}
+          )} */}
         </div>
         {skillLevelTags.length > 0 && (
           <div className="flex shrink-0 flex-col items-end gap-2 sm:flex-row sm:flex-wrap sm:justify-end">
