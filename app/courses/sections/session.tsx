@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Building2, X } from "lucide-react";
+import { Building2, Loader2, X } from "lucide-react";
 import type { SessionCourseOption } from "@/lib/course-session-options";
 
 /** Radix Select requires a non-empty value for the placeholder row */
@@ -23,7 +23,7 @@ type SessionVariant = "full" | "banner";
 
 export type SessionProps = {
   variant?: SessionVariant;
-  /** Course listing pages: dropdown of courses */
+  /** Optional fallback if the Sanity request fails (e.g. empty category build) */
   courseOptions?: SessionCourseOption[];
   /** Course detail page: fixed course + URL sent to Zapier */
   lockedCourse?: SessionCourseOption;
@@ -38,14 +38,55 @@ function Session({
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
-
-  const sortedOptions = useMemo(
-    () =>
-      [...courseOptions].sort((a, b) =>
-        a.title.localeCompare(b.title, undefined, { sensitivity: "base" }),
-      ),
-    [courseOptions],
+  const [sanityCourses, setSanityCourses] = useState<SessionCourseOption[]>([]);
+  const [coursesLoading, setCoursesLoading] = useState(() => !lockedCourse);
+  const [coursesFetchError, setCoursesFetchError] = useState<string | null>(
+    null,
   );
+
+  const dropdownOptions = useMemo(() => {
+    const list =
+      sanityCourses.length > 0 ? sanityCourses : [...courseOptions];
+    return [...list].sort((a, b) =>
+      a.title.localeCompare(b.title, undefined, { sensitivity: "base" }),
+    );
+  }, [sanityCourses, courseOptions]);
+
+  useEffect(() => {
+    if (lockedCourse) {
+      setCoursesLoading(false);
+      return;
+    }
+    let cancelled = false;
+    setCoursesLoading(true);
+    setCoursesFetchError(null);
+    fetch("/api/courses/session-options")
+      .then(async (res) => {
+        const data = (await res.json()) as {
+          courses?: SessionCourseOption[];
+          error?: string;
+        };
+        if (!res.ok) {
+          throw new Error(data.error || "Failed to load courses");
+        }
+        if (!cancelled) {
+          setSanityCourses(Array.isArray(data.courses) ? data.courses : []);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setCoursesFetchError(
+            "Couldn’t load courses. Please refresh the page or try again shortly.",
+          );
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setCoursesLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [lockedCourse]);
 
   const [form, setForm] = useState({
     name: "",
@@ -328,6 +369,25 @@ function Session({
                           Page: {form.coursePath}
                         </p>
                       </>
+                    ) : coursesLoading ? (
+                      <div
+                        className="flex h-11 w-full items-center gap-2 rounded-md border border-gray-200 bg-gray-50 px-3 text-sm text-gray-600"
+                        role="status"
+                        aria-live="polite"
+                        aria-busy="true"
+                      >
+                        <Loader2
+                          className="h-4 w-4 shrink-0 animate-spin text-[#016068]"
+                          aria-hidden
+                        />
+                        Loading courses…
+                      </div>
+                    ) : coursesFetchError ? (
+                      <p className="text-sm text-red-600">{coursesFetchError}</p>
+                    ) : dropdownOptions.length === 0 ? (
+                      <p className="text-sm text-gray-500">
+                        No courses are available to select right now.
+                      </p>
                     ) : (
                       <Select
                         value={
@@ -344,7 +404,7 @@ function Session({
                             }));
                             return;
                           }
-                          const opt = sortedOptions.find((o) => o.url === path);
+                          const opt = dropdownOptions.find((o) => o.url === path);
                           setForm((p) => ({
                             ...p,
                             coursePath: path,
@@ -370,7 +430,7 @@ function Session({
                           >
                             Select a course…
                           </SelectItem>
-                          {sortedOptions.map((o) => (
+                          {dropdownOptions.map((o) => (
                             <SelectItem
                               key={o.url}
                               value={o.url}
@@ -400,7 +460,11 @@ function Session({
                     type="submit"
                     disabled={
                       status === "loading" ||
-                      (!lockedCourse && !form.coursePath.trim())
+                      coursesLoading ||
+                      (!lockedCourse &&
+                        (!form.coursePath.trim() ||
+                          !!coursesFetchError ||
+                          dropdownOptions.length === 0))
                     }
                     className="h-12 w-full bg-[#016068] font-semibold text-white uppercase hover:bg-[#014d54]"
                   >
