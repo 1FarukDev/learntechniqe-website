@@ -12,7 +12,7 @@ export const coursesQuery = groq`
     duration,
   }
 `;
-
+ 
 export const courseCardsQuery = groq`
   *[_type == "course"] | order(title asc) {
     title,
