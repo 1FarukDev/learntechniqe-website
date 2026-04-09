@@ -15,7 +15,8 @@ interface RequestCourseOverviewModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   courseName: string;
-  courseUrl: string;
+  /** Full page URL sent to Zapier (brochure webhook) */
+  courseCanonicalUrl: string;
 }
 
 function useIsMobile() {
@@ -30,48 +31,45 @@ function useIsMobile() {
   return isMobile;
 }
 
-const emptyForm = {
-  first_name: "",
-  last_name: "",
-  number: "",
-  email: "",
-};
+const emptyForm = { name: "", email: "" };
 
 export function RequestCourseOverviewModal({
   open,
   onOpenChange,
   courseName,
-  courseUrl,
+  courseCanonicalUrl,
 }: RequestCourseOverviewModalProps) {
-  const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [formData, setFormData] = useState(emptyForm);
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    if (!open) setStatus("idle");
+    if (!open) {
+      setStatus("idle");
+      setFormData(emptyForm);
+    }
   }, [open]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
     try {
-      const res = await fetch("/api/zapier/callback", {
+      const res = await fetch("/api/zapier/brochure", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          first_name: formData.first_name,
-          last_name: formData.last_name,
-          number: formData.number,
-          email: formData.email,
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          source: "brochure",
           course: courseName,
           course_name: courseName,
-          course_url: courseUrl,
+          course_url: courseCanonicalUrl,
         }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Failed");
       setFormData(emptyForm);
-      onOpenChange(false);
+      setStatus("success");
     } catch {
       setStatus("error");
     }
@@ -84,84 +82,60 @@ export function RequestCourseOverviewModal({
         className={isMobile ? "h-[85vh] rounded-t-2xl border-t max-h-[90vh]" : "sm:max-w-md w-full"}
       >
         <SheetHeader className="text-left">
-          <SheetTitle className="font-heading text-xl">Request a call back</SheetTitle>
+          <SheetTitle className="font-heading text-xl">Request course overview</SheetTitle>
           <SheetDescription>
-            Enter your details and we&apos;ll call you back about {courseName}.
+            Enter your name and email and we&apos;ll send you an overview of {courseName}.
           </SheetDescription>
         </SheetHeader>
 
         <div className="flex flex-col gap-6 px-4 pb-6 overflow-y-auto flex-1">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {status === "success" ? (
+            <p className="text-sm text-green-600 font-medium">
+              Thank you! We&apos;ll email you the course overview shortly.
+            </p>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label htmlFor="overview-first" className="block text-sm font-semibold text-gray-700 mb-1">
-                  First Name <span className="text-red-500">*</span>
+                <label htmlFor="overview-name" className="block text-sm font-semibold text-gray-700 mb-1">
+                  Name <span className="text-red-500">*</span>
                 </label>
                 <Input
-                  id="overview-first"
+                  id="overview-name"
                   type="text"
-                  placeholder="Enter your first name"
-                  value={formData.first_name}
-                  onChange={(e) => setFormData((p) => ({ ...p, first_name: e.target.value }))}
+                  placeholder="Enter your name"
+                  value={formData.name}
+                  onChange={(e) => setFormData((p) => ({ ...p, name: e.target.value }))}
                   required
                   className="bg-white h-12"
                 />
               </div>
               <div>
-                <label htmlFor="overview-last" className="block text-sm font-semibold text-gray-700 mb-1">
-                  Last Name <span className="text-red-500">*</span>
+                <label htmlFor="overview-email" className="block text-sm font-semibold text-gray-700 mb-1">
+                  Email <span className="text-red-500">*</span>
                 </label>
                 <Input
-                  id="overview-last"
-                  type="text"
-                  placeholder="Enter your last name"
-                  value={formData.last_name}
-                  onChange={(e) => setFormData((p) => ({ ...p, last_name: e.target.value }))}
+                  id="overview-email"
+                  type="email"
+                  placeholder="Enter your email"
+                  value={formData.email}
+                  onChange={(e) => setFormData((p) => ({ ...p, email: e.target.value }))}
                   required
                   className="bg-white h-12"
                 />
               </div>
-            </div>
-            <div>
-              <label htmlFor="overview-phone" className="block text-sm font-semibold text-gray-700 mb-1">
-                Phone Number <span className="text-red-500">*</span>
-              </label>
-              <Input
-                id="overview-phone"
-                type="tel"
-                placeholder="Enter your phone number"
-                value={formData.number}
-                onChange={(e) => setFormData((p) => ({ ...p, number: e.target.value }))}
-                required
-                className="bg-white h-12"
-              />
-            </div>
-            <div>
-              <label htmlFor="overview-email" className="block text-sm font-semibold text-gray-700 mb-1">
-                Email Address <span className="text-red-500">*</span>
-              </label>
-              <Input
-                id="overview-email"
-                type="email"
-                placeholder="Enter your email"
-                value={formData.email}
-                onChange={(e) => setFormData((p) => ({ ...p, email: e.target.value }))}
-                required
-                className="bg-white h-12"
-              />
-            </div>
-            {status === "error" && (
-              <p className="text-sm text-red-600 font-medium">Something went wrong. Please try again.</p>
-            )}
+              {status === "error" && (
+                <p className="text-sm text-red-600 font-medium">Something went wrong. Please try again.</p>
+              )}
 
-            <Button
-              type="submit"
-              disabled={status === "loading"}
-              className="w-full h-12 uppercase bg-[#016068] hover:bg-[#014d54] text-white font-semibold"
-            >
-              {status === "loading" ? "Sending..." : "Request a call back"}
-            </Button>
-          </form>
+              <Button
+                type="submit"
+                disabled={status === "loading"}
+                className="w-full h-12 uppercase bg-[#016068] hover:bg-[#014d54] text-white font-semibold"
+              >
+                {status === "loading" ? "Sending..." : "Request course overview"}
+              </Button>
+            </form>
+          )}
         </div>
       </SheetContent>
     </Sheet>

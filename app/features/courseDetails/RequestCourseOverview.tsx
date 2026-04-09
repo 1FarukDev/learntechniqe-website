@@ -8,14 +8,15 @@ const defaultTriggerClassName =
 
 interface RequestCourseOverviewProps {
   courseName: string;
-  courseUrl: string;
+  /** Full URL for Zapier (brochure webhook) */
+  courseCanonicalUrl: string;
   /** Overrides default text-link styling (e.g. hero card CTA button) */
   triggerClassName?: string;
 }
 
 export function RequestCourseOverview({
   courseName,
-  courseUrl,
+  courseCanonicalUrl,
   triggerClassName,
 }: RequestCourseOverviewProps) {
   const [open, setOpen] = useState(false);
@@ -27,13 +28,13 @@ export function RequestCourseOverview({
         onClick={() => setOpen(true)}
         className={triggerClassName ?? defaultTriggerClassName}
       >
-        Request a call back
+        Request course overview
       </button>
       <RequestCourseOverviewModal
         open={open}
         onOpenChange={setOpen}
         courseName={courseName}
-        courseUrl={courseUrl}
+        courseCanonicalUrl={courseCanonicalUrl}
       />
     </>
   );

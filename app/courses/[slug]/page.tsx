@@ -5,7 +5,6 @@ import Am2ResitSection from "@/app/features/courseDetails/Am2ResitSection";
 import CourseDetails from "@/app/features/courseDetails/CourseDetails";
 import CourseHero from "@/app/features/courseDetails/heroSection";
 import CourseReviews from "@/app/features/courseDetails/CourseReviews";
-import Brochure from "@/app/features/homepage/brochure";
 import Contact from "@/app/features/homepage/contact";
 import { AnimatedSection } from "@/components/animated-section";
 import { client } from "@/lib/sanity/client";
@@ -105,6 +104,8 @@ async function CourseDetail({ params }: CoursePageProps) {
     courseId: coursecheckCourseId,
   });
 
+  const courseCanonicalUrl = `https://www.learntechnique.com/courses/${slug}`;
+
   const heroData = {
     ...defaultCourseHeroData,
     ...rawCourse,
@@ -114,6 +115,7 @@ async function CourseDetail({ params }: CoursePageProps) {
       rawCourse?.qualifications ?? defaultCourseHeroData.qualifications,
     summary: rawCourse?.summary ?? defaultCourseHeroData.summary,
     bookingAvailable,
+    courseCanonicalUrl,
   };
 
   const detailsSummaryRaw = rawCourse?.detailsSummary;
@@ -156,8 +158,6 @@ async function CourseDetail({ params }: CoursePageProps) {
       rawCourse?.cademyDirectUrl ?? defaultBookCourseData.cademyDirectUrl,
     dates: cademyDates.length > 0 ? cademyDates : defaultBookCourseData.dates,
   };
-
-  const courseCanonicalUrl = `https://www.learntechnique.com/courses/${slug}`;
 
   const courseJsonLd = {
     "@context": "https://schema.org",
@@ -222,16 +222,6 @@ async function CourseDetail({ params }: CoursePageProps) {
           />
         </AnimatedSection>
       )}
-      <AnimatedSection variant="fade-up">
-        <Brochure
-          courseUrl={courseCanonicalUrl}
-          courseTitle={
-            typeof rawCourse?.title === "string" && rawCourse.title.trim().length > 0
-              ? rawCourse.title.trim()
-              : "This course"
-          }
-        />
-      </AnimatedSection>
       <AnimatedSection variant="fade-up">
         <CourseReviews
           reviews={coursecheckReviews}

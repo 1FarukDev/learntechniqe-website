@@ -59,6 +59,8 @@ export interface CourseHeroData {
   summary?: string;
   bookingAvailable?: boolean;
   bookASession?: boolean;
+  /** Full URL for brochure / course-overview Zapier payloads */
+  courseCanonicalUrl?: string;
 }
 
 export interface CourseDetailsData {

@@ -115,6 +115,34 @@ Used for **callback** requests from course or pathway UI (modal or inline). The 
 
 ---
 
+## Career Pathways (`/pathways`, `/pathways/[slug]`)
+
+Pathway-specific leads use the **same two Zaps** as the rest of the site: **Contact** (section 3) and, on course pages, **Request callback** (section 4). You do **not** need separate Catch Hook URLs for pathways—only correct `.env` values and (optionally) filters in Zapier.
+
+### What fires on pathway pages
+
+| Page | UI | Zap | `source` / notes |
+|------|-----|---------|------------------|
+| `/pathways` | Payment calculator sticky → “Enquire” | **Contact** | `pathway_calculator_enquiry`; includes `pathway_name`, `pathway_url`, `message` (price summary) |
+| `/pathways/[slug]` | Same calculator (when pathways have prices in CMS) | **Contact** | `pathway_calculator_enquiry` |
+| `/pathways/[slug]` | “Enquire About This Pathway” block | **Contact** | `pathway_enquiry`; includes `pathway_name`, `pathway_url`, `message` |
+| `/pathways` · `/pathways/[slug]` | Footer-style **Contact** block (`homepage/contact`) | **Contact** | `contact` (default) — general enquiry, not pathway-tagged |
+| `/pathways/[slug]` | Hero “Enquire Now” | — | Scrolls to `#enquirySection`; **no** Zap by itself |
+
+**Not used on pathway detail pages:** the hero **Course enquiry** expander and **Request a call back** modal (those only appear on **course** hero when `isPathway` is false). Callback Zaps still apply anywhere `RequestCourseOverviewModal` or `BookCourse` runs (see `FORMS_AND_ZAPS.md`).
+
+### Building the Zaps in Zapier
+
+1. **Contact Zap** — Create **Webhooks by Zapier → Catch Hook**. Copy the URL into `ZAPIER_CONTACT_WEBHOOK_URL`. Add **Google Sheets → Create Spreadsheet Row** (or email/CRM) and map columns from section 3, including `pathway_name` and `pathway_url` (they appear after a real calculator or pathway enquiry submit, or Zapier **Test** with a manual JSON body).
+2. **Optional — pathway-only notifications:** After the trigger, add **Filter by Zapier** (or **Paths**): e.g. only continue if `source` is one of `pathway_enquiry`, `pathway_calculator_enquiry`.
+3. **Callback Zap** — Only required if you use callback flows on **courses**; pathway listings above do not depend on it unless you add UI that posts to `/api/zapier/callback`.
+
+### Quick test
+
+After setting `ZAPIER_CONTACT_WEBHOOK_URL`, submit from `/pathways` (calculator enquiry) and from `/pathways/<slug>` (pathway enquiry form). In Zapier **History**, confirm `source` and `pathway_*` fields match the table above.
+
+---
+
 ## 5. Book session Zap
 
 **Env:** `ZAPIER_BOOK_SESSION_WEBHOOK_URL`

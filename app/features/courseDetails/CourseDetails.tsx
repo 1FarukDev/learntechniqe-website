@@ -21,11 +21,10 @@ function AccordionList({ topics }: AccordionListProps) {
           <div key={i} className="rounded-sm overflow-hidden">
             <button
               onClick={() => setOpenIndex(isOpen ? -1 : i)}
-              className={`w-full flex items-center justify-between px-5 py-4 text-left transition-colors duration-200 ${
-                isOpen
+              className={`w-full flex items-center justify-between px-5 py-4 text-left transition-colors duration-200 ${isOpen
                   ? "bg-[#016068] text-white"
                   : "bg-[#e8edf2] text-gray-700 hover:bg-gray-200"
-              }`}
+                }`}
             >
               <span className="font-semibold text-sm">{topic.title}</span>
               {isOpen ? (
@@ -36,9 +35,8 @@ function AccordionList({ topics }: AccordionListProps) {
             </button>
 
             <div
-              className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                isOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
-              }`}
+              className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
+                }`}
             >
               <div className="bg-white px-6 py-5">
                 <ul className="flex flex-col">
@@ -146,11 +144,10 @@ function CourseDetails({ data }: CourseDetailsProps) {
               <button
                 key={tab.key}
                 onClick={(e) => handleTabChange(tab.key, e.currentTarget)}
-                className={`py-5 text-xs font-semibold uppercase tracking-widest transition-all duration-200 border-r last:border-r-0 border-gray-200 ${
-                  activeTab === tab.key
+                className={`py-5 text-xs font-semibold uppercase tracking-widest transition-all duration-200 border-r last:border-r-0 border-gray-200 ${activeTab === tab.key
                     ? "bg-[#4a5568] text-white"
                     : "bg-[#e8edf2] text-gray-500 hover:bg-gray-200"
-                }`}
+                  }`}
               >
                 {tab.label}
               </button>
@@ -169,11 +166,10 @@ function CourseDetails({ data }: CourseDetailsProps) {
               <button
                 key={tab.key}
                 onClick={(e) => handleTabChange(tab.key, e.currentTarget)}
-                className={`shrink-0 px-5 py-3 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-200 ${
-                  activeTab === tab.key
+                className={`shrink-0 px-5 py-3 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-200 ${activeTab === tab.key
                     ? "bg-[#4a5568] text-white shadow-md"
                     : "bg-[#e8edf2] text-gray-500 hover:bg-gray-200"
-                }`}
+                  }`}
               >
                 {tab.label}
               </button>
@@ -183,9 +179,8 @@ function CourseDetails({ data }: CourseDetailsProps) {
 
         {summary && (
           <div
-            className={`rounded-sm border border-gray-200 border-l-4 border-l-[#016068] bg-[#e8edf2]/40 px-5 py-4 text-sm sm:text-base leading-relaxed text-gray-800 whitespace-pre-line ${
-              hasAccordion ? "mb-8" : ""
-            }`}
+            className={`rounded-sm border border-gray-200 border-l-4 border-l-[#016068] bg-[#e8edf2]/40 px-5 py-4 text-sm sm:text-base leading-relaxed text-gray-800 whitespace-pre-line ${hasAccordion ? "mb-8" : ""
+              }`}
             role="note"
           >
             {summary}
@@ -194,9 +189,8 @@ function CourseDetails({ data }: CourseDetailsProps) {
 
         {hasAccordion && (
           <div
-            className={`transition-all duration-200 ease-in-out ${
-              animating ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"
-            }`}
+            className={`transition-all duration-200 ease-in-out ${animating ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"
+              }`}
           >
             <AccordionList
               key={displayedTab}

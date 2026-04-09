@@ -9,6 +9,10 @@ import { CourseHeroData } from "@/lib/types/course";
 import { defaultCourseHeroData } from "@/lib/constants/course";
 import { urlFor } from "@/lib/sanity/image";
 
+/** Tighter spacing when the overview link sits under hero intro paragraphs */
+const heroDescriptionOverviewTriggerClassName =
+  "inline-block pt-2 text-[#4DD9AC] font-semibold text-sm underline underline-offset-4 hover:text-white transition-colors text-left";
+
 interface CourseHeroProps {
   data?: CourseHeroData | null;
   isPathway?: boolean;
@@ -79,12 +83,32 @@ function CourseHero({ data, isPathway = false }: CourseHeroProps) {
               {description.map((para, i) => (
                 <p key={i}>{para}</p>
               ))}
+              {!isPathway && !bookingAvailable && (
+                <RequestCourseOverview
+                  courseName={title}
+                  courseCanonicalUrl={
+                    course.courseCanonicalUrl ??
+                    `https://www.learntechnique.com/courses/${slug}`
+                  }
+                  triggerClassName={heroDescriptionOverviewTriggerClassName}
+                />
+              )}
             </div>
           )}
           {course.summary && (
             <p className="mt-4 text-white/70 text-sm sm:text-base leading-7 italic">
               {course.summary}
             </p>
+          )}
+
+          {!isPathway && !bookingAvailable && description.length === 0 && (
+            <RequestCourseOverview
+              courseName={title}
+              courseCanonicalUrl={
+                course.courseCanonicalUrl ??
+                `https://www.learntechnique.com/courses/${slug}`
+              }
+            />
           )}
 
           {isPathway ? (
@@ -99,7 +123,10 @@ function CourseHero({ data, isPathway = false }: CourseHeroProps) {
             bookingAvailable && (
               <RequestCourseOverview
                 courseName={title}
-                courseUrl={`/courses/${slug}`}
+                courseCanonicalUrl={
+                  course.courseCanonicalUrl ??
+                  `https://www.learntechnique.com/courses/${slug}`
+                }
               />
             )
           )}

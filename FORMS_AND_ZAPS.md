@@ -114,7 +114,7 @@ All of the above keys are listed in `.env.example`.
 | **Purpose** | Course-specific enquiry from the course hero info card |
 | **Posts to** | `/api/zapier/contact` |
 | **Env** | `ZAPIER_CONTACT_WEBHOOK_URL` |
-| **Pages** | `/courses/[slug]` · `/pathways/[slug]` |
+| **Pages** | `/courses/[slug]` (hero card only; hidden when `isPathway` on pathway pages) |
 
 ---
 
@@ -123,10 +123,10 @@ All of the above keys are listed in `.env.example`.
 | | |
 |-|-|
 | **File** | `app/features/courseDetails/RequestCourseOverviewModal.tsx` |
-| **Purpose** | Request a callback from course / pathway page |
+| **Purpose** | Request a callback from the **course** hero (“Request overview” link) |
 | **Posts to** | `/api/zapier/callback` |
 | **Env** | `ZAPIER_CALLBACK_WEBHOOK_URL` |
-| **Pages** | `/courses/[slug]` · `/pathways/[slug]` |
+| **Pages** | `/courses/[slug]` (pathway detail pages use a different hero — this modal is not shown) |
 
 ---
 
