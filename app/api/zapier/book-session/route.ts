@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { formatCourseNameForZapier } from "@/lib/utils";
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,11 +13,17 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const payload = {
+    const payload: Record<string, unknown> = {
       ...body,
       source: "book_session",
       timestamp: new Date().toISOString(),
     };
+    if (typeof payload.course === "string") {
+      payload.course = formatCourseNameForZapier(payload.course);
+    }
+    if (typeof payload.course_name === "string") {
+      payload.course_name = formatCourseNameForZapier(payload.course_name);
+    }
 
     const response = await fetch(webhookUrl, {
       method: "POST",

@@ -7,6 +7,7 @@ import { CademyBookingIframe } from "./CademyBookingIframe";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { StandalonePrivacyConsent } from "@/components/form-privacy-consent";
+import { formatCourseNameForZapier } from "@/lib/utils";
 
 interface BookCourseProps {
   data?: BookCourseData | null;
@@ -39,6 +40,7 @@ function RequestOverviewInlineForm({
     if (!privacyAgreed) return;
     setStatus("loading");
     try {
+      const courseForZapier = formatCourseNameForZapier(courseName);
       const res = await fetch("/api/zapier/callback", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -47,8 +49,8 @@ function RequestOverviewInlineForm({
           last_name: formData.last_name,
           number: formData.number,
           email: formData.email,
-          course: courseName,
-          course_name: courseName,
+          course: courseForZapier,
+          course_name: courseForZapier,
           course_url: courseUrl,
         }),
       });

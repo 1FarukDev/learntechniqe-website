@@ -11,6 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { StandalonePrivacyConsent } from "@/components/form-privacy-consent";
+import { formatCourseNameForZapier } from "@/lib/utils";
 
 interface RequestCourseOverviewModalProps {
   open: boolean;
@@ -58,6 +59,7 @@ export function RequestCourseOverviewModal({
     if (!privacyAgreed) return;
     setStatus("loading");
     try {
+      const courseForZapier = formatCourseNameForZapier(courseName);
       const res = await fetch("/api/zapier/brochure", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -65,8 +67,8 @@ export function RequestCourseOverviewModal({
           name: formData.name.trim(),
           email: formData.email.trim(),
           source: "brochure",
-          course: courseName,
-          course_name: courseName,
+          course: courseForZapier,
+          course_name: courseForZapier,
           course_url: courseCanonicalUrl,
         }),
       });

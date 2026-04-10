@@ -16,6 +16,7 @@ import {
 import { Building2, Loader2, X } from "lucide-react";
 import type { SessionCourseOption } from "@/lib/course-session-options";
 import { StandalonePrivacyConsent } from "@/components/form-privacy-consent";
+import { formatCourseNameForZapier } from "@/lib/utils";
 
 /** Radix Select requires a non-empty value for the placeholder row */
 const COURSE_SELECT_NONE = "__book_session_no_course__";
@@ -136,7 +137,7 @@ function Session({
           last_name: rest.join(" ") || "",
           email: form.email,
           number: form.phone,
-          course: form.course,
+          course: formatCourseNameForZapier(form.course),
           course_url: fullUrl || form.coursePath,
           course_path: form.coursePath,
         }),
