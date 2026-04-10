@@ -223,7 +223,7 @@ export default function StudentAccommodation() {
             }`}
         >
           <MapPin />
-          <p className="uppercase">Clay Clay Cross</p>
+          <p className="uppercase">Clay Cross</p>
         </div>
 
         <div
