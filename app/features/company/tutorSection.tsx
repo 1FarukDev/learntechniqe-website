@@ -2,7 +2,8 @@
 
 import React from "react";
 import Image, { StaticImageData } from "next/image";
-import Andie from "@/app/assets/tutor/andie.png";
+import KingsImage from "@/app/assets/team/Kings.png";
+
 interface Tutor {
   name: string;
   role: string;
@@ -14,44 +15,53 @@ const tutors: Tutor[] = [
   {
     name: "Andy Polkinghorne",
     role: "Electrical Tutor",
-    image: Andie,
     accentColor: "#2563EB",
   },
   {
     name: "Allan Morrison",
     role: "Electrical Tutor",
-    image: Andie,
-    accentColor: "#2563EB",
+    accentColor: "#7C3AED",
   },
   {
     name: "Chris Harrison",
     role: "Electrical Tutor",
-    image: Andie,
     accentColor: "#F59E0B",
   },
   {
     name: "Kingsley Owomero",
     role: "Electrical Tutor",
-    image: Andie,
+    image: KingsImage,
     accentColor: "#16A34A",
+  },
+  {
+    name: "Paul Batty",
+    role: "Electrical Tutor",
+    accentColor: "#DC2626",
+  },
+  {
+    name: "Dave Brenton",
+    role: "AM2 Assessor",
+    accentColor: "#0891B2",
+  },
+  {
+    name: "Adam Wood",
+    role: "AM2 Assessor",
+    accentColor: "#D97706",
   },
   {
     name: "Arsham Hassanpour",
     role: "PLC & Automation Tutor",
-    image: Andie,
-    accentColor: "#2563EB",
+    accentColor: "#4F46E5",
   },
   {
     name: "Paria Faramarzi",
-    role: "PLC & Automation Tutor ",
-    image: Andie,
-    accentColor: "#2563EB",
+    role: "PLC & Automation Tutor",
+    accentColor: "#BE185D",
   },
   {
     name: "Tim Morris",
     role: "Air Conditioning and Refrigeration Tutor",
-    image: Andie,
-    accentColor: "#F59E0B",
+    accentColor: "#059669",
   },
 ];
 
@@ -59,42 +69,45 @@ function TutorCard({ tutor }: { tutor: Tutor }) {
   return (
     <div className="flex flex-col items-center">
       <div className="relative w-full pt-8 sm:pt-[52px]">
+        {/* Colored card background */}
         <div
-          className="w-full rounded-2xl h-32 sm:h-[190px] relative"
-          style={{
-            backgroundColor: tutor.accentColor,
-          }}
+          className="w-full rounded-2xl h-32 sm:h-[190px]"
+          style={{ backgroundColor: tutor.accentColor }}
         />
 
-        <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-40 sm:h-[240px] overflow-hidden pointer-events-none"
-        >
+        {/* Figure overlay */}
+        {/* Figure overlay */}
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-40 sm:h-[240px] overflow-visible pointer-events-none flex items-end justify-center">
           {tutor.image ? (
-            <Image
-              src={tutor.image}
-              alt={tutor.name}
-              fill
-              style={{ objectFit: "contain", objectPosition: "bottom center" }}
-            />
-          ) : (
-            <div className="w-full h-full flex items-end justify-center pb-2">
-              <svg
-                viewBox="0 0 100 120"
-                width="55%"
-                fill="rgba(255,255,255,0.35)"
-              >
-                <ellipse cx="50" cy="32" rx="22" ry="26" />
-                <path d="M10 110 Q10 68 50 68 Q90 68 90 110 Z" />
-              </svg>
+            <div className="relative w-full h-[115%]">
+              <Image
+                src={tutor.image}
+                alt={tutor.name}
+                fill
+                style={{
+                  objectFit: "contain",
+                  objectPosition: "bottom center",
+                }}
+              />
             </div>
+          ) : (
+            <svg
+              viewBox="0 0 100 120"
+              width="100%"
+              height="100%"
+              fill="rgba(255,255,255,.8)"
+              style={{ display: "block" }}
+              preserveAspectRatio="xMidYMax meet"
+            >
+              <ellipse cx="50" cy="28" rx="20" ry="22" />
+              <path d="M10 120 Q10 68 50 68 Q90 68 90 120 Z" />
+            </svg>
           )}
         </div>
       </div>
 
       <div className="text-center mt-3 px-1">
-        <p
-          className="font-bold text-[#000000] text-base sm:text-xl leading-snug"
-        >
+        <p className="font-bold text-[#000000] text-base sm:text-xl leading-snug">
           {tutor.name}
         </p>
         <p className="text-black font-normal text-sm mt-0.5">{tutor.role}</p>
@@ -110,9 +123,7 @@ export default function TutorsSection() {
       style={{ backgroundColor: "#dff0f0" }}
     >
       <div className="text-center mb-10 md:mb-14">
-        <h2
-          className="text-black text-3xl sm:text-4xl md:text-5xl font-semibold mb-3"
-        >
+        <h2 className="text-black text-3xl sm:text-4xl md:text-5xl font-semibold mb-3">
           Our Tutors
         </h2>
         <p className="text-black text-base font-normal max-w-xl mx-auto leading-relaxed">

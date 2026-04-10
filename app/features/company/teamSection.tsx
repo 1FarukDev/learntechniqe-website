@@ -2,8 +2,13 @@
 
 import React, { useState } from "react";
 import Image, { StaticImageData } from "next/image";
-import MarkImage from "@/app/assets/team/mark.png";
-import SimonImage from "@/app/assets/team/simon.png";
+import MarkImage from "@/app/assets/team/Mark.jpg";
+import SimonImage from "@/app/assets/team/Simon.jpg";
+import OliverImage from "@/app/assets/team/Oliver.jpg";
+
+import GeorginaImage from "@/app/assets/team/Georgina.jpg";
+
+
 interface TeamMember {
   name: string;
   role: string;
@@ -187,6 +192,7 @@ const team: TeamMember[] = [
   {
     name: "Oliver Crook",
     role: "Commercial Manager",
+    image: OliverImage,
     bio: "Oliver is our Commercial Manager, and forms part of the senior management team. He is responsible for identifying and pursuing new business opportunities, building strategic partnerships, and overseeing contracts. He leads the company’s sales and marketing strategy with a strong focus on growth and profitability. He works closely with our Operations Manager to ensure that all employees adhere to company policies and procedures, monitors compliance with regulations, and works continuously to enhance operational processes, systems, and management practices across the organisation.  ",
   },
   {
@@ -197,6 +203,7 @@ const team: TeamMember[] = [
   {
     name: "Georgina Thompson",
     role: "Sales & Administration ",
+    image: GeorginaImage,
     bio: "Georgina forms part of our Sales & Administration team. She is a customer-focused Sales and Administration Advisor, skilled in managing client accounts, supporting the team, providing expert advice on all of our courses and guiding you down the right path. ",
   },
   {
