@@ -4,6 +4,10 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Footer from "./shared/footer";
 import HeaderWrapper from "./shared/headerWrapper";
+import {
+  TrackingHeadScripts,
+  TrackingNoScripts,
+} from "./shared/trackingScripts";
 import { NavigationProgress } from "./navigation-progress";
 
 const outfit = Outfit({
@@ -147,6 +151,8 @@ export default function RootLayout({
       <body
         className={`${outfit.variable} ${lato.variable} ${nohemi.variable} antialiased`}
       >
+        <TrackingNoScripts />
+        <TrackingHeadScripts />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
