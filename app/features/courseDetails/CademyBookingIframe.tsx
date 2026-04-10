@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Loader2 } from "lucide-react";
 
 const HEIGHT_MIN = 260;
 const HEIGHT_MAX = 4000;
@@ -58,6 +59,11 @@ interface CademyBookingIframeProps {
 export function CademyBookingIframe({ src, title }: CademyBookingIframeProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [heightPx, setHeightPx] = useState(HEIGHT_INITIAL);
+  const [iframeLoaded, setIframeLoaded] = useState(false);
+
+  useEffect(() => {
+    setIframeLoaded(false);
+  }, [src]);
 
   const applyHeight = useCallback((raw: number) => {
     const v = Math.min(HEIGHT_MAX, Math.max(HEIGHT_MIN, Math.round(raw)));
@@ -87,22 +93,41 @@ export function CademyBookingIframe({ src, title }: CademyBookingIframeProps) {
         doc.documentElement?.offsetHeight ?? 0,
       );
       if (h > HEIGHT_MIN) applyHeight(h);
-    } catch {}
+    } catch {
+      // Cross-origin: height comes from postMessage instead
+    } finally {
+      setIframeLoaded(true);
+    }
   };
 
   return (
-    <iframe
-      ref={iframeRef}
-      src={src}
-      title={title}
-      className="w-full border-0"
-      style={{
-        height: heightPx,
-        display: "block",
-        maxHeight: "min(100vh, 4000px)",
-      }}
-      onLoad={handleLoad}
-      sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-forms allow-modals allow-pointer-lock allow-storage-access-by-user-activation allow-top-navigation allow-top-navigation-by-user-activation allow-top-navigation-to-custom-protocols allow-presentation"
-    />
+    <div
+      className="relative w-full"
+      style={{ minHeight: iframeLoaded ? undefined : heightPx }}
+      aria-busy={!iframeLoaded}
+    >
+      {!iframeLoaded && (
+        <div
+          className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 rounded-lg bg-gray-50/95 text-gray-600"
+          aria-hidden={iframeLoaded}
+        >
+          <Loader2 className="h-9 w-9 animate-spin text-[#14AE5C]" aria-hidden />
+          <span className="text-sm font-medium">Loading booking calendar…</span>
+        </div>
+      )}
+      <iframe
+        ref={iframeRef}
+        src={src}
+        title={title}
+        className="w-full border-0"
+        style={{
+          height: heightPx,
+          display: "block",
+          maxHeight: "min(100vh, 4000px)",
+        }}
+        onLoad={handleLoad}
+        sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-forms allow-modals allow-pointer-lock allow-storage-access-by-user-activation allow-top-navigation allow-top-navigation-by-user-activation allow-top-navigation-to-custom-protocols allow-presentation"
+      />
+    </div>
   );
 }
