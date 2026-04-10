@@ -14,6 +14,7 @@ import { Search, ChevronRight, Clock, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import type { CourseCardData } from "@/lib/course-categories";
+import { getCourseUrl } from "@/lib/course-categories";
 
 export interface PathwayModalItem {
   title: string;
@@ -290,7 +291,7 @@ export function CourseSearchModal({
                 displayCourses.map((course) => (
                   <li key={course.slug}>
                     <Link
-                      href={`/courses/${course.slug}`}
+                      href={getCourseUrl(course.slug)}
                       onClick={handleClose}
                       className="flex items-center justify-between p-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors group"
                     >

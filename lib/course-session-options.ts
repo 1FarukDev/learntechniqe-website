@@ -1,4 +1,5 @@
 import type { CourseCardData } from "@/lib/course-categories";
+import { getCourseUrl } from "@/lib/course-categories";
 
 export type SessionCourseOption = { title: string; url: string };
 
@@ -9,7 +10,7 @@ export function courseOptionsForSessionBook(
   const bySlug = new Map<string, SessionCourseOption>();
   for (const c of courses) {
     if (!c?.slug) continue;
-    bySlug.set(c.slug, { title: c.title, url: `/courses/${c.slug}` });
+    bySlug.set(c.slug, { title: c.title, url: getCourseUrl(c.slug) });
   }
   return Array.from(bySlug.values()).sort((a, b) =>
     a.title.localeCompare(b.title, undefined, { sensitivity: "base" }),

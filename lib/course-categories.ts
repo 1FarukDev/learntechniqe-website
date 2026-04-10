@@ -312,7 +312,8 @@ export function categoriseFromHeader(
   return column.subcategories.map((sub, idx) => {
     const courses = sub.items
       .map((item) => {
-        const slug = item.href.replace(/^\/courses\//, "");
+        // Extract just the slug from URLs like /courses/electrical/slug-name
+        const slug = item.href.replace(/^\/courses\/[^/]+\//, "");
         return courseBySlug.get(slug);
       })
       .filter((c): c is CourseCardData => c != null);
@@ -323,4 +324,26 @@ export function categoriseFromHeader(
       courses,
     };
   });
+}
+
+/**
+ * Get the category slug from a course slug (e.g., "electrical", "plc", "aircon-refrigeration").
+ * Returns "electrical" by default for unknown courses.
+ */
+export function getCategoryFromSlug(slug: string): "electrical" | "plc" | "aircon-refrigeration" {
+  if (PLC_SLUG_MARKERS.some((s) => slug.includes(s))) {
+    return "plc";
+  }
+  if (AIRCON_SLUG_MARKERS.some((s) => slug.includes(s))) {
+    return "aircon-refrigeration";
+  }
+  return "electrical";
+}
+
+/**
+ * Get the full course URL with category included (e.g., "/courses/electrical/my-course-slug").
+ */
+export function getCourseUrl(slug: string): string {
+  const category = getCategoryFromSlug(slug);
+  return `/courses/${category}/${slug}`;
 }

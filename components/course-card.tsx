@@ -5,14 +5,14 @@ import CardImage from "@/app/assets/png/cardimage.png";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import type { CourseCardData } from "@/lib/course-categories";
-import { getCategoryTag } from "@/lib/course-categories";
+import { getCategoryTag, getCourseUrl } from "@/lib/course-categories";
 
 interface CourseCardProps {
   course?: CourseCardData;
   hrefPrefix?: string;
 }
 
-function CourseCard({ course, hrefPrefix = "/courses" }: CourseCardProps) {
+function CourseCard({ course, hrefPrefix }: CourseCardProps) {
   const title = course?.title ?? "Course Title";
   const slug = course?.slug ?? "#";
   const price = course?.price ?? "";
@@ -23,10 +23,13 @@ function CourseCard({ course, hrefPrefix = "/courses" }: CourseCardProps) {
 
   const categoryTag = getCategoryTag(slug);
   const firstTag = tags[0];
+  
+  // Use getCourseUrl if no custom hrefPrefix, otherwise use the old behavior for backwards compatibility
+  const href = hrefPrefix ? `${hrefPrefix}/${slug}` : getCourseUrl(slug);
 
   return (
     <Link
-      href={`${hrefPrefix}/${slug}`}
+      href={href}
       className="flex flex-col bg-[#FFF9ED] min-w-[220px] sm:min-w-[260px] max-w-[260px] sm:max-w-[300px] shrink-0 rounded-md overflow-hidden hover:shadow-lg transition-shadow h-full"
     >
       <div className="w-full relative h-44 sm:h-52 md:h-56">
