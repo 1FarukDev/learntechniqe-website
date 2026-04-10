@@ -12,14 +12,13 @@ function AboutSection() {
                     </h2>
                     <div className="space-y-4 max-w-3xl mx-auto text-black/80">
                         <p className="text-sm sm:text-base leading-relaxed">
-                            With a central centre focusing on PLC training in the north we work hard to supply
+                            With a central centre focusing on technical training in the north, we work hard to supply
                             the very best training as close to you as possible. Our ever-expanding business and
                             centres show how committed we are to the very best professional training and we
                             don&apos;t stop there. With our comfortable lounge areas fitted with plenty of sofas, chairs,
-                            dining areas, vending machines, hair preparers, magazines and a large TV for your
+                            dining areas, vending machines magazines and a large TV for your
                             entertainment. Our classrooms are kitted out with the latest projector screens,
-                            heating/cooling systems and all the technical gear you will need to learn whichever
-                            course you team on your visit.
+                            heating/cooling systems and all the technical gear you will need to learn.
                         </p>
                     </div>
                 </div>

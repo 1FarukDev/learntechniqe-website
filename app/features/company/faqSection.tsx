@@ -36,7 +36,7 @@ const faqs: FAQItem[] = [
     outro: [
       "The average age of our career-changing students is 38. We've successfully trained people in their 40s and 50s who had never touched electrical equipment before.",
       "What you need: Willingness to learn, basic problem-solving skills, and commitment to the course. That's it.",
-      "Follow-up support: If you struggle with any module, we offer free retakes and extra trainer sessions until you pass.",
+      // "Follow-up support: If you struggle with any module, we offer free retakes and extra trainer sessions until you pass.",
     ],
   },
   {
@@ -90,7 +90,7 @@ const faqs: FAQItem[] = [
       "We never cancel courses. Even if only one student books, the course runs. This is one of our key differences from other training providers. Here's why we can guarantee this:",
     bullets: [
       {
-        text: "Multiple training centres (Chesterfield, Oxford, Stirling) with dedicated facilities",
+        text: "Multiple training centres (Chesterfield, Stirling) with dedicated facilities",
       },
       {
         text: "Full-time tutors on staff, not freelancers we book per course",
@@ -222,9 +222,9 @@ const faqs: FAQItem[] = [
       {
         text: "Career development - Guidance on next qualifications to take, advice on specialisations (renewables, PLC, HVAC), and business advice for those going self-employed",
       },
-      {
-        text: "Free retakes - If you need to retake an assessment later (e.g. for renewal), we support you",
-      },
+      // {
+      //   text: "Free retakes - If you need to retake an assessment later (e.g. for renewal), we support you",
+      // },
     ],
     outro: [
       "Real example: Students regularly call us months or years after their course with questions like \"I'm wiring a three-phase motor, can you talk me through the connections?\" We're always happy to help.",
@@ -234,7 +234,7 @@ const faqs: FAQItem[] = [
   {
     question: "What accommodation is available?",
     outro: [
-      "We have partnered with several local hotels that offer discounted rates for our students. Please see our Student Accommodation page for a full list of nearby options with contact details.",
+      "Please see our Student Accommodation page for a full list of nearby options with contact details.",
     ],
   },
   {
@@ -246,7 +246,7 @@ const faqs: FAQItem[] = [
   {
     question: "What time does the course start and end?",
     outro: [
-      "Courses typically run from 8:30am to 4:30pm Monday to Friday. Some courses may have different hours — your joining instructions will confirm the exact times for your specific course.",
+      "Courses typically run from 8:30am to 4:30pm Monday to Thursday and 8:30am to 2:00pm on Fridays. Some courses may have different hours — your joining instructions will confirm the exact times for your specific course.",
     ],
   },
   {

@@ -28,7 +28,7 @@ const locations: Location[] = [
     hotels: [
       {
         name: "Twin Oaks Hotel",
-        distance: "5 miles to Cross",
+        distance: "5 miles to Clay Cross",
         address: ["Church Lane,", "Palterton,", "Chesterfield,", "S44 6UZ"],
         phone: "01246 855455",
         website: "https://www.twinoakshotel.co.uk",
@@ -36,7 +36,7 @@ const locations: Location[] = [
       },
       {
         name: "Hotel Ibis",
-        distance: "5 miles to Cross",
+        distance: "5 miles to Clay Cross",
         address: ["Lordsmill street,", "Palterton,", "Chesterfield,", "S41 7RW"],
         phone: "01246 385050",
         website: "https://all.accor.com/a/en.htmlk",
@@ -44,7 +44,7 @@ const locations: Location[] = [
       },
       {
         name: "The Shoulder At Hardstoft ",
-        distance: "4 miles to Cross",
+        distance: "4 miles to Clay Cross",
         address: ["Hardstoft,", "Chesterfield,", "Chesterfield,", "S45 8AF"],
         phone: "01246 850276",
         website: "https://theshoulderathardstoft.com/",
@@ -52,7 +52,7 @@ const locations: Location[] = [
       },
       {
         name: "Casa Hotel",
-        distance: "6 miles to Cross",
+        distance: "6 miles to Clay Cross",
         address: ["Lockoford Lane,", "Chesterfield,", "S41 7JB"],
         phone: "01246 245999",
         website: "https://www.casahotels.co.uk/",
@@ -60,7 +60,7 @@ const locations: Location[] = [
       },
       {
         name: "Premier Inn – Chesterfield North",
-        distance: "6 miles to Cross",
+        distance: "6 miles to Clay Cross",
         address: ["Tapton Lock Hill,", "Off Rotherway,", "Chesterfield,", "S41 7NJ"],
         phone: "0333 777 4593",
         website: "http://premierinn.com/gb/en/hotels/england/derbyshire/chesterfield/chesterfield-north.html",
@@ -68,7 +68,7 @@ const locations: Location[] = [
       },
       {
         name: "Forte Travelodge",
-        distance: "7 miles to Cross",
+        distance: "7 miles to Clay Cross",
         address: ["Brimington Road North,", "Chesterfield,", "S41 9BE"],
         phone: "01246 455411",
         website: "https://www.travelodge.co.uk/hotels/121/Chesterfield-hotel",
@@ -223,7 +223,7 @@ export default function StudentAccommodation() {
             }`}
         >
           <MapPin />
-          <p className="uppercase">Clay Cross</p>
+          <p className="uppercase">Clay Clay Cross</p>
         </div>
 
         <div

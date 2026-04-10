@@ -191,13 +191,13 @@ const team: TeamMember[] = [
   },
   {
     name: "Mic Barber",
-    role: "Centre Course & Certification Coordinator ",
+    role: "Centre, Course & Certification Coordinator ",
     bio: "Mic ensures all courses run smoothly from booking to certification, coordinating across multiple centres and awarding bodies. ",
   },
   {
     name: "Georgina Thompson",
     role: "Sales & Administration ",
-    bio: "Georgina forms part of our Sales & Administration team. She is customer-focused Sales and Administration Advisor, skilled in managing client accounts, supporting the team, providing expert advice on all of our courses and guiding you down the right path. ",
+    bio: "Georgina forms part of our Sales & Administration team. She is a customer-focused Sales and Administration Advisor, skilled in managing client accounts, supporting the team, providing expert advice on all of our courses and guiding you down the right path. ",
   },
   {
     name: "Paige Campbell",
