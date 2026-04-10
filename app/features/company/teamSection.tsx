@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image, { StaticImageData } from "next/image";
-import MarkImage from "@/app/assets/team/Mark.jpg";
+import MarkImage from "@/app/assets/team/Mark.png";
 import SimonImage from "@/app/assets/team/Simon.jpg";
 import OliverImage from "@/app/assets/team/Oliver.jpg";
 
