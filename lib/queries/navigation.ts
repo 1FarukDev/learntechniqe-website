@@ -12,7 +12,7 @@ export const headerQuery = groq`
       cardColor,
       subcategories[] {
         label,
-        items[] {
+        items[] { 
           label,
           "href": select(
             defined(course->slug.current) => "/courses/" + select(

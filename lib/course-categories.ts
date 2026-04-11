@@ -330,6 +330,8 @@ export function categoriseFromHeader(
  * Get the category slug from a course slug (e.g., "electrical", "plc", "aircon-refrigeration").
  * Returns "electrical" by default for unknown courses.
  */
+
+
 export function getCategoryFromSlug(slug: string): "electrical" | "plc" | "aircon-refrigeration" {
   if (PLC_SLUG_MARKERS.some((s) => slug.includes(s))) {
     return "plc";
