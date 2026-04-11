@@ -10,9 +10,11 @@ import { getCategoryTag, getCourseUrl } from "@/lib/course-categories";
 interface CourseCardProps {
   course?: CourseCardData;
   hrefPrefix?: string;
+  /** When set (e.g. CMS pathway → course link), use this path as-is instead of deriving via getCourseUrl(slug). */
+  linkHref?: string;
 }
 
-function CourseCard({ course, hrefPrefix }: CourseCardProps) {
+function CourseCard({ course, hrefPrefix, linkHref }: CourseCardProps) {
   const title = course?.title ?? "Course Title";
   const slug = course?.slug ?? "#";
   const price = course?.price ?? "";
@@ -23,9 +25,10 @@ function CourseCard({ course, hrefPrefix }: CourseCardProps) {
 
   const categoryTag = getCategoryTag(slug);
   const firstTag = tags[0];
-  
-  // Use getCourseUrl if no custom hrefPrefix, otherwise use the old behavior for backwards compatibility
-  const href = hrefPrefix ? `${hrefPrefix}/${slug}` : getCourseUrl(slug);
+
+  const href =
+    (linkHref && linkHref.trim()) ||
+    (hrefPrefix ? `${hrefPrefix}/${slug}` : getCourseUrl(slug));
 
   return (
     <Link

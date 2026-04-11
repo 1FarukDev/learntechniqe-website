@@ -30,19 +30,28 @@ function toCardData(p: Pathway): CourseCardData {
     extractText(p.description) ??
     null;
 
-  /** Full app path e.g. courses/am2-assessment — used with empty hrefPrefix on CourseCard */
-  const coursePath =
-    typeof p.href === "string" && p.href.startsWith("/courses/")
-      ? p.href.slice(1)
-      : null;
+  /** Sanity course slug for tags / getCourseUrl when the card links to a pathway page, not a course URL. */
+  const slugFromCourseHref = (href: string): string => {
+    const segs = href.replace(/\/+$/, "").split("/").filter(Boolean);
+    if (segs[0] !== "courses") return href;
+    const maybeCategory = segs[1];
+    if (
+      ["electrical", "plc", "aircon-refrigeration"].includes(maybeCategory) &&
+      segs.length >= 3
+    ) {
+      return segs[segs.length - 1] ?? maybeCategory;
+    }
+    return maybeCategory ?? href;
+  };
+
+  const isCourseHref =
+    typeof p.href === "string" && p.href.startsWith("/courses/");
 
   return {
     title: pw?.title ?? p.title ?? "Pathway",
-    slug:
-      coursePath ??
-      pw?.slug ??
-      p.href?.replace(/^\/pathways\//, "") ??
-      "#",
+    slug: isCourseHref
+      ? slugFromCourseHref(p.href)
+      : (pw?.slug ?? p.href?.replace(/^\/pathways\//, "") ?? "#"),
     price,
     duration: pw?.duration ?? null,
     description: desc,
@@ -74,6 +83,7 @@ export function PathwayCardsGrid({ pathways }: PathwayCardsGridProps) {
                 <CourseCard
                   course={card}
                   hrefPrefix={hrefPrefix}
+                  linkHref={isCourseHref ? pathway.href : undefined}
                 />
               </div>
             );

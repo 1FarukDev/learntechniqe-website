@@ -43,7 +43,7 @@ const locationData: Record<
   },
 };
 
-const sLocation: React.FC = () => {
+const Location: React.FC = () => {
   const [activeTab, setActiveTab] = useState<Tab>("clay");
   const [mapOpen, setMapOpen] = useState(false);
   const [tourOpen, setTourOpen] = useState(false);
