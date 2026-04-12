@@ -103,7 +103,10 @@ function CompanyPage() {
         <TutorsSection />
       </AnimatedSection>
       <AnimatedSection variant="fade-in">
-        <StudentAccommodation />
+        <div id="accommodation">
+           <StudentAccommodation />
+        </div>
+      
       </AnimatedSection>
       <AnimatedSection variant="fade-in">
         <FAQSection />
