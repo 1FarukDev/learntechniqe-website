@@ -194,7 +194,7 @@ export const defaultPricingBannerData: PricingBannerData = {
 export const defaultBookCourseData: BookCourseData = {
   title: 'Total Industrial Electrical Maintenance 10',
   prerequisites: 'Understanding of Basic Electrical Principles',
-  completionRewards: [
+  completionRewards: [ 
     'The EAL Level 3 Award in Industrial & Panel Wiring certification.',
     'Fundamental Electrical Principles for Industrial Practices (PLC)',
   ],
