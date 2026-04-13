@@ -184,7 +184,7 @@ function CoursesMegaMenu({
                 colIdx > 0 ? "md:border-l md:border-zinc-200/80" : ""
               }`}
               style={{
-                opacity: visible ? 1 : 0,
+                opacity: visible ? 1 : 0, 
                 transform: visible ? "translateY(0)" : "translateY(-6px)",
                 transition: `opacity 280ms ease ${colIdx * 45}ms, transform 280ms ease ${colIdx * 45}ms`,
               }}
