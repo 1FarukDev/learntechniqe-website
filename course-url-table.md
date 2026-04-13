@@ -14,7 +14,7 @@
 | City & Guilds 2382-22 18th Edition Wiring Regulations | 2382-22 | https://www.learntechnique.com/courses/electrical/18th-edition-wiring-regulations-city-guilds-2382-22 |
 | City & Guilds 2382-22 18th Edition Wiring Regulations - 1 Day Update | 2382-22 | https://www.learntechnique.com/courses/electrical/city-guilds-2382-22-18th-edition-wiring-regulations-1-day-update |
 | City & Guilds 2382-22 18th Edition Wiring Regulations - 1 Day Update - Online | 2382-22 | https://www.learntechnique.com/courses/electrical/18th-edition-wiring-regulations-1-day-update-online |
-| City & Guilds 2382-22 18th Edition Wiring Regulations - Online | 2382-22 | https://www.learntechnique.com/courses/electrical/18th-edition-wiring-regulations-online-city-guilds-2382-22 |
+| City & Guilds 2382-22 18th Edition Wiring Regulations - Online | 2382-22 | https://www.learntechnique.com/courses/electrical/18th-edition-wiring-regulations-online-city-guilds-2382-22 | 
 | City & Guilds 2383-10 Building Regulations for Electrical Installations in Dwellings (Part P) | 2383-10 | https://www.learntechnique.com/courses/electrical/building-regulations-for-electrical-installations-in-dwellings-city-guilds-2383-10 |
 | City & Guilds 2391-50 Initial Verification of Electrical Installations | 2391-50 | https://www.learntechnique.com/courses/electrical/initial-verification-of-electrical-installations-city-guilds-2391-50 |
 | City & Guilds 2391-51 Periodic Inspection & Testing of Electrical Installations | 2391-51 | https://www.learntechnique.com/courses/electrical/periodic-inspection-testing-of-electrical-installations-city-guilds-2391-51 |
