@@ -54,19 +54,54 @@ function resolveOldCoursePrefix(
 /**
  * Returns a same-site redirect target for legacy WordPress URLs, or null to fall through.
  */
+const COURSE_LISTING_SEGMENTS = new Set([
+  "electrical",
+  "plc",
+  "aircon-refrigeration",
+]);
+
 export function resolveLegacyRedirect(
   pathname: string,
 ): LegacyRedirectTarget | null {
   const path = normalizePathname(pathname);
   const key = path.toLowerCase();
 
-  // Already on new app structure — do not intercept
-  if (
-    key.startsWith("/courses/") ||
-    key.startsWith("/blog/") ||
-    key.startsWith("/pathways/") ||
-    key.startsWith("/career/")
-  ) {
+  /**
+   * Marketing / GSC links like `/courses/city-guilds-combined` (no category segment).
+   * Canonical URLs are `/courses/{electrical|plc|aircon-refrigeration}/{slug}`.
+   */
+  if (key.startsWith("/courses/")) {
+    const parts = key.split("/").filter(Boolean);
+    if (
+      parts.length >= 3 &&
+      parts[0] === "courses" &&
+      COURSE_LISTING_SEGMENTS.has(parts[1]!)
+    ) {
+      return null;
+    }
+    if (parts.length === 2 && parts[0] === "courses") {
+      const seg = parts[1]!;
+      if (COURSE_LISTING_SEGMENTS.has(seg)) {
+        return null;
+      }
+      const canonical = COURSE_SLUG_ALIASES[seg] ?? seg;
+      if (KNOWN_COURSE_SLUGS.has(canonical)) {
+        return { pathname: getCourseUrl(canonical) };
+      }
+      return { pathname: "/courses" };
+    }
+    if (parts.length > 2 && parts[0] === "courses" && !COURSE_LISTING_SEGMENTS.has(parts[1]!)) {
+      const seg = parts[1]!;
+      const canonical = COURSE_SLUG_ALIASES[seg] ?? seg;
+      if (KNOWN_COURSE_SLUGS.has(canonical)) {
+        return { pathname: getCourseUrl(canonical) };
+      }
+      return { pathname: "/courses" };
+    }
+    return null;
+  }
+
+  if (key.startsWith("/blog/") || key.startsWith("/pathways/") || key.startsWith("/career/")) {
     return null;
   }
 
@@ -126,7 +161,12 @@ export function resolveLegacyRedirect(
 
   // --- /category/... ---
   if (key.startsWith("/category/")) {
-    if (key.includes("/plc")) return { pathname: "/courses/plc" };
+    if (key.includes("/plc")) {
+      if (key.includes("/page/")) {
+        return { pathname: "/blog/all" };
+      }
+      return { pathname: "/courses/plc" };
+    }
     if (key.includes("company-news") || key.includes("case-studies")) {
       return { pathname: "/blog/all" };
     }

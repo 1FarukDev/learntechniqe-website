@@ -1,0 +1,185 @@
+import { redirect } from "next/navigation";
+import { client } from "@/lib/sanity/client";
+import {
+  getLegacyWpBlogBySlug,
+  getLegacyWpBlogs,
+  isLegacyWordPressBlogsVisible,
+  legacyWpRecordToBlogPost,
+  normalizeLegacyBlogCategory,
+} from "@/lib/legacy-wp-blogs";
+import {
+  BLOG_CARDS_BY_SLUGS_QUERY,
+  SANITY_BLOG_INDEX_QUERY,
+} from "@/lib/queries/blog";
+import type { BlogPost } from "@/lib/types/blog";
+
+export const BLOG_LIST_PAGE_SIZE = 12;
+
+export const BLOG_LIST_CATEGORY_FILTERS = [
+  "All Categories",
+  "Air Conditioning",
+  "Refrigeration",
+  "Electrical",
+  "Industry News",
+  "PLC",
+  "Uncategorized",
+] as const;
+
+type SanityIndexRow = {
+  slug: string;
+  date: string;
+  category: string;
+  highlighted?: boolean;
+};
+
+type MergedRow =
+  | {
+      kind: "sanity";
+      slug: string;
+      date: string;
+      category: string;
+      highlighted: boolean;
+    }
+  | {
+      kind: "legacy";
+      slug: string;
+      date: string;
+      category: string;
+      highlighted: boolean;
+    };
+
+function parsePage(raw: string | string[] | undefined): number {
+  const s = Array.isArray(raw) ? raw[0] : raw;
+  const n = parseInt(s ?? "1", 10);
+  return Number.isFinite(n) && n >= 1 ? n : 1;
+}
+
+function normalizeCategoryParam(
+  raw: string | string[] | undefined,
+): string | null {
+  const s = (Array.isArray(raw) ? raw[0] : raw)?.trim();
+  if (!s) return null;
+  if (s === "All Categories" || s === "All") return null;
+  const allowed = BLOG_LIST_CATEGORY_FILTERS.filter(
+    (c) => c !== "All Categories",
+  ) as unknown as string[];
+  return allowed.includes(s) ? s : null;
+}
+
+export function buildBlogListUrl(
+  basePath: string,
+  page: number,
+  category: string | null,
+): string {
+  const params = new URLSearchParams();
+  if (page > 1) params.set("page", String(page));
+  if (category) params.set("category", category);
+  const q = params.toString();
+  return q ? `${basePath}?${q}` : basePath;
+}
+
+export async function getPaginatedBlogListing(input: {
+  searchParams: Record<string, string | string[] | undefined>;
+  basePath: string;
+}): Promise<{
+  posts: BlogPost[];
+  page: number;
+  totalPages: number;
+  total: number;
+  category: string | null;
+  basePath: string;
+}> {
+  const pageSize = BLOG_LIST_PAGE_SIZE;
+  let page = parsePage(input.searchParams.page);
+  const category = normalizeCategoryParam(input.searchParams.category);
+
+  const indexRows = await client.fetch<SanityIndexRow[]>(
+    SANITY_BLOG_INDEX_QUERY,
+  );
+
+  const sanitySlugLower = new Set(
+    indexRows.map((r) => r.slug.toLowerCase()).filter(Boolean),
+  );
+
+  const merged: MergedRow[] = indexRows.map((r) => ({
+    kind: "sanity" as const,
+    slug: r.slug,
+    date: r.date,
+    category: r.category,
+    highlighted: Boolean(r.highlighted),
+  }));
+
+  if (isLegacyWordPressBlogsVisible()) {
+    for (const rec of getLegacyWpBlogs()) {
+      if (sanitySlugLower.has(rec.slug.toLowerCase())) continue;
+      const dateIso = rec.date
+        ? new Date(rec.date.replace(" ", "T")).toISOString()
+        : new Date(0).toISOString();
+      merged.push({
+        kind: "legacy",
+        slug: rec.slug,
+        date: dateIso,
+        category: normalizeLegacyBlogCategory(rec.category),
+        highlighted: false,
+      });
+    }
+  }
+
+  merged.sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+  );
+
+  const filtered = category
+    ? merged.filter((r) => r.category === category)
+    : merged;
+
+  const total = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize) || 1);
+
+  if (total > 0 && page > totalPages) {
+    redirect(buildBlogListUrl(input.basePath, totalPages, category));
+  }
+
+  const slice = filtered.slice((page - 1) * pageSize, page * pageSize);
+
+  const sanitySlugsOnPage = [
+    ...new Set(
+      slice.filter((r): r is MergedRow & { kind: "sanity" } => r.kind === "sanity").map((r) => r.slug),
+    ),
+  ];
+
+  const sanityPosts =
+    sanitySlugsOnPage.length > 0
+      ? await client.fetch<BlogPost[]>(BLOG_CARDS_BY_SLUGS_QUERY, {
+          slugs: sanitySlugsOnPage,
+        })
+      : [];
+
+  const sanityBySlug = new Map(
+    sanityPosts.map((p) => [p.slug.current.toLowerCase(), p]),
+  );
+
+  const posts: BlogPost[] = slice.map((row) => {
+    if (row.kind === "sanity") {
+      const p = sanityBySlug.get(row.slug.toLowerCase());
+      if (!p) {
+        throw new Error(`Missing Sanity blog for slug: ${row.slug}`);
+      }
+      return p;
+    }
+    const rec = getLegacyWpBlogBySlug(row.slug);
+    if (!rec) {
+      throw new Error(`Missing legacy blog for slug: ${row.slug}`);
+    }
+    return legacyWpRecordToBlogPost(rec);
+  });
+
+  return {
+    posts,
+    page,
+    totalPages,
+    total,
+    category,
+    basePath: input.basePath,
+  };
+}

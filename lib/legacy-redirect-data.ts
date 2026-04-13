@@ -249,6 +249,15 @@ export const EXACT_PATH_REDIRECTS: Readonly<Record<string, string>> = {
   "/managed-learning-programme-for-new-entrants": "/courses",
   "/smart-meter-installer-to-domestic-gas-engineer": "/courses",
   "/gucsk": "/courses",
+  // Remaining GSC / legacy URLs (explicit targets when slug differs or blog missing)
+  "/18th-edition-get-speed-latest-changes":
+    "/courses/electrical/18th-edition-wiring-regulations-1-day-update-online",
+  "/f-gas-question-time-understanding-urgency":
+    "/courses/aircon-refrigeration/f-gas-regulations-course-5-day-city-guilds",
+  "/citb-sets-out-timeline-for-new-construction-industry-levy": "/blog/all",
+  "/daikin-industries-launches-low-gwp-refrigerant": "/blog/all",
+  "/emerson-launches-industry-first-controller-automation-versatility-iiot-enabled-operations":
+    "/courses/plc",
 };
 
 /**

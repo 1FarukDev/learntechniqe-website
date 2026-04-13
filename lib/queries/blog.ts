@@ -1,7 +1,16 @@
 /** Slugs only — for sitemap generation. */
 export const BLOG_SLUGS_FOR_SITEMAP_QUERY = `*[_type == "blog" && isPublished == true]{ "slug": slug.current }`;
 
-export const ALL_BLOGS_QUERY = `*[_type == "blog" && isPublished == true] | order(date desc) {
+/** Lightweight index for merging with legacy and paginating without loading every full post. */
+export const SANITY_BLOG_INDEX_QUERY = `*[_type == "blog" && isPublished == true]{
+  "slug": slug.current,
+  date,
+  category,
+  highlighted
+}`;
+
+/** Full card fields for posts whose slugs appear on the current page (small $slugs set). */
+export const BLOG_CARDS_BY_SLUGS_QUERY = `*[_type == "blog" && isPublished == true && slug.current in $slugs] {
   _id,
   title,
   slug,

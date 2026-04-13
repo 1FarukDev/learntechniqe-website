@@ -18,6 +18,7 @@ import RichText from "@/components/portable-text";
 const categories = [
   "Air Conditioning",
   "Refrigeration",
+  "Electrical",
   "Industry News",
   "PLC",
   "Uncategorized",

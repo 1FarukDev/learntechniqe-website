@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { client } from "@/lib/sanity/client";
+import { getLegacyWpBlogs } from "@/lib/legacy-wp-blogs";
 import { BLOG_SLUGS_FOR_SITEMAP_QUERY } from "@/lib/queries/blog";
 import { coursesQuery } from "@/lib/queries/courses";
 import { PATHWAYS_QUERY } from "@/lib/queries/pathway";
@@ -102,15 +103,34 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
+  const sanityBlogSlugs = new Set<string>();
   const blogPages: MetadataRoute.Sitemap = blogRows
     .map((row) => row.slug?.trim())
     .filter((slug): slug is string => Boolean(slug))
-    .map((slug) => ({
-      url: `${BASE_URL}/blog/${slug}`,
-      lastModified: new Date(),
+    .map((slug) => {
+      sanityBlogSlugs.add(slug.toLowerCase());
+      return {
+        url: `${BASE_URL}/blog/${slug}`,
+        lastModified: new Date(),
+        changeFrequency: "monthly" as const,
+        priority: 0.55,
+      };
+    });
+
+  const legacyBlogPages: MetadataRoute.Sitemap = getLegacyWpBlogs()
+    .filter((p) => !sanityBlogSlugs.has(p.slug.toLowerCase()))
+    .map((p) => ({
+      url: `${BASE_URL}/blog/${p.slug}`,
+      lastModified: new Date(p.date.replace(" ", "T")),
       changeFrequency: "monthly" as const,
-      priority: 0.55,
+      priority: 0.5,
     }));
 
-  return [...staticPages, ...coursePages, ...pathwayPages, ...blogPages];
+  return [
+    ...staticPages,
+    ...coursePages,
+    ...pathwayPages,
+    ...blogPages,
+    ...legacyBlogPages,
+  ];
 }
