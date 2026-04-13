@@ -11,7 +11,7 @@ export interface LegacyWpBlogRecord {
 }
 
 let legacyCache: LegacyWpBlogRecord[] | null = null;
-let legacyLoadPromise: Promise<LegacyWpBlogRecord[]> | null = null;
+let legacyLoadPromise: Promise<LegacyWpBlogRecord[]> | null = null; 
 
 /**
  * When `false`, legacy WordPress data is never imported, listed, routed, or sitemapped.
