@@ -1,4 +1,26 @@
 import type { NextConfig } from "next";
+import { legacyPathRedirects } from "./lib/legacy-redirects";
+
+function permanentRedirectsFromLegacy(
+  entries: ReadonlyArray<{ readonly source: string; readonly destination: string }>,
+) {
+  const out: { source: string; destination: string; permanent: true }[] = [];
+  const seen = new Set<string>();
+
+  for (const { source: raw, destination } of entries) {
+    const path = raw.startsWith("/") ? raw : `/${raw}`;
+    const base = path === "/" ? "/" : path.replace(/\/+$/, "") || "/";
+    const variants = base === "/" ? ["/"] : [base, `${base}/`];
+
+    for (const source of variants) {
+      if (seen.has(source)) continue;
+      seen.add(source);
+      out.push({ source, destination, permanent: true });
+    }
+  }
+
+  return out;
+}
 
 const nextConfig: NextConfig = {
   images: {
@@ -10,38 +32,7 @@ const nextConfig: NextConfig = {
     ],
   },
   async redirects() {
-    return [
-      {
-        source: "/plc-training-courses",
-        destination: "/courses/plc",
-        permanent: true,
-      },
-      {
-        source: "/plc-training-courses/",
-        destination: "/courses/plc",
-        permanent: true,
-      },
-      {
-        source: "/electrician-courses",
-        destination: "/courses/electrical",
-        permanent: true,
-      },
-      {
-        source: "/electrician-courses/",
-        destination: "/courses/electrical",
-        permanent: true,
-      },
-      {
-        source: "/online-training-courses",
-        destination: "/courses",
-        permanent: true,
-      },
-      {
-        source: "/online-training-courses/",
-        destination: "/courses",
-        permanent: true,
-      },
-    ];
+    return permanentRedirectsFromLegacy(legacyPathRedirects);
   },
 };
 

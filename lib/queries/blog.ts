@@ -1,3 +1,6 @@
+/** Slugs only — for sitemap generation. */
+export const BLOG_SLUGS_FOR_SITEMAP_QUERY = `*[_type == "blog" && isPublished == true]{ "slug": slug.current }`;
+
 export const ALL_BLOGS_QUERY = `*[_type == "blog" && isPublished == true] | order(date desc) {
   _id,
   title,
