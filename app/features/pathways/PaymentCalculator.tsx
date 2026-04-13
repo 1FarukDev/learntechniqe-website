@@ -69,7 +69,7 @@ export function PaymentCalculator({ pathways }: PaymentCalculatorProps) {
           {selectedPathway && (
             <div className="space-y-4">
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Total (+ VAT)</span>
+                <span className="text-gray-600">Total (inc VAT)</span>
                 <span className="font-semibold text-[#016068]">
                   {formatPrice(priceIncVat)}
                 </span>

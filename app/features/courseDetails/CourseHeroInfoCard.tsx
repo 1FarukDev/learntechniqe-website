@@ -92,7 +92,7 @@ function CourseHeroInfoCard({
                   ).toLocaleString("en-GB", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
-                  })} + VAT`}
+                  })} inc VAT`}
                 )
               </p>
             )}
