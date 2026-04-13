@@ -1,10 +1,7 @@
 "use client";
 
-import { MapPin } from "lucide-react";
+import { Car, Hotel as HotelIcon, MapPin } from "lucide-react";
 import React, { useState } from "react";
-import HotelIcon from "@/app/assets/svg/hotel.svg";
-import CarIcon from "@/app/assets/svg/car.svg";
-import Image from "next/image";
 
 interface Hotel {
   name: string;
@@ -145,7 +142,7 @@ function HotelCard({ hotel }: { hotel: Hotel }) {
         className="flex items-center gap-2 px-5 py-3 justify-center"
         style={{ backgroundColor: "#0f172a" }}
       >
-        <Image src={HotelIcon} alt="Hotel icon" />
+        <HotelIcon className="size-5 shrink-0 text-[#F5A623]" aria-hidden />
         <span
           className="text-white font-bold text-sm"
           style={{ fontFamily: "'Barlow', sans-serif" }}
@@ -156,10 +153,8 @@ function HotelCard({ hotel }: { hotel: Hotel }) {
 
       <div className="px-5 py-5 flex flex-col gap-3 items-center">
         <div className="flex items-center gap-1.5 bg-[#C8F1DB] text-[#14AE5C] py-1 px-2 rounded-xs">
-          <Image src={CarIcon} alt="Hotel icon" />
-          <span className="text-xs font-bold" >
-            {hotel.distance}
-          </span>
+          <Car className="size-4 shrink-0 text-[#F5A623]" aria-hidden />
+          <span className="text-xs font-bold">{hotel.distance}</span>
         </div>
 
         <div className="text-sm text-black leading-relaxed text-center">
@@ -222,7 +217,11 @@ export default function StudentAccommodation() {
             : "bg-[#ECF0F0] text-[#627080]"
             }`}
         >
-          <MapPin />
+          <MapPin
+            className={
+              activeTab === "clay-cross" ? "text-white" : "text-[#F5A623]"
+            }
+          />
           <p className="uppercase">Clay Cross</p>
         </div>
 
@@ -233,7 +232,11 @@ export default function StudentAccommodation() {
             : "bg-[#ECF0F0] text-[#627080]"
             }`}
         >
-          <MapPin />
+          <MapPin
+            className={
+              activeTab === "stirling" ? "text-white" : "text-[#F5A623]"
+            }
+          />
           <p className="uppercase">Stirling</p>
         </div>
       </div>

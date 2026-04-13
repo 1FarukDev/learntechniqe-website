@@ -8,6 +8,7 @@ import FAQSection from "../features/company/faqSection";
 import JoinOurTeam from "../features/company/joinTeamSection";
 import Contact from "../features/homepage/contact";
 import Location from "../features/homepage/location";
+import WhereWeAreSection from "../features/company/whereWeAreSection";
 import { AnimatedSection } from "@/components/animated-section";
 
 export const metadata: Metadata = {
@@ -115,10 +116,9 @@ function CompanyPage() {
         <JoinOurTeam />
       </AnimatedSection> */}
       <AnimatedSection variant="fade-in">
-        <div id="location">
-          <Location />
-        </div>
+        <WhereWeAreSection />
       </AnimatedSection>
+    
       <AnimatedSection variant="fade-in">
         <Contact />
       </AnimatedSection>

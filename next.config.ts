@@ -32,16 +32,6 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        source: "/locations",
-        destination: "/company",
-        permanent: true,
-      },
-      {
-        source: "/locations/",
-        destination: "/company",
-        permanent: true,
-      },
-      {
         source: "/online-training-courses",
         destination: "/courses",
         permanent: true,
