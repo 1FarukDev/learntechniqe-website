@@ -29,6 +29,18 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "cdn.sanity.io",
       },
+      {
+        protocol: "https",
+        hostname: "www.learntechnique.com",
+      },
+      {
+        protocol: "https",
+        hostname: "learntechnique.com",
+      },
+      {
+        protocol: "https",
+        hostname: "wordpress-351202-5905302.cloudwaysapps.com",
+      },
     ],
   },
   async redirects() {

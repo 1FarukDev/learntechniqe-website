@@ -23,4 +23,6 @@ export interface BlogPost {
   body: any[]
   highlighted: boolean
   isPublished: boolean
+  /** First <img> from legacy WordPress HTML — used for listing cards only. */
+  legacyCardImageUrl?: string
 }

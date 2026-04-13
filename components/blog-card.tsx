@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { Button } from "./ui/button";
 
@@ -8,7 +8,7 @@ interface BlogPost {
   author: string;
   date: string;
   category: string;
-  image: string;
+  image: string | StaticImageData;
   slug?: { current: string };
 }
 
@@ -19,6 +19,8 @@ interface BlogCardProps {
   fluid?: boolean;
   /** No outline border — uses shadow only (e.g. dense grids where adjacent borders double up) */
   noBorder?: boolean;
+  /** Use for remote legacy WordPress images when domain may be outside default patterns */
+  imageUnoptimized?: boolean;
 }
 
 function BlogCard({
@@ -27,6 +29,7 @@ function BlogCard({
   highlighted = false,
   fluid = false,
   noBorder = false,
+  imageUnoptimized = false,
 }: BlogCardProps) {
   const fixedWidth = variant === "large" ? "w-100" : "w-75";
   const borderClasses = highlighted
@@ -55,6 +58,11 @@ function BlogCard({
           alt={post.title}
           fill
           className="object-cover"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          unoptimized={imageUnoptimized}
+          placeholder={
+            typeof post.image === "object" ? "blur" : undefined
+          }
         />
       </div>
 

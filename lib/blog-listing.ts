@@ -101,21 +101,28 @@ export async function getPaginatedBlogListing(input: {
     indexRows.map((r) => r.slug.toLowerCase()).filter(Boolean),
   );
 
-  const merged: MergedRow[] = indexRows.map((r) => ({
-    kind: "sanity" as const,
-    slug: r.slug,
-    date: r.date,
-    category: r.category,
-    highlighted: Boolean(r.highlighted),
-  }));
+  const sanityMerged: MergedRow[] = indexRows
+    .filter((r) => r.slug?.trim())
+    .map((r) => ({
+      kind: "sanity" as const,
+      slug: r.slug,
+      date: r.date,
+      category: r.category,
+      highlighted: Boolean(r.highlighted),
+    }))
+    .sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+    );
 
+  const legacyMerged: MergedRow[] = [];
   if (isLegacyWordPressBlogsVisible()) {
-    for (const rec of getLegacyWpBlogs()) {
+    const legacyList = await getLegacyWpBlogs();
+    for (const rec of legacyList) {
       if (sanitySlugLower.has(rec.slug.toLowerCase())) continue;
       const dateIso = rec.date
         ? new Date(rec.date.replace(" ", "T")).toISOString()
         : new Date(0).toISOString();
-      merged.push({
+      legacyMerged.push({
         kind: "legacy",
         slug: rec.slug,
         date: dateIso,
@@ -123,11 +130,12 @@ export async function getPaginatedBlogListing(input: {
         highlighted: false,
       });
     }
+    legacyMerged.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+    );
   }
 
-  merged.sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-  );
+  const merged = [...sanityMerged, ...legacyMerged];
 
   const filtered = category
     ? merged.filter((r) => r.category === category)
@@ -159,20 +167,22 @@ export async function getPaginatedBlogListing(input: {
     sanityPosts.map((p) => [p.slug.current.toLowerCase(), p]),
   );
 
-  const posts: BlogPost[] = slice.map((row) => {
-    if (row.kind === "sanity") {
-      const p = sanityBySlug.get(row.slug.toLowerCase());
-      if (!p) {
-        throw new Error(`Missing Sanity blog for slug: ${row.slug}`);
+  const posts: BlogPost[] = await Promise.all(
+    slice.map(async (row) => {
+      if (row.kind === "sanity") {
+        const p = sanityBySlug.get(row.slug.toLowerCase());
+        if (!p) {
+          throw new Error(`Missing Sanity blog for slug: ${row.slug}`);
+        }
+        return p;
       }
-      return p;
-    }
-    const rec = getLegacyWpBlogBySlug(row.slug);
-    if (!rec) {
-      throw new Error(`Missing legacy blog for slug: ${row.slug}`);
-    }
-    return legacyWpRecordToBlogPost(rec);
-  });
+      const rec = await getLegacyWpBlogBySlug(row.slug);
+      if (!rec) {
+        throw new Error(`Missing legacy blog for slug: ${row.slug}`);
+      }
+      return legacyWpRecordToBlogPost(rec);
+    }),
+  );
 
   return {
     posts,

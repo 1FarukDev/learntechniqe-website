@@ -1,6 +1,9 @@
 import type { MetadataRoute } from "next";
 import { client } from "@/lib/sanity/client";
-import { getLegacyWpBlogs } from "@/lib/legacy-wp-blogs";
+import {
+  getLegacyWpBlogs,
+  isLegacyWordPressBlogsVisible,
+} from "@/lib/legacy-wp-blogs";
 import { BLOG_SLUGS_FOR_SITEMAP_QUERY } from "@/lib/queries/blog";
 import { coursesQuery } from "@/lib/queries/courses";
 import { PATHWAYS_QUERY } from "@/lib/queries/pathway";
@@ -117,7 +120,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       };
     });
 
-  const legacyBlogPages: MetadataRoute.Sitemap = getLegacyWpBlogs()
+  const legacyRows = isLegacyWordPressBlogsVisible()
+    ? await getLegacyWpBlogs()
+    : [];
+  const legacyBlogPages: MetadataRoute.Sitemap = legacyRows
     .filter((p) => !sanityBlogSlugs.has(p.slug.toLowerCase()))
     .map((p) => ({
       url: `${BASE_URL}/blog/${p.slug}`,

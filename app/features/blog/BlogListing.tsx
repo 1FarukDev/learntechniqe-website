@@ -1,5 +1,6 @@
 import Link from "next/link";
 import BlogCard from "@/components/blog-card";
+import defaultLegacyBlogCover from "@/app/assets/png/courses.jpg";
 import {
   BLOG_LIST_CATEGORY_FILTERS,
   BLOG_LIST_PAGE_SIZE,
@@ -74,25 +75,30 @@ export default function BlogListing({
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
-          {posts.map((post) => (
-            <BlogCard
-              key={post._id}
-              post={{
-                id: post._id,
-                title: post.title,
-                author: post.author,
-                date: new Date(post.date).toLocaleDateString("en-GB"),
-                category: post.category,
-                image: post._id.startsWith("legacy-wp-")
-                  ? "/window.svg"
-                  : urlFor(post.coverImage).url(),
-                slug: post.slug,
-              }}
-              fluid
-              noBorder
-              highlighted={post.highlighted}
-            />
-          ))}
+          {posts.map((post) => {
+            const isLegacy = post._id.startsWith("legacy-wp-");
+            const cardImage = isLegacy
+              ? (post.legacyCardImageUrl ?? defaultLegacyBlogCover)
+              : urlFor(post.coverImage).url();
+            return (
+              <BlogCard
+                key={post._id}
+                post={{
+                  id: post._id,
+                  title: post.title,
+                  author: post.author,
+                  date: new Date(post.date).toLocaleDateString("en-GB"),
+                  category: post.category,
+                  image: cardImage,
+                  slug: post.slug,
+                }}
+                fluid
+                noBorder
+                highlighted={post.highlighted}
+                imageUnoptimized={Boolean(post.legacyCardImageUrl)}
+              />
+            );
+          })}
         </div>
 
         {totalPages > 1 && (

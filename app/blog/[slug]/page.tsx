@@ -1,11 +1,11 @@
 import BlogDetailPage from "@/app/features/blog/BlogDetails";
 import HeroSection from "@/app/features/blog/hero";
-import LegacyWpBlogDetail from "@/app/features/blog/LegacyWpBlogDetail";
 import Contact from "@/app/features/homepage/contact";
 import { AnimatedSection } from "@/components/animated-section";
 import { client } from "@/lib/sanity/client";
 import {
   getLegacyWpBlogBySlug,
+  isLegacyWordPressBlogsVisible,
   normalizeLegacyBlogCategory,
 } from "@/lib/legacy-wp-blogs";
 import {
@@ -17,10 +17,17 @@ import { BlogPost } from "@/lib/types/blog";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import React from "react";
+import { cache } from "react";
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
+
+/** One legacy fetch per request (metadata + page). No-op when legacy is disabled. */
+const getLegacyPostForSlug = cache(async (slug: string) => {
+  if (!isLegacyWordPressBlogsVisible()) return undefined;
+  return getLegacyWpBlogBySlug(slug);
+});
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -38,7 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const legacy = getLegacyWpBlogBySlug(slug);
+  const legacy = await getLegacyPostForSlug(slug);
   if (legacy) {
     return {
       title: legacy.title,
@@ -93,8 +100,11 @@ export default async function BlogPostPage({ params }: Props) {
     );
   }
 
-  const legacy = getLegacyWpBlogBySlug(slug);
+  const legacy = await getLegacyPostForSlug(slug);
   if (legacy) {
+    const { default: LegacyWpBlogDetail } = await import(
+      "@/app/features/blog/LegacyWpBlogDetail"
+    );
     return (
       <main>
         <AnimatedSection variant="fade-in" visibleOnLoad>

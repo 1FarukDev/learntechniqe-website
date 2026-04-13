@@ -1,30 +1,55 @@
 import type { BlogPost } from "@/lib/types/blog";
-import legacyWordpressBlogs from "./data/legacy-wordpress-blogs.json";
+import { extractFirstImageUrlFromHtml } from "@/lib/legacy-wp-extract-image";
 
-export type LegacyWpBlogRecord = (typeof legacyWordpressBlogs)[number];
+export interface LegacyWpBlogRecord {
+  slug: string;
+  title: string;
+  date: string;
+  author: string;
+  category: string;
+  html: string;
+}
 
-const legacyList = legacyWordpressBlogs as LegacyWpBlogRecord[];
+let legacyCache: LegacyWpBlogRecord[] | null = null;
+let legacyLoadPromise: Promise<LegacyWpBlogRecord[]> | null = null;
 
 /**
- * When `false`, legacy WordPress posts are not listed, not routable at `/blog/[slug]`,
- * and not added to the sitemap. Sanity posts are unaffected.
- * Server-only (no `NEXT_PUBLIC_` prefix).
+ * When `false`, legacy WordPress data is never imported, listed, routed, or sitemapped.
+ * Sanity is unaffected. Server-only env (no `NEXT_PUBLIC_` prefix).
  */
 export function isLegacyWordPressBlogsVisible(): boolean {
   return process.env.LEGACY_WORDPRESS_BLOGS_VISIBLE !== "false";
 }
 
-export function getLegacyWpBlogs(): LegacyWpBlogRecord[] {
-  return isLegacyWordPressBlogsVisible() ? legacyList : [];
+async function loadLegacyRecords(): Promise<LegacyWpBlogRecord[]> {
+  if (!isLegacyWordPressBlogsVisible()) {
+    return [];
+  }
+  if (legacyCache) {
+    return legacyCache;
+  }
+  if (!legacyLoadPromise) {
+    legacyLoadPromise = import("./data/legacy-wordpress-blogs.json").then(
+      (mod) => {
+        const rows = mod.default as LegacyWpBlogRecord[];
+        legacyCache = rows;
+        return rows;
+      },
+    );
+  }
+  return legacyLoadPromise;
 }
 
-export function getLegacyWpBlogBySlug(slug: string): LegacyWpBlogRecord | undefined {
+export async function getLegacyWpBlogs(): Promise<LegacyWpBlogRecord[]> {
+  return loadLegacyRecords();
+}
+
+export async function getLegacyWpBlogBySlug(
+  slug: string,
+): Promise<LegacyWpBlogRecord | undefined> {
   if (!isLegacyWordPressBlogsVisible()) return undefined;
-  return legacyList.find((p) => p.slug === slug);
-}
-
-export function getLegacyWpSlugSet(): Set<string> {
-  return new Set(legacyList.map((p) => p.slug));
+  const all = await loadLegacyRecords();
+  return all.find((p) => p.slug.toLowerCase() === slug.toLowerCase());
 }
 
 /** Map WordPress category labels to the blog filter chips on /blog. */
@@ -51,6 +76,9 @@ export function legacyWpRecordToBlogPost(record: LegacyWpBlogRecord): BlogPost {
     ? new Date(record.date.replace(" ", "T")).toISOString()
     : new Date().toISOString();
 
+  const legacyCardImageUrl =
+    extractFirstImageUrlFromHtml(record.html) ?? undefined;
+
   return {
     _id: `legacy-wp-${record.slug}`,
     title: record.title,
@@ -70,21 +98,6 @@ export function legacyWpRecordToBlogPost(record: LegacyWpBlogRecord): BlogPost {
     body: [],
     highlighted: false,
     isPublished: true,
+    legacyCardImageUrl,
   };
-}
-
-export function mergeSanityAndLegacyBlogs(sanityPosts: BlogPost[]): BlogPost[] {
-  if (!isLegacyWordPressBlogsVisible()) {
-    return sanityPosts;
-  }
-  const sanitySlugs = new Set(
-    sanityPosts.map((p) => p.slug.current.toLowerCase()),
-  );
-  const legacyAdapted = legacyList
-    .filter((l) => !sanitySlugs.has(l.slug.toLowerCase()))
-    .map(legacyWpRecordToBlogPost);
-
-  return [...sanityPosts, ...legacyAdapted].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-  );
 }
