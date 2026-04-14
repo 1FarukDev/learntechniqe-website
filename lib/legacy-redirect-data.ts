@@ -33,18 +33,19 @@ export const COURSE_SLUG_ALIASES: Readonly<Record<string, string>> = {
     "city-guilds-2346-03-experienced-worker-level-3-course",
   "city-guilds-2377-22-2-day":
     "in-service-inspection-testing-of-electrical-equipment-2-day-city-guilds-2377-77",
-  "city-guilds-2377-22-update":
-    "pat-testing-city-guilds-2377-77-2days",
+  "city-guilds-2377-22-update": "pat-testing-city-guilds-2377-77-2days",
   "2-day-pat-testing-course":
     "in-service-inspection-testing-of-electrical-equipment-2-day-city-guilds-2377-77",
   "2-day-pat-testing-course-arlo":
     "in-service-inspection-testing-of-electrical-equipment-2-day-city-guilds-2377-77",
   "3-day-pat-testing-course": "pat-testing-city-guilds-2377-77",
   "online-pat-testing-course": "pat-testing-city-guilds-2377-77-2days",
-  "total-industrial-electrical-maintenance": "total-industrial-electrical-maintenance-10",
+  "total-industrial-electrical-maintenance":
+    "total-industrial-electrical-maintenance-10",
   "total-industrial-electrical-maintenance-arlo":
     "total-industrial-electrical-maintenance-10",
-  "basic-electrical-generic-module-module-1": "basic-electrical-course-module-1",
+  "basic-electrical-generic-module-module-1":
+    "basic-electrical-course-module-1",
   "city-guilds-2383-10":
     "building-regulations-for-electrical-installations-in-dwellings-city-guilds-2383-10",
   "city-guilds-2365": "city-guilds-2365-02",
@@ -59,7 +60,8 @@ export const COURSE_SLUG_ALIASES: Readonly<Record<string, string>> = {
   "refrigeration-electrics-maintenance-course":
     "refrigeration-electrics-maintenance-course",
   "pipework-and-brazing": "pipework-brazing-course-city-guilds",
-  "hydrocarbon-refrigeration": "level-2-award-hydrocarbon-refrigeration-city-guilds",
+  "hydrocarbon-refrigeration":
+    "level-2-award-hydrocarbon-refrigeration-city-guilds",
   "hydrocarbon-refrigeration-arlo":
     "level-2-award-hydrocarbon-refrigeration-city-guilds",
   "f-gas-regulations": "f-gas-regulations-course-5-day-city-guilds",
@@ -80,7 +82,8 @@ export const COURSE_SLUG_ALIASES: Readonly<Record<string, string>> = {
   "plc-siemens": "programmable-logic-controllers-siemens-all-models-available",
   "plc-allen-bradley":
     "programmable-logic-controllers-allen-bradley-all-models-available",
-  "plc-mitsubishi": "programmable-logic-controllers-mitsubishi-all-models-available",
+  "plc-mitsubishi":
+    "programmable-logic-controllers-mitsubishi-all-models-available",
   "plc-18": "programmable-logic-controllers-18",
   "plc-15": "programmable-logic-controllers-15",
   "plc-15-arlo": "programmable-logic-controllers-15",
@@ -196,14 +199,15 @@ export const EXACT_PATH_REDIRECTS: Readonly<Record<string, string>> = {
     "/blog/european-computer-driving-licence-ecdl-course",
   "/technique-blog": "/blog",
   "/technique_courses/plc-training-courses": "/courses/plc",
-  "/refrigeration-and-air-conditioning-courses": "/courses/aircon-refrigeration",
+  "/refrigeration-and-air-conditioning-courses":
+    "/courses/aircon-refrigeration",
   "/fgas-tacr-training-courses": "/courses/aircon-refrigeration",
   "/gas-courses": "/courses/aircon-refrigeration",
   "/documents": "/contact",
   "/images/map.pdf": "/company",
   "/oa": "/",
-  "/privacy-policy": "/privacy-policy",
-  "/terms-and-conditions": "/terms-and-conditions",
+  // "/privacy-policy": "/privacy-policy",
+  // "/terms-and-conditions": "/terms-and-conditions",
   // Root marketing URLs → canonical course URLs
   "/plc10-10-day-eal-level-3-plc-training-course":
     "/courses/plc/programmable-logic-controllers-10",

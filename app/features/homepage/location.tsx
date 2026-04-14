@@ -88,32 +88,43 @@ const Location: React.FC = () => {
         <button
           type="button"
           onClick={() => switchTab("clay")}
-          className={`${baseClasses} ${activeTab === "clay"
+          className={`${baseClasses} ${
+            activeTab === "clay"
               ? "bg-[#0088FF] text-white"
               : "bg-[#ECF0F0] text-[#627080]"
-            }`}
+          }`}
         >
-          <MapPin />
+          <MapPin
+            className={
+              activeTab === "clay" ? "text-white" : "text-[#F5A623]"
+            }
+          />
           <span className="uppercase">Clay Cross</span>
         </button>
 
         <button
           type="button"
           onClick={() => switchTab("stirling")}
-          className={`${baseClasses} ${activeTab === "stirling"
+          className={`${baseClasses} ${
+            activeTab === "stirling"
               ? "bg-[#0088FF] text-white"
               : "bg-[#ECF0F0] text-[#627080]"
-            }`}
+          }`}
         >
-          <MapPin />
+          <MapPin
+            className={
+              activeTab === "stirling" ? "text-white" : "text-[#F5A623]"
+            }
+          />
           <span className="uppercase">Stirling</span>
         </button>
       </div>
 
       <div className="flex flex-col md:flex-row mt-6 sm:mt-10 justify-between items-center gap-6">
         <div
-          className={`flex flex-col gap-4 sm:gap-8 mt-6 sm:mt-13 w-full md:w-1/2 order-2 md:order-1 transition-opacity duration-200 ease-in-out ${isTransitioning ? "opacity-0" : "opacity-100"
-            }`}
+          className={`flex flex-col gap-4 sm:gap-8 mt-6 sm:mt-13 w-full md:w-1/2 order-2 md:order-1 transition-opacity duration-200 ease-in-out ${
+            isTransitioning ? "opacity-0" : "opacity-100"
+          }`}
         >
           <h3 className="text-[#01656B] font-bold text-sm sm:text-base">
             {current.subtitle}
@@ -246,8 +257,9 @@ const Location: React.FC = () => {
         </div>
 
         <div
-          className={`relative w-full md:w-1/2 aspect-[626.32/488.05] max-w-[626.32px] max-h-[488.05px] order-1 md:order-2 transition-opacity duration-200 ease-in-out ${isTransitioning ? "opacity-0" : "opacity-100"
-            }`}
+          className={`relative w-full md:w-1/2 aspect-[626.32/488.05] max-w-[626.32px] max-h-[488.05px] order-1 md:order-2 transition-opacity duration-200 ease-in-out ${
+            isTransitioning ? "opacity-0" : "opacity-100"
+          }`}
         >
           <Image
             src={current.image}
