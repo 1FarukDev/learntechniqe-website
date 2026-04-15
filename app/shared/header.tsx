@@ -184,7 +184,7 @@ function CoursesMegaMenu({
                 colIdx > 0 ? "md:border-l md:border-zinc-200/80" : ""
               }`}
               style={{
-                opacity: visible ? 1 : 0, 
+                opacity: visible ? 1 : 0,
                 transform: visible ? "translateY(0)" : "translateY(-6px)",
                 transition: `opacity 280ms ease ${colIdx * 45}ms, transform 280ms ease ${colIdx * 45}ms`,
               }}
@@ -197,7 +197,7 @@ function CoursesMegaMenu({
                   <Link
                     href={categoryHrefFromMegaMenuTitle(col.title)}
                     onClick={onClose}
-                    className="rounded-sm text-zinc-900 hover:text-[#016068] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#016068]"
+                    className="rounded-sm text-zinc-900 hover:text-[#016068] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#016068] "
                   >
                     {toTitleCase(col.title)}
                   </Link>
@@ -538,9 +538,9 @@ function MobileDrawer({
                 coursesOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
               }`}
             >
-              <div className="ml-2 mt-1 flex flex-col gap-0.5 min-h-0 overflow-hidden">
+              <div className="ml-2 mt-1 flex flex-col gap-0.5 min-h-0 overflow-hidden ">
                 {data.megaMenuColumns.map((col, colIdx) => (
-                  <div key={colIdx}>
+                  <div key={colIdx} className="">
                     <button
                       type="button"
                       aria-expanded={openColumn === colIdx}
@@ -548,10 +548,14 @@ function MobileDrawer({
                       onClick={() =>
                         setOpenColumn((p) => (p === colIdx ? null : colIdx))
                       }
-                      className="w-full flex min-h-11 items-center justify-between gap-2 px-3 py-2 text-left text-sm font-semibold text-gray-800 hover:text-teal-700 active:bg-gray-50 rounded-lg transition-colors border-b border-gray-100"
+                      className="w-full flex min-h-11  items-center justify-between gap-2 px-3 py-2 text-left text-sm font-semibold text-gray-800 hover:text-teal-700 active:bg-gray-50 rounded-lg transition-colors border-b border-gray-100"
                     >
-                      <span className="min-w-0 flex-1">
-                        {toTitleCase(col.title)}
+                      <span
+                        className="min-w-0 flex-1 md:capitalize"
+                        style={{ textTransform: "capitalize" }}
+                      >
+                        {col.title.charAt(0).toUpperCase() +
+                          col.title.slice(1).toLowerCase()}
                       </span>
                       <ChevronDown
                         size={16}
