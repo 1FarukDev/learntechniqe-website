@@ -5,10 +5,12 @@ import ThirdStar from "@/app/assets/svg/3stars.svg";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { AnimatedSection } from "@/components/animated-section";
+import Certification from "./certification";
 
 function Stages() {
   return (
-    <section className="flex md:px-0 px-4 flex-col items-center justify-center gap-6 w-full mt-20 sm:mt-16 md:mt-35 text-center max-w-7xl mx-auto ">
+    <section className="flex md:px-0 px-4 flex-col items-center justify-center gap-4 w-full mt-20 sm:mt-16 md:mt-35 text-center max-w-7xl mx-auto ">
       <h2 className="font-semibold text-[32px] sm:text-[44px] md:text-[56px] lg:text-[68px] leading-tight text-black px-2">
         There’s a Course For Everyone
       </h2>
@@ -19,7 +21,12 @@ function Stages() {
         <br className="hidden sm:block" /> we’ll help you find the perfect
         course to take the next step.
       </p>
-      <section className="flex flex-col lg:flex-row items-stretch justify-center gap-6 sm:gap-10 w-full my-12 sm:my-16 md:my-20">
+      <div className="w-full">
+        <AnimatedSection variant="fade-left">
+          <Certification />
+        </AnimatedSection>
+      </div>
+      <section className=" flex flex-col lg:flex-row items-stretch justify-center gap-6 sm:gap-10 w-full my-12 sm:my-16 md:my-20">
         <div className="bg-[#D4D8DB] w-full lg:w-1/2 pt-10 sm:pt-15 pb-5 px-6 sm:px-10 rounded-2xl border border-[#bcbdbd] flex flex-col">
           <div>
             <div className="flex items-center justify-between gap-3 sm:gap-0 mb-4 sm:mb-8 h-20 sm:h-25">
@@ -34,8 +41,8 @@ function Stages() {
             </div>
 
             <p className="text-start mb-4 sm:mb-8 text-sm sm:text-base leading-relaxed">
-              Taking the first step in your journey <br /> and ready to start building
-              your skills
+              Taking the first step in your journey <br /> and ready to start
+              building your skills
             </p>
 
             <h5 className="text-start font-semibold uppercase text-sm sm:text-base mb-4 sm:mb-0">
@@ -43,7 +50,10 @@ function Stages() {
             </h5>
           </div>
 
-          <Button asChild className="bg-[#01636B] h-14 sm:h-17.25 uppercase mt-auto text-sm sm:text-base">
+          <Button
+            asChild
+            className="bg-[#01636B] h-14 sm:h-17.25 uppercase mt-auto text-sm sm:text-base"
+          >
             <Link href="/courses?level=beginner">Find courses</Link>
           </Button>
         </div>
@@ -67,7 +77,8 @@ function Stages() {
             </div>
 
             <p className="text-start text-white mb-4 sm:mb-8 text-sm sm:text-base leading-relaxed">
-              An experienced professional looking <br /> to expand and refine your expertise.
+              An experienced professional looking <br /> to expand and refine
+              your expertise.
             </p>
 
             <h5 className="text-start font-semibold uppercase text-sm sm:text-base text-white mb-4 sm:mb-10">
@@ -75,7 +86,10 @@ function Stages() {
             </h5>
           </div>
 
-          <Button asChild className="bg-[#E99E20] h-14 sm:h-17.25 uppercase mt-auto text-sm sm:text-base relative z-10 hover:bg-[#d88e10]">
+          <Button
+            asChild
+            className="bg-[#E99E20] h-14 sm:h-17.25 uppercase mt-auto text-sm sm:text-base relative z-10 hover:bg-[#d88e10]"
+          >
             <Link href="/courses?level=existing-electrician">Find courses</Link>
           </Button>
         </div>

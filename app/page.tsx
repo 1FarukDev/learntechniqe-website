@@ -81,9 +81,7 @@ export default async function Home() {
       <AnimatedSection variant="fade-up">
         <BookASession />
       </AnimatedSection>
-      <AnimatedSection variant="fade-left">
-        <Certification />
-      </AnimatedSection>
+     
       <AnimatedSection variant="fade-up">
         <Ratings />
       </AnimatedSection>
