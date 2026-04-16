@@ -211,6 +211,11 @@ const team: TeamMember[] = [
     role: "Sales & Administration ",
     bio: "Paige forms part of our Sales & Administration team. An organised and experienced Sales professional, skilled in supporting our team, managing client accounts and providing expert advice on all of our courses and guiding you down the right path. ",
   },
+  {
+    name: "Joe Crook",
+    role: "Engineering Technician",
+    bio: "Joe is our Engineering Technician, responsible for providing technical support and expertise in engineering projects. He works closely with our engineering team to ensure that all technical aspects of our courses are up to date and meet industry standards.",
+  },
 ];
 
 export default function LeadershipSection() {
