@@ -53,16 +53,16 @@ export default async function BlogPage({
       <AnimatedSection variant="fade-in" visibleOnLoad>
         <HeroSection title="Complete Guide to Air Conditioning Training: Start Your HVAC Career in 2026" />
       </AnimatedSection>
-      <AnimatedSection variant="fade-up" className="-mt-10">
-        <BlogListing
-          posts={listing.posts}
-          basePath={listing.basePath}
-          page={listing.page}
-          totalPages={listing.totalPages}
-          total={listing.total}
-          category={listing.category}
-        />
-      </AnimatedSection>
+
+      <BlogListing
+        posts={listing.posts}
+        basePath={listing.basePath}
+        page={listing.page}
+        totalPages={listing.totalPages}
+        total={listing.total}
+        category={listing.category}
+      />
+
       <AnimatedSection variant="fade-up">
         <Contact />
       </AnimatedSection>

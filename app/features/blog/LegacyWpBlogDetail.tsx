@@ -24,9 +24,7 @@ export default function LegacyWpBlogDetail({ post }: { post: LegacyWpBlogRecord 
           {post.author ? `${post.author} · ` : ""}
           {displayDate}
         </p>
-        <p className="text-xs text-gray-400 border border-gray-100 rounded-lg px-3 py-2 mb-10 bg-gray-50">
-          Archive article from the previous Technique Learning Solutions website.
-        </p>
+      
         <div
           className="prose prose-zinc max-w-none text-gray-800 prose-headings:text-black prose-a:text-[#016068]"
           dangerouslySetInnerHTML={{ __html: post.html }}
