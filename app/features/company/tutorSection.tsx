@@ -63,6 +63,11 @@ const tutors: Tutor[] = [
     role: "Air Conditioning and Refrigeration Tutor",
     accentColor: "#059669",
   },
+  {
+    name: "Joe Crook",
+    role: "Engineering Technician",
+    accentColor: "#D97706",
+  },
 ];
 
 function TutorCard({ tutor }: { tutor: Tutor }) {
