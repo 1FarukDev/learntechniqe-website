@@ -8,6 +8,27 @@ import {
 } from "@/lib/blog-listing";
 import { urlFor } from "@/lib/sanity/image";
 import type { BlogPost } from "@/lib/types/blog";
+import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
+
+const PAGE_WINDOW = 10;
+
+function paginationWindow(
+  page: number,
+  totalPages: number,
+  windowSize: number,
+) {
+  const idx = Math.floor((page - 1) / windowSize);
+  const start = idx * windowSize + 1;
+  const end = Math.min(start + windowSize - 1, totalPages);
+  const pages = Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  return {
+    pages,
+    showJumpBack: start > 1,
+    showJumpForward: end < totalPages,
+    jumpBackPage: Math.max(1, start - windowSize),
+    jumpForwardPage: Math.min(totalPages, end + 1),
+  };
+}
 
 type Props = {
   posts: BlogPost[];
@@ -62,11 +83,10 @@ export default function BlogListing({
                 key={label}
                 href={href}
                 scroll
-                className={`rounded-full px-4 py-2 text-sm font-medium transition ${
-                  active
+                className={`rounded-full px-4 py-2 text-sm font-medium transition ${active
                     ? "bg-[#016068] text-white"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
+                  }`}
               >
                 {label}
               </Link>
@@ -103,32 +123,102 @@ export default function BlogListing({
 
         {totalPages > 1 && (
           <nav
-            className="mt-12 flex flex-wrap items-center justify-center gap-4"
+            className="mt-12 flex flex-col items-center gap-3"
             aria-label="Blog pagination"
           >
-            {page > 1 ? (
-              <Link
-                href={buildBlogListUrl(basePath, page - 1, category)}
-                className="rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-[#016068] hover:bg-gray-50"
-              >
-                Previous
-              </Link>
-            ) : (
-              <span className="px-4 py-2 text-sm text-gray-300">Previous</span>
-            )}
-            <span className="text-sm text-gray-600 tabular-nums">
+            <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+              {page > 1 ? (
+                <Link
+                  href={buildBlogListUrl(basePath, page - 1, category)}
+                  scroll
+                  className="min-h-10 min-w-10 inline-flex items-center justify-center rounded-lg border border-gray-200 text-sm font-semibold text-[#016068] hover:bg-gray-50 sm:px-3"
+                  aria-label="Previous page"
+                >
+                  <ArrowLeftIcon className="size-4" />
+                </Link>
+              ) : (
+                <span
+                  className="min-h-10 min-w-10 inline-flex items-center justify-center rounded-lg border border-gray-100 text-sm text-gray-300"
+                  aria-hidden
+                >
+                  <ArrowLeftIcon className="size-4" />
+                </span>
+              )}
+
+              {(() => {
+                const w = paginationWindow(page, totalPages, PAGE_WINDOW);
+                return (
+                  <>
+                    {w.showJumpBack ? (
+                      <Link
+                        href={buildBlogListUrl(
+                          basePath,
+                          w.jumpBackPage,
+                          category,
+                        )}
+                        scroll
+                        className="min-h-10 min-w-10 inline-flex items-center justify-center rounded-lg border border-gray-200 text-sm font-bold text-[#016068] hover:bg-[#016068]/5"
+                        aria-label={`Go to page ${w.jumpBackPage}`}
+                      >
+                        {"<<"}
+                      </Link>
+                    ) : null}
+
+                    {w.pages.map((n) => (
+                      <Link
+                        key={n}
+                        href={buildBlogListUrl(basePath, n, category)}
+                        scroll
+                        aria-label={`Page ${n}`}
+                        aria-current={n === page ? "page" : undefined}
+                        className={`min-h-10 min-w-10 inline-flex items-center justify-center rounded-lg text-sm font-semibold tabular-nums transition sm:min-w-[2.25rem] ${n === page
+                            ? "bg-[#016068] text-white shadow-sm"
+                            : "border border-gray-200 text-gray-800 hover:bg-gray-50"
+                          }`}
+                      >
+                        {n}
+                      </Link>
+                    ))}
+
+                    {w.showJumpForward ? (
+                      <Link
+                        href={buildBlogListUrl(
+                          basePath,
+                          w.jumpForwardPage,
+                          category,
+                        )}
+                        scroll
+                        className="min-h-10 min-w-10 inline-flex items-center justify-center rounded-lg border border-gray-200 text-sm font-bold text-[#016068] hover:bg-[#016068]/5"
+                        aria-label={`Go to page ${w.jumpForwardPage}`}
+                      >
+                        {">>"}
+                      </Link>
+                    ) : null}
+                  </>
+                );
+              })()}
+
+              {page < totalPages ? (
+                <Link
+                  href={buildBlogListUrl(basePath, page + 1, category)}
+                  scroll
+                  className="min-h-10 min-w-10 inline-flex items-center justify-center rounded-lg border border-gray-200 text-sm font-semibold text-[#016068] hover:bg-gray-50 sm:px-3"
+                  aria-label="Next page"
+                >
+                  <ArrowRightIcon className="size-4" />
+                </Link>
+              ) : (
+                <span
+                  className="min-h-10 min-w-10 inline-flex items-center justify-center rounded-lg border border-gray-100 text-sm text-gray-300"
+                  aria-hidden
+                >
+                  <ArrowRightIcon className="size-4" />
+                </span>
+              )}
+            </div>
+            <p className="text-xs text-gray-500 tabular-nums">
               Page {page} of {totalPages}
-            </span>
-            {page < totalPages ? (
-              <Link
-                href={buildBlogListUrl(basePath, page + 1, category)}
-                className="rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-[#016068] hover:bg-gray-50"
-              >
-                Next
-              </Link>
-            ) : (
-              <span className="px-4 py-2 text-sm text-gray-300">Next</span>
-            )}
+            </p>
           </nav>
         )}
       </div>

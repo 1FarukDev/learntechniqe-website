@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 /* @import "tw-animate-css"; */
 @import "shadcn/tailwind.css";
 /* 
@@ -414,6 +415,105 @@ h6 {
 
 .font-heading {
   font-family: var(--font-heading);
+}
+
+/* Migrated WordPress post HTML — typography + layout fixes inside .legacy-wp-html */
+.legacy-wp-html {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.legacy-wp-html img,
+.legacy-wp-html video {
+  max-width: 100%;
+  height: auto;
+}
+
+.legacy-wp-html iframe {
+  max-width: 100%;
+  border-radius: var(--radius-lg);
+}
+
+.legacy-wp-html .wp-caption,
+.legacy-wp-html figure {
+  max-width: 100%;
+}
+
+.legacy-wp-html .wp-caption img {
+  margin-bottom: 0.35rem;
+}
+
+.legacy-wp-html .wp-caption-text {
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: oklch(0.45 0 0);
+  margin-top: 0.25rem;
+}
+
+@media (min-width: 640px) {
+  .legacy-wp-html img.alignleft,
+  .legacy-wp-html .alignleft {
+    float: left;
+    margin: 0.35rem 1.25rem 1rem 0;
+    max-width: min(100%, 340px);
+  }
+
+  .legacy-wp-html img.alignright,
+  .legacy-wp-html .alignright {
+    float: right;
+    margin: 0.35rem 0 1rem 1.25rem;
+    max-width: min(100%, 340px);
+  }
+
+  .legacy-wp-html .aligncenter,
+  .legacy-wp-html img.aligncenter {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (max-width: 639px) {
+  .legacy-wp-html img.alignleft,
+  .legacy-wp-html img.alignright,
+  .legacy-wp-html .alignleft,
+  .legacy-wp-html .alignright {
+    float: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+  }
+}
+
+/* Neutralise pasted Word/WordPress inline typography so prose controls rhythm */
+.legacy-wp-html [style*="font-size"] {
+  font-size: inherit !important;
+}
+
+.legacy-wp-html [style*="line-height"] {
+  line-height: inherit !important;
+}
+
+.legacy-wp-html [style*="font-family"]:not(pre):not(code) {
+  font-family: inherit !important;
+}
+
+.legacy-wp-html p[style*="margin"] {
+  margin-block: 1em !important;
+}
+
+.legacy-wp-html table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.legacy-wp-html::after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
 .no-scrollbar::-webkit-scrollbar {
