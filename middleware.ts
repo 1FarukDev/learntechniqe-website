@@ -1,8 +1,24 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { resolveLegacyRedirect } from "@/lib/legacy-redirect-resolve";
+import {
+  LEARNER_COOKIE_NAME,
+  verifyLearnerToken,
+} from "@/lib/elearning/auth";
 
-export function middleware(request: NextRequest) {
+const PROTECTED_LEARNER_PREFIXES = [
+  "/learn/dashboard",
+  "/learn/courses",
+  "/learn/certificate",
+];
+
+function isProtectedLearnerPath(pathname: string): boolean {
+  return PROTECTED_LEARNER_PREFIXES.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
+  );
+}
+
+export async function middleware(request: NextRequest) {
   const host = request.nextUrl.hostname.toLowerCase();
   const isLocal =
     host === "localhost" ||
@@ -19,6 +35,19 @@ export function middleware(request: NextRequest) {
   }
 
   const pathname = request.nextUrl.pathname;
+
+  if (isProtectedLearnerPath(pathname)) {
+    const token = request.cookies.get(LEARNER_COOKIE_NAME)?.value;
+    const session = await verifyLearnerToken(token);
+    if (!session) {
+      const redirect = request.nextUrl.clone();
+      redirect.pathname = "/learn/login";
+      redirect.searchParams.set("next", pathname);
+      return NextResponse.redirect(redirect);
+    }
+    return NextResponse.next();
+  }
+
   const target = resolveLegacyRedirect(pathname);
   if (!target) {
     return NextResponse.next();

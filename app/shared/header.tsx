@@ -13,6 +13,7 @@ import {
   Clock,
   ArrowRight,
   ArrowUpRight,
+  GraduationCap,
 } from "lucide-react";
 import type { HeaderData } from "@/types/header";
 import { categoryHrefFromMegaMenuTitle } from "@/lib/course-categories";
@@ -721,6 +722,15 @@ function MobileDrawer({
             </Link>
           ))}
 
+          <Link
+            href="/learn/login"
+            onClick={onClose}
+            className="mx-3 mt-2 flex items-center justify-center gap-2 rounded-xl border border-[#016068]/20 bg-[#016068]/5 px-4 py-3 text-sm font-semibold text-[#016068] hover:bg-[#016068]/10 transition-colors"
+          >
+            <GraduationCap size={16} strokeWidth={2.25} />
+            Learner Login
+          </Link>
+
           {contactLink && (
             <Link
               href={contactLink.href}
@@ -757,6 +767,7 @@ function Header({
 
   const noNavbarPages = ["/", "/not-found", "/company"];
   const isHomePage = noNavbarPages.includes(pathname);
+  const isLearnerPortal = pathname.startsWith("/learn");
 
   const showMegaMenu = showCoursesMega || showPathwaysMega;
 
@@ -807,6 +818,8 @@ function Header({
   const contactLink = data.navLinks.find(
     (link) => link.label.toLowerCase() === "contact",
   );
+
+  if (isLearnerPortal) return null;
 
   return (
     <header
@@ -921,6 +934,19 @@ function Header({
                 <p>{toTitleCase(link.label)}</p>
               </Link>
             ))}
+
+            <Link
+              href="/learn/login"
+              onClick={closeAll}
+              className={`flex items-center gap-1.5 text-sm font-semibold transition-colors ${
+                useWhiteStyle
+                  ? "text-white/90 hover:text-white"
+                  : "text-[#016068] hover:text-[#014d54]"
+              }`}
+            >
+              <GraduationCap size={15} strokeWidth={2.25} />
+              <p>Learner Login</p>
+            </Link>
 
             {contactLink && (
               <Link
