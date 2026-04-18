@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Footer from "./shared/footer";
 import HeaderWrapper from "./shared/headerWrapper";
+import { ConditionalFooter } from "./shared/ConditionalFooter";
 import {
   TrackingHeadScripts,
   TrackingNoScripts,
@@ -160,7 +161,9 @@ export default function RootLayout({
         <NavigationProgress />
         <HeaderWrapper />
         {children}
-        <Footer />
+        <ConditionalFooter>
+          <Footer />
+        </ConditionalFooter>
         <script src="//code.tidio.co/xfa1nuadygc0qsxfrhtjddlktnyppeeu.js" async></script>
       </body>
     </html>
