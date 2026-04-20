@@ -5,6 +5,10 @@ import {
   LEARNER_COOKIE_NAME,
   verifyLearnerToken,
 } from "@/lib/elearning/auth";
+import {
+  ADMIN_COOKIE_NAME,
+  verifyAdminSessionToken,
+} from "@/lib/elearning/admin-auth";
 
 const PROTECTED_LEARNER_PREFIXES = [
   "/learn/dashboard",
@@ -15,6 +19,13 @@ const PROTECTED_LEARNER_PREFIXES = [
 function isProtectedLearnerPath(pathname: string): boolean {
   return PROTECTED_LEARNER_PREFIXES.some(
     (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
+  );
+}
+
+function isProtectedAdminPath(pathname: string): boolean {
+  return (
+    pathname.startsWith("/admin/elearning") &&
+    pathname !== "/admin/elearning/login"
   );
 }
 
@@ -35,6 +46,18 @@ export async function middleware(request: NextRequest) {
   }
 
   const pathname = request.nextUrl.pathname;
+
+  if (isProtectedAdminPath(pathname)) {
+    const adminToken = request.cookies.get(ADMIN_COOKIE_NAME)?.value;
+    const ok = await verifyAdminSessionToken(adminToken);
+    if (!ok) {
+      const redirect = request.nextUrl.clone();
+      redirect.pathname = "/admin/elearning/login";
+      redirect.searchParams.set("next", pathname);
+      return NextResponse.redirect(redirect);
+    }
+    return NextResponse.next();
+  }
 
   if (isProtectedLearnerPath(pathname)) {
     const token = request.cookies.get(LEARNER_COOKIE_NAME)?.value;

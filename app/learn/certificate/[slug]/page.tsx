@@ -1,4 +1,4 @@
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -8,7 +8,15 @@ import {
   Heart,
 } from "lucide-react";
 import { getCurrentLearner } from "@/lib/elearning/session";
-import { getCourseBySlug, isFreeCourse } from "@/lib/elearning/catalog";
+import {
+  canLearnerAccessCourse,
+  getCourseRowBySlug,
+  rowToCatalogCourse,
+} from "@/lib/elearning/courses";
+import {
+  getCourseCompletionDate,
+  learnerCompletedCourse,
+} from "@/lib/elearning/learners";
 import { LearnerTopBar } from "../../LearnerTopBar";
 import { CertificatePanel } from "./CertificatePanel";
 
@@ -25,11 +33,27 @@ export default async function CertificatePage({ params }: PageProps) {
     redirect(`/learn/login?next=/learn/certificate/${encodeURIComponent(slug)}`);
   }
 
-  const course = getCourseBySlug(slug);
-  if (!course) notFound();
-  if (!isFreeCourse(slug)) redirect("/learn/dashboard");
+  const row = await getCourseRowBySlug(slug);
+  if (!row || !canLearnerAccessCourse(learner, row)) {
+    redirect("/learn/dashboard");
+  }
 
-  if (!learner.completedAt) {
+  const course = rowToCatalogCourse(row);
+
+  const completedDb = await learnerCompletedCourse(learner.id, row.id);
+  const legacyComplete =
+    Boolean(learner.completedAt) &&
+    row.assign_on_lead &&
+    learner.courseSlug === row.slug;
+  if (!completedDb && !legacyComplete) {
+    redirect(`/learn/courses/${slug}`);
+  }
+
+  const completionDate =
+    (await getCourseCompletionDate(learner.id, row.id)) ??
+    (learner.completedAt && legacyComplete ? learner.completedAt : null);
+
+  if (!completionDate) {
     redirect(`/learn/courses/${slug}`);
   }
 
@@ -37,13 +61,13 @@ export default async function CertificatePage({ params }: PageProps) {
     [learner.firstName, learner.lastName].filter(Boolean).join(" ").trim() ||
     learner.email;
 
-  const completedDate = learner.completedAt.toLocaleDateString("en-GB", {
+  const completedDate = completionDate.toLocaleDateString("en-GB", {
     day: "2-digit",
     month: "long",
     year: "numeric",
   });
 
-  const certificateId = `LT-${String(learner.id).padStart(6, "0")}-${learner.completedAt.getFullYear()}`;
+  const certificateId = `LT-${String(learner.id).padStart(6, "0")}-${completionDate.getFullYear()}`;
 
   return (
     <>
@@ -85,7 +109,6 @@ export default async function CertificatePage({ params }: PageProps) {
           certificateId={certificateId}
         />
 
-        {/* Loyalty prompt */}
         <aside className="mt-12 rounded-3xl border border-[#016068]/20 bg-gradient-to-br from-white via-white to-[#ECF5F6] p-7 md:p-10 overflow-hidden relative">
           <div className="absolute -top-16 -right-10 size-48 rounded-full bg-[#E99E20]/15 blur-3xl" />
           <div className="relative flex flex-col md:flex-row md:items-center gap-8">

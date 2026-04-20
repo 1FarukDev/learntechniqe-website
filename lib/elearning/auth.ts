@@ -1,4 +1,5 @@
 import { SignJWT, jwtVerify, type JWTPayload } from "jose";
+import { getElearningJwtSecretBytes } from "./jwt-secret";
 
 export const LEARNER_COOKIE_NAME = "lt_learner";
 export const LEARNER_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 30; // 30 days
@@ -11,16 +12,6 @@ export interface LearnerSessionClaims extends JWTPayload {
   courseSlug: string;
 }
 
-function getSecret(): Uint8Array {
-  const raw = process.env.ELEARNING_JWT_SECRET;
-  if (!raw || raw.length < 32) {
-    throw new Error(
-      "ELEARNING_JWT_SECRET is missing or too short (min 32 chars). See .env.example."
-    );
-  }
-  return new TextEncoder().encode(raw);
-}
-
 export async function signLearnerToken(
   claims: Omit<LearnerSessionClaims, "iat" | "exp">
 ): Promise<string> {
@@ -30,15 +21,16 @@ export async function signLearnerToken(
     .setIssuer("learntechnique-elearning")
     .setAudience("learner")
     .setExpirationTime(`${LEARNER_COOKIE_MAX_AGE_SECONDS}s`)
-    .sign(getSecret());
+    .sign(getElearningJwtSecretBytes());
 }
+
 
 export async function verifyLearnerToken(
   token: string | undefined | null
 ): Promise<LearnerSessionClaims | null> {
   if (!token) return null;
   try {
-    const { payload } = await jwtVerify(token, getSecret(), {
+    const { payload } = await jwtVerify(token, getElearningJwtSecretBytes(), {
       issuer: "learntechnique-elearning",
       audience: "learner",
     });

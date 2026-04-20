@@ -1,172 +1,318 @@
-# Learner Portal & Free E-Learning Setup
+# Learner portal & free e-learning — setup guide
 
-This document describes how the new learner portal is wired together and the
-four things you need to configure for launch.
+This document is the single source of truth for configuring the **Learn
+Technique learner portal** (`/learn/*`), the **admin console** (`/admin/elearning`),
+database, environment variables, Zapier, SCORM packages, and local testing.
 
-## What's been built
+For the **rest of the website** (CMS, courses from Sanity, contact forms),
+see the root `.env.example` and `README.md`. The learner portal only needs the
+variables listed below for e-learning.
 
-- **Public entry points**
-  - Header link **Learner Login** (desktop & mobile) → `/learn/login`
-- **Learner-only pages** (all behind middleware auth)
-  - `/learn/dashboard` – hero card for the learner's free course + a grid of
-    "coming soon" locked courses and a loyalty/upsell strip.
-  - `/learn/courses/[slug]` – SCORM course player (iframe + SCORM 1.2 / 2004
-    runtime via the `scorm-again` package). Surfaces completion to the parent.
-  - `/learn/certificate/[slug]` – rendered certificate + one-click PDF download
-    (jsPDF) + loyalty prompt for paid courses.
-- **API routes** (`app/api/elearning/…`)
-  - `POST /api/elearning/lead` – ad-funnel intake from Zapier (creates/refreshes
-    learner, generates password, fires welcome-email webhook).
-  - `POST /api/elearning/login` – password login.
-  - `POST /api/elearning/logout`
-  - `GET  /api/elearning/me`
-  - `POST /api/elearning/complete` – called by the player on completion.
-- **Storage** – Supabase (Postgres). A single `learners` table, created once
-  via the SQL migration in `supabase-schema.sql` (see step 2 below).
-- **Auth** – bcrypt password hashes, JWT session in an httpOnly cookie
-  (`lt_learner`), verified in middleware for protected routes.
+---
+
+## What you get (feature summary)
+
+| Area | Details |
+|------|---------|
+| **Entry** | **Learner Login** in the site header → `/learn/login` |
+| **Dashboard** | `/learn/dashboard` — free course card, locked “coming soon” courses, loyalty strip |
+| **Course** | `/learn/courses/[slug]` — SCORM 1.2 / 2004 player (`scorm-again`), completion → certificate |
+| **Certificate** | `/learn/certificate/[slug]` — on-screen certificate + PDF download (`jspdf`) |
+| **APIs** | `POST /api/elearning/lead`, `/login`, `/logout`, `GET /me`, `POST /complete` |
+| **Admin** | `/admin/elearning` — edit title / duration / description; upload SCORM zip to Supabase Storage (served via `/elearning-scorm/…` same-origin proxy) |
+| **Data** | Supabase Postgres — `learners` (`supabase-schema.sql`), `elearning_course_settings` (`supabase-elearning-admin.sql`) |
+| **Auth** | Learners: bcrypt + JWT cookie `lt_learner`. Admin: password env + JWT cookie `lt_eadmin`. Middleware protects learner + admin routes. |
+
+Session cookies are set on **`NextResponse`** in Route Handlers (reliable cookie
+delivery in Next.js App Router).
+
+---
+
+## Recommended order of work
+
+1. Create Supabase project and run `supabase-schema.sql`, then `supabase-elearning-admin.sql`.
+2. Create Storage bucket **`elearning-scorm`** (private) — or uncomment the bucket stanza in the SQL file if your role allows it.
+3. Fill **required** env vars locally (including **`ELEARNING_ADMIN_PASSWORD`**) and test with `npm run dev` + seed script.
+4. Open **`/admin/elearning`** — publish your SCORM zip **or** keep serving from `public/elearning/...` until you upload.
+5. Add **Zapier** vars when the ad funnel goes live.
+6. Copy all env vars to **production** (e.g. Vercel) and redeploy.
+
+---
 
 ## 1. Environment variables
 
-Add these to your deployment environment (see `.env.example` for the full
-template):
+Copy from `.env.example` into `.env` (local) or your host’s environment
+dashboard. Names are exact.
 
-```env
-NEXT_PUBLIC_SUPABASE_URL=https://xxxxxxxx.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOi...
+### 1.1 Required for the learner portal (login, dashboard, course, DB)
 
-ELEARNING_JWT_SECRET=<64-char random string>
-ELEARNING_LEAD_INTAKE_SECRET=<any shared secret for Zapier>
-ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL=https://hooks.zapier.com/...
-ZAPIER_ELEARNING_COMPLETION_WEBHOOK_URL=https://hooks.zapier.com/...   # optional
-```
+| Variable | Description |
+|----------|-------------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL (e.g. `https://xxxxx.supabase.co`). **Project Settings → API → Project URL** in the Supabase dashboard. |
+| `SUPABASE_SERVICE_ROLE_KEY` | **`service_role`** secret key. **Project Settings → API → service_role**. Server-only — never expose in client code or the browser. Bypasses RLS so API routes can read/write `learners`. |
+| `ELEARNING_JWT_SECRET` | Secret used to sign the session JWT. **Minimum 32 characters.** Generate once and keep stable across deploys so existing sessions stay valid. |
 
-Generate the JWT secret with:
+Generate `ELEARNING_JWT_SECRET`:
 
 ```bash
 node -e "console.log(require('crypto').randomBytes(48).toString('base64url'))"
 ```
 
-> ⚠️  `SUPABASE_SERVICE_ROLE_KEY` bypasses Row-Level Security. It must only be
-> set on the server (Vercel / hosting env). Never expose it to the browser.
+**Development:** If `ELEARNING_JWT_SECRET` is missing or shorter than 32
+characters while `NODE_ENV === "development"`, the app logs a warning and uses
+a fixed dev-only secret so you can sign in locally. **Production and `next start`
+must set a real secret.**
 
-## 2. Create the Supabase project (one-off, ~3 minutes)
+### 1.2 Required only for the **ad lead → account** flow (`POST /api/elearning/lead`)
 
-1. Sign up at [supabase.com](https://supabase.com) and create a new project
-   (the free tier handles thousands of learners comfortably).
-2. Once the project is ready, open **Project Settings → Data API** and copy
-   **Project URL** into `NEXT_PUBLIC_SUPABASE_URL`.
-3. Open **Project Settings → API Keys** and copy the **`service_role`** key
-   into `SUPABASE_SERVICE_ROLE_KEY`. (Keep the `anon` key — we don't use it
-   here, but it's handy for any public Supabase usage later.)
-4. Open **SQL editor → New query**, paste the entire contents of
-   `supabase-schema.sql` from this repo, and click **Run**. This creates the
-   `learners` table and enables Row-Level Security.
+If this is unset, the lead endpoint returns **500 — “Lead intake not
+configured”** and Ads cannot create learners.
 
-That's it — our server-side API routes use the service-role key and can
-read/write `learners` directly. RLS keeps the table invisible to the browser.
+| Variable | Description |
+|----------|-------------|
+| `ELEARNING_LEAD_INTAKE_SECRET` | Shared secret. Zapier must send header **`X-Lead-Secret`** with exactly this value on every `POST` to `/api/elearning/lead`. |
 
-## 3. Zapier wiring
+### 1.3 Welcome email after a lead is accepted
 
-### 3a. Lead intake (Google Ads / Facebook Ads → our site)
+Not strictly required for the HTTP handler to succeed, but without it learners
+won’t get an email with their password.
 
-- Trigger: new lead from your Ads form (Lead Ads / Google Lead Form).
-- Action: **Webhooks by Zapier → Custom Request (POST)**
-  - URL: `https://www.learntechnique.com/api/elearning/lead`
-  - Header: `X-Lead-Secret: <value of ELEARNING_LEAD_INTAKE_SECRET>`
-  - Header: `Content-Type: application/json`
-  - Data (JSON):
-    ```json
-    {
-      "email":      "{{email}}",
-      "first_name": "{{first_name}}",
-      "last_name":  "{{last_name}}",
-      "phone":      "{{phone}}",
-      "source":     "google-ads",
-      "campaign":   "{{campaign_name}}"
-    }
-    ```
+| Variable | Description |
+|----------|-------------|
+| `ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL` | Zapier **Catch Hook** URL. After creating/updating a learner, the app `POST`s JSON to this URL so your Zap can send email. If unset, the API still succeeds but logs a warning and **no welcome email** is triggered. |
 
-Our endpoint generates a random 10-char password, stores the learner, and then
-posts to the welcome-email webhook (see below).
+### 1.4 Optional
 
-### 3b. Welcome email (our site → learner)
+| Variable | Description |
+|----------|-------------|
+| `ZAPIER_ELEARNING_COMPLETION_WEBHOOK_URL` | Zapier Catch Hook — notified the **first** time a learner completes the free course (sales follow-up). |
 
-- Trigger: **Webhooks by Zapier → Catch Hook**
-  - Paste the hook URL into `ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL`.
-- Action: **Gmail / Outlook / your ESP → Send Email**
-  - To: `{{email}}`
-  - Subject: `Welcome to Learn Technique – your free course is ready`
-  - Body: use `{{first_name}}`, `{{password}}`, `{{login_url}}`,
-    `{{course_title}}`, `{{course_duration}}`.
+### 1.5 Admin UI (`/admin/elearning`)
 
-Payload shape delivered to your Zap:
+| Variable | Description |
+|----------|-------------|
+| `ELEARNING_ADMIN_PASSWORD` | **Required** to sign in at `/admin/elearning/login`. Use a long random password (≥ 12 characters). |
+
+Optional:
+
+| Variable | Description |
+|----------|-------------|
+| `ELEARNING_SCORM_BUCKET` | Supabase Storage bucket id (default **`elearning-scorm`**). Must exist and match what you created in the dashboard. |
+
+### 1.6 Optional — local seed script overrides
+
+Used only by `npm run seed:elearning-test-user` (see §4). Not required in
+production.
+
+| Variable | Description |
+|----------|-------------|
+| `ELEARNING_TEST_EMAIL` | Override default seed email (`elearning-test@learntechnique.local`). |
+| `ELEARNING_TEST_PASSWORD` | Override default seed password (`LearnTest-Portal-2026`). |
+
+### 1.7 Minimal copy-paste template (fill in values)
+
+```env
+# ─── Learner portal (required) ─────────────────────────────────────
+NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT_REF.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here
+ELEARNING_JWT_SECRET=paste_output_from_crypto_command_min_32_chars
+
+# ─── Ads funnel (required when Zapier posts leads) ─────────────────
+ELEARNING_LEAD_INTAKE_SECRET=your_random_shared_secret
+
+# ─── Zapier ─────────────────────────────────────────────────────────
+ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL=https://hooks.zapier.com/hooks/catch/...
+# ZAPIER_ELEARNING_COMPLETION_WEBHOOK_URL=https://hooks.zapier.com/hooks/catch/...
+
+# ─── Admin UI ───────────────────────────────────────────────────────
+ELEARNING_ADMIN_PASSWORD=your_long_random_admin_password_here
+# ELEARNING_SCORM_BUCKET=elearning-scorm
+```
+
+---
+
+## 2. Supabase project & database (one-off)
+
+1. Create a project at [supabase.com](https://supabase.com) (free tier is fine).
+2. **Project Settings → API**
+   - Copy **Project URL** → `NEXT_PUBLIC_SUPABASE_URL`.
+   - Copy **`service_role` `secret`** → `SUPABASE_SERVICE_ROLE_KEY` (not the `anon` key).
+3. **SQL Editor → New query** — paste the entire contents of
+   **`supabase-schema.sql`** from this repo → **Run**.
+
+This creates **`public.learners`**, an index on email, enables **RLS**, and does
+not add public policies — only server-side calls using the **service_role** key
+can access the table.
+
+---
+
+## 3. Zapier
+
+Replace the site origin with yours (`https://www.learntechnique.com` in
+production, or your Vercel preview URL for testing).
+
+### 3a. Lead intake (Meta / Google Lead Form → website)
+
+- **Trigger:** New lead from your ad form.
+- **Action:** **Webhooks by Zapier → Custom Request (POST)**  
+  - **URL:** `https://www.learntechnique.com/api/elearning/lead`  
+  - **Headers:**  
+    - `Content-Type: application/json`  
+    - `X-Lead-Secret: <same value as ELEARNING_LEAD_INTAKE_SECRET>`  
+  - **Body** (example — map fields from your trigger):
 
 ```json
 {
-  "email": "…",
-  "first_name": "…",
-  "last_name": "…",
-  "password": "Ab3k9Rt2Xc",
-  "login_url": "https://www.learntechnique.com/learn/login",
-  "course_title": "Electrical Safety Essentials",
-  "course_duration": "Approx. 30 minutes",
-  "is_new_account": true,
-  "timestamp": "2026-04-18T10:22:33.000Z"
+  "email": "{{email}}",
+  "first_name": "{{first_name}}",
+  "last_name": "{{last_name}}",
+  "phone": "{{phone}}",
+  "source": "meta-leads",
+  "campaign": "{{campaign_name}}"
 }
 ```
 
-### 3c. (Optional) Completion notification
+The API also accepts **`firstName` / `lastName`** (camelCase) and
+**`phone_number`** instead of `phone` if your trigger uses those names.
 
-- Trigger: Catch Hook → paste into `ZAPIER_ELEARNING_COMPLETION_WEBHOOK_URL`.
-- Action: Notify sales in Slack / Pipedrive / email, so they can offer a paid
-  course to the learner while the free course is fresh.
+The server generates a **new random password**, upserts the learner, then (if
+`ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL` is set) posts the welcome payload below.
 
-## 4. Installing the SCORM course
+### 3b. Welcome email (Catch Hook ← website)
 
-When the SCORM package arrives:
+1. Create a Zap: **Webhooks by Zapier → Catch Hook** — copy the hook URL into
+   `ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL`.
+2. Second step: **Email** (Gmail, Microsoft, etc.) using the fields from the
+   webhook body.
 
-1. Unzip it.
-2. Replace the contents of `public/elearning/electrical-safety-essentials/`
-   with the unzipped files.
-3. If the entry HTML isn't called `index.html`, update the `scormEntryUrl`
-   prop in `app/learn/courses/[slug]/page.tsx` to match (e.g. `index_lms.html`).
+**JSON body sent to the Catch Hook** (exact field names):
 
-No progress tracking is retained — the player watches for the SCORM
-`completed` / `passed` status and triggers `/api/elearning/complete`, which
-records the completion timestamp in the `learners` table and unlocks the
-certificate page.
+| Field | Type | Description |
+|-------|------|-------------|
+| `email` | string | Learner email |
+| `first_name` | string | |
+| `last_name` | string | |
+| `password` | string | New one-time password (regenerated on every upsert from the lead endpoint) |
+| `login_url` | string | Absolute URL to `/learn/login` (same origin as the request) |
+| `course_title` | string | e.g. Electrical Safety Essentials |
+| `course_duration` | string | e.g. Approx. 30 minutes |
+| `is_new_account` | boolean | `true` on first insert, `false` if email existed and was updated |
+| `timestamp` | string | ISO 8601 |
 
-## Local development
+### 3c. Course completion (optional)
+
+Set `ZAPIER_ELEARNING_COMPLETION_WEBHOOK_URL` to another Catch Hook. It is
+called **only on first completion** (not on repeat completes).
+
+**JSON body:**
+
+| Field | Type |
+|-------|------|
+| `email` | string |
+| `first_name` | string |
+| `last_name` | string |
+| `course_slug` | string |
+| `course_title` | string |
+| `completed_at` | string (ISO 8601) |
+
+---
+
+## 4. Local development & test account
 
 ```bash
+npm install
 npm run dev
 ```
 
-### Test login (no Zapier required)
+**Prerequisites:** `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and
+`supabase-schema.sql` applied. `ELEARNING_JWT_SECRET` strongly recommended;
+dev fallback exists only for `next dev`.
 
-With `NEXT_PUBLIC_SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` set in `.env`
-and the `learners` table created (`supabase-schema.sql`), seed a fixed test
-account:
+**Seed a fixed test learner** (no Zapier):
 
 ```bash
 npm run seed:elearning-test-user
 ```
 
-Default credentials printed by the script:
+Default login (unless overridden by `ELEARNING_TEST_*` in `.env`):
 
-| Field    | Value |
-|----------|--------|
-| **URL**  | `http://localhost:3000/learn/login` |
-| **Email** | `elearning-test@learntechnique.local` |
-| **Password** | `LearnTest-Portal-2026` |
+| | |
+|--|--|
+| URL | `http://localhost:3000/learn/login` |
+| Email | `elearning-test@learntechnique.local` |
+| Password | `LearnTest-Portal-2026` |
 
-Override via `.env`: `ELEARNING_TEST_EMAIL`, `ELEARNING_TEST_PASSWORD`.
-Re-running the seed resets `completed_at` so you can test course → certificate again.
+Re-running the seed **updates the password** (if you changed env overrides) and
+**clears `completed_at`** so you can retest course → certificate.
 
-Then:
+Test the placeholder course: open the SCORM page, click **Simulate course
+completion**, then open the certificate.
 
-- Visit `/learn/login`, sign in, open the course, use the placeholder
-  **Simulate course completion** button, then open the certificate flow.
-- Alternatively, seed via production funnel: POST to `/api/elearning/lead`
-  with the `X-Lead-Secret` header (welcome email fires if the Zap URL is set).
+**Test the lead endpoint** (with dev server running):
+
+```bash
+curl -s -X POST http://localhost:3000/api/elearning/lead \
+  -H "Content-Type: application/json" \
+  -H "X-Lead-Secret: YOUR_ELEARNING_LEAD_INTAKE_SECRET" \
+  -d '{"email":"someone@example.com","first_name":"Test","last_name":"User"}'
+```
+
+---
+
+## 5. SCORM package
+
+**Recommended (production):** sign in at **`/admin/elearning`** and use **Upload
+zip & publish**. This stores files in Supabase Storage and streams them via
+**`/elearning-scorm/<slug>/…`** on your own domain — SCORM 1.2 **API** calls
+from the iframe still reach the parent player (same origin).
+
+Set **Launch file** to your entry HTML (`index.html` unless `imsmanifest.xml`
+points elsewhere). Metadata (title, duration, description) can be saved without
+re-uploading the zip (**Save text only**).
+
+**Alternative (manual / dev):** unzip into
+**`public/elearning/electrical-safety-essentials/`**. While **`storage_prefix`**
+is empty in `elearning_course_settings`, the player uses
+**`/elearning/<slug>/<entry>`** from `public/`.
+
+No SCORM suspend data is persisted server-side — completion is detected from
+SCORM status and saved via **`POST /api/elearning/complete`**.
+
+---
+
+## 6. Production deployment
+
+1. Add all required env vars on the host (e.g. **Vercel → Settings → Environment
+   Variables**). Use **Production** (and **Preview** if you use branch deploys).
+2. Do **not** prefix server secrets with `NEXT_PUBLIC_` (only
+   `NEXT_PUBLIC_SUPABASE_URL` is public by design).
+3. Redeploy after changing env.
+4. Point Zapier webhook URLs at the **production** origin
+   (`https://www.learntechnique.com/...`) when you go live.
+
+---
+
+## 7. Troubleshooting
+
+| Symptom | Things to check |
+|---------|------------------|
+| **Login** “temporarily unavailable” / 500 | `ELEARNING_JWT_SECRET` (length ≥ 32 in prod), Supabase URL + service role, `learners` table exists. In **development**, the JSON error may include a short hint. |
+| **Lead** returns 401 | `X-Lead-Secret` header must match `ELEARNING_LEAD_INTAKE_SECRET` exactly. |
+| **Lead** returns 500 “not configured” | Set `ELEARNING_LEAD_INTAKE_SECRET`. |
+| **No welcome email** | Set `ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL`; check Zapier task history and server logs. |
+| **Main site / Sanity errors** (`apicdn.sanity.io`) | Not part of e-learning — set `NEXT_PUBLIC_SANITY_*` and optionally `NEXT_PUBLIC_SANITY_USE_CDN=false` (see `.env.example`). |
+| **Admin login fails** | Set **`ELEARNING_ADMIN_PASSWORD`** (≥ 12 chars). Middleware uses JWT only (`admin-auth.ts`); password check runs in **`/api/admin/elearning/login`** only. |
+| **ZIP upload fails** | Create bucket **`elearning-scorm`** in Supabase Storage; confirm `SUPABASE_SERVICE_ROLE_KEY` works. |
+
+---
+
+## 8. File reference
+
+| File | Purpose |
+|------|---------|
+| `.env.example` | All env var names for the repo (including Sanity & other Zapier hooks). |
+| `supabase-schema.sql` | Learners table for Supabase. |
+| `supabase-elearning-admin.sql` | Course settings row + optional bucket notes. |
+| `scripts/seed-elearning-test-user.mjs` | Local test learner seed. |
+| `lib/elearning/catalog.ts` | Locked “coming soon” courses + default styling for the free course card. |
+| `lib/elearning/course-settings.ts` | Runtime title/duration/description + SCORM launch URL (DB + storage). |

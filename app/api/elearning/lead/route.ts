@@ -3,7 +3,7 @@ import {
   generateWelcomePassword,
   upsertLearnerWithPassword,
 } from "@/lib/elearning/learners";
-import { FREE_COURSE } from "@/lib/elearning/catalog";
+import { getCourseSettings } from "@/lib/elearning/course-settings";
 
 export const runtime = "nodejs";
 
@@ -73,6 +73,8 @@ export async function POST(request: NextRequest) {
 
   const password = generateWelcomePassword();
 
+  const courseMeta = await getCourseSettings();
+
   let result;
   try {
     result = await upsertLearnerWithPassword({
@@ -81,7 +83,7 @@ export async function POST(request: NextRequest) {
       lastName,
       phone,
       password,
-      courseSlug: FREE_COURSE.slug,
+      courseSlug: courseMeta.slug,
       source,
       adCampaign,
     });
@@ -106,8 +108,8 @@ export async function POST(request: NextRequest) {
           last_name: result.learner.lastName,
           password,
           login_url: loginUrl,
-          course_title: FREE_COURSE.title,
-          course_duration: FREE_COURSE.duration,
+          course_title: courseMeta.title,
+          course_duration: courseMeta.duration,
           is_new_account: result.created,
           timestamp: new Date().toISOString(),
         }),

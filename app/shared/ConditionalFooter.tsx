@@ -9,6 +9,7 @@ import type { ReactNode } from "react";
  */
 export function ConditionalFooter({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  if (pathname?.startsWith("/learn")) return null;
+  if (pathname?.startsWith("/learn") || pathname?.startsWith("/admin"))
+    return null;
   return <>{children}</>;
 }

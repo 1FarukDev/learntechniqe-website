@@ -768,6 +768,7 @@ function Header({
   const noNavbarPages = ["/", "/not-found", "/company"];
   const isHomePage = noNavbarPages.includes(pathname);
   const isLearnerPortal = pathname.startsWith("/learn");
+  const isAdminPortal = pathname.startsWith("/admin");
 
   const showMegaMenu = showCoursesMega || showPathwaysMega;
 
@@ -819,7 +820,7 @@ function Header({
     (link) => link.label.toLowerCase() === "contact",
   );
 
-  if (isLearnerPortal) return null;
+  if (isLearnerPortal || isAdminPortal) return null;
 
   return (
     <header

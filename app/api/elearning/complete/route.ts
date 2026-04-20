@@ -1,17 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
-  markCourseCompleted,
+  countLearnerCompletions,
   findLearnerById,
+  recordCourseCompletionBySlug,
 } from "@/lib/elearning/learners";
 import { readLearnerSession } from "@/lib/elearning/session";
-import { FREE_COURSE, getCourseBySlug } from "@/lib/elearning/catalog";
+import {
+  canLearnerAccessCourse,
+  getCourseSettings,
+  getCourseRowBySlug,
+  resolveCourseBySlug,
+} from "@/lib/elearning/courses";
 
 export const runtime = "nodejs";
 
 /**
  * Called by the SCORM player when the learner reaches the end of the course.
- * Writes the completion timestamp (idempotent) and fires an optional Zapier
- * webhook so sales can follow up about paid courses.
+ * Writes per-course completion (idempotent), syncs legacy `completed_at` for
+ * the lead course, and fires an optional Zapier webhook on the learner's first
+ * ever completion.
  */
 export async function POST(request: NextRequest) {
   const session = await readLearnerSession();
@@ -23,12 +30,22 @@ export async function POST(request: NextRequest) {
   try {
     body = (await request.json()) as Record<string, unknown>;
   } catch {
-    // Empty body is fine — default to the learner's assigned free course.
+    // Empty body — default slug from session / lead course.
   }
 
-  const slug =
-    typeof body.slug === "string" ? body.slug : session.courseSlug || FREE_COURSE.slug;
-  const course = getCourseBySlug(slug);
+  const settings = await getCourseSettings();
+  const slugRaw =
+    typeof body.slug === "string"
+      ? body.slug.trim()
+      : session.courseSlug || settings.slug;
+  const slug = slugRaw || settings.slug;
+
+  const row = await getCourseRowBySlug(slug);
+  if (!row) {
+    return NextResponse.json({ error: "Unknown course" }, { status: 400 });
+  }
+
+  const course = await resolveCourseBySlug(slug);
   if (!course) {
     return NextResponse.json({ error: "Unknown course" }, { status: 400 });
   }
@@ -40,23 +57,27 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Learner not found" }, { status: 404 });
     }
 
-    const updated = await markCourseCompleted(learnerId);
-    const completedAt = updated?.completedAt ?? new Date();
-    const alreadyCompleted = Boolean(learner.completedAt);
+    if (!canLearnerAccessCourse(learner, row)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    const priorCompletions = await countLearnerCompletions(learnerId);
+
+    const result = await recordCourseCompletionBySlug(learnerId, slug);
 
     const webhook = process.env.ZAPIER_ELEARNING_COMPLETION_WEBHOOK_URL;
-    if (webhook && !alreadyCompleted) {
+    if (webhook && result.inserted && priorCompletions === 0) {
       try {
         await fetch(webhook, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            email: learner.email,
-            first_name: learner.firstName,
-            last_name: learner.lastName,
+            email: result.learner?.email,
+            first_name: result.learner?.firstName,
+            last_name: result.learner?.lastName,
             course_slug: course.slug,
             course_title: course.title,
-            completed_at: completedAt.toISOString(),
+            completed_at: result.completedAt.toISOString(),
           }),
         });
       } catch (err) {
@@ -66,7 +87,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      completedAt: completedAt.toISOString(),
+      completedAt: result.completedAt.toISOString(),
     });
   } catch (err) {
     console.error("elearning/complete failed", err);

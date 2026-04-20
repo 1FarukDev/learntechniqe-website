@@ -176,23 +176,115 @@ export async function touchLastLogin(learnerId: number): Promise<void> {
   }
 }
 
-export async function markCourseCompleted(
-  learnerId: number
-): Promise<Learner | null> {
+export async function learnerCompletedCourse(
+  learnerId: number,
+  courseId: number
+): Promise<boolean> {
   const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase
+    .from("elearning_completions")
+    .select("id")
+    .eq("learner_id", learnerId)
+    .eq("course_id", courseId)
+    .maybeSingle();
+  if (error) throw error;
+  return Boolean(data);
+}
 
-  // Read-modify-write so we only stamp the first completion (idempotent).
-  const existing = await findLearnerById(learnerId);
-  if (!existing) return null;
-  if (existing.completedAt) return existing;
+export async function getCourseCompletionDate(
+  learnerId: number,
+  courseId: number
+): Promise<Date | null> {
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase
+    .from("elearning_completions")
+    .select("completed_at")
+    .eq("learner_id", learnerId)
+    .eq("course_id", courseId)
+    .maybeSingle<{ completed_at: string }>();
+  if (error) throw error;
+  return data?.completed_at ? new Date(data.completed_at) : null;
+}
 
+export async function countLearnerCompletions(learnerId: number): Promise<number> {
+  const supabase = getSupabaseAdmin();
+  const { count, error } = await supabase
+    .from("elearning_completions")
+    .select("*", { count: "exact", head: true })
+    .eq("learner_id", learnerId);
+  if (error) return 0;
+  return count ?? 0;
+}
+
+/**
+ * Records per-course completion (idempotent). Stamps `learners.completed_at`
+ * on first completion of the lead course (Zapier / legacy certificate).
+ */
+export async function recordCourseCompletionBySlug(
+  learnerId: number,
+  courseSlug: string
+): Promise<{
+  learner: Learner | null;
+  inserted: boolean;
+  completedAt: Date;
+  assignOnLead: boolean;
+}> {
+  const supabase = getSupabaseAdmin();
+  const slug = courseSlug.trim();
+  const { data: course, error: cErr } = await supabase
+    .from("elearning_courses")
+    .select("id, assign_on_lead")
+    .eq("slug", slug)
+    .maybeSingle<{ id: number; assign_on_lead: boolean }>();
+  if (cErr) throw cErr;
+  if (!course) {
+    throw new Error("Unknown course");
+  }
+
+  const { error: insErr } = await supabase.from("elearning_completions").insert({
+    learner_id: learnerId,
+    course_id: course.id,
+  });
+
+  let inserted = true;
+  if (insErr) {
+    const code = (insErr as { code?: string }).code;
+    if (code === "23505") inserted = false;
+    else throw insErr;
+  }
+
+  if (inserted && course.assign_on_lead) {
+    await supabase
+      .from("learners")
+      .update({ completed_at: new Date().toISOString() })
+      .eq("id", learnerId)
+      .is("completed_at", null);
+  }
+
+  const completionDate =
+    (await getCourseCompletionDate(learnerId, course.id)) ?? new Date();
+  const learner = await findLearnerById(learnerId);
+  return {
+    learner,
+    inserted,
+    completedAt: completionDate,
+    assignOnLead: course.assign_on_lead,
+  };
+}
+
+export async function listLearners(limit = 500): Promise<Learner[]> {
+  const supabase = getSupabaseAdmin();
   const { data, error } = await supabase
     .from("learners")
-    .update({ completed_at: new Date().toISOString() })
-    .eq("id", learnerId)
-    .select()
-    .single<LearnerRow>();
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(limit);
   if (error) throw error;
-  if (!data) return null;
-  return mapRow(data);
+  return (data ?? []).map(mapRow);
+}
+
+export async function deleteLearnerById(id: number): Promise<void> {
+  const supabase = getSupabaseAdmin();
+  const { error } = await supabase.from("learners").delete().eq("id", id);
+  if (error) throw error;
 }
