@@ -208,7 +208,7 @@ const team: TeamMember[] = [
   },
   {
     name: "Paige Campbell",
-    role: "Sales & Administration",
+    role: "Sales & Administration ",
     image: PaigeImage,
     bio: "Paige forms part of our Sales & Administration team. An organised and experienced Sales professional, skilled in supporting our team, managing client accounts and providing expert advice on all of our courses and guiding you down the right path. ",
   },
