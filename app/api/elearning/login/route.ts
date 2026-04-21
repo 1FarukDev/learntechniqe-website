@@ -21,24 +21,23 @@ export async function POST(request: NextRequest) {
   if (!email || !password) {
     return NextResponse.json(
       { error: "Enter your email and password" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
   try {
     const found = await findLearnerCredentials(email);
     if (!found) {
-      // Generic message — we don't disclose which field was wrong.
       return NextResponse.json(
         { error: "Email or password is incorrect" },
-        { status: 401 }
+        { status: 401 },
       );
     }
     const ok = await verifyPassword(password, found.passwordHash);
     if (!ok) {
       return NextResponse.json(
         { error: "Email or password is incorrect" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -55,10 +54,12 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (err) {
-    console.error("elearning/login failed", err);
+    const errorMessage = err instanceof Error ? err.message : String(err);
+    console.error("elearning/login failed", errorMessage);
+
     return NextResponse.json(
       { error: "Sign in is temporarily unavailable. Please try again." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
