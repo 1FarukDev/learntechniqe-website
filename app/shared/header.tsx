@@ -19,6 +19,10 @@ import type { HeaderData } from "@/types/header";
 import { categoryHrefFromMegaMenuTitle } from "@/lib/course-categories";
 import type { PathwayNavItem } from "./headerWrapper";
 
+/** Set `NEXT_PUBLIC_SHOW_LEARNER_LOGIN=false` in `.env` to hide the header link. */
+const showLearnerLoginInHeader =
+  process.env.NEXT_PUBLIC_SHOW_LEARNER_LOGIN !== "false";
+
 function toTitleCase(str: string): string {
   if (!str) return str;
   return str;
@@ -722,14 +726,16 @@ function MobileDrawer({
             </Link>
           ))}
 
-          <Link
-            href="/learn/login"
-            onClick={onClose}
-            className="mx-3 mt-2 flex items-center justify-center gap-2 rounded-xl border border-[#016068]/20 bg-[#016068]/5 px-4 py-3 text-sm font-semibold text-[#016068] hover:bg-[#016068]/10 transition-colors"
-          >
-            <GraduationCap size={16} strokeWidth={2.25} />
-            Learner Login
-          </Link>
+          {showLearnerLoginInHeader && (
+            <Link
+              href="/learn/login"
+              onClick={onClose}
+              className="mx-3 mt-2 flex items-center justify-center gap-2 rounded-xl border border-[#016068]/20 bg-[#016068]/5 px-4 py-3 text-sm font-semibold text-[#016068] hover:bg-[#016068]/10 transition-colors"
+            >
+              <GraduationCap size={16} strokeWidth={2.25} />
+              Learner Login
+            </Link>
+          )}
 
           {contactLink && (
             <Link
@@ -936,18 +942,20 @@ function Header({
               </Link>
             ))}
 
-            <Link
-              href="/learn/login"
-              onClick={closeAll}
-              className={`flex items-center gap-1.5 text-sm font-semibold transition-colors ${
-                useWhiteStyle
-                  ? "text-white/90 hover:text-white"
-                  : "text-[#016068] hover:text-[#014d54]"
-              }`}
-            >
-              <GraduationCap size={15} strokeWidth={2.25} />
-              <p>Learner Login</p>
-            </Link>
+            {showLearnerLoginInHeader && (
+              <Link
+                href="/learn/login"
+                onClick={closeAll}
+                className={`flex items-center gap-1.5 text-sm font-semibold transition-colors ${
+                  useWhiteStyle
+                    ? "text-white/90 hover:text-white"
+                    : "text-[#016068] hover:text-[#014d54]"
+                }`}
+              >
+                <GraduationCap size={15} strokeWidth={2.25} />
+                <p>Learner Login</p>
+              </Link>
+            )}
 
             {contactLink && (
               <Link
