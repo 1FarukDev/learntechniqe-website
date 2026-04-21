@@ -216,7 +216,7 @@ const team: TeamMember[] = [
     role: "Engineering Technician",
     bio: "Joe is our Engineering Technician, responsible for providing technical support and expertise in engineering projects. He works closely with our engineering team to ensure that all technical aspects of our courses are up to date and meet industry standards.",
   },
-];
+]; 
 
 export default function LeadershipSection() {
   return (
