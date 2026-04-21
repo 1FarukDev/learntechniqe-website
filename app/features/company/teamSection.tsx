@@ -5,7 +5,7 @@ import Image, { StaticImageData } from "next/image";
 import MarkImage from "@/app/assets/team/Mark.png";
 import SimonImage from "@/app/assets/team/Simon.jpg";
 import OliverImage from "@/app/assets/team/Oliver.jpg";
-
+import PaigeImage from "@/app/assets/team/paige.jpg";
 import GeorginaImage from "@/app/assets/team/Georgina.jpg";
 
 
@@ -209,6 +209,7 @@ const team: TeamMember[] = [
   {
     name: "Paige Campbell",
     role: "Sales & Administration ",
+    image: PaigeImage,
     bio: "Paige forms part of our Sales & Administration team. An organised and experienced Sales professional, skilled in supporting our team, managing client accounts and providing expert advice on all of our courses and guiding you down the right path. ",
   },
   {
