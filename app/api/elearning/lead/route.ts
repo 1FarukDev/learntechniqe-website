@@ -85,6 +85,14 @@ export async function POST(request: NextRequest) {
       : typeof body.phone_number === "string"
         ? body.phone_number
         : null;
+  const leadCourse =
+    typeof body.course === "string" ? body.course.trim() : "";
+  const leadCourseSlug =
+    typeof body.course_slug === "string"
+      ? body.course_slug.trim()
+      : typeof body.courseSlug === "string"
+        ? body.courseSlug.trim()
+        : "";
   const source = typeof body.source === "string" ? body.source : "ad-funnel";
   const adCampaign =
     typeof body.campaign === "string"
@@ -98,6 +106,8 @@ export async function POST(request: NextRequest) {
   const password = generateWelcomePassword();
 
   const courseMeta = await getCourseSettings();
+  const courseForWelcome = leadCourse || courseMeta.title;
+  const courseSlugForWelcome = leadCourseSlug || courseMeta.slug;
 
   let result;
   try {
@@ -131,8 +141,11 @@ export async function POST(request: NextRequest) {
           email: result.learner.email,
           first_name: result.learner.firstName,
           last_name: result.learner.lastName,
+          phone: result.learner.phone,
           password,
           login_url: loginUrl,
+          course: courseForWelcome,
+          course_slug: courseSlugForWelcome,
           course_title: courseMeta.title,
           course_duration: courseMeta.duration,
           is_new_account: result.created,
