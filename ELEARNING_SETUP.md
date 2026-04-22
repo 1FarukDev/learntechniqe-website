@@ -79,7 +79,14 @@ won’t get an email with their password.
 
 | Variable | Description |
 |----------|-------------|
-| `ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL` | Zapier **Catch Hook** URL. After creating/updating a learner, the app `POST`s JSON to this URL so your Zap can send email. If unset, the API still succeeds but logs a warning and **no welcome email** is triggered. |
+| `ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL` | **Optional legacy fallback.** If the per-source URL below is unset, the app uses this Catch Hook for that source. |
+| `ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL_META` | Catch Hook for **Meta** leads. Used when the lead JSON includes `"type": "meta"` (or omitted — **meta** is the default). |
+| `ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL_GOOGLE_ADS` | Catch Hook for **Google Ads** leads. Used when the lead JSON includes `"type": "google_ads"`. |
+
+The lead body may include **`type`**: `"meta"` or `"google_ads"`. The server
+`POST`s the welcome payload (including `type`, `source`, `ad_campaign`) to the
+matching URL, with fallback to `ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL` if a
+per-source URL is not set.
 
 ### 1.4 Optional
 
@@ -120,8 +127,10 @@ ELEARNING_JWT_SECRET=paste_output_from_crypto_command_min_32_chars
 # ─── Ads funnel (required when Zapier posts leads) ─────────────────
 ELEARNING_LEAD_INTAKE_SECRET=your_random_shared_secret
 
-# ─── Zapier ─────────────────────────────────────────────────────────
-ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL=https://hooks.zapier.com/hooks/catch/...
+# ─── Zapier (welcome email Catch Hooks) ─────────────────────────────
+# ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL=https://hooks.zapier.com/hooks/catch/...
+# ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL_META=https://hooks.zapier.com/hooks/catch/...
+# ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL_GOOGLE_ADS=https://hooks.zapier.com/hooks/catch/...
 # ZAPIER_ELEARNING_COMPLETION_WEBHOOK_URL=https://hooks.zapier.com/hooks/catch/...
 
 # ─── Admin UI ───────────────────────────────────────────────────────
@@ -168,21 +177,32 @@ production, or your Vercel preview URL for testing).
   "last_name": "{{last_name}}",
   "phone": "{{phone}}",
   "source": "meta-leads",
-  "campaign": "{{campaign_name}}"
+  "campaign": "{{campaign_name}}",
+  "type": "meta"
 }
 ```
 
-The API also accepts **`firstName` / `lastName`** (camelCase) and
-**`phone_number`** instead of `phone` if your trigger uses those names.
+Use **`"type": "meta"`** or **`"type": "google_ads"`** so the correct welcome
+Catch Hook is used (`ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL_META` vs
+`ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL_GOOGLE_ADS`). JSON must use **one**
+string value — not `||` inside the JSON.
 
-The server generates a **new random password**, upserts the learner, then (if
-`ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL` is set) posts the welcome payload below.
+The API also accepts **`firstName` / `lastName`** (camelCase),
+**`phone_number`** instead of `phone`, and a single **`name`** field (split into
+first/last on the server if first/last are missing).
+
+The server generates a **new random password**, upserts the learner, then
+posts the welcome payload (below) to the Catch Hook chosen by **`type`** (with
+fallback to `ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL`).
 
 ### 3b. Welcome email (Catch Hook ← website)
 
-1. Create a Zap: **Webhooks by Zapier → Catch Hook** — copy the hook URL into
-   `ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL`.
-2. Second step: **Email** (Gmail, Microsoft, etc.) using the fields from the
+1. Create **two** Zaps (recommended): **Webhooks by Zapier → Catch Hook** — copy
+   Meta’s hook URL into **`ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL_META`** and
+   Google Ads’ hook URL into **`ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL_GOOGLE_ADS`**.
+   Alternatively, set **`ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL`** alone as a
+   shared Catch Hook for both sources.
+2. Second step on each Zap: **Email** (Gmail, Microsoft, etc.) using the fields from the
    webhook body.
 
 **JSON body sent to the Catch Hook** (exact field names):
@@ -198,6 +218,9 @@ The server generates a **new random password**, upserts the learner, then (if
 | `course_duration` | string | e.g. Approx. 30 minutes |
 | `is_new_account` | boolean | `true` on first insert, `false` if email existed and was updated |
 | `timestamp` | string | ISO 8601 |
+| `type` | string | **`meta`** or **`google_ads`** — which source fired the welcome webhook |
+| `source` | string | From lead JSON (e.g. landing page label) |
+| `ad_campaign` | string \| null | From lead `campaign` / `ad_campaign` |
 
 ### 3c. Course completion (optional)
 
@@ -299,7 +322,7 @@ SCORM status and saved via **`POST /api/elearning/complete`**.
 | **Login** “temporarily unavailable” / 500 | `ELEARNING_JWT_SECRET` (length ≥ 32 in prod), Supabase URL + service role, `learners` table exists. In **development**, the JSON error may include a short hint. |
 | **Lead** returns 401 | `X-Lead-Secret` header must match `ELEARNING_LEAD_INTAKE_SECRET` exactly. |
 | **Lead** returns 500 “not configured” | Set `ELEARNING_LEAD_INTAKE_SECRET`. |
-| **No welcome email** | Set `ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL`; check Zapier task history and server logs. |
+| **No welcome email** | Set `ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL_META` / `_GOOGLE_ADS` or legacy `ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL`; confirm lead JSON `type` matches the hook you configured; check Zapier task history and server logs. |
 | **Main site / Sanity errors** (`apicdn.sanity.io`) | Not part of e-learning — set `NEXT_PUBLIC_SANITY_*` and optionally `NEXT_PUBLIC_SANITY_USE_CDN=false` (see `.env.example`). |
 | **Admin login fails** | Set **`ELEARNING_ADMIN_PASSWORD`** (≥ 12 chars). Middleware uses JWT only (`admin-auth.ts`); password check runs in **`/api/admin/elearning/login`** only. |
 | **ZIP upload fails** | Create bucket **`elearning-scorm`** in Supabase Storage; confirm `SUPABASE_SERVICE_ROLE_KEY` works. |

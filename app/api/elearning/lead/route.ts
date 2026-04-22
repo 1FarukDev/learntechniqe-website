@@ -4,16 +4,25 @@ import {
   upsertLearnerWithPassword,
 } from "@/lib/elearning/learners";
 import { getCourseSettings } from "@/lib/elearning/course-settings";
+import {
+  normalizeLeadSourceType,
+  resolveWelcomeWebhookUrl,
+  splitFullName,
+} from "@/lib/elearning/welcome-webhook";
 
 export const runtime = "nodejs";
 
 /**
  * Zapier (or any ad-funnel) posts new leads here. Creates/refreshes the
- * learner record with a freshly generated password, then fires a second
- * Zapier webhook that sends the welcome email.
+ * learner record with a freshly generated password, then fires a Zapier Catch
+ * Hook so you can send the welcome email.
  *
- * Protected by a shared secret in the `X-Lead-Secret` header to stop random
- * traffic from minting accounts.
+ * Optional JSON field `type`: `"meta"` | `"google_ads"` — routes the welcome
+ * POST to `ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL_META` or
+ * `ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL_GOOGLE_ADS`, with fallback to
+ * `ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL`.
+ *
+ * Protected by `X-Lead-Secret` matching `ELEARNING_LEAD_INTAKE_SECRET`.
  */
 export async function POST(request: NextRequest) {
   const intakeSecret = process.env.ELEARNING_LEAD_INTAKE_SECRET?.trim();
@@ -44,18 +53,32 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const firstName =
+  let firstName =
     typeof body.first_name === "string"
       ? body.first_name
       : typeof body.firstName === "string"
         ? body.firstName
         : "";
-  const lastName =
+  let lastName =
     typeof body.last_name === "string"
       ? body.last_name
       : typeof body.lastName === "string"
         ? body.lastName
         : "";
+
+  if (
+    !(firstName ?? "").trim() &&
+    !(lastName ?? "").trim() &&
+    typeof body.name === "string"
+  ) {
+    const split = splitFullName(body.name);
+    firstName = split.first;
+    lastName = split.last;
+  }
+
+  firstName = (firstName ?? "").trim();
+  lastName = (lastName ?? "").trim();
+
   const phone =
     typeof body.phone === "string"
       ? body.phone
@@ -69,6 +92,8 @@ export async function POST(request: NextRequest) {
       : typeof body.ad_campaign === "string"
         ? body.ad_campaign
         : null;
+
+  const leadType = normalizeLeadSourceType(body.type);
 
   const password = generateWelcomePassword();
 
@@ -95,7 +120,8 @@ export async function POST(request: NextRequest) {
   }
 
   const loginUrl = new URL("/learn/login", request.nextUrl.origin).toString();
-  const welcomeWebhook = process.env.ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL;
+  const welcomeWebhook = resolveWelcomeWebhookUrl(leadType);
+
   if (welcomeWebhook) {
     try {
       await fetch(welcomeWebhook, {
@@ -111,6 +137,9 @@ export async function POST(request: NextRequest) {
           course_duration: courseMeta.duration,
           is_new_account: result.created,
           timestamp: new Date().toISOString(),
+          type: leadType,
+          source,
+          ad_campaign: adCampaign,
         }),
       });
     } catch (err) {
@@ -118,7 +147,7 @@ export async function POST(request: NextRequest) {
     }
   } else {
     console.warn(
-      "ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL not set — skipping welcome email",
+      `elearning/lead: no welcome webhook for type=${leadType}; set ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL_META, ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL_GOOGLE_ADS, or ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL`,
     );
   }
 
@@ -126,5 +155,6 @@ export async function POST(request: NextRequest) {
     success: true,
     created: result.created,
     login_url: loginUrl,
+    type: leadType,
   });
 }
