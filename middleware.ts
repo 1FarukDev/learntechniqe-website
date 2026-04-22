@@ -9,6 +9,10 @@ import {
   ADMIN_COOKIE_NAME,
   verifyAdminSessionToken,
 } from "@/lib/elearning/admin-auth";
+import {
+  isBlockedElearningPath,
+  isElearningPlatformDisabled,
+} from "@/lib/elearning/platform-access";
 
 const PROTECTED_LEARNER_PREFIXES = [
   "/learn/dashboard",
@@ -46,6 +50,19 @@ export async function middleware(request: NextRequest) {
   }
 
   const pathname = request.nextUrl.pathname;
+
+  if (isElearningPlatformDisabled() && isBlockedElearningPath(pathname)) {
+    if (pathname.startsWith("/api")) {
+      return NextResponse.json(
+        { error: "E-learning is currently unavailable." },
+        { status: 403 }
+      );
+    }
+    const url = request.nextUrl.clone();
+    url.pathname = "/404";
+    url.search = "";
+    return NextResponse.redirect(url);
+  }
 
   if (isProtectedAdminPath(pathname)) {
     const adminToken = request.cookies.get(ADMIN_COOKIE_NAME)?.value;

@@ -16,7 +16,7 @@ export const runtime = "nodejs";
  * traffic from minting accounts.
  */
 export async function POST(request: NextRequest) {
-  const intakeSecret = process.env.ELEARNING_LEAD_INTAKE_SECRET;
+  const intakeSecret = process.env.ELEARNING_LEAD_INTAKE_SECRET?.trim();
   if (!intakeSecret) {
     return NextResponse.json(
       { error: "Lead intake not configured" },
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const provided = request.headers.get("x-lead-secret");
+  const provided = request.headers.get("x-lead-secret")?.trim();
   if (!provided || provided !== intakeSecret) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
