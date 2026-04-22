@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { MarkNotFoundForHeader } from "@/app/shared/mark-not-found-header";
 
 export default function NotFound() {
   return (
     <div className="min-h-[70vh] flex flex-col items-center justify-center px-5 py-20">
+      <MarkNotFoundForHeader />
       <div className="max-w-2xl mx-auto text-center">
         <h1 className="font-heading font-bold text-[120px] sm:text-[160px] md:text-[200px] leading-none text-[#01636B]/20 select-none">
           404

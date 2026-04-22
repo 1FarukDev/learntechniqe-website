@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useState, useRef } from "react";
 import LearnTechniqueLogo from "@/app/assets/svg/learntechnique.png";
 import LearnTechniqueLogoWhite from "@/app/assets/svg/learntechnique-white.png";
 import Elmlogo from "@/app/assets/svg/elm.svg";
@@ -18,6 +18,7 @@ import {
 import type { HeaderData } from "@/types/header";
 import { categoryHrefFromMegaMenuTitle } from "@/lib/course-categories";
 import type { PathwayNavItem } from "./headerWrapper";
+import { NOT_FOUND_HEADER_ATTR } from "./mark-not-found-header";
 
 /** Set `NEXT_PUBLIC_SHOW_LEARNER_LOGIN=false` in `.env` to hide the header link. */
 const showLearnerLoginInHeader =
@@ -767,11 +768,12 @@ function Header({
   const [showCoursesMega, setShowCoursesMega] = useState(false);
   const [showPathwaysMega, setShowPathwaysMega] = useState(false);
   const [showMobileDrawer, setShowMobileDrawer] = useState(false);
+  const [notFoundUi, setNotFoundUi] = useState(false);
   const coursesTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pathwaysTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pathname = usePathname();
 
-  const noNavbarPages = ["/", "/not-found", "/company"];
+  const noNavbarPages = ["/", "/not-found", "/404", "/company"];
   const isHomePage = noNavbarPages.includes(pathname);
   const isLearnerPortal = pathname.startsWith("/learn");
   const isAdminPortal = pathname.startsWith("/admin");
@@ -790,7 +792,20 @@ function Header({
     setShowMobileDrawer(false);
   }, [pathname]);
 
-  const useWhiteStyle = !isHomePage && !scrolled && !showMegaMenu;
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    const sync = () => setNotFoundUi(root.hasAttribute(NOT_FOUND_HEADER_ATTR));
+    sync();
+    const observer = new MutationObserver(sync);
+    observer.observe(root, {
+      attributes: true,
+      attributeFilter: [NOT_FOUND_HEADER_ATTR],
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  const useWhiteStyle =
+    !isHomePage && !notFoundUi && !scrolled && !showMegaMenu;
 
   const closeAll = () => {
     setShowCoursesMega(false);
