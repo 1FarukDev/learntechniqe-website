@@ -26,14 +26,21 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    console.log("[login] 1. Looking up learner:", email);
     const found = await findLearnerCredentials(email);
+    console.log("[login] 2. Found learner:", found ? "yes" : "no");
+
     if (!found) {
       return NextResponse.json(
         { error: "Email or password is incorrect" },
         { status: 401 },
       );
     }
+
+    console.log("[login] 3. Verifying password...");
     const ok = await verifyPassword(password, found.passwordHash);
+    console.log("[login] 4. Password ok:", ok);
+
     if (!ok) {
       return NextResponse.json(
         { error: "Email or password is incorrect" },
@@ -41,8 +48,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    console.log("[login] 5. Setting session cookie...");
     await setLearnerSessionCookie(found.learner);
+    console.log("[login] 6. Touching last login...");
     await touchLastLogin(found.learner.id);
+    console.log("[login] 7. Done!");
 
     return NextResponse.json({
       success: true,
@@ -54,9 +64,7 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (err) {
-    const errorMessage = err instanceof Error ? err.message : String(err);
-    console.error("elearning/login failed", errorMessage);
-
+    console.error("[login] failed at step:", err);
     return NextResponse.json(
       { error: "Sign in is temporarily unavailable. Please try again." },
       { status: 500 },
