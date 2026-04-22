@@ -45,7 +45,7 @@ const faqs: FAQItem[] = [
       "Yes, we offer flexible payment options including monthly payment plans. Payment options include:",
     bullets: [
       {
-        text: "Full payment upfront (often with early booking discounts)",
+        text: "Full payment upfront (often with early booking discounts)", 
       }, 
       // {
       //   text: "Monthly payment plans - Spread the cost over several months",
