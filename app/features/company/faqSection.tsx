@@ -46,7 +46,7 @@ const faqs: FAQItem[] = [
     bullets: [
       {
         text: "Full payment upfront (often with early booking discounts)",
-      },
+      }, 
       // {
       //   text: "Monthly payment plans - Spread the cost over several months",
       // },
