@@ -32,115 +32,122 @@ export function CertificatePanel({
       const pageW = doc.internal.pageSize.getWidth();
       const pageH = doc.internal.pageSize.getHeight();
 
-      // Outer frame
-      doc.setFillColor(246, 248, 250);
+      // Outer background and border
+      doc.setFillColor(232, 241, 247);
       doc.rect(0, 0, pageW, pageH, "F");
+      doc.setDrawColor(123, 151, 171);
+      doc.setLineWidth(8);
+      doc.rect(12, 12, pageW - 24, pageH - 24, "S");
 
       // Inner card
-      const margin = 28;
+      const margin = 34;
       doc.setFillColor(255, 255, 255);
-      doc.roundedRect(margin, margin, pageW - margin * 2, pageH - margin * 2, 14, 14, "F");
-
-      // Decorative teal bar
-      doc.setFillColor(1, 96, 104);
-      doc.rect(margin, margin, pageW - margin * 2, 8, "F");
-
-      // Accent gold bar
-      doc.setFillColor(233, 158, 32);
-      doc.rect(margin, margin + 8, 160, 4, "F");
+      doc.rect(margin, margin, pageW - margin * 2, pageH - margin * 2, "F");
+      doc.setDrawColor(123, 151, 171);
+      doc.setLineWidth(1.2);
+      doc.rect(margin + 6, margin + 6, pageW - margin * 2 - 12, pageH - margin * 2 - 12, "S");
 
       // Header
-      doc.setTextColor(1, 96, 104);
+      doc.setTextColor(32, 32, 32);
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(11);
-      doc.text("LEARN TECHNIQUE", pageW / 2, margin + 50, { align: "center" });
+      doc.setFontSize(25);
+      doc.text("TECHNIQUE", pageW / 2, margin + 48, { align: "center" });
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(8.5);
-      doc.setTextColor(120, 120, 120);
-      doc.text("TECHNIQUE LEARNING SOLUTIONS", pageW / 2, margin + 66, {
+      doc.setFontSize(8);
+      doc.setTextColor(70, 70, 70);
+      doc.text("For ALL your engineering training needs", pageW / 2, margin + 62, {
         align: "center",
+      });
+      doc.setFontSize(7);
+      doc.text(`Date of Attendance: ${completedDate}`, pageW - margin - 18, margin + 62, {
+        align: "right",
       });
 
       // Title
-      doc.setTextColor(20, 20, 20);
-      doc.setFont("helvetica", "bold");
+      doc.setTextColor(93, 133, 150);
+      doc.setFont("helvetica", "normal");
       doc.setFontSize(34);
-      doc.text("Certificate of Completion", pageW / 2, margin + 130, {
+      doc.text("Certificate of Attendance", pageW / 2, margin + 122, {
         align: "center",
       });
 
       // Sub
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(12);
-      doc.setTextColor(110, 110, 110);
-      doc.text("This certifies that", pageW / 2, margin + 170, {
+      doc.setFontSize(13);
+      doc.setTextColor(25, 25, 25);
+      doc.text("This is to certify that", pageW / 2, margin + 160, {
         align: "center",
       });
 
-      // Learner name
+      // Name boxed line
+      const boxW = pageW * 0.58;
+      const boxX = (pageW - boxW) / 2;
+      doc.setDrawColor(198, 198, 198);
+      doc.setLineWidth(0.8);
+      doc.rect(boxX, margin + 176, boxW, 17, "S");
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(32);
-      doc.setTextColor(1, 96, 104);
-      doc.text(fullName, pageW / 2, margin + 215, { align: "center" });
-
-      // Underline
-      const nameWidth = doc.getTextWidth(fullName);
-      doc.setDrawColor(233, 158, 32);
-      doc.setLineWidth(1.2);
-      doc.line(
-        (pageW - nameWidth) / 2,
-        margin + 225,
-        (pageW + nameWidth) / 2,
-        margin + 225
-      );
+      doc.setFontSize(22);
+      doc.setTextColor(78, 104, 119);
+      doc.text(fullName, pageW / 2, margin + 190, { align: "center" });
 
       // Body
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(12);
-      doc.setTextColor(90, 90, 90);
-      doc.text("has successfully completed the course", pageW / 2, margin + 255, {
+      doc.setFont("helvetica", "italic");
+      doc.setFontSize(14);
+      doc.setTextColor(35, 35, 35);
+      doc.text("successfully completed the following training:", pageW / 2, margin + 227, {
         align: "center",
       });
 
+      // Course boxed line
       doc.setFont("helvetica", "bold");
       doc.setFontSize(20);
-      doc.setTextColor(20, 20, 20);
-      doc.text(`"${courseTitle}"`, pageW / 2, margin + 290, { align: "center" });
+      doc.setTextColor(78, 104, 119);
+      doc.rect(boxX, margin + 236, boxW, 17, "S");
+      doc.text(courseTitle, pageW / 2, margin + 250, { align: "center" });
 
-      // Footer row: date + signature + id
-      const footerY = pageH - margin - 70;
-      doc.setLineWidth(0.5);
-      doc.setDrawColor(220, 220, 220);
-      doc.line(margin + 80, footerY, margin + 260, footerY);
-      doc.line(pageW - margin - 260, footerY, pageW - margin - 80, footerY);
-
+      // Trainer/course specific line
+      doc.setDrawColor(198, 198, 198);
+      doc.setLineWidth(0.8);
+      doc.rect(margin + 38, pageH - margin - 95, pageW * 0.42, 17, "S");
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(10);
-      doc.setTextColor(40, 40, 40);
-      doc.text(completedDate, margin + 170, footerY + 16, { align: "center" });
-      doc.text("Mark Harvey", pageW - margin - 170, footerY + 16, {
-        align: "center",
-      });
-
+      doc.setFontSize(14);
+      doc.setTextColor(78, 104, 119);
+      doc.text(courseTitle, margin + 42, pageH - margin - 82);
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(8);
-      doc.setTextColor(150, 150, 150);
-      doc.text("Date of completion", margin + 170, footerY + 30, {
-        align: "center",
-      });
-      doc.text("Managing Director", pageW - margin - 170, footerY + 30, {
-        align: "center",
-      });
+      doc.setFontSize(10.5);
+      doc.setTextColor(20, 20, 20);
+      doc.text("Company Trainer", margin + 38, pageH - margin - 62);
 
-      // Certificate ID
+      // Signature block
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(12);
+      doc.setTextColor(60, 60, 60);
+      doc.text("Mark Crook", pageW - margin - 120, pageH - margin - 100);
+      doc.setFont("times", "italic");
+      doc.setFontSize(35);
+      doc.text("M. Crook", pageW - margin - 118, pageH - margin - 76);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(11);
+      doc.text("Company Director", pageW - margin - 120, pageH - margin - 60);
+
+      // Footer
+      doc.setFontSize(9);
+      doc.setTextColor(52, 52, 52);
+      doc.text("Technique Learning Solutions", pageW / 2, pageH - margin - 52, {
+        align: "center",
+      });
       doc.setFontSize(8);
-      doc.setTextColor(170, 170, 170);
       doc.text(
-        `Certificate ID: ${certificateId}  ·  Verify at learntechnique.com`,
+        "1-2 Technique Tower Business Park, High Street, Clay Cross, Chesterfield, Derbyshire S45 9EA",
         pageW / 2,
-        pageH - margin - 22,
+        pageH - margin - 41,
         { align: "center" }
       );
+      doc.setFontSize(7.5);
+      doc.setTextColor(130, 130, 130);
+      doc.text(`Certificate Ref: ${certificateId}`, pageW - margin - 10, pageH - margin - 26, {
+        align: "right",
+      });
 
       const filename = `learn-technique-certificate-${fullName
         .replace(/[^a-z0-9]+/gi, "-")
@@ -157,55 +164,76 @@ export function CertificatePanel({
   return (
     <div className="rounded-3xl overflow-hidden border border-zinc-200 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.15)] bg-white">
       {/* Visual certificate preview */}
-      <div className="relative aspect-[1.414/1] w-full bg-[#F6F8FA]">
-        <div className="absolute inset-4 md:inset-8 rounded-xl bg-white border border-zinc-100 overflow-hidden">
-          <div className="h-2 bg-[#016068]" />
-          <div className="h-1 w-40 bg-[#E99E20]" />
-          <div className="px-6 md:px-14 py-8 md:py-12 flex flex-col items-center text-center h-full">
-            <p className="text-[10px] md:text-xs font-bold tracking-[0.35em] text-[#016068]">
-              LEARN TECHNIQUE
-            </p>
-            <p className="mt-1 text-[9px] md:text-[10px] tracking-[0.3em] text-zinc-400">
-              TECHNIQUE LEARNING SOLUTIONS
-            </p>
+      <div className="relative aspect-[1.4/1] w-full bg-[#e8f1f7] p-2 sm:p-3">
+        <div className="absolute inset-2 sm:inset-3 border-[6px] border-[#7b97ab]" />
+        <div className="relative h-full w-full border-[10px] border-[#9ab0c0] bg-white p-4 sm:p-6 md:p-9 text-center">
+          <div className="absolute inset-1 border border-[#8da7b7]" />
 
-            <h2 className="mt-5 md:mt-8 font-heading text-2xl md:text-4xl tracking-tight text-zinc-900">
-              Certificate of Completion
+          <div className="relative z-10 h-full flex flex-col">
+            <div className="flex items-start justify-between text-[8px] text-zinc-700">
+              <p className="text-left">Under our training service and experience -</p>
+              <p className="text-right">
+                Date of Attendance: <span className="font-medium">{completedDate}</span>
+              </p>
+            </div>
+
+            <div className="mt-1">
+              <p className="text-xl sm:text-2xl md:text-3xl font-semibold tracking-[0.08em] text-zinc-900">
+                TECHNIQUE
+              </p>
+              <p className="text-[9px] sm:text-[10px] text-zinc-700">
+                For ALL your engineering training needs
+              </p>
+            </div>
+
+            <h2 className="mt-6 md:mt-8 text-3xl sm:text-4xl md:text-5xl font-medium text-[#5d8596]">
+              Certificate of Attendance
             </h2>
-            <p className="mt-4 md:mt-6 text-[11px] md:text-sm text-zinc-500">
-              This certifies that
-            </p>
-            <p className="mt-2 md:mt-3 font-heading text-xl md:text-3xl text-[#016068] tracking-tight px-4 border-b-2 border-[#E99E20] pb-1 max-w-full truncate">
-              {fullName}
-            </p>
-            <p className="mt-4 md:mt-6 text-[11px] md:text-sm text-zinc-500 px-6">
-              has successfully completed the course
-            </p>
-            <p className="mt-1.5 md:mt-2 font-semibold text-sm md:text-xl text-zinc-900 italic px-6 max-w-2xl">
-              &ldquo;{courseTitle}&rdquo;
+            <p className="mt-4 text-sm md:text-xl text-zinc-900">This is to certify that</p>
+
+            <div className="mt-2 mx-auto w-[76%] border border-zinc-300 px-3 py-1">
+              <p className="text-lg sm:text-2xl md:text-4xl text-[#4e6877] font-medium truncate">
+                {fullName}
+              </p>
+            </div>
+
+            <p className="mt-3 text-base md:text-3xl italic text-zinc-900">
+              successfully completed the following training:
             </p>
 
-            <div className="mt-auto pt-6 md:pt-10 flex w-full items-end justify-between text-[10px] md:text-xs text-zinc-500">
-              <div className="flex-1 text-center">
-                <p className="border-t border-zinc-200 pt-1.5 mx-4 md:mx-6 font-semibold text-zinc-800">
-                  {completedDate}
-                </p>
-                <p className="text-[9px] md:text-[10px] text-zinc-400 mt-0.5">
-                  Date of completion
-                </p>
+            <div className="mt-2 mx-auto w-[76%] border border-zinc-300 px-3 py-1">
+              <p className="text-lg sm:text-2xl md:text-4xl text-[#4e6877] font-medium truncate">
+                {courseTitle}
+              </p>
+            </div>
+
+            <div className="mt-auto grid grid-cols-2 items-end gap-3 pb-4">
+              <div className="text-left">
+                <div className="w-[88%] border border-zinc-300 px-2 py-1">
+                  <p className="text-sm md:text-lg text-[#4e6877] font-medium truncate">
+                    {courseTitle}
+                  </p>
+                </div>
+                <p className="mt-1 text-xs sm:text-sm text-zinc-900">Company Trainer</p>
               </div>
-              <div className="flex-1 text-center">
-                <p className="border-t border-zinc-200 pt-1.5 mx-4 md:mx-6 font-semibold text-zinc-800">
-                  Mark Harvey
+              <div className="text-right pr-2">
+                <p className="text-lg sm:text-2xl text-zinc-700">Mark Crook</p>
+                <p className="text-3xl sm:text-4xl italic font-serif text-zinc-800 -mt-1">
+                  M. Crook
                 </p>
-                <p className="text-[9px] md:text-[10px] text-zinc-400 mt-0.5">
-                  Managing Director
-                </p>
+                <p className="text-xs sm:text-sm text-zinc-900">Company Director</p>
               </div>
             </div>
 
-            <p className="mt-3 md:mt-5 text-[9px] md:text-[10px] text-zinc-400 tracking-wide">
-              Certificate ID: {certificateId}
+            <div className="text-center text-[10px] sm:text-xs text-zinc-700 leading-tight">
+              <p>Technique Learning Solutions</p>
+              <p>
+                1-2 Technique Tower Business Park, High Street, Clay Cross,
+                Chesterfield, Derbyshire S45 9EA
+              </p>
+            </div>
+            <p className="mt-1 text-right text-[10px] text-zinc-500">
+              Certificate Ref: {certificateId}
             </p>
           </div>
         </div>
