@@ -21,38 +21,29 @@ export async function POST(request: NextRequest) {
   if (!email || !password) {
     return NextResponse.json(
       { error: "Enter your email and password" },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
   try {
-    console.log("[login] 1. Looking up learner:", email);
     const found = await findLearnerCredentials(email);
-    console.log("[login] 2. Found learner:", found ? "yes" : "no");
-
     if (!found) {
+      // Generic message — we don't disclose which field was wrong.
       return NextResponse.json(
         { error: "Email or password is incorrect" },
-        { status: 401 },
+        { status: 401 }
       );
     }
-
-    console.log("[login] 3. Verifying password...");
     const ok = await verifyPassword(password, found.passwordHash);
-    console.log("[login] 4. Password ok:", ok);
-
     if (!ok) {
       return NextResponse.json(
         { error: "Email or password is incorrect" },
-        { status: 401 },
+        { status: 401 }
       );
     }
 
-    console.log("[login] 5. Setting session cookie...");
     await setLearnerSessionCookie(found.learner);
-    console.log("[login] 6. Touching last login...");
     await touchLastLogin(found.learner.id);
-    console.log("[login] 7. Done!");
 
     return NextResponse.json({
       success: true,
@@ -64,10 +55,10 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (err) {
-    console.error("[login] failed at step:", err);
+    console.error("elearning/login failed", err);
     return NextResponse.json(
       { error: "Sign in is temporarily unavailable. Please try again." },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

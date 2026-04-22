@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
   if (!intakeSecret) {
     return NextResponse.json(
       { error: "Lead intake not configured" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
   if (!email || !/.+@.+\..+/.test(email)) {
     return NextResponse.json(
       { error: "A valid email is required" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -62,8 +62,7 @@ export async function POST(request: NextRequest) {
       : typeof body.phone_number === "string"
         ? body.phone_number
         : null;
-  const source =
-    typeof body.source === "string" ? body.source : "ad-funnel";
+  const source = typeof body.source === "string" ? body.source : "ad-funnel";
   const adCampaign =
     typeof body.campaign === "string"
       ? body.campaign
@@ -91,7 +90,7 @@ export async function POST(request: NextRequest) {
     console.error("elearning/lead: upsert failed", err);
     return NextResponse.json(
       { error: "Could not create learner" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
@@ -119,7 +118,7 @@ export async function POST(request: NextRequest) {
     }
   } else {
     console.warn(
-      "ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL not set — skipping welcome email"
+      "ZAPIER_ELEARNING_WELCOME_WEBHOOK_URL not set — skipping welcome email",
     );
   }
 
