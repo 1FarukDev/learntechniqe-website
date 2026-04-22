@@ -47,9 +47,9 @@ const faqs: FAQItem[] = [
       {
         text: "Full payment upfront (often with early booking discounts)",
       },
-      {
-        text: "Monthly payment plans - Spread the cost over several months",
-      },
+      // {
+      //   text: "Monthly payment plans - Spread the cost over several months",
+      // },
       {
         text: "Employer sponsorship - Many companies pay for employee training",
       },
