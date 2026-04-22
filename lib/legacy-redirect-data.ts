@@ -203,7 +203,7 @@ export const EXACT_PATH_REDIRECTS: Readonly<Record<string, string>> = {
     "/courses/aircon-refrigeration",
   "/fgas-tacr-training-courses": "/courses/aircon-refrigeration",
   "/gas-courses": "/courses/aircon-refrigeration",
-  "/documents": "/contact",
+  // "/documents": "/contact",
   "/images/map.pdf": "/company",
   "/oa": "/",
   // "/privacy-policy": "/privacy-policy",
@@ -308,4 +308,5 @@ export const RESERVED_ROOT_SEGMENTS = new Set([
   "wp-admin",
   "wp-login.php",
   "_next",
+  "documents"
 ]);
