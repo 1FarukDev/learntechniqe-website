@@ -308,5 +308,6 @@ export const RESERVED_ROOT_SEGMENTS = new Set([
   "wp-admin",
   "wp-login.php",
   "_next",
-  "documents"
+  "documents",
+  "practical-assessments"
 ]);

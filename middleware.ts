@@ -13,6 +13,10 @@ import {
   isBlockedElearningPath,
   isElearningPlatformDisabled,
 } from "@/lib/elearning/platform-access";
+import {
+  practicalAccessCookieValue,
+  PRACTICAL_COOKIE_NAME,
+} from "@/lib/practical-assessments-auth";
 
 const PROTECTED_LEARNER_PREFIXES = [
   "/learn/dashboard",
@@ -30,6 +34,13 @@ function isProtectedAdminPath(pathname: string): boolean {
   return (
     pathname.startsWith("/admin/elearning") &&
     pathname !== "/admin/elearning/login"
+  );
+}
+
+function isProtectedPracticalAssessmentsPath(pathname: string): boolean {
+  return (
+    pathname.startsWith("/practical-assessments") &&
+    pathname !== "/practical-assessments/login"
   );
 }
 
@@ -82,6 +93,19 @@ export async function middleware(request: NextRequest) {
     if (!session) {
       const redirect = request.nextUrl.clone();
       redirect.pathname = "/learn/login";
+      redirect.searchParams.set("next", pathname);
+      return NextResponse.redirect(redirect);
+    }
+    return NextResponse.next();
+  }
+
+  if (isProtectedPracticalAssessmentsPath(pathname)) {
+    const practicalCookie = request.cookies.get(PRACTICAL_COOKIE_NAME)?.value;
+    const hasAccess = practicalCookie === practicalAccessCookieValue();
+
+    if (!hasAccess) {
+      const redirect = request.nextUrl.clone();
+      redirect.pathname = "/practical-assessments/login";
       redirect.searchParams.set("next", pathname);
       return NextResponse.redirect(redirect);
     }
