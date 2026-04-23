@@ -63,5 +63,6 @@ export const courseBySlugQuery = groq`
     courseReviewId,
     dates,
     bookASession,
+    showPracticalAssessmentBanner,
   }
 `;

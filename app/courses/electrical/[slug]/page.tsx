@@ -24,6 +24,7 @@ import { fetchCoursecheckReviews } from "@/lib/coursecheck/fetchers";
 import { notFound } from "next/navigation";
 import React from "react";
 import Session from "../../sections/session";
+import PracticalAssessmentBanner from "../../sections/practicalAssessmentBanner";
 
 interface CoursePageProps {
   params: { slug: string };
@@ -188,6 +189,8 @@ async function CourseDetail({ params }: CoursePageProps) {
     }),
   };
 
+  console.log(rawCourse?.showPracticalAssessmentBanner)
+
   return (
     <main>
       <script
@@ -222,6 +225,12 @@ async function CourseDetail({ params }: CoursePageProps) {
           />
         </AnimatedSection>
       )}
+      {Boolean(rawCourse?.showPracticalAssessmentBanner) && (
+        <AnimatedSection variant="fade-up">
+          <PracticalAssessmentBanner />
+        </AnimatedSection>
+      )}
+      
       <AnimatedSection variant="fade-up">
         <CourseReviews
           reviews={coursecheckReviews}
