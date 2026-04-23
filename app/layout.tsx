@@ -10,6 +10,7 @@ import {
   TrackingNoScripts,
 } from "./shared/trackingScripts";
 import { NavigationProgress } from "./navigation-progress";
+import CookieBanner from "@/components/cookie-banner";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -164,6 +165,7 @@ export default function RootLayout({
         <ConditionalFooter>
           <Footer />
         </ConditionalFooter>
+        <CookieBanner />
         <script src="//code.tidio.co/xfa1nuadygc0qsxfrhtjddlktnyppeeu.js" async></script>
       </body>
     </html>
