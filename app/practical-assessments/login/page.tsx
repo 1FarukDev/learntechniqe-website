@@ -1,10 +1,32 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { FormEvent, Suspense, useState } from "react";
 import { MarkNotFoundForHeader } from "@/app/shared/mark-not-found-header";
 
 export default function PracticalAssessmentsLoginPage() {
+  return (
+    <Suspense fallback={<LoginPageFallback />}>
+      <PracticalAssessmentsLoginContent />
+    </Suspense>
+  );
+}
+
+function LoginPageFallback() {
+  return (
+    <main className="min-h-screen flex items-center justify-center px-4 py-10">
+      <MarkNotFoundForHeader />
+      <div className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-8 shadow-md">
+        <h1 className="text-2xl font-semibold text-zinc-900">
+          Practical Assessments
+        </h1>
+        <p className="mt-2 text-sm text-zinc-600">Loading login form...</p>
+      </div>
+    </main>
+  );
+}
+
+function PracticalAssessmentsLoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const nextPath = searchParams.get("next") || "/practical-assessments";
