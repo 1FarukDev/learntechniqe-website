@@ -16,4 +16,4 @@ declare module "react-pdf" {
     className?: string;
     width?: number;
   }>;
-}
+} 
