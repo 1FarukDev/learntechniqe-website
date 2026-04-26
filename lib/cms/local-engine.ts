@@ -601,7 +601,7 @@ export async function runLocalCmsQuery<T>(
   const handler = getRegistry().get(key);
   if (!handler) {
     throw new Error(
-      `Local CMS: unsupported GROQ query. Add a handler in lib/cms/local-engine.ts or disable USE_LOCAL_CMS.`,
+      `Local CMS: unsupported GROQ query. Add a handler in lib/cms/local-engine.ts or turn off local mode in admin.`,
     );
   }
   return handler(docs, byId, params) as T;

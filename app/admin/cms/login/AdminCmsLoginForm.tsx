@@ -53,11 +53,8 @@ export function AdminCmsLoginForm() {
             Local content admin
           </h1>
           <p className="mt-2 text-center text-sm text-zinc-500">
-            Edit the JSON store used when{" "}
-            <code className="text-xs bg-zinc-100 px-1 rounded">
-              USE_LOCAL_CMS=true
-            </code>
-            . Password:{" "}
+            Edit the JSON store and choose local vs live Sanity in the admin.
+            Password:{" "}
             <code className="text-xs bg-zinc-100 px-1 rounded">
               SANITY_CMS_ADMIN_PASSWORD
             </code>

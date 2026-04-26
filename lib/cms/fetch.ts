@@ -11,7 +11,7 @@ const revalidateForThisRequest = cache(async () => {
 
 /**
  * Use everywhere you previously called `client.fetch`.
- * When USE_LOCAL_CMS=true, reads the local JSON store (no Sanity API).
+ * When local mode is on (see admin → Content source), reads the local JSON store.
  * Otherwise uses the shared Sanity client with Next Data Cache revalidation
  * from admin + env (see `lib/cms/data-cache-settings.ts`).
  */

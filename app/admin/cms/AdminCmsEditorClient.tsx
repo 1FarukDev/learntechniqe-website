@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
+import { CmsLocalModeSettings } from "./CmsLocalModeSettings";
 import { CmsDataCacheSettings } from "./CmsDataCacheSettings";
 
 export function AdminCmsEditorClient() {
@@ -115,12 +116,9 @@ export function AdminCmsEditorClient() {
               Local CMS store
             </h1>
             <p className="text-sm text-zinc-600 mt-1">
-              Full JSON mirror of Sanity documents. Validate changes in a
-              staging build before setting{" "}
-              <code className="text-xs bg-zinc-200/80 px-1 rounded">
-                USE_LOCAL_CMS=true
-              </code>{" "}
-              in production.
+              Full JSON mirror of Sanity documents. Use{" "}
+              <strong>Content source</strong> below to point the public site at
+              this file or at live Sanity.
             </p>
           </div>
           <div className="flex gap-2">
@@ -152,6 +150,7 @@ export function AdminCmsEditorClient() {
           </p>
         )}
 
+        <CmsLocalModeSettings />
         <CmsDataCacheSettings />
 
         <textarea

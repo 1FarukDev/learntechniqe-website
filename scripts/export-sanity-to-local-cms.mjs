@@ -62,8 +62,6 @@ await writeFile(outPath, `${JSON.stringify(store, null, 2)}\n`, "utf8");
 
 console.log(`Wrote ${documents.length} documents to ${outPath}`);
 console.log(
-  "Next: set USE_LOCAL_CMS=true to serve content from this file (no Sanity API reads).",
+  "Next: in /admin/cms → Content source, enable the local store (or set USE_LOCAL_CMS until you save a mode file).",
 );
-console.log(
-  "Edit content at /admin/cms (password: SANITY_CMS_ADMIN_PASSWORD).",
-);
+console.log("Edit content at /admin/cms (password: SANITY_CMS_ADMIN_PASSWORD).");
