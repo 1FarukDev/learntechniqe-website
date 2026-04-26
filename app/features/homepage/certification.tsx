@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { client } from "@/lib/sanity/client";
+import { cmsFetch } from "@/lib/cms/fetch";
 import type { CertificationItem, CertificationType } from "@/lib/types/certification";
 import { CERTIFICATION_QUERY } from "@/lib/queries/certification";
 import { urlFor } from "@/lib/sanity/image";
@@ -15,7 +15,7 @@ const WIDTH_MD: Record<CertificationItem["width"], string> = {
 };
 
 async function Certification() {
-  const data = await client.fetch<CertificationType>(CERTIFICATION_QUERY);
+  const data = await cmsFetch<CertificationType>(CERTIFICATION_QUERY);
 
   if (!data?.isActive || !data?.certifications?.length) return null;
 

@@ -7,7 +7,7 @@ import Contact from "@/app/features/homepage/contact";
 import { AnimatedSection } from "@/components/animated-section";
 import HeroSection from "@/app/shared/heroBackground";
 import { CATEGORY_PAGE_CURVE_SURFACE } from "@/lib/constants/category-page-surface";
-import { client } from "@/lib/sanity/client";
+import { cmsFetch } from "@/lib/cms/fetch";
 import { courseCardsQuery } from "@/lib/queries/courses";
 import { headerQuery } from "@/lib/queries/navigation";
 import { categoriseFromHeader } from "@/lib/course-categories";
@@ -30,8 +30,8 @@ export const metadata: Metadata = {
 
 export default async function AirconRefrigerationCoursesPage() {
   const [allCourses, headerData] = await Promise.all([
-    client.fetch<CourseCardData[]>(courseCardsQuery),
-    client.fetch<HeaderData>(headerQuery),
+    cmsFetch<CourseCardData[]>(courseCardsQuery),
+    cmsFetch<HeaderData>(headerQuery),
   ]);
   const grouped = categoriseFromHeader(
     headerData.megaMenuColumns,

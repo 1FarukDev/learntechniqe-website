@@ -1,5 +1,9 @@
 import { createClient } from "next-sanity";
 
+import { SANITY_CMS_REVALIDATE_SECONDS } from "./fetch-constants";
+
+export { SANITY_CMS_REVALIDATE_SECONDS };
+
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
 if (!projectId) {
   throw new Error(
@@ -25,5 +29,9 @@ export const client = createClient({
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
   apiVersion: "2024-01-01",
   useCdn,
+  /**
+   * `cmsFetch` always passes `next: { revalidate }` (admin + env; see
+   * `lib/cms/data-cache-settings.ts`). Direct `client.fetch` is unused.
+   */
   ...(requestTimeoutMs !== undefined ? { timeout: requestTimeoutMs } : {}),
 });

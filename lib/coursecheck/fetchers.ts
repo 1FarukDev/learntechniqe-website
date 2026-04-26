@@ -15,11 +15,17 @@ export async function fetchCoursecheckReviews(
   const qs = params.toString();
   if (qs) url += `?${qs}`;
 
-  const res = await fetch(url, { next: { revalidate: 600 } });
-  if (!res.ok) {
-    console.error(`Coursecheck API error: ${res.status} ${res.statusText}`);
+  try {
+    const res = await fetch(url, { next: { revalidate: 600 } });
+    if (!res.ok) {
+      console.error(`Coursecheck API error: ${res.status} ${res.statusText}`);
+      return { reviews: [] };
+    }
+
+    return await res.json();
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.warn(`Coursecheck fetch failed (${url}): ${message}`);
     return { reviews: [] };
   }
-
-  return res.json();
 }

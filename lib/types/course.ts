@@ -59,6 +59,8 @@ export interface CourseHeroData {
   summary?: string;
   bookingAvailable?: boolean;
   bookASession?: boolean;
+  /** When true, show the practical assessment promo block on the course page */
+  showPracticalAssessmentBanner?: boolean;
   /** Full URL for brochure / course-overview Zapier payloads */
   courseCanonicalUrl?: string;
 }
@@ -79,6 +81,8 @@ export interface PricingBannerData {
 
 export interface BookCourseData {
   title: string;
+  /** Coursecheck / reviews integration id from Sanity */
+  courseReviewId?: number;
   prerequisites?: string;
   showAccreditation?: boolean;
   completionRewards?: string[];

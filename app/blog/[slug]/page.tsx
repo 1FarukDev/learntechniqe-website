@@ -2,7 +2,7 @@ import BlogDetailPage from "@/app/features/blog/BlogDetails";
 import HeroSection from "@/app/features/blog/hero";
 import Contact from "@/app/features/homepage/contact";
 import { AnimatedSection } from "@/components/animated-section";
-import { client } from "@/lib/sanity/client";
+import { cmsFetch } from "@/lib/cms/fetch";
 import {
   getLegacyWpBlogBySlug,
   isLegacyWordPressBlogsVisible,
@@ -31,7 +31,7 @@ const getLegacyPostForSlug = cache(async (slug: string) => {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = await client.fetch<BlogPost | null>(BLOG_BY_SLUG_QUERY, {
+  const post = await cmsFetch<BlogPost | null>(BLOG_BY_SLUG_QUERY, {
     slug,
   });
 
@@ -66,16 +66,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
 
-  const post = await client.fetch<BlogPost | null>(BLOG_BY_SLUG_QUERY, {
+  const post = await cmsFetch<BlogPost | null>(BLOG_BY_SLUG_QUERY, {
     slug,
   });
 
   if (post?.isPublished) {
     const [recentPosts, relatedPosts] = await Promise.all([
-      client.fetch<{ _id: string; title: string; slug: { current: string } }[]>(
+      cmsFetch<{ _id: string; title: string; slug: { current: string } }[]>(
         RECENT_BLOGS_QUERY,
       ),
-      client.fetch<BlogPost[]>(RELATED_BLOGS_QUERY, {
+      cmsFetch<BlogPost[]>(RELATED_BLOGS_QUERY, {
         category: post.category,
         currentId: post._id,
       }),

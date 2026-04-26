@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { client } from "@/lib/sanity/client";
+import { cmsFetch } from "@/lib/cms/fetch";
 import {
   getLegacyWpBlogBySlug,
   getLegacyWpBlogs,
@@ -93,7 +93,7 @@ export async function getPaginatedBlogListing(input: {
   let page = parsePage(input.searchParams.page);
   const category = normalizeCategoryParam(input.searchParams.category);
 
-  const indexRows = await client.fetch<SanityIndexRow[]>(
+  const indexRows = await cmsFetch<SanityIndexRow[]>(
     SANITY_BLOG_INDEX_QUERY,
   );
 
@@ -158,7 +158,7 @@ export async function getPaginatedBlogListing(input: {
 
   const sanityPosts =
     sanitySlugsOnPage.length > 0
-      ? await client.fetch<BlogPost[]>(BLOG_CARDS_BY_SLUGS_QUERY, {
+      ? await cmsFetch<BlogPost[]>(BLOG_CARDS_BY_SLUGS_QUERY, {
           slugs: sanitySlugsOnPage,
         })
       : [];

@@ -1,4 +1,4 @@
-import { client } from "@/lib/sanity/client";
+import { cmsFetch } from "@/lib/cms/fetch";
 import { practicalAssessmentCentresQuery } from "@/lib/queries/practical-assessments";
 
 export type PracticalAssessmentItem = {
@@ -30,7 +30,7 @@ type PracticalAssessmentCentreRow = {
 };
 
 async function fetchPracticalCentres(): Promise<PracticalAssessmentCentre[]> {
-  const rows = await client.fetch<PracticalAssessmentCentreRow[]>(
+  const rows = await cmsFetch<PracticalAssessmentCentreRow[]>(
     practicalAssessmentCentresQuery,
   );
 

@@ -10,7 +10,7 @@ import Certification from "./features/homepage/certification";
 import CampaignBanner from "./features/homepage/campaignBanner";
 import Contact from "./features/homepage/contact";
 import { AnimatedSection } from "@/components/animated-section";
-import { client } from "@/lib/sanity/client";
+import { cmsFetch } from "@/lib/cms/fetch";
 import { courseCardsQuery } from "@/lib/queries/courses";
 import { PATHWAYS_PAGE_QUERY } from "@/lib/queries/pathway";
 import type { CourseCardData } from "@/lib/course-categories";
@@ -33,8 +33,10 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   const [allCourses, pathwaysPage] = await Promise.all([
-    client.fetch<CourseCardData[]>(courseCardsQuery),
-    client.fetch(PATHWAYS_PAGE_QUERY).catch(() => null),
+    cmsFetch<CourseCardData[]>(courseCardsQuery),
+    cmsFetch<{ pathways?: unknown[] } | null>(PATHWAYS_PAGE_QUERY).catch(
+      () => null,
+    ),
   ]);
   const popularCourses = pickPopularCourses(allCourses);
 

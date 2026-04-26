@@ -4,7 +4,7 @@ import { AnimatedSection } from "@/components/animated-section";
 import HeroSection from "../shared/heroBackground";
 import Session from "./sections/session";
 import Contact from "../features/homepage/contact";
-import { client } from "@/lib/sanity/client";
+import { cmsFetch } from "@/lib/cms/fetch";
 import { courseCardsQuery } from "@/lib/queries/courses";
 import { headerQuery } from "@/lib/queries/navigation";
 import { categoriseFromHeader } from "@/lib/course-categories";
@@ -28,8 +28,8 @@ export const metadata: Metadata = {
 
 export default async function CoursesPage() {
   const [allCourses, headerData] = await Promise.all([
-    client.fetch<CourseCardData[]>(courseCardsQuery),
-    client.fetch<HeaderData>(headerQuery),
+    cmsFetch<CourseCardData[]>(courseCardsQuery),
+    cmsFetch<HeaderData>(headerQuery),
   ]);
 
   const allGrouped: { value: string; label: string; courses: CourseCardData[]; courseType: string }[] = [];

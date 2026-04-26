@@ -9,7 +9,7 @@ import { PathwaysCalculatorSticky } from "../features/pathways/PathwaysCalculato
 import type { PathwayCalcData } from "../features/pathways/PathwaysCalculatorSticky";
 import Location from "../features/homepage/location";
 import Contact from "../features/homepage/contact";
-import { client } from "@/lib/sanity/client";
+import { cmsFetch } from "@/lib/cms/fetch";
 import { PATHWAYS_PAGE_QUERY } from "@/lib/queries/pathway";
 
 export const metadata: Metadata = {
@@ -88,7 +88,9 @@ type PathwaysPageData = {
 
 async function getPathwaysData(): Promise<PathwaysPageData> {
   try {
-    const data = await client.fetch(PATHWAYS_PAGE_QUERY);
+    const data = (await cmsFetch(
+      PATHWAYS_PAGE_QUERY,
+    )) as PathwaysPageData;
     return {
       ...data,
       pathways: data.pathways.map((pathway: any) => ({

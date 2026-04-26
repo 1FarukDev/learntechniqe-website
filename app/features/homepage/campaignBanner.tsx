@@ -1,12 +1,12 @@
 import React from 'react'
 import Image from 'next/image'
-import { client } from "@/lib/sanity/client";
+import { cmsFetch } from "@/lib/cms/fetch";
 import { CampaignBannerType } from "@/lib/types/campaignBanner";
 import { CAMPAIGN_BANNER_QUERY } from "@/lib/queries/campaignBanner";
 import { urlFor } from "@/lib/sanity/image";
 
 async function CampaignBanner() {
-  const data = await client.fetch<CampaignBannerType>(CAMPAIGN_BANNER_QUERY)
+  const data = await cmsFetch<CampaignBannerType>(CAMPAIGN_BANNER_QUERY)
 
   if (!data?.isActive || !data?.image) return null
 

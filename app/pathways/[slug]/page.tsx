@@ -7,7 +7,7 @@ import type { PathwayCalcData } from "@/app/features/pathways/PathwaysCalculator
 import Contact from "@/app/features/homepage/contact";
 import Ratings from "@/app/features/homepage/ratings";
 import { AnimatedSection } from "@/components/animated-section";
-import { client } from "@/lib/sanity/client";
+import { cmsFetch } from "@/lib/cms/fetch";
 import {
   PATHWAY_DETAIL_QUERY,
   PATHWAYS_QUERY,
@@ -18,6 +18,7 @@ import {
   defaultCourseHeroData,
 } from "@/lib/constants/course";
 import { notFound } from "next/navigation";
+import type { CourseDetailsData, CourseHeroData } from "@/lib/types/course";
 
 interface PathwayPageProps {
   params: { slug: string };
@@ -25,17 +26,22 @@ interface PathwayPageProps {
 
 export async function generateMetadata({ params }: PathwayPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const pathway = await client.fetch(PATHWAY_DETAIL_QUERY, { slug });
+  const pathway = await cmsFetch<Record<string, unknown> | null>(
+    PATHWAY_DETAIL_QUERY,
+    { slug },
+  );
   if (!pathway) return {};
 
-  const title = pathway.title ?? "Career Pathway";
+  const title = (pathway.title as string | undefined) ?? "Career Pathway";
+  const pDesc = pathway.description;
   const description =
-    Array.isArray(pathway.description) && pathway.description.length > 0
-      ? typeof pathway.description[0] === "string"
-        ? pathway.description[0]
-        : pathway.description[0]?.children?.[0]?.text ?? ""
-      : typeof pathway.description === "string"
-        ? pathway.description
+    Array.isArray(pDesc) && pDesc.length > 0
+      ? typeof pDesc[0] === "string"
+        ? pDesc[0]
+        : (pDesc[0] as { children?: { text?: string }[] })?.children?.[0]
+            ?.text ?? ""
+      : typeof pDesc === "string"
+        ? pDesc
         : `${title} — structured electrical career pathway at Technique Learning Solutions.`;
 
   const metaDescription = description.length > 155
@@ -56,26 +62,33 @@ export async function generateMetadata({ params }: PathwayPageProps): Promise<Me
 }
 
 export async function generateStaticParams() {
-  const pathways = await client.fetch(PATHWAYS_QUERY);
-  return pathways.map((p: any) => ({ slug: p.slug }));
+  const pathways = await cmsFetch<{ slug: string }[]>(PATHWAYS_QUERY);
+  return pathways.map((p) => ({ slug: p.slug }));
 }
 
 async function PathwayDetail({ params }: PathwayPageProps) {
   const { slug } = await params;
 
   const [rawCourse, allPathways] = await Promise.all([
-    client.fetch(PATHWAY_DETAIL_QUERY, { slug }),
-    client.fetch<PathwayCalcData[]>(PATHWAYS_CALC_QUERY),
+    cmsFetch<Record<string, unknown> | null>(PATHWAY_DETAIL_QUERY, { slug }),
+    cmsFetch<PathwayCalcData[]>(PATHWAYS_CALC_QUERY),
   ]);
 
   if (!rawCourse) return notFound();
 
-  const heroData = {
+  const raw = rawCourse as unknown as Partial<CourseHeroData> & {
+    priceIncVat?: string | number;
+    deposit?: string | number;
+    paymentPlan?: string;
+    monthlyInstalment?: string | number;
+    instalments?: string | number;
+  };
+  const heroData: CourseHeroData = {
     ...defaultCourseHeroData,
-    ...rawCourse,
-    tags: rawCourse?.tags ?? defaultCourseHeroData.tags,
-    description: rawCourse?.description ?? defaultCourseHeroData.description,
-    qualifications: rawCourse?.qualifications ?? defaultCourseHeroData.qualifications,
+    ...raw,
+    tags: raw.tags ?? defaultCourseHeroData.tags,
+    description: raw.description ?? defaultCourseHeroData.description,
+    qualifications: raw.qualifications ?? defaultCourseHeroData.qualifications,
     bookingAvailable: true,
   };
 
@@ -85,12 +98,14 @@ async function PathwayDetail({ params }: PathwayPageProps) {
       ? detailsSummaryRaw.trim()
       : undefined;
 
-  const detailsData = {
+  const dr = rawCourse as unknown as Partial<CourseDetailsData>;
+  const detailsData: CourseDetailsData = {
     ...defaultCourseDetailsData,
     ...(detailsSummary ? { detailsSummary } : {}),
-    courseGoals: rawCourse?.courseGoals ?? defaultCourseDetailsData.courseGoals,
-    entryRequirements: rawCourse?.entryRequirements ?? defaultCourseDetailsData.entryRequirements,
-    syllabus: rawCourse?.syllabus ?? defaultCourseDetailsData.syllabus,
+    courseGoals: dr.courseGoals ?? defaultCourseDetailsData.courseGoals,
+    entryRequirements:
+      dr.entryRequirements ?? defaultCourseDetailsData.entryRequirements,
+    syllabus: dr.syllabus ?? defaultCourseDetailsData.syllabus,
   };
 
   const calculatorPathways: PathwayCalcData[] = (allPathways ?? []).filter(
@@ -107,14 +122,14 @@ async function PathwayDetail({ params }: PathwayPageProps) {
       </AnimatedSection>
       <AnimatedSection variant="fade-up">
         <PathwayEnquiryForm
-          pathwayName={rawCourse?.title ?? ""}
+          pathwayName={String(raw.title ?? "")}
           pathwaySlug={slug}
-          price={rawCourse?.price}
-          priceIncVat={rawCourse?.priceIncVat}
-          deposit={rawCourse?.deposit}
-          paymentPlan={rawCourse?.paymentPlan}
-          monthlyInstalment={rawCourse?.monthlyInstalment}
-          instalments={rawCourse?.instalments}
+          price={raw.price}
+          priceIncVat={rawCourse.priceIncVat as string | number | undefined}
+          deposit={rawCourse.deposit as string | number | undefined}
+          paymentPlan={rawCourse.paymentPlan as string | undefined}
+          monthlyInstalment={rawCourse.monthlyInstalment as string | number | undefined}
+          instalments={rawCourse.instalments as string | number | undefined}
         />
       </AnimatedSection>
       <AnimatedSection variant="fade-up">

@@ -7,7 +7,7 @@ import CourseHero from "@/app/features/courseDetails/heroSection";
 import CourseReviews from "@/app/features/courseDetails/CourseReviews";
 import Contact from "@/app/features/homepage/contact";
 import { AnimatedSection } from "@/components/animated-section";
-import { client } from "@/lib/sanity/client";
+import { cmsFetch } from "@/lib/cms/fetch";
 import { courseBySlugQuery, coursesQuery } from "@/lib/queries/courses";
 import {
   defaultBookCourseData,
@@ -23,6 +23,7 @@ import { getCademyDates } from "@/lib/cademy";
 import { fetchCoursecheckReviews } from "@/lib/coursecheck/fetchers";
 import { notFound } from "next/navigation";
 import React from "react";
+import type { Course } from "@/lib/types/course";
 import Session from "../../sections/session";
 import PracticalAssessmentBanner from "../../sections/practicalAssessmentBanner";
 
@@ -34,18 +35,22 @@ export async function generateMetadata({
   params,
 }: CoursePageProps): Promise<Metadata> {
   const { slug } = await params;
-  let course = await client.fetch(courseBySlugQuery, { slug });
-  if (!course && slug === AM2_COURSE_SLUG) course = getAm2SanityFallback();
+  let course = await cmsFetch<Course | null>(courseBySlugQuery, { slug });
+  if (!course && slug === AM2_COURSE_SLUG) {
+    course = getAm2SanityFallback() as unknown as Course;
+  }
   if (!course) return {};
 
   const title = course.title ?? "Course Details";
+  const descRaw: unknown = course.description;
   const description =
-    Array.isArray(course.description) && course.description.length > 0
-      ? typeof course.description[0] === "string"
-        ? course.description[0]
-        : (course.description[0]?.children?.[0]?.text ?? "")
-      : typeof course.description === "string"
-        ? course.description
+    Array.isArray(descRaw) && descRaw.length > 0
+      ? typeof descRaw[0] === "string"
+        ? descRaw[0]
+        : (descRaw[0] as { children?: { text?: string }[] })?.children?.[0]
+            ?.text ?? ""
+      : typeof descRaw === "string"
+        ? descRaw
         : `${title} — accredited training course at Technique Learning Solutions. Expert-led, hands-on training at world-class facilities.`;
 
   const metaDescription =
@@ -68,7 +73,7 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  const courses = await client.fetch(coursesQuery);
+  const courses = await cmsFetch<{ slug: string }[]>(coursesQuery);
   const slugs = courses.map((course: { slug: string }) => ({
     slug: course.slug,
     category: "plc",
@@ -81,10 +86,10 @@ export async function generateStaticParams() {
 
 async function CourseDetail({ params }: CoursePageProps) {
   const { slug } = await params;
-  let rawCourse = await client.fetch(courseBySlugQuery, { slug });
+  let rawCourse = await cmsFetch<Course | null>(courseBySlugQuery, { slug });
 
   if (!rawCourse && slug === AM2_COURSE_SLUG) {
-    rawCourse = getAm2SanityFallback();
+    rawCourse = getAm2SanityFallback() as unknown as Course;
   }
 
   if (!rawCourse) return notFound();
@@ -161,17 +166,19 @@ async function CourseDetail({ params }: CoursePageProps) {
     dates: cademyDates.length > 0 ? cademyDates : defaultBookCourseData.dates,
   };
 
+  const jsonDesc: unknown = rawCourse?.description;
   const courseJsonLd = {
     "@context": "https://schema.org",
     "@type": "Course",
     name: rawCourse?.title ?? "Course",
     description:
-      Array.isArray(rawCourse?.description) && rawCourse.description.length > 0
-        ? typeof rawCourse.description[0] === "string"
-          ? rawCourse.description[0]
-          : (rawCourse.description[0]?.children?.[0]?.text ?? "")
-        : typeof rawCourse?.description === "string"
-          ? rawCourse.description
+      Array.isArray(jsonDesc) && jsonDesc.length > 0
+        ? typeof jsonDesc[0] === "string"
+          ? jsonDesc[0]
+          : (jsonDesc[0] as { children?: { text?: string }[] })?.children?.[0]
+              ?.text ?? ""
+        : typeof jsonDesc === "string"
+          ? jsonDesc
           : "",
     provider: {
       "@type": "EducationalOrganization",

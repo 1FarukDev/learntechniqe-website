@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "generate:legacy-blogs": "node scripts/generate-legacy-wp-blogs.mjs",
-    "seed:elearning-test-user": "node --env-file=.env scripts/seed-elearning-test-user.mjs"
+    "seed:elearning-test-user": "node --env-file=.env scripts/seed-elearning-test-user.mjs",
+    "export:local-cms": "node --env-file=.env scripts/export-sanity-to-local-cms.mjs"
   },
   "dependencies": {
     "@iconify/react": "^6.0.2",

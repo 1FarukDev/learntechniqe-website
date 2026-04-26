@@ -17,6 +17,10 @@ import {
   practicalAccessCookieValue,
   PRACTICAL_COOKIE_NAME,
 } from "@/lib/practical-assessments-auth";
+import {
+  CMS_ADMIN_COOKIE_NAME,
+  verifyCmsAdminSessionToken,
+} from "@/lib/cms/admin-session";
 
 const PROTECTED_LEARNER_PREFIXES = [
   "/learn/dashboard",
@@ -34,6 +38,12 @@ function isProtectedAdminPath(pathname: string): boolean {
   return (
     pathname.startsWith("/admin/elearning") &&
     pathname !== "/admin/elearning/login"
+  );
+}
+
+function isProtectedCmsPath(pathname: string): boolean {
+  return (
+    pathname.startsWith("/admin/cms") && pathname !== "/admin/cms/login"
   );
 }
 
@@ -81,6 +91,18 @@ export async function middleware(request: NextRequest) {
     if (!ok) {
       const redirect = request.nextUrl.clone();
       redirect.pathname = "/admin/elearning/login";
+      redirect.searchParams.set("next", pathname);
+      return NextResponse.redirect(redirect);
+    }
+    return NextResponse.next();
+  }
+
+  if (isProtectedCmsPath(pathname)) {
+    const token = request.cookies.get(CMS_ADMIN_COOKIE_NAME)?.value;
+    const ok = await verifyCmsAdminSessionToken(token);
+    if (!ok) {
+      const redirect = request.nextUrl.clone();
+      redirect.pathname = "/admin/cms/login";
       redirect.searchParams.set("next", pathname);
       return NextResponse.redirect(redirect);
     }

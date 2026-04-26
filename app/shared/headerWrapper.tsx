@@ -1,4 +1,4 @@
-import { client } from "@/lib/sanity/client";
+import { cmsFetch } from "@/lib/cms/fetch";
 import { headerQuery } from "@/lib/queries/navigation";
 import { PATHWAYS_PAGE_QUERY } from "@/lib/queries/pathway";
 import type { HeaderData } from "@/types/header";
@@ -25,8 +25,10 @@ export interface PathwayNavItem {
 
 export default async function HeaderWrapper() {
   const [headerData, pathwaysPage] = await Promise.all([
-    client.fetch<HeaderData>(headerQuery),
-    client.fetch(PATHWAYS_PAGE_QUERY).catch(() => null),
+    cmsFetch<HeaderData>(headerQuery),
+    cmsFetch<{ pathways?: unknown[] } | null>(PATHWAYS_PAGE_QUERY).catch(
+      () => null,
+    ),
   ]);
 
   const pathwayNavItems: PathwayNavItem[] = (pathwaysPage?.pathways ?? [])

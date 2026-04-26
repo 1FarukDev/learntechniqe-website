@@ -1,10 +1,13 @@
-import { client } from "../sanity/client";
+import { cmsFetch } from "@/lib/cms/fetch";
+import { LEGAL_DOCUMENT_PDF_QUERY } from "./legal-document-pdf.query";
 
-export async function getLegalDocumentPdf(slug: string) {
-  return client.fetch(
-    `*[_type == "legalDocument" && slug.current == $slug][0]{
-      "pdfUrl": pdf.asset->url
-    }`,
-    { slug }
+export { LEGAL_DOCUMENT_PDF_QUERY };
+
+export async function getLegalDocumentPdf(
+  slug: string,
+): Promise<{ pdfUrl?: string | null } | null> {
+  return cmsFetch<{ pdfUrl?: string | null } | null>(
+    LEGAL_DOCUMENT_PDF_QUERY,
+    { slug },
   );
 }

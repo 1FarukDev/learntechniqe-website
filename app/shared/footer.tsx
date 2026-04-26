@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import FooterLogo from "@/app/assets/png/logo-white.png";
 import { PaymentMethodLogos } from "@/components/payment-method-logos";
-import { client } from "@/lib/sanity/client";
+import { cmsFetch } from "@/lib/cms/fetch";
 import { headerQuery } from "@/lib/queries/navigation";
 import { PATHWAYS_QUERY } from "@/lib/queries/pathway";
 import type { HeaderData } from "@/types/header";
@@ -21,8 +21,8 @@ interface PathwayLink {
 
 async function getFooterData() {
   const [headerData, pathways] = await Promise.all([
-    client.fetch<HeaderData>(headerQuery),
-    client.fetch<PathwayLink[]>(PATHWAYS_QUERY),
+    cmsFetch<HeaderData>(headerQuery),
+    cmsFetch<PathwayLink[]>(PATHWAYS_QUERY),
   ]);
   return { headerData, pathways };
 }

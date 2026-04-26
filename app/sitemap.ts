@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { client } from "@/lib/sanity/client";
+import { cmsFetch } from "@/lib/cms/fetch";
 import {
   getLegacyWpBlogs,
   isLegacyWordPressBlogsVisible,
@@ -12,9 +12,11 @@ const BASE_URL = "https://www.learntechnique.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [courses, pathways, blogRows] = await Promise.all([
-    client.fetch<{ slug: string }[]>(coursesQuery).catch(() => []),
-    client.fetch<{ slug: string }[]>(PATHWAYS_QUERY).catch(() => []),
-    client.fetch<{ slug: string | null }[]>(BLOG_SLUGS_FOR_SITEMAP_QUERY).catch(() => []),
+    cmsFetch<{ slug: string }[]>(coursesQuery).catch(() => []),
+    cmsFetch<{ slug: string }[]>(PATHWAYS_QUERY).catch(() => []),
+    cmsFetch<{ slug: string | null }[]>(BLOG_SLUGS_FOR_SITEMAP_QUERY).catch(
+      () => [],
+    ),
   ]);
 
   const staticPages: MetadataRoute.Sitemap = [
